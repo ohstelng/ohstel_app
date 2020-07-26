@@ -38,27 +38,25 @@ class _MainHomePageState extends State<MainHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('home Page'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.phonelink_erase),
-            onPressed: () async {
-              await AuthService().signOut();
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.update),
-            onPressed: () async {},
-          )
-        ],
-      ),
       body: PageView(
         children: <Widget>[
           HostelBookingHomePage(),
           Container(child: Center(child: Text('Food'))),
           Container(child: Center(child: Text('Mall'))),
           Container(child: Center(child: Text('Hire'))),
+          Container(
+              child: Center(
+                  child: Column(
+            children: <Widget>[
+              Text('Account\n SignOut'),
+              IconButton(
+                icon: Icon(Icons.phonelink_erase),
+                onPressed: () async {
+                  await AuthService().signOut();
+                },
+              ),
+            ],
+          )))
         ],
         controller: pageController,
         onPageChanged: pageChanged,
@@ -67,7 +65,7 @@ class _MainHomePageState extends State<MainHomePage> {
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: getPageIndex,
         onTap: onTapChangePage,
-        activeColor: Colors.blue,
+        activeColor: Colors.deepOrange,
         inactiveColor: Colors.grey,
         items: [
           BottomNavigationBarItem(
@@ -95,6 +93,13 @@ class _MainHomePageState extends State<MainHomePage> {
             icon: Icon(Icons.settings),
             title: Text(
               'Hire',
+              style: TextStyle(fontSize: 14),
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_box),
+            title: Text(
+              'Profile',
               style: TextStyle(fontSize: 14),
             ),
           ),

@@ -8,9 +8,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
+import 'package:intl/intl.dart';
+
+final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
 
 class HostelBookingHomePage extends StatefulWidget {
   @override
@@ -580,7 +584,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             child: Column(
               children: <Widget>[
                 Text(
-                  '#${hostel.price}K',
+                  '₦${formatCurrency.format(hostel.price)}K',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
@@ -643,7 +647,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Widget searchInputControl() {
     return Container(
-      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.symmetric(vertical: 40, horizontal: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -653,7 +657,10 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             child: Container(
               height: 50,
               margin: EdgeInsets.only(right: 5),
-              decoration: BoxDecoration(),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+
+              ),
               child: MaterialButton(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -662,25 +669,26 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                     ),
                   );
                 },
-                color: Colors.grey,
+                color: Colors.grey[200],
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  side: BorderSide(color: Colors.grey[600]),
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
                   children: <Widget>[
+                    Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8),
                     Text(
                       'Search Hostel',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
                         fontSize: 20.0,
                       ),
-                    ),
-                    Icon(
-                      Icons.search,
-                      color: Colors.white,
                     ),
                   ],
                 ),
@@ -703,7 +711,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         });
         performSearchController();
       },
-      hint: Text('Filter Search'),
+      hint: Text('Filter'),
 //      hint: Icon(Icons.sort),
       isExpanded: true,
       items: [
