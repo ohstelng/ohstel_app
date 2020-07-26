@@ -1,6 +1,8 @@
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -20,7 +22,6 @@ class _SignUpPageState extends State<SignUpPage> {
   String firstName;
   String email;
   String lastName;
-  String _password;
   String _passwordAgain;
   String uniName;
   String userName;
@@ -65,314 +66,471 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  bool _obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: loading == false
-            ? Container(
+      resizeToAvoidBottomPadding: false,
+      body: loading == false
+          ? SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        colors: [
+                      Colors.deepOrange[800],
+                      Colors.deepOrange[400],
+                      Colors.deepOrange[100]
+                    ])),
                 child: Form(
                   key: formKey,
                   child: Column(
                     children: <Widget>[
                       Container(
-                          height: 100,
-                          child: Center(
-                            child: Text(
-                              'SignUp',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20.0),
-                            ),
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          margin: EdgeInsets.symmetric(vertical: 40),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'SignUp',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30.0),
+                              ),
+                              SizedBox(
+                                height: 7,
+                              ),
+                              Text(
+                                'Let\'s Get Started',
+                                style: TextStyle(color: Colors.white),
+                              )
+                            ],
                           )),
                       Container(
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value.trim().isEmpty) {
-                              return 'First Name Can\'t Be Empty';
-                            } else if (value.trim().length < 3) {
-                              return 'First Name Must Be More Than 2 Characters';
-                            } else {
-                              return null;
-                            }
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'First Name',
-                          ),
-                          onSaved: (value) => firstName = value.trim(),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-//                                decoration: BoxDecoration(
-//                                    border: Border(
-//                                        bottom: BorderSide(
-//                                            color: Colors.grey[200]))),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value.trim().isEmpty) {
-                                return 'Last Name Can\'t Be Empty';
-                              } else if (value.trim().length < 3) {
-                                return 'Last Name Must Be More Than 2 Characters';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Last Name',
-                            ),
-                            onSaved: (value) => lastName = value.trim(),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value.trim().isEmpty) {
-                                return 'UserName Can\'t Be Empty';
-                              } else if (value.trim().length <= 3) {
-                                return 'UserName Must Be More Than 3 Characters';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'UserName',
-                            ),
-                            onSaved: (value) => userName = value.trim(),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value.trim().isEmpty) {
-                                return 'Field Can\'t Be Empty';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Phone Number',
-                            ),
-                            onSaved: (value) => phoneNumber = value.trim(),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value.trim().isEmpty) {
-                                return 'Field Can\'t Be Empty';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'School Location',
-                            ),
-                            onSaved: (value) => schoolLocation = value.trim(),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value.trim().isEmpty) {
-                                return 'Email Can\'t Be Empty';
-//                    } else if (!EmailValidator.validate(value.trim())) {
-//                      return 'Not a vaild Email';
-                              } else if (!value.trim().endsWith('.com')) {
-                                return 'Invalid Email';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                            ),
-                            onSaved: (value) => email = value.trim(),
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 10),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.info_outline,
-                                size: 18,
-                                color: Colors.blue,
+                        padding:
+                        EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(60),
+                                topRight: Radius.circular(60))),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(
+                                        225,
+                                        95,
+                                        27,
+                                        .3,
+                                      ),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 10))
+                                ],
                               ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Container(
-                                  child: Text(
-                                    'Be sure to submit a vaild/correct email address as this email will be use if there is a case of forgotten paswword.',
-                                    textAlign: TextAlign.justify,
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                  ),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value
+                                      .trim()
+                                      .isEmpty) {
+                                    return 'First Name Can\'t Be Empty';
+                                  } else if (value
+                                      .trim()
+                                      .length < 3) {
+                                    return 'First Name Must Be More Than 2 Characters';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  labelText: 'First Name',
+                                ),
+                                onSaved: (value) => firstName = value.trim(),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(
+                                        225,
+                                        95,
+                                        27,
+                                        .3,
+                                      ),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 10))
+                                ],
+                              ),
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.only(left: 15, right: 15),
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value
+                                        .trim()
+                                        .isEmpty) {
+                                      return 'Last Name Can\'t Be Empty';
+                                    } else if (value
+                                        .trim()
+                                        .length < 3) {
+                                      return 'Last Name Must Be More Than 2 Characters';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: 'Last Name',
+                                      border: InputBorder.none),
+                                  onSaved: (value) => lastName = value.trim(),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value.trim().isEmpty) {
-                                return 'Password Can\'t Be Empty';
-                              } else if (value.trim().length < 6) {
-                                return 'Password Must Be More Than 6 Characters';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Password',
                             ),
-//                                    obscureText: true,
-                            onSaved: (value) {
-                              _password = value.trim();
-                            },
-                            keyboardType: TextInputType.visiblePassword,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value.trim().isEmpty) {
-                                return 'Password Can\'t Be Empty';
-                              } else if (value.trim().length < 6) {
-                                return 'Password Must Be More Than 6 Characters';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Password Again!',
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(
+                                        225,
+                                        95,
+                                        27,
+                                        .3,
+                                      ),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 10))
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                ),
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value
+                                        .trim()
+                                        .isEmpty) {
+                                      return 'UserName Can\'t Be Empty';
+                                    } else if (value
+                                        .trim()
+                                        .length <= 3) {
+                                      return 'UserName Must Be More Than 3 Characters';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: 'User Name',
+                                      border: InputBorder.none),
+                                  onSaved: (value) => userName = value.trim(),
+                                ),
+                              ),
                             ),
-                            onSaved: (value) {
-                              _passwordAgain = value.trim();
-                            },
-                            keyboardType: TextInputType.visiblePassword,
-//                                    obscureText: notshowPassword,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, bottom: 15),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value.trim().isEmpty) {
-                                return 'Password Can\'t Be Empty';
-                              } else if (value.trim().length < 6) {
-                                return 'Password Must Be More Than 6 Characters';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Password Again!',
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(
+                                        225,
+                                        95,
+                                        27,
+                                        .3,
+                                      ),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 10))
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                ),
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value
+                                        .trim()
+                                        .isEmpty) {
+                                      return 'Field Can\'t Be Empty';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: 'Phone Number',
+                                      border: InputBorder.none),
+                                  onSaved: (value) =>
+                                  phoneNumber = value.trim(),
+                                ),
+                              ),
                             ),
-                            onSaved: (value) {
-                              uniName = value.trim();
-                            },
-                            keyboardType: TextInputType.visiblePassword,
-//                                    obscureText: notshowPassword,
-                          ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(
+                                        225,
+                                        95,
+                                        27,
+                                        .3,
+                                      ),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 10))
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                ),
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value
+                                        .trim()
+                                        .isEmpty) {
+                                      return 'Field Can\'t Be Empty';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: 'School Location',
+                                      border: InputBorder.none),
+                                  onSaved: (value) =>
+                                  schoolLocation = value.trim(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(
+                                        225,
+                                        95,
+                                        27,
+                                        .3,
+                                      ),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 10))
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                ),
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value
+                                        .trim()
+                                        .isEmpty) {
+                                      return 'Email Can\'t Be Empty';
+//                    } else if (!EmailValidator.validate(value.trim())) {
+//                      return 'Not a vaild Email';
+                                    } else if (!value.trim().endsWith('.com')) {
+                                      return 'Invalid Email';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: 'Email',
+                                      border: InputBorder.none),
+                                  onSaved: (value) => email = value.trim(),
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Color.fromRGBO(
+                                        225,
+                                        95,
+                                        27,
+                                        .3,
+                                      ),
+                                      blurRadius: 20,
+                                      offset: Offset(0, 10))
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                ),
+                                child: TextFormField(
+                                  validator: (value) {
+                                    if (value
+                                        .trim()
+                                        .isEmpty) {
+                                      return 'Password Can\'t Be Empty';
+                                    } else if (value
+                                        .trim()
+                                        .length < 6) {
+                                      return 'Password Must Be More Than 6 Characters';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: 'Password',
+                                      border: InputBorder.none,
+                                      suffixIcon: GestureDetector(
+                                        child: Icon(_obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
+                                        onTap: () {
+                                          setState(() =>
+                                          _obscureText = !_obscureText);
+                                        },
+                                      )),
+                                  obscureText: !_obscureText,
+                                  onSaved: (value) {
+                                    _passwordAgain = value.trim();
+                                  },
+                                ),
+                              ),
+                            ),
+                            signUpButton(),
+                            logInButton(),
+                          ],
                         ),
                       ),
-                      signUpButton(),
-                      logInButton(),
-                    ],
-                  ),
-                ),
-              )
-            : Container(
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircularProgressIndicator(),
-                      Text('Loading......')
-                    ],
-                  ),
-                ),
-              ),
+              ],
+            ),
+          ),
+        ),
+      )
+          : Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SpinKitChasingDots(
+              color: Colors.deepOrange,
+              size: 50.0,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text('Loading......')
+          ],
+        ),
       ),
     );
   }
 
   Widget signUpButton() {
     return Container(
-      margin: EdgeInsets.all(20),
-      height: 60,
-      width: MediaQuery.of(context).size.width * 0.80,
-      decoration: BoxDecoration(
-          color: Colors.green, borderRadius: BorderRadius.circular(15)),
-      child: RaisedButton(
-        onPressed: () {
-          validateAndSave();
-        },
-        child: Center(
-          child: Text(
-            'Create account',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-            textAlign: TextAlign.center,
-          ),
+        child: InkWell(
+          onTap: () {
+            validateAndSave();
+          },
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(
+              "Create Account",
+              style: TextStyle(
+                  color: Colors.deepOrange,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Icon(
+              Icons.account_box,
+              color: Colors.deepOrange,
+              size: 30,
+            )
+          ]),
         ),
-      ),
-    );
+        margin: EdgeInsets.symmetric(vertical: 20),
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        height: 60,
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.deepOrange, width: 2.5),
+          borderRadius: BorderRadius.circular(40),
+        ));
   }
 
   Widget logInButton() {
-    return Container(
-      margin: EdgeInsets.all(20),
-      height: 60,
-      width: MediaQuery.of(context).size.width * 0.80,
-      decoration: BoxDecoration(
-          color: Colors.green, borderRadius: BorderRadius.circular(15)),
-      child: RaisedButton(
-        onPressed: () {
-          widget.toggleView();
-        },
-        child: Center(
-          child: Text(
-            'login',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-            textAlign: TextAlign.center,
+    return InkWell(
+      onTap: () {
+        widget.toggleView();
+      },
+      child: Container(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        height: 60,
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.deepOrange[400],
+              Colors.deepOrange[500],
+              Colors.deepOrange[500],
+              Colors.deepOrange[400]
+            ],
           ),
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: Center(
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(
+              "Login",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Icon(
+              Icons.account_balance,
+              color: Colors.white,
+              size: 30,
+            )
+          ]),
         ),
       ),
     );
