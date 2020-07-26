@@ -1,6 +1,7 @@
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -324,7 +325,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CircularProgressIndicator(),
+                      SpinKitChasingDots(
+                        color: Colors.deepOrange,
+                        size: 50.0,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
                       Text('Loading......')
                     ],
                   ),
