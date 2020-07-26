@@ -1,10 +1,17 @@
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
+import 'package:Ohstel_app/auth/models/login_user_model.dart';
 import 'package:Ohstel_app/auth/wrapper.dart';
-import 'package:Ohstel_app/models/login_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'hive_methods/hive_class.dart';
+
 void main() {
+  // init hive
+  WidgetsFlutterBinding.ensureInitialized();
+  InitHive().startHive(boxName: 'userDataBox');
+
+  // run app
   runApp(MyApp());
 }
 

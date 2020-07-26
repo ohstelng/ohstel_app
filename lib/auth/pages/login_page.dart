@@ -59,9 +59,11 @@ class _LogInPageState extends State<LogInPage> {
       print(email);
       print(password);
       await logInUser();
-      setState(() {
-        loading = false;
-      });
+      if(mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     } else {
       Fluttertoast.showToast(msg: 'Invaild Inputs');
       setState(() {

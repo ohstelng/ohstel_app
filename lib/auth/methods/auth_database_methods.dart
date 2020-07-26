@@ -13,6 +13,7 @@ class AuthDatabaseMethods {
     @required String userName,
     @required String schoolLocation,
     @required String phoneNumber,
+    @required String uniName,
   }) {
     return userDataCollectionRef.document(uid).setData(
       {
@@ -22,6 +23,7 @@ class AuthDatabaseMethods {
         'userName': userName,
         'schoolLocation': schoolLocation,
         'phoneNumber': phoneNumber,
+        'uniName': uniName,
       },
       merge: true,
     );

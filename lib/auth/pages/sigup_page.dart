@@ -22,6 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String lastName;
   String _password;
   String _passwordAgain;
+  String uniName;
   String userName;
   String phoneNumber;
   String schoolLocation;
@@ -60,6 +61,7 @@ class _SignUpPageState extends State<SignUpPage> {
       userName: userName,
       schoolLocation: schoolLocation,
       phoneNumber: phoneNumber,
+      uniName: uniName,
     );
   }
 
@@ -279,6 +281,31 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             onSaved: (value) {
                               _passwordAgain = value.trim();
+                            },
+                            keyboardType: TextInputType.visiblePassword,
+//                                    obscureText: notshowPassword,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, bottom: 15),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value.trim().isEmpty) {
+                                return 'Password Can\'t Be Empty';
+                              } else if (value.trim().length < 6) {
+                                return 'Password Must Be More Than 6 Characters';
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Password Again!',
+                            ),
+                            onSaved: (value) {
+                              uniName = value.trim();
                             },
                             keyboardType: TextInputType.visiblePassword,
 //                                    obscureText: notshowPassword,

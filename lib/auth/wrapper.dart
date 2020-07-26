@@ -1,6 +1,6 @@
+import 'package:Ohstel_app/auth/models/login_user_model.dart';
 import 'package:Ohstel_app/auth/pages/login_page.dart';
 import 'package:Ohstel_app/landing_page/landing_page.dart';
-import 'package:Ohstel_app/models/login_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

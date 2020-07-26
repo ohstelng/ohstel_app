@@ -1,8 +1,10 @@
 import 'package:Ohstel_app/auth/methods/auth_database_methods.dart';
-import 'package:Ohstel_app/models/login_user_model.dart';
+import 'package:Ohstel_app/auth/models/login_user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive/hive.dart';
 
 class AuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -28,6 +30,9 @@ class AuthService {
       AuthResult result = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser user = result.user;
+
+      await getUserDetails(uid: user.uid);
+
       return userFromFirebase(user);
     } catch (e) {
       print(e.toString());
@@ -44,6 +49,7 @@ class AuthService {
     @required String userName,
     @required String schoolLocation,
     @required String phoneNumber,
+    @required String uniName,
   }) async {
     try {
       AuthResult result = await auth.createUserWithEmailAndPassword(
@@ -60,21 +66,11 @@ class AuthService {
         userName: userName,
         schoolLocation: schoolLocation,
         phoneNumber: phoneNumber,
+        uniName: uniName,
       );
 
-      // create user data
-//      await DatabaseService(uid: user.uid).updateUserData(
-//        email: email,
-//        fullName: fullName,
-//        userName: userName,
-//      );
-
-      // create public user data
-//      await DatabaseService(uid: user.uid).createPublicUserData(
-//        email: email,
-//        fullName: fullName,
-//        userName: userName,
-//      );
+      // save user info to local database using hive
+      getUserDetails(uid: user.uid);
 
       return userFromFirebase(user);
     } catch (e) {
@@ -87,10 +83,64 @@ class AuthService {
   // signing out method
   Future signOut() async {
     try {
+      deleteUserDataToDb();
       return await auth.signOut();
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '${e.message}');
     }
   }
+
+  Future getUserDetails({@required String uid}) async {
+    final CollectionReference userDataCollectionRef =
+        Firestore.instance.collection('userData');
+    print(
+        'uuuuuuuuuuuuuuuuuuuuuuuuiiiiiiiiiiiiiiiiiiiiiiiiiiiiddddddddddddddddddd');
+    print(uid.trim());
+    try {
+      DocumentSnapshot document =
+          await userDataCollectionRef.document(uid).get();
+      print('pppppppppppppppppppppppppppppppppppppppppppppppppppppp');
+      print(document.data);
+      saveUserDataToDb(userData: document.data);
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '${e.message}');
+    }
+  }
+
+  void saveUserDataToDb({@required Map userData}) {
+    Box<Map> userDataBox = Hive.box<Map>('userDataBox');
+    final key = 0;
+    final value = userData;
+
+    userDataBox.put(key, value);
+    print('saved');
+  }
+
+  void deleteUserDataToDb() {
+    Box<Map> userDataBox = Hive.box<Map>('userDataBox');
+    final key = 0;
+
+    userDataBox.delete(key);
+  }
+
+//  Future<void> update() async {
+//    final CollectionReference hostelCollectionRef =
+//        Firestore.instance.collection('hostelBookings');
+//
+//    try {
+//      QuerySnapshot querySnapshot = await hostelCollectionRef.getDocuments();
+//      for (var i = 0; i < querySnapshot.documents.length; i++) {
+//        String id = querySnapshot.documents[i].documentID;
+//        await hostelCollectionRef.document(id).updateData({
+//          'uniName': 'unilorin',
+//        });
+//        print(id);
+//      }
+//    } catch (e) {
+//      print(e);
+//      Fluttertoast.showToast(msg: '${e.message}');
+//    }
+//  }
 }
