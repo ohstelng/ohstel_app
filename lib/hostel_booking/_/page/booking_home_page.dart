@@ -29,7 +29,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   var tempSearchStore = [];
   List<HostelModel> searchList;
   var query = '';
-  int perPage = 3;
+  int perPage = 4;
   bool gettingMoreHostels = false;
   bool moreHostelAvailable = true;
   HostelModel lastHostel;
@@ -446,15 +446,14 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       body: Column(
         children: <Widget>[
           searchInputControl(),
-          Expanded(
+          Container(
+            width: MediaQuery.of(context).size.width * 0.97,
+            height: MediaQuery.of(context).size.height * 0.77,
             child: isStillLoadingData
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : Container(
-                    child:
-                        sortBy == 'distance' ? sortByDistance() : resultList(),
-                  ),
+                : sortBy == 'distance' ? sortByDistance() : resultList(),
           ),
         ],
       ),
@@ -503,16 +502,21 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   }
 
   Widget resultList() {
-    return ListView.builder(
-        physics: BouncingScrollPhysics(),
-        controller: scrollController,
-        itemCount: searchList.length,
-        itemBuilder: (context, index) {
-          print(index);
-          HostelModel currentHostelModel = searchList[index];
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 1.0, mainAxisSpacing: 8
+      ),
+      physics: BouncingScrollPhysics(),
+      controller: scrollController,
+      itemCount: searchList.length,
+      itemBuilder: (context, index) {
+        print(index);
+        HostelModel currentHostelModel = searchList[index];
 
-          return Card(
-            elevation: 2.5,
+        return Container(
+
+          child: Card(
             child: InkWell(
               onTap: () {
                 print(currentHostelModel.id);
@@ -525,85 +529,93 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 );
               },
               child: Container(
-                margin: EdgeInsets.all(10),
+                margin: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     displayMultiPic(imageList: currentHostelModel.imageUrl),
                     hostelDetails(hostel: currentHostelModel),
+                    SizedBox(height: 8),
                     index == (searchList.length - 1)
                         ? Container(
-                            height: 100,
-                            child: Center(
-                              child: moreHostelAvailable == false
-                                  ? Text('No More Hostel Available!!')
-                                  : CircularProgressIndicator(),
-                            ),
-                          )
+                      child: Center(
+                        child: moreHostelAvailable == false
+                            ? Text('No More Hostel Available!!')
+                            : CircularProgressIndicator(),
+                      ),
+                    )
                         : Container(),
                   ],
                 ),
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget hostelDetails({@required HostelModel hostel}) {
     return Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
+      width: MediaQuery
+          .of(context)
+          .size
+          .width * 0.46,
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width * 0.60,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${hostel.hostelName}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                '${hostel.hostelName}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  color: Colors.deepOrange[500],
                 ),
-                Text(
-                  '${hostel.hostelLocation}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15.0,
-                    color: Colors.grey,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
-          Container(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  '₦${formatCurrency.format(hostel.price)}K',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+          Row(
+            children: <Widget>[
+              Icon(Icons.location_on, size: 16, color: Colors.black),
+              SizedBox(width: 8),
+              Text(
+                '${hostel.hostelLocation}',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14.0,
+                  color: Colors.grey,
                 ),
-                Text(
-                  '${hostel.distanceFromSchoolInKm}KM',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 10.0,
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                '${hostel.distanceFromSchoolInKm}KM',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                  color: Colors.grey,
                 ),
-              ],
-            ),
-          )
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+          Row(children: <Widget>[
+            Text(
+              '₦ ${formatCurrency.format(hostel.price)}',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+                color: Colors.black,
+              ),
+              overflow: TextOverflow.ellipsis,
+            )
+          ])
         ],
       ),
     );
@@ -612,8 +624,11 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   Widget displayMultiPic({@required List imageList}) {
     return Container(
       constraints: BoxConstraints(
-        maxHeight: 250,
-        maxWidth: MediaQuery.of(context).size.width * .95,
+        maxHeight: 120,
+        maxWidth: MediaQuery
+            .of(context)
+            .size
+            .width * .46,
       ),
       child: Carousel(
         images: imageList.map(
@@ -647,7 +662,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Widget searchInputControl() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 40, horizontal: 8),
+      padding: EdgeInsets.only(top: 40, left: 8, right: 8, bottom: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -659,7 +674,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               margin: EdgeInsets.only(right: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-
               ),
               child: MaterialButton(
                 onPressed: () {
@@ -675,7 +689,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-
                   children: <Widget>[
                     Icon(
                       Icons.search,
@@ -711,7 +724,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         });
         performSearchController();
       },
-      hint: Text('Filter'),
+      hint: Icon(Icons.tune,),
 //      hint: Icon(Icons.sort),
       isExpanded: true,
       items: [
