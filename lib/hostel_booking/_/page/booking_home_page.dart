@@ -29,7 +29,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   var tempSearchStore = [];
   List<HostelModel> searchList;
   var query = '';
-  int perPage = 4;
+  int perPage = 6;
   bool gettingMoreHostels = false;
   bool moreHostelAvailable = true;
   HostelModel lastHostel;
@@ -442,20 +442,48 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          searchInputControl(),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.97,
-            height: MediaQuery.of(context).size.height * 0.77,
-            child: isStillLoadingData
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : sortBy == 'distance' ? sortByDistance() : resultList(),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(130),
+          child: AppBar(
+            flexibleSpace: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                searchInputControl(),
+                TabBar(
+                  tabs: [
+                    Tab(text: "Explore"),
+                    Tab(text: "Saved"),
+                  ],
+                )
+              ],
+            ),
           ),
-        ],
+        ),
+        body: TabBarView(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.97,
+              height: MediaQuery.of(context).size.height * 0.77,
+              child: isStillLoadingData
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : sortBy == 'distance' ? resultList() : sortByDistance(),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.97,
+              height: MediaQuery.of(context).size.height * 0.77,
+              child: isStillLoadingData
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : resultList(),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -463,14 +491,17 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   Widget sortByDistance() {
     print('distance');
     return PaginateFirestore(
-      itemsPerPage: 3,
+      itemsPerPage: 2,
       initialLoader: Container(
         height: 50,
         child: Center(
           child: CircularProgressIndicator(),
         ),
       ),
-      bottomLoader: CircularProgressIndicator(),
+      bottomLoader: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(child: CircularProgressIndicator()),
+      ),
       query: Firestore.instance
           .collection('hostelBookings')
           .where('uniName', isEqualTo: uniName)
@@ -478,19 +509,26 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           .where('isSchoolHostel', isEqualTo: false),
       itemBuilder: (context, DocumentSnapshot documentSnapshot) {
         HostelModel currentHostelModel =
-            HostelModel.fromMap(documentSnapshot.data);
+        HostelModel.fromMap(documentSnapshot.data);
 
         return Card(
           elevation: 2.5,
           child: InkWell(
             onTap: () {
               print(currentHostelModel.id);
+              Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HostelBookingInFoPage(
+                              hostelModel: currentHostelModel)));
             },
             child: Container(
               margin: EdgeInsets.all(10),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   displayMultiPic(imageList: currentHostelModel.imageUrl),
+                  SizedBox(width: 8,),
                   hostelDetails(hostel: currentHostelModel),
                 ],
               ),
@@ -504,18 +542,17 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   Widget resultList() {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 1.0, mainAxisSpacing: 8
-      ),
+          crossAxisCount: 2, crossAxisSpacing: 1.0, mainAxisSpacing: 8),
       physics: BouncingScrollPhysics(),
       controller: scrollController,
+      shrinkWrap: true,
+      primary: false,
       itemCount: searchList.length,
       itemBuilder: (context, index) {
         print(index);
         HostelModel currentHostelModel = searchList[index];
 
         return Container(
-
           child: Card(
             child: InkWell(
               onTap: () {
@@ -536,7 +573,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                     displayMultiPic(imageList: currentHostelModel.imageUrl),
                     hostelDetails(hostel: currentHostelModel),
                     SizedBox(height: 8),
-                    index == (searchList.length - 1)
+                    index == (searchList.length)
                         ? Container(
                       child: Center(
                         child: moreHostelAvailable == false
@@ -560,9 +597,10 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       width: MediaQuery
           .of(context)
           .size
-          .width * 0.46,
+          .width * 0.40,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -578,6 +616,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
             ],
           ),
+          SizedBox(height: 5),
           Row(
             children: <Widget>[
               Icon(Icons.location_on, size: 16, color: Colors.black),
@@ -605,6 +644,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
             ],
           ),
+          SizedBox(height: 5),
           Row(children: <Widget>[
             Text(
               '₦ ${formatCurrency.format(hostel.price)}',
@@ -652,7 +692,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         dotSpacing: 15.0,
         dotSize: 4,
         dotIncreaseSize: 2.5,
-        dotIncreasedColor: Colors.teal,
+        dotIncreasedColor: Colors.deepOrange,
         dotBgColor: Colors.transparent,
         animationCurve: Curves.fastOutSlowIn,
         animationDuration: Duration(milliseconds: 2000),
@@ -664,11 +704,12 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     return Container(
       padding: EdgeInsets.only(top: 40, left: 8, right: 8, bottom: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          Expanded(flex: 1, child: Icon(Icons.menu, color: Colors.white,)),
           Expanded(
-            flex: 5,
+            flex: 10,
             child: Container(
               height: 50,
               margin: EdgeInsets.only(right: 5),
@@ -724,8 +765,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         });
         performSearchController();
       },
-      hint: Icon(Icons.tune,),
-//      hint: Icon(Icons.sort),
+      hint: Icon(
+        Icons.tune, color: Colors.white,
+      ),
       isExpanded: true,
       items: [
         DropdownMenuItem<String>(
@@ -745,7 +787,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           child: Column(
             children: <Widget>[
               Text(
-                "By Price",
+                "Price",
                 textAlign: TextAlign.center,
               ),
               Divider(),
@@ -757,7 +799,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           child: Column(
             children: <Widget>[
               Text(
-                "By distance(KM)",
+                "Distance",
                 textAlign: TextAlign.center,
               ),
               Divider(),
@@ -769,7 +811,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           child: Column(
             children: <Widget>[
               Text(
-                "By Roommate Needed",
+                "Roommate",
                 textAlign: TextAlign.center,
               ),
               Divider(),
@@ -781,8 +823,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           child: Column(
             children: <Widget>[
               Text(
-                "By onCampus Only",
-                textAlign: TextAlign.center,
+                  "On-Campus",
+                  textAlign: TextAlign.center, maxLines: 1
               ),
               Divider(),
             ],

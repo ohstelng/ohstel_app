@@ -44,9 +44,8 @@ class _MainHomePageState extends State<MainHomePage> {
           Container(child: Center(child: Text('Food'))),
           Container(child: Center(child: Text('Mall'))),
           Container(child: Center(child: Text('Hire'))),
-          Container(
-              child: Center(
-                  child: Column(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text('Account\n SignOut'),
               IconButton(
@@ -56,7 +55,7 @@ class _MainHomePageState extends State<MainHomePage> {
                 },
               ),
             ],
-          )))
+          )
         ],
         controller: pageController,
         onPageChanged: pageChanged,
@@ -97,9 +96,9 @@ class _MainHomePageState extends State<MainHomePage> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_box),
+            icon: Icon(Icons.account_balance_wallet),
             title: Text(
-              'Profile',
+              'Wallet',
               style: TextStyle(fontSize: 14),
             ),
           ),
@@ -108,3 +107,4 @@ class _MainHomePageState extends State<MainHomePage> {
     );
   }
 }
+
