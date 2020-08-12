@@ -6,10 +6,12 @@ import 'package:provider/provider.dart';
 
 import 'hive_methods/hive_class.dart';
 
-void main() {
+Future<void> main() async {
   // init hive
   WidgetsFlutterBinding.ensureInitialized();
-  InitHive().startHive(boxName: 'userDataBox');
+  await InitHive().startHive(boxName: 'userDataBox');
+  await InitHive().startCartHiveDb();
+  await InitHive().startMarketCartHiveDb();
 
   // run app
   runApp(MyApp());

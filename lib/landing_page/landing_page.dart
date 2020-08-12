@@ -1,5 +1,7 @@
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
+import 'package:Ohstel_app/hostel_food/_/pages/food_home_page.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -47,17 +49,13 @@ class _MainHomePageState extends State<MainHomePage> {
               await AuthService().signOut();
             },
           ),
-          IconButton(
-            icon: Icon(Icons.update),
-            onPressed: () async {},
-          )
         ],
       ),
       body: PageView(
         children: <Widget>[
           HostelBookingHomePage(),
-          Container(child: Center(child: Text('Food'))),
-          Container(child: Center(child: Text('Mall'))),
+          FoodHomePage(),
+          MarketHomePage(),
           Container(child: Center(child: Text('Hire'))),
         ],
         controller: pageController,
