@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
     return StreamProvider<LoginUserModel>.value(
       value: AuthService().userStream,
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Ohstel',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.deepOrange,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: Wrapper(),

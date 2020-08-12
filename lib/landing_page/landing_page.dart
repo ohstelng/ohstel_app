@@ -40,6 +40,7 @@ class _MainHomePageState extends State<MainHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       appBar: AppBar(
         title: Text('home Page'),
         actions: <Widget>[
@@ -51,12 +52,26 @@ class _MainHomePageState extends State<MainHomePage> {
           ),
         ],
       ),
+=======
+>>>>>>> 8cbbef7a8fabad5527916a7eb245f7d0eb5670ca
       body: PageView(
         children: <Widget>[
           HostelBookingHomePage(),
           FoodHomePage(),
           MarketHomePage(),
           Container(child: Center(child: Text('Hire'))),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Account\n SignOut'),
+              IconButton(
+                icon: Icon(Icons.phonelink_erase),
+                onPressed: () async {
+                  await AuthService().signOut();
+                },
+              ),
+            ],
+          )
         ],
         controller: pageController,
         onPageChanged: pageChanged,
@@ -65,7 +80,7 @@ class _MainHomePageState extends State<MainHomePage> {
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: getPageIndex,
         onTap: onTapChangePage,
-        activeColor: Colors.blue,
+        activeColor: Colors.deepOrange,
         inactiveColor: Colors.grey,
         items: [
           BottomNavigationBarItem(
@@ -96,8 +111,16 @@ class _MainHomePageState extends State<MainHomePage> {
               style: TextStyle(fontSize: 14),
             ),
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance_wallet),
+            title: Text(
+              'Wallet',
+              style: TextStyle(fontSize: 14),
+            ),
+          ),
         ],
       ),
     );
   }
 }
+

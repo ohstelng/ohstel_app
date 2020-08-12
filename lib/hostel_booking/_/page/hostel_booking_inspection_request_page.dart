@@ -124,7 +124,7 @@ class _HostelBookingInspectionRequestPageState
     return Container(
       margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
       child: FlatButton(
-        color: Colors.blue,
+        color: Theme.of(context).primaryColor,
         onPressed: () {
           validateAndSave();
         },

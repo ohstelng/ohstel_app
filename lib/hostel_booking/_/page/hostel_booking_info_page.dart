@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
+import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_inspection_request_page.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:extended_image/extended_image.dart';
@@ -123,60 +124,10 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            header(),
-            body(),
-            footer(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget header() {
-    return Container(
-      margin: EdgeInsets.all(15.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey[300],
-            ),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Center(
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey[300],
-            ),
-            child: InkWell(
-              onTap: () {
-                // TODO: implement bookmarking of post
-              },
-              child: Center(
-                child: Icon(
-                  Icons.bookmark_border,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
+          body(),
+          footer(),
         ],
       ),
     );
@@ -185,9 +136,57 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   Widget body() {
     return Expanded(
       child: Container(
-        child: ListView(
+        child: Column(
           children: <Widget>[
-            displayMultiPic(imageList: widget.hostelModel.imageUrl),
+            Stack(children: [
+              displayMultiPic(imageList: widget.hostelModel.imageUrl),
+              SafeArea(
+                child: Container(
+                  padding: EdgeInsets.only(right: 10, top: 10, left: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Center(
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                          flex: 6,
+                          child: Text('Hostel Details',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white))),
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          onTap: () {
+                            // TODO: implement bookmarking of post
+                          },
+                          child: Center(
+                            child: Icon(
+                              Icons.bookmark_border,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ]),
             hostelDetails(),
           ],
         ),
@@ -196,85 +195,172 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   }
 
   Widget footer() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        FlatButton(
-          color: Colors.blue,
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => HostelBookingInspectionRequestPage(
-                  hostelModel: widget.hostelModel,
-                ),
-              ),
-            );
-          },
-          child: Text('Request Inspection'),
-        ),
-        FlatButton(
-          color: Colors.green,
-          onPressed: () {
-            chargeCard();
-          },
-          child: Text('Pay'),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 5,
+            child: FlatButton(
+              color: Theme.of(context).primaryColor,
+              onPressed: () {
+                chargeCard();
+              },
+              child: Text('Make Payment'),
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: FlatButton(
+              color: Theme.of(context).buttonColor,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HostelBookingInspectionRequestPage(
+                      hostelModel: widget.hostelModel,
+                    ),
+                  ),
+                );
+              },
+              child: Text('Request Inspection'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget hostelDetails() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text('Name: ${widget.hostelModel.hostelName}'),
-        Text('Des: ${widget.hostelModel.description}'),
-        Text('Distance: ${widget.hostelModel.distanceFromSchoolInKm}'),
-        Text('Price: ${widget.hostelModel.price}'),
-        Text('Location: ${widget.hostelModel.hostelLocation}'),
-        Text('ratings: ${widget.hostelModel.ratings}'),
-        Text('Features: ${widget.hostelModel.extraFeatures}'),
-        Text('lank Mark Close by: ${widget.hostelModel.landMark}'),
-        Text('School Hostel?: ${widget.hostelModel.isRoomMateNeeded}'),
-        Text('Roommate needed? : ${widget.hostelModel.isSchoolHostel}'),
-        Text('and lots more..............'),
-      ],
+    TextStyle _titlestyle = TextStyle(
+        fontSize: 22, fontWeight: FontWeight.bold);
+    return DefaultTabController(
+      length: 2,
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text('${widget.hostelModel.hostelName}', style: _titlestyle,),
+                Spacer(),
+                Text('₦${formatCurrency.format(widget.hostelModel.price)}',
+                  style: _titlestyle,),
+              ],
+            ), SizedBox(height: 8),
+            Row(
+              children: <Widget>[
+                Text('${widget.hostelModel.hostelLocation}'),
+                Spacer(),
+                Text(widget.hostelModel.isSchoolHostel
+                    ? 'Roommate Needed'
+                    : '')
+              ],
+            ),
+            SizedBox(height: 8),
+            Row(children: <Widget>[
+              Icon(
+                Icons.location_on,
+                size: 16,
+              ),
+
+
+              Text(
+                  '${widget.hostelModel
+                      .distanceFromSchoolInKm}KM from Unilorin'),
+              Spacer(),
+            ]),
+//          Text('Des: ${widget.hostelModel.description}'),
+//          Text('Price: ${widget.hostelModel.price}'),
+//          Text('ratings: ${widget.hostelModel.ratings}'),
+//          Text('Features: ${widget.hostelModel.extraFeatures}'),
+//          Text('lank Mark Close by: ${widget.hostelModel.landMark}'),
+//          Text('School Hostel?: ${widget.hostelModel.isRoomMateNeeded}'),
+//          Text('Roommate needed? : ${widget.hostelModel.isSchoolHostel}'),
+//          Text('and lots more..............'),
+            Container(
+              child: TabBar(
+                tabs: <Widget>[
+                  Tab(child: Text(
+                    'Details', style: TextStyle(color: Colors.black),),
+
+                  ),
+                  Tab(
+                      child: Text(
+                        'Reviews', style: TextStyle(color: Colors.black),
+                      ))
+                ],
+              ),
+            ),
+            Container(
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.22,
+                child: TabBarView(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SingleChildScrollView(
+                          child: Text('${widget.hostelModel.description}')),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SingleChildScrollView(child: Text(
+                          'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat')),
+                    )
+                  ],
+                ))
+          ],
+        ),
+      ),
     );
   }
 
   Widget displayMultiPic({@required List imageList}) {
     return Container(
-      margin: EdgeInsets.all(10),
       constraints: BoxConstraints(
-        maxHeight: 400,
-        maxWidth: MediaQuery.of(context).size.width * .95,
+        maxHeight: MediaQuery
+            .of(context)
+            .size
+            .height * 0.5,
+        maxWidth: MediaQuery
+            .of(context)
+            .size
+            .width,
       ),
-      child: Carousel(
-        images: imageList.map(
-          (images) {
-            return Container(
-              child: ExtendedImage.network(
-                images,
-                fit: BoxFit.fill,
-                handleLoadingProgress: true,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(15),
-                cache: false,
-                enableMemoryCache: true,
-              ),
-            );
-          },
-        ).toList(),
-        autoplay: true,
-        indicatorBgPadding: 0.0,
-        dotPosition: DotPosition.bottomCenter,
-        dotSpacing: 15.0,
-        dotSize: 4,
-        dotIncreaseSize: 2.5,
-        dotIncreasedColor: Colors.teal,
-        dotBgColor: Colors.transparent,
-        animationCurve: Curves.fastOutSlowIn,
-        animationDuration: Duration(milliseconds: 2000),
+      child: ClipRRect(borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
+        child: Carousel(
+          images: imageList.map(
+                (images) {
+              return Container(
+                child: ExtendedImage.network(
+                  images,
+                  fit: BoxFit.fill,
+                  handleLoadingProgress: true,
+                  shape: BoxShape.rectangle,
+                  cache: false,
+                  enableMemoryCache: true,
+                ),
+              );
+            },
+          ).toList(),
+          autoplay: true,
+          indicatorBgPadding: 16.0,
+          dotPosition: DotPosition.bottomCenter,
+          dotSpacing: 15.0,
+          dotSize: 4,
+          dotIncreaseSize: 2.5,
+          dotIncreasedColor: Colors.deepOrange,
+          dotBgColor: Colors.transparent,
+          animationCurve: Curves.fastOutSlowIn,
+          animationDuration: Duration(milliseconds: 2000),
+        ),
       ),
     );
   }
