@@ -286,7 +286,7 @@ class HostelBookingMethods {
     List<HostelModel> hostelList = List<HostelModel>();
 
     QuerySnapshot querySnapshot = await hostelCollection
-        .where('uniName', isEqualTo: uniName)
+//        .where('uniName', isEqualTo: uniName)
         .orderBy('dateAdded', descending: true)
         .where('hostelLocation', isEqualTo: keyWord)
         .limit(3)
