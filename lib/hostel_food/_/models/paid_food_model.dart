@@ -12,6 +12,9 @@ class PaidFood {
   String uniName;
   bool onCampus;
 
+  // this will be a map of area name and address
+  Map addressDetails;
+
   PaidFood({
     @required this.address,
     @required this.phoneNumber,
@@ -20,6 +23,7 @@ class PaidFood {
     @required this.orders,
     @required this.uniName,
     @required this.onCampus,
+    @required this.addressDetails,
   });
 
   PaidFood.fromMap(Map<String, dynamic> mapData) {
@@ -31,6 +35,7 @@ class PaidFood {
     this.orders = mapData['orders'];
     this.uniName = mapData['uniName'];
     this.onCampus = mapData['onCampus'];
+    this.addressDetails = mapData['addressDetails'];
   }
 
   Map toMap() {
@@ -43,6 +48,7 @@ class PaidFood {
     data['orders'] = this.orders;
     data['uniName'] = this.uniName;
     data['onCampus'] = this.onCampus;
+    data['addressDetails'] = this.addressDetails;
 
     return data;
   }

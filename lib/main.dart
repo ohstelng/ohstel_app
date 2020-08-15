@@ -13,6 +13,7 @@ Future<void> main() async {
   await InitHive().startCartHiveDb();
   await InitHive().startMarketCartHiveDb();
   await InitHive().startLocationHive();
+  await InitHive().startFoodAddressDetailHive();
 
   // run app
   runApp(MyApp());

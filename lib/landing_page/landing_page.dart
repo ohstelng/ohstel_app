@@ -46,17 +46,6 @@ class _MainHomePageState extends State<MainHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('home Page'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.phonelink_erase),
-            onPressed: () async {
-              await AuthService().signOut();
-            },
-          ),
-        ],
-      ),
       body: PageView(
         children: <Widget>[
           HostelBookingHomePage(),

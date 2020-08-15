@@ -6,6 +6,7 @@ import 'package:Ohstel_app/hostel_food/_/methods/fast_food_methods.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/paid_food_model.dart';
+import 'package:Ohstel_app/hostel_food/_/pages/select_location_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
@@ -20,11 +21,14 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  Box<Map> cartBox = Hive.box('cart');
-  Box<Map> userDataBox = Hive.box('userDataBox');
+  Box<Map> cartBox;
+  Box<Map> userDataBox;
+  Box<Map> addressDetailsBox;
   int numbers = 0;
   Map userData;
   bool onCampus = false;
+  bool isLoading = true;
+  Map addressDetails;
 
   List<ExtraItemDetails> getExtraFromMap({@required List data}) {
     List<ExtraItemDetails> _extraList = [];
@@ -67,9 +71,22 @@ class _CartPageState extends State<CartPage> {
   }
 
   Future<void> getUserData() async {
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
+    cartBox = await HiveMethods().getOpenBox('cart');
+    userDataBox = await HiveMethods().getOpenBox('userDataBox');
+    addressDetailsBox = await HiveMethods().getOpenBox('addressBox');
     Map data = await HiveMethods().getUserData();
     print(data);
     userData = data;
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   String _getReference() {
@@ -162,6 +179,7 @@ class _CartPageState extends State<CartPage> {
   Future<void> saveFoodInfoToDb() async {
     int numbers = cartBox.length;
     Map currentUserData = await HiveMethods().getUserData();
+    Map addressDetails = await HiveMethods().getFoodLocationDetails();
     List<String> fastFoodList = [];
     List<Map> ordersList = [];
 
@@ -201,6 +219,7 @@ class _CartPageState extends State<CartPage> {
       orders: ordersList,
       uniName: userData['uniName'],
       onCampus: onCampus,
+      addressDetails: addressDetails,
     );
 
     try {
@@ -213,75 +232,62 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  Future<void> editAddressDialog() async {
-    String addr = await HiveMethods().getAddress();
+  void selectDeliveryLocation() {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        TextEditingController controller = TextEditingController();
-        controller.text = addr.toString();
         return AlertDialog(
-          title: Text("Edit Address"),
-          content: TextField(
-            controller: controller,
-            textInputAction: TextInputAction.done,
-            autocorrect: true,
-            maxLength: 250,
-            maxLines: null,
-            onSubmitted: (val) {
-              print(val);
-            },
-          ),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () {
-                if (controller.text == 'null' || controller.text.trim() == '') {
-                  Fluttertoast.showToast(msg: 'Please Input an address');
-                } else {
-                  editAddress(address: controller.text.trim());
-                }
-              },
-              child: Text('Save Address'),
-            ),
-          ],
+          contentPadding: EdgeInsets.all(5.0),
+          content: Builder(builder: (context) {
+            var height = MediaQuery.of(context).size.height;
+            var width = MediaQuery.of(context).size.width;
+
+            return Container(
+              height: height * .70,
+              width: width,
+              child: SelectDeliveryLocationPage(),
+            );
+          }),
         );
       },
     );
   }
 
-  Future<void> editAddress({@required String address}) async {
-    Map currentUserData = await HiveMethods().getUserData();
-    print(currentUserData);
-    currentUserData['address'] = address;
-    print(currentUserData);
-    HiveMethods().updateUserAddress(map: currentUserData);
-    Navigator.maybePop(context);
+  void pay() async {
+    Map addressDetails = await HiveMethods().getFoodLocationDetails();
+    if (addressDetails != null && onCampus != null) {
+      chargeCard(price: getGrandTotal() * 100);
+    } else {
+      Fluttertoast.showToast(
+        msg: 'Plase Provide a delivery Location!',
+        gravity: ToastGravity.CENTER,
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
   }
 
   Widget getAddress() {
     return ValueListenableBuilder(
-      valueListenable: userDataBox.listenable(),
-      builder: (context, Box box, _) {
-        if (box.values.isEmpty)
-          return Center(
-            child: Text("User Details is empty"),
+      valueListenable: addressDetailsBox.listenable(),
+      builder: (context, Box box, widget) {
+        if (box.values.isEmpty) {
+          return Text('No Adress Found!!');
+        } else {
+          Map data = box.getAt(0);
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('Address:  '),
+              Expanded(
+                  child: Text(
+                '${data['address']}, ${data['areaName']}',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              )),
+            ],
           );
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: box.values.length,
-          itemBuilder: (context, index) {
-            Map data = box.getAt(0);
-            if (data['address'] == null) {
-              return Center(child: Text("User Address Not Found!"));
-            }
-            return Text(
-              data['address'],
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            );
-          },
-        );
+        }
       },
     );
   }
@@ -300,164 +306,153 @@ class _CartPageState extends State<CartPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Food Cart'),
-        actions: <Widget>[
-          FlatButton(
-            textColor: Colors.white,
-            child: Text('Edit Address'),
-            onPressed: () {
-              editAddressDialog();
-            },
-          )
-        ],
       ),
-      body: Container(
-        child: ValueListenableBuilder(
-          valueListenable: cartBox.listenable(),
-          builder: (context, box, widget) {
-            if (box.values.isEmpty) {
-              return Center(
-                child: Text("Cart list is empty"),
-              );
-            }
-            return Column(
-              children: <Widget>[
-                Flexible(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: box.values.length,
-                    itemBuilder: (context, index) {
-                      numbers = box.values.length;
-                      Map data = box.getAt(index);
-                      ItemDetails currentItemDetails = ItemDetails.formMap(
-                          data['itemDetails'].cast<String, dynamic>());
-                      List<ExtraItemDetails> currentExtraItemDetails =
-                          getExtraFromMap(data: data['extraItems']);
+      body: isLoading
+          ? Container(
+              child: Center(child: CircularProgressIndicator()),
+            )
+          : Container(
+              child: ValueListenableBuilder(
+                valueListenable: cartBox.listenable(),
+                builder: (context, box, widget) {
+                  if (box.values.isEmpty) {
+                    return Center(
+                      child: Text("Cart list is empty"),
+                    );
+                  }
+                  return Column(
+                    children: <Widget>[
+                      Flexible(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: box.values.length,
+                          itemBuilder: (context, index) {
+                            numbers = box.values.length;
+                            Map data = box.getAt(index);
+                            ItemDetails currentItemDetails =
+                                ItemDetails.formMap(data['itemDetails']
+                                    .cast<String, dynamic>());
+                            List<ExtraItemDetails> currentExtraItemDetails =
+                                getExtraFromMap(data: data['extraItems']);
 
-                      return Container(
+                            return Container(
+                              margin: EdgeInsets.all(15.0),
+                              child: Column(
+                                children: <Widget>[
+                                  Column(
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                              '${currentItemDetails.itemName}'),
+                                          Text('${currentItemDetails.price}'),
+                                        ],
+                                      ),
+                                      getExtraWidget(
+                                          extras: currentExtraItemDetails),
+                                      Container(
+                                        margin: EdgeInsets.only(top: 10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text('Number Of Plates'),
+                                            Text('${data['numberOfPlates']}'),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(),
+                                      Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text(''),
+                                            Row(
+                                              children: <Widget>[
+                                                Text('Remove'),
+                                                InkWell(
+                                                  child: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  ),
+                                                  onTap: () {
+                                                    cartBox.deleteAt(index);
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
                         margin: EdgeInsets.all(15.0),
                         child: Column(
                           children: <Widget>[
-                            Column(
+                            Divider(
+                              thickness: 1.5,
+                              color: Colors.black,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text('${currentItemDetails.itemName}'),
-                                    Text('${currentItemDetails.price}'),
-                                  ],
-                                ),
-                                getExtraWidget(extras: currentExtraItemDetails),
-                                Container(
-                                  margin: EdgeInsets.only(top: 10.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text('Number Of Plates'),
-                                      Text('${data['numberOfPlates']}'),
-                                    ],
-                                  ),
-                                ),
-                                Divider(),
-                                Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(''),
-                                      Row(
-                                        children: <Widget>[
-                                          Text('Remove'),
-                                          InkWell(
-                                            child: Icon(
-                                              Icons.delete,
-                                              color: Colors.red,
-                                            ),
-                                            onTap: () {
-                                              cartBox.deleteAt(index);
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Divider(),
+                                Text('Total'),
+                                Text('${getGrandTotal()}'),
                               ],
+                            ),
+                            Divider(
+                              thickness: 1.5,
+                              color: Colors.black,
                             ),
                           ],
                         ),
-                      );
-                    },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(15.0),
-                  child: Column(
-                    children: <Widget>[
-                      Divider(
-                        thickness: 1.5,
-                        color: Colors.black,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text('Total'),
-                          Text('${getGrandTotal()}'),
-                        ],
+                      Container(
+                        child: getAddress(),
                       ),
-                      Divider(
-                        thickness: 1.5,
-                        color: Colors.black,
+                      Container(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.all(10.0),
+                              child: FlatButton(
+                                color: Colors.green,
+                                onPressed: () {
+                                  selectDeliveryLocation();
+                                },
+                                child: Text('Select Loactions'),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.all(10.0),
+                              child: FlatButton(
+                                color: Colors.green,
+                                onPressed: () {
+                                  pay();
+                                },
+                                child: Text('Pay'),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
-                  ),
-                ),
-                Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text('Address'),
-                      Flexible(child: getAddress()),
-                    ],
-                  ),
-                ),
-                Container(
-                    child: CheckboxListTile(
-                  title: Text("Are you on School Campus??"),
-                  value: onCampus,
-                  onChanged: (newValue) {
-                    setState(() {
-                      onCampus = newValue;
-                    });
-                  },
-                  controlAffinity:
-                      ListTileControlAffinity.trailing, //  <-- leading Checkbox
-                )),
-                Container(
-                  child: FlatButton(
-                    color: Colors.green,
-                    onPressed: () async {
-                      String addr = await HiveMethods().getAddress();
-                      if (addr != null && onCampus != null) {
-                        chargeCard(price: getGrandTotal() * 100);
-                      } else {
-                        Fluttertoast.showToast(
-                          msg: 'Plase Provide a delivery Location!',
-                          gravity: ToastGravity.CENTER,
-                          toastLength: Toast.LENGTH_LONG,
-                        );
-                      }
-                    },
-                    child: Text('Pay'),
-                  ),
-                )
-              ],
-            );
-          },
-        ),
-      ),
+                  );
+                },
+              ),
+            ),
     );
   }
 

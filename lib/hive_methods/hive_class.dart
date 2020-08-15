@@ -20,6 +20,12 @@ class InitHive {
     await Hive.openBox<Map>('locationBox');
   }
 
+  Future startFoodAddressDetailHive() async {
+    Directory documentDir = await getApplicationSupportDirectory();
+    Hive.init(documentDir.path);
+    await Hive.openBox<Map>('addressBox');
+  }
+
   Future startCartHiveDb() async {
     Directory documentDir = await getApplicationSupportDirectory();
     Hive.init(documentDir.path);
@@ -145,5 +151,19 @@ class HiveMethods {
     Map locationData = locationDataBox.get(0);
 
     return locationData;
+  }
+
+  Future<void> saveFoodLocationDetailsToDb({@required Map map}) async {
+    Box<Map> cartDataBox = await getOpenBox('addressBox');
+
+    cartDataBox.put(0, map);
+    print('saved');
+  }
+
+  Future<Map> getFoodLocationDetails() async {
+    Box<Map> addressDetailsDataBox = await getOpenBox('addressBox');
+
+    Map addressDetails = addressDetailsDataBox.get(0);
+    return addressDetails;
   }
 }
