@@ -12,6 +12,7 @@ Future<void> main() async {
   await InitHive().startHive(boxName: 'userDataBox');
   await InitHive().startCartHiveDb();
   await InitHive().startMarketCartHiveDb();
+  await InitHive().startLocationHive();
 
   // run app
   runApp(MyApp());

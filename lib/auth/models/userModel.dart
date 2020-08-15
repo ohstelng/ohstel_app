@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class UserModel{
+class UserModel {
   String uid;
   String email;
   String fullName;
@@ -8,6 +8,7 @@ class UserModel{
   String schoolLocation;
   String phoneNumber;
   String uniName;
+  Map uniDetails;
 
   UserModel({
     @required this.uid,
@@ -17,9 +18,16 @@ class UserModel{
     @required this.schoolLocation,
     @required this.phoneNumber,
     @required this.uniName,
-});
+    @required this.uniDetails,
+  });
 
-  UserModel.fromMap(Map<String, dynamic> mapData){
+  //TODO: implement toMap here
+  //TODO: implement toMap here
+  //TODO: implement toMap here
+  //TODO: implement toMap here
+  //TODO: implement toMap here
+
+  UserModel.fromMap(Map<String, dynamic> mapData) {
     this.uid = mapData['uid'];
     this.email = mapData['email'];
     this.fullName = mapData['fullName'];
@@ -27,7 +35,6 @@ class UserModel{
     this.schoolLocation = mapData['schoolLocation'];
     this.phoneNumber = mapData['phoneNumber'];
     this.uniName = mapData['uniName'];
+    this.uniDetails = mapData['uniDetails'];
   }
-
-
 }

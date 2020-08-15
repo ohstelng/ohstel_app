@@ -7,7 +7,6 @@ import 'package:uuid/uuid.dart';
 class HostelModel {
   String hostelName;
   String hostelLocation;
-  String hostelAreaName;
   int price;
   double distanceFromSchoolInKm;
   bool isRoomMateNeeded;
@@ -28,7 +27,6 @@ class HostelModel {
   HostelModel({
     @required this.hostelName,
     @required this.hostelLocation,
-    @required this.hostelAreaName,
     @required this.price,
     @required this.distanceFromSchoolInKm,
     @required this.isRoomMateNeeded,
@@ -47,7 +45,7 @@ class HostelModel {
   HostelModel.fromMap(Map<String, dynamic> mapData) {
     this.hostelName = mapData['hostelName'];
     this.hostelLocation = mapData['hostelLocation'];
-    this.hostelAreaName = mapData['hostelAreaName'];
+
     this.price = mapData['price'];
     this.distanceFromSchoolInKm = mapData['distanceFromSchoolInKm'];
     this.isRoomMateNeeded = mapData['isRoomMateNeeded'];
@@ -70,7 +68,6 @@ class HostelModel {
     Map data = Map<String, dynamic>();
     data['hostelName'] = this.hostelName;
     data['hostelLocation'] = this.hostelLocation;
-    data['hostelAreaName'] = this.hostelAreaName;
     data['hostelLocation'] = this.hostelLocation;
     data['price'] = this.price;
     data['distanceFromSchoolInKm'] = this.distanceFromSchoolInKm;

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
@@ -11,8 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:paginate_firestore/paginate_firestore.dart';
 
 final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
 
@@ -29,7 +32,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   var tempSearchStore = [];
   List<HostelModel> searchList;
   var query = '';
-  int perPage = 6;
+  int perPage = 3;
   bool gettingMoreHostels = false;
   bool moreHostelAvailable = true;
   HostelModel lastHostel;
@@ -63,6 +66,37 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     }
   }
 
+  void search() {
+    try {
+      setState(() {
+        isStillLoadingData = true;
+      });
+
+      HostelBookingMethods().fetchAllHostel(uniName: uniName).then(
+        (List<HostelModel> list) {
+          if (list != null && list.isNotEmpty) {
+            setState(() {
+              searchList = list;
+              isStillLoadingData = false;
+              lastHostel = searchList[searchList.length - 1];
+            });
+          } else {
+            setState(() {
+              searchList = [];
+              isStillLoadingData = false;
+            });
+          }
+        },
+      );
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: e.message);
+      setState(() {
+        isStillLoadingData = false;
+      });
+    }
+  }
+
   void getHostelSearchByOnCampusOnly() {
     try {
       isStillLoadingData = true;
@@ -70,11 +104,16 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
       HostelBookingMethods().fetchAllSchoolHostel(uniName: uniName).then(
         (List<HostelModel> list) {
-          if (list != null) {
+          if (list != null && list.isNotEmpty) {
             setState(() {
               searchList = list;
               isStillLoadingData = false;
               lastHostel = searchList[searchList.length - 1];
+            });
+          } else {
+            setState(() {
+              searchList = [];
+              isStillLoadingData = false;
             });
           }
         },
@@ -95,11 +134,16 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
       HostelBookingMethods().fetchAllHostelSortByPrice(uniName: uniName).then(
         (List<HostelModel> list) {
-          if (list != null) {
+          if (list != null && list.isNotEmpty) {
             setState(() {
               searchList = list;
               isStillLoadingData = false;
               lastHostel = searchList[searchList.length - 1];
+            });
+          } else {
+            setState(() {
+              searchList = [];
+              isStillLoadingData = false;
             });
           }
         },
@@ -122,11 +166,16 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           .fetchAllHostelSortByDistanceFromSchool(uniName: uniName)
           .then(
         (List<HostelModel> list) {
-          if (list != null) {
+          if (list != null && list.isNotEmpty) {
             setState(() {
               searchList = list;
               isStillLoadingData = false;
               lastHostel = searchList[searchList.length - 1];
+            });
+          } else {
+            setState(() {
+              searchList = [];
+              isStillLoadingData = false;
             });
           }
         },
@@ -149,11 +198,16 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           .fetchAllHostelSortByRoommateNeeded(uniName: uniName)
           .then(
         (List<HostelModel> list) {
-          if (list != null) {
+          if (list != null && list.isNotEmpty) {
             setState(() {
               searchList = list;
               isStillLoadingData = false;
               lastHostel = searchList[searchList.length - 1];
+            });
+          } else {
+            setState(() {
+              searchList = [];
+              isStillLoadingData = false;
             });
           }
         },
@@ -422,6 +476,14 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     uniName = name;
   }
 
+  Future getUniList() async {
+    String url = "http://ohstel.pythonanywhere.com/hostelSearchKey";
+    var response = await http.get(url);
+    var result = json.decode(response.body);
+    print(result);
+    return result;
+  }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -432,12 +494,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       _scrollListener();
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
   }
 
   @override
@@ -452,12 +508,14 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 searchInputControl(),
-                TabBar(
-                  tabs: [
-                    Tab(text: "Explore"),
-                    Tab(text: "Saved"),
-                  ],
-                )
+                Expanded(
+                  child: TabBar(
+                    tabs: [
+                      Tab(text: "Explore"),
+                      Tab(text: "Saved"),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -509,18 +567,16 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           .where('isSchoolHostel', isEqualTo: false),
       itemBuilder: (context, DocumentSnapshot documentSnapshot) {
         HostelModel currentHostelModel =
-        HostelModel.fromMap(documentSnapshot.data);
+            HostelModel.fromMap(documentSnapshot.data);
 
         return Card(
           elevation: 2.5,
           child: InkWell(
             onTap: () {
               print(currentHostelModel.id);
-              Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          HostelBookingInFoPage(
-                              hostelModel: currentHostelModel)));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      HostelBookingInFoPage(hostelModel: currentHostelModel)));
             },
             child: Container(
               margin: EdgeInsets.all(10),
@@ -528,7 +584,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   displayMultiPic(imageList: currentHostelModel.imageUrl),
-                  SizedBox(width: 8,),
+                  SizedBox(
+                    width: 8,
+                  ),
                   hostelDetails(hostel: currentHostelModel),
                 ],
               ),
@@ -575,12 +633,12 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                     SizedBox(height: 8),
                     index == (searchList.length)
                         ? Container(
-                      child: Center(
-                        child: moreHostelAvailable == false
-                            ? Text('No More Hostel Available!!')
-                            : CircularProgressIndicator(),
-                      ),
-                    )
+                            child: Center(
+                              child: moreHostelAvailable == false
+                                  ? Text('No More Hostel Available!!')
+                                  : CircularProgressIndicator(),
+                            ),
+                          )
                         : Container(),
                   ],
                 ),
@@ -594,10 +652,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Widget hostelDetails({@required HostelModel hostel}) {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.40,
+      width: MediaQuery.of(context).size.width * 0.40,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
@@ -665,10 +720,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     return Container(
       constraints: BoxConstraints(
         maxHeight: 120,
-        maxWidth: MediaQuery
-            .of(context)
-            .size
-            .width * .46,
+        maxWidth: MediaQuery.of(context).size.width * .46,
       ),
       child: Carousel(
         images: imageList.map(
@@ -707,9 +759,14 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Expanded(flex: 1, child: Icon(Icons.menu, color: Colors.white,)),
           Expanded(
-            flex: 10,
+              flex: 1,
+              child: Icon(
+                Icons.menu,
+                color: Colors.white,
+              )),
+          Expanded(
+            flex: 8,
             child: Container(
               height: 50,
               margin: EdgeInsets.only(right: 5),
@@ -718,6 +775,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
               child: MaterialButton(
                 onPressed: () {
+//                  SubLocationViewModel.loadSubLocationsFromApi(
+//                      uniName: uniName);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => HostelBookingSearchPage(),
@@ -755,18 +814,112 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     );
   }
 
+  void changeUni() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Select Uni'),
+          content: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.55,
+            child: FutureBuilder(
+              future: getUniList(),
+              builder: (context, snapshot) {
+                print(snapshot.data);
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                print(snapshot.data);
+                Map data = snapshot.data;
+                return Container(
+                  width: double.maxFinite,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      List<String> uniList = data.keys.toList();
+                      uniList.sort();
+                      Map currentUniDetails = data[uniList[index]];
+
+                      return Column(
+                        children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                              child: ListTile(
+                                onTap: () {
+                                  print(currentUniDetails['abbr']
+                                      .toString()
+                                      .toLowerCase());
+                                  uniName = currentUniDetails['abbr']
+                                      .toString()
+                                      .toLowerCase();
+//                                  print(uniName);
+                                  Navigator.pop(context);
+                                  search();
+                                },
+                                title: Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Colors.grey,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '${currentUniDetails['name']}',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                subtitle: Text(
+                                  '${currentUniDetails['abbr']}',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              )),
+                          Divider(),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   DropdownButton dropdownButton() {
     return DropdownButton<String>(
       onChanged: (value) {
         print('value: ${value.runtimeType}');
         print('value: $value');
-        setState(() {
-          sortBy = value;
-        });
-        performSearchController();
+        if (value == 'changeUni') {
+          print('Change uin');
+          changeUni();
+          setState(() {
+            sortBy = sortBy;
+          });
+        } else {
+          setState(() {
+            sortBy = value;
+          });
+          performSearchController();
+        }
       },
       hint: Icon(
-        Icons.tune, color: Colors.white,
+        Icons.tune,
+        color: Colors.white,
       ),
       isExpanded: true,
       items: [
@@ -822,10 +975,16 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           value: "isSchoolHostel",
           child: Column(
             children: <Widget>[
-              Text(
-                  "On-Campus",
-                  textAlign: TextAlign.center, maxLines: 1
-              ),
+              Text("On-Campus", textAlign: TextAlign.center, maxLines: 1),
+              Divider(),
+            ],
+          ),
+        ),
+        DropdownMenuItem<String>(
+          value: "changeUni",
+          child: Column(
+            children: <Widget>[
+              Text("Edit Uni", textAlign: TextAlign.center, maxLines: 1),
               Divider(),
             ],
           ),

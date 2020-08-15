@@ -393,7 +393,6 @@ packages:
       name: hive_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "0.3.0+2"
   hive_generator:
     dependency: "direct dev"
@@ -409,9 +408,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.14.0+3"
-=======
-    version: "0.3.1"
->>>>>>> 8cbbef7a8fabad5527916a7eb245f7d0eb5670ca
   http:
     dependency: transitive
     description:

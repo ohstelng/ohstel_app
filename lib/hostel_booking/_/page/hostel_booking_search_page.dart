@@ -29,8 +29,8 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
   HostelModel lastHostel;
   String uniName;
 
-  void _loadData() {
-    SubLocationViewModel.loadSubLocations();
+  Future<void> _loadData() async {
+    await SubLocationViewModel.loadSubLocationsFromDb();
   }
 
   Future<void> getUniName() async {

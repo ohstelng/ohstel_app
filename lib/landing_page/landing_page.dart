@@ -1,4 +1,5 @@
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/food_home_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
@@ -28,6 +29,11 @@ class _MainHomePageState extends State<MainHomePage> {
   @override
   void initState() {
     pageController = PageController();
+    //TODO: implement connectivity checker
+    //TODO: implement connectivity checker
+    //TODO: implement connectivity checker
+    //TODO: implement connectivity checker
+    HiveMethods().intiLocationData();
     super.initState();
   }
 
@@ -40,7 +46,6 @@ class _MainHomePageState extends State<MainHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       appBar: AppBar(
         title: Text('home Page'),
         actions: <Widget>[
@@ -52,8 +57,6 @@ class _MainHomePageState extends State<MainHomePage> {
           ),
         ],
       ),
-=======
->>>>>>> 8cbbef7a8fabad5527916a7eb245f7d0eb5670ca
       body: PageView(
         children: <Widget>[
           HostelBookingHomePage(),
@@ -123,4 +126,3 @@ class _MainHomePageState extends State<MainHomePage> {
     );
   }
 }
-
