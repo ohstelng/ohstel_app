@@ -6,25 +6,25 @@ class ProductModel {
   String productName;
   List<String> imageUrls;
   String productCategory;
+  String productOriginLocation;
   String productSubCategory;
   String productDescription;
-  String uniName;
   int productPrice;
   String productShopName;
   String productShopOwnerEmail;
   int productShopOwnerPhoneNumber;
   Timestamp dateAdded;
   List<String> searchKeys;
-  String id = Uuid().v4().toString();
+  String id = Uuid().v1().toString();
 
   ProductModel({
     @required this.productName,
     @required this.imageUrls,
     @required this.productCategory,
+    @required this.productOriginLocation,
     @required this.productDescription,
     @required this.productSubCategory,
     @required this.productPrice,
-    @required this.uniName,
     @required this.productShopName,
     @required this.productShopOwnerEmail,
     @required this.productShopOwnerPhoneNumber,
@@ -34,11 +34,11 @@ class ProductModel {
     this.productName = mapData['productName'];
     this.imageUrls = mapData['imageUrls'].cast<String>();
     this.productCategory = mapData['productCategory'];
+    this.productOriginLocation = mapData['productOriginLocation'];
     this.productSubCategory = mapData['productSubCategory'];
     this.productDescription = mapData['productDescription'];
     this.productPrice = mapData['productPrice'];
     this.productShopName = mapData['productShopName'];
-    this.uniName = mapData['uniName'];
     this.productShopOwnerEmail = mapData['productShopOwnerEmail'];
     this.productShopOwnerPhoneNumber =
         int.parse(mapData['productShopOwnerPhoneNumber']);
@@ -58,16 +58,18 @@ class ProductModel {
 
     _searchKeys.add(prodCat);
     _searchKeys.add(prodshopOwnerName);
-    _searchKeys.add(prodSubCat);
-    _searchKeys.addAll(prodNames);
+    _searchKeys.add(prodSubCat.toLowerCase());
+    prodNames.forEach((element) {
+      _searchKeys.add(element.toLowerCase());
+    });
 
     data['productName'] = this.productName.toLowerCase();
     data['imageUrls'] = this.imageUrls;
     data['productCategory'] = this.productCategory.toLowerCase();
+    data['productOriginLocation'] = this.productOriginLocation.toLowerCase();
     data['productSubCategory'] = this.productSubCategory.toLowerCase();
     data['productDescription'] = this.productDescription.toLowerCase();
     data['productShopName'] = this.productShopName.toLowerCase();
-    data['uniName'] = this.uniName.toLowerCase();
     data['productShopOwnerEmail'] = this.productShopOwnerEmail;
     data['productShopOwnerPhoneNumber'] =
         this.productShopOwnerPhoneNumber.toString();
@@ -95,6 +97,7 @@ class ProductModel {
 //    productShopName: 'ola',
 //    productShopOwnerEmail: 'olashop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08099776655,
+//    productOriginLocation: 'unilorin',
 //  ),
 //  ProductModel(
 //    productName: 'Kings oil',
@@ -110,6 +113,7 @@ class ProductModel {
 //    productShopName: 'ola',
 //    productShopOwnerEmail: 'olashop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08099776655,
+//    productOriginLocation: 'unilorin',
 //  ),
 //  ProductModel(
 //    productName: 'Holladia Yoghurt',
@@ -125,6 +129,7 @@ class ProductModel {
 //    productShopName: 'ola',
 //    productShopOwnerEmail: 'olashop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08099776655,
+//    productOriginLocation: 'unilorin',
 //  ),
 //  ProductModel(
 //    productName: 'Red Blanket',
@@ -140,6 +145,7 @@ class ProductModel {
 //    productShopName: 'ola',
 //    productShopOwnerEmail: 'olashop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08099776655,
+//    productOriginLocation: 'unilorin',
 //  ),
 //  ProductModel(
 //    productName: 'Vita Foam',
@@ -155,6 +161,7 @@ class ProductModel {
 //    productShopName: 'ola',
 //    productShopOwnerEmail: 'olashop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08099776655,
+//    productOriginLocation: 'unilorin',
 //  ),
 //  ProductModel(
 //    productName: 'Fila Polo',
@@ -170,6 +177,7 @@ class ProductModel {
 //    productShopName: 'ola',
 //    productShopOwnerEmail: 'olashop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08099776655,
+//    productOriginLocation: 'unilorin',
 //  ),
 //  ProductModel(
 //    productName: 'Nike Shoes',
@@ -185,6 +193,7 @@ class ProductModel {
 //    productShopName: 'ola',
 //    productShopOwnerEmail: 'olashop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08099776655,
+//    productOriginLocation: 'unilorin',
 //  ),
 //  ProductModel(
 //    productName: 'Apple watch',
@@ -200,6 +209,7 @@ class ProductModel {
 //    productShopName: 'ola shop',
 //    productShopOwnerEmail: 'olashop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08099776655,
+//    productOriginLocation: 'unilorin',
 //  ),
 //  ProductModel(
 //    productName: 'NoteBooks',
@@ -215,6 +225,7 @@ class ProductModel {
 //    productShopName: 'teni',
 //    productShopOwnerEmail: 'teniShop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08011223344,
+//    productOriginLocation: 'unilag',
 //  ),
 //  ProductModel(
 //    productName: 'School Bag',
@@ -230,11 +241,12 @@ class ProductModel {
 //    productShopName: 'teni',
 //    productShopOwnerEmail: 'teniShop123@gmail.com',
 //    productShopOwnerPhoneNumber: 08011223344,
+//    productOriginLocation: 'unilag',
 //  ),
 //];
-
-///
-
+//
+/////
+//
 //List<Map> catList = [
 //  {
 //    'searchKey': 'Bed and Beddings',
@@ -277,25 +289,26 @@ class ProductModel {
 //        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTCmF8OLf8CW3ffRr0a743R5biIdkSW3x2ZVg&usqp=CAU'
 //  },
 //];
-
-//void savecat() async {
-//  final CollectionReference marketRef = Firestore.instance.collection('market');
 //
-//  for (Map i in catList) {
-//    await marketRef
-//        .document('categories')
-//        .collection('productsList')
-//        .document(i['searchKey'])
-//        .setData(i.cast<String, dynamic>());
-//  }
-//}
+////void savecat() async {
+////  final CollectionReference marketRef = Firestore.instance.collection('market');
+////
+////  for (Map i in catList) {
+////    await marketRef
+////        .document('categories')
+////        .collection('productsList')
+////        .document(i['searchKey'])
+////        .setData(i.cast<String, dynamic>());
+////  }
+////}
 //
 //Future<void> saveProduct() async {
 //  final CollectionReference collectionReference =
 //      Firestore.instance.collection('market');
 //
 //  for (ProductModel productModel in list) {
-//    print(productModel.imageUrls);
+//    print(productModel.productOriginLocation);
+////    print(list.length);
 //    await collectionReference
 //        .document('products')
 //        .collection('allProducts')

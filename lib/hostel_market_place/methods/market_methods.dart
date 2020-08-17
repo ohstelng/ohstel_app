@@ -1,4 +1,5 @@
 import 'package:Ohstel_app/hostel_market_place/models/paid_market_orders_model.dart';
+import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -45,5 +46,52 @@ class MarketMethods {
       print(e);
       Fluttertoast.showToast(msg: '${e}');
     }
+  }
+
+  Future<List<ProductModel>> getProductByKeyword(
+      {@required String keyword}) async {
+    print('pppppppppppppp');
+    print(keyword);
+    List<ProductModel> productList = List<ProductModel>();
+
+    QuerySnapshot querySnapshot = await marketCollection
+        .document('products')
+        .collection('allProducts')
+        .orderBy('dateAdded', descending: true)
+        .where('searchKeys', arrayContains: keyword)
+        .limit(5)
+        .getDocuments();
+
+    for (var i = 0; i < querySnapshot.documents.length; i++) {
+      productList.add(ProductModel.fromMap(querySnapshot.documents[i].data));
+    }
+
+    print(productList);
+
+    return productList;
+  }
+
+  Future<List<ProductModel>> getMoreProductByKeyword({
+    @required String keyword,
+    @required ProductModel lastProduct,
+  }) async {
+    List<ProductModel> productList = List<ProductModel>();
+
+    QuerySnapshot querySnapshot = await marketCollection
+        .document('products')
+        .collection('allProducts')
+        .orderBy('dateAdded', descending: true)
+        .where('searchKeys', arrayContains: keyword)
+        .startAfter([lastProduct.dateAdded])
+        .limit(3)
+        .getDocuments();
+
+    for (var i = 0; i < querySnapshot.documents.length; i++) {
+      productList.add(ProductModel.fromMap(querySnapshot.documents[i].data));
+    }
+
+    print(productList);
+
+    return productList;
   }
 }

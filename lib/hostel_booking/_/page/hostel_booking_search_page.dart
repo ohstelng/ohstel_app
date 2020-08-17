@@ -68,11 +68,9 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
       });
     } catch (e) {
       Fluttertoast.showToast(msg: e.message, toastLength: Toast.LENGTH_LONG);
-      setState(
-        () {
+      setState(() {
           isStillLoadingData = false;
-        },
-      );
+        });
     }
   }
 

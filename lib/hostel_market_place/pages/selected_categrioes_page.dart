@@ -68,7 +68,6 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
               .collection('allProducts')
               .where('productCategory',
                   isEqualTo: widget.searchKey.toLowerCase())
-              .where('uniName', isEqualTo: uniName)
               .orderBy('dateAdded', descending: true),
           itemBuilder: (context, DocumentSnapshot documentSnapshot) {
             ProductModel currentProductModel =

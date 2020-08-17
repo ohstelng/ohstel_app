@@ -3,6 +3,7 @@ import 'package:Ohstel_app/hostel_market_place/methods/market_methods.dart';
 import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/all_categories_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_cart_page.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/market_search_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_categrioes_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_product_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,18 +35,20 @@ class _MarketHomePageState extends State<MarketHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              searchBar(),
-              header(),
-            ],
-          ),
-          advertBanner(),
-          categories(),
-          lastestProduct(),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                searchBar(),
+                header(),
+              ],
+            ),
+            advertBanner(),
+            categories(),
+            lastestProduct(),
+          ],
+        ),
       ),
     );
   }
@@ -67,8 +70,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
             .collection('market')
             .document('products')
             .collection('allProducts')
-            .orderBy('dateAdded', descending: true)
-            .where('uniLocation', isEqualTo: 'unilorin'),
+            .orderBy('dateAdded', descending: true),
         itemBuilder: (context, DocumentSnapshot documentSnapshot) {
 //          print(documentSnapshot.data);
           ProductModel currentProductModel =
@@ -262,12 +264,21 @@ class _MarketHomePageState extends State<MarketHomePage> {
           color: Colors.grey[300],
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text('Search For Product'),
-            Icon(Icons.search),
-          ],
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => MarketSearchPage(),
+              ),
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('Search For Product'),
+              Icon(Icons.search),
+            ],
+          ),
         ),
       ),
     );
