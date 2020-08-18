@@ -2,6 +2,7 @@ import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/food_home_page.dart';
+import 'package:Ohstel_app/hostel_hire/pages/hire_home_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _MainHomePageState extends State<MainHomePage> {
           HostelBookingHomePage(),
           FoodHomePage(),
           MarketHomePage(),
-          Container(child: Center(child: Text('Hire'))),
+          HireHomePage(),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

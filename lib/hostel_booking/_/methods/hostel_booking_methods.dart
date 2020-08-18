@@ -17,12 +17,12 @@ class HostelBookingMethods {
       QuerySnapshot querySnapshot = await hostelCollection
           .where('uniName', isEqualTo: uniName)
           .orderBy('dateAdded', descending: true)
-          .limit(3)
+          .limit(6)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
         hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['email']);
+        print(querySnapshot.documents[i].data['price']);
       }
     } catch (e) {
       print(e);
@@ -44,7 +44,7 @@ class HostelBookingMethods {
           .where('uniName', isEqualTo: uniName)
           .orderBy('dateAdded', descending: true)
           .startAfter([lastHostel.dateAdded])
-          .limit(perPage)
+          .limit(3)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
@@ -71,7 +71,7 @@ class HostelBookingMethods {
           .where('uniName', isEqualTo: uniName)
           .orderBy('dateAdded', descending: true)
           .where('isSchoolHostel', isEqualTo: true)
-          .limit(3)
+          .limit(6)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
@@ -100,7 +100,7 @@ class HostelBookingMethods {
           .orderBy('dateAdded', descending: true)
           .where('isSchoolHostel', isEqualTo: true)
           .startAfter([lastHostel.dateAdded])
-          .limit(perPage)
+          .limit(3)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
@@ -126,7 +126,7 @@ class HostelBookingMethods {
       QuerySnapshot querySnapshot = await hostelCollection
           .where('uniName', isEqualTo: uniName)
           .orderBy('price', descending: false)
-          .limit(3)
+          .limit(6)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
@@ -155,7 +155,7 @@ class HostelBookingMethods {
           .where('uniName', isEqualTo: uniName)
           .orderBy('price', descending: false)
           .startAfter([lastHostel.price])
-          .limit(perPage)
+          .limit(3)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
@@ -180,7 +180,7 @@ class HostelBookingMethods {
           .where('uniName', isEqualTo: uniName)
           .orderBy('distanceFromSchoolInKm', descending: false)
           .where('isSchoolHostel', isEqualTo: false)
-          .limit(3)
+          .limit(6)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
@@ -211,7 +211,7 @@ class HostelBookingMethods {
           .orderBy('distanceFromSchoolInKm', descending: false)
           .where('isSchoolHostel', isEqualTo: false)
           .startAfter([lastHostel.distanceFromSchoolInKm])
-          .limit(perPage)
+          .limit(3)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
@@ -236,7 +236,7 @@ class HostelBookingMethods {
           .where('uniName', isEqualTo: uniName)
           .orderBy('dateAdded', descending: true)
           .where('isRoomMateNeeded', isEqualTo: true)
-          .limit(3)
+          .limit(6)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
@@ -265,7 +265,7 @@ class HostelBookingMethods {
           .orderBy('dateAdded', descending: true)
           .where('isRoomMateNeeded', isEqualTo: true)
           .startAfter([lastHostel.dateAdded])
-          .limit(perPage)
+          .limit(3)
           .getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
@@ -289,7 +289,7 @@ class HostelBookingMethods {
 //        .where('uniName', isEqualTo: uniName)
         .orderBy('dateAdded', descending: true)
         .where('hostelLocation', isEqualTo: keyWord)
-        .limit(3)
+        .limit(6)
         .getDocuments();
 
     for (var i = 0; i < querySnapshot.documents.length; i++) {
