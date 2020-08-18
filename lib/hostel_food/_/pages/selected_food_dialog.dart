@@ -7,6 +7,8 @@ import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
+import 'cart_page.dart';
+
 class FoodDialog extends StatefulWidget {
   final List<ExtraItemDetails> currentExtraItemDetails;
   final ItemDetails itemDetails;
@@ -21,6 +23,8 @@ class FoodDialog extends StatefulWidget {
 }
 
 class _FoodDialogState extends State<FoodDialog> {
+  Runes input = Runes('\u20a6');
+  var symbol;
   StreamController<List<ExtraItemDetails>> extraListController =
       StreamController();
   String selectedExtras;
@@ -49,161 +53,298 @@ class _FoodDialogState extends State<FoodDialog> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    symbol = String.fromCharCodes(input);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+            color: Colors.black,
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop()),
+        actions: [
+          IconButton(
+            color: Colors.black87,
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CartPage(),
+                ),
+              );
+            },
+          )
+        ],
+      ),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            widget.itemDetails.imageUrl != null
-                ? Container(
-                    margin: EdgeInsets.all(10.0),
-                    height: 150,
-                    width: 150,
-                    child: ExtendedImage.network(
-                      widget.itemDetails.imageUrl,
-                      fit: BoxFit.contain,
-                      handleLoadingProgress: true,
-                      shape: BoxShape.circle,
-                      cache: false,
-                      enableMemoryCache: true,
-                    ),
-                  )
-                : Container(
-                    height: 120,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  '${widget.itemDetails.itemName}',
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: ListView(
+            children: <Widget>[
+              widget.itemDetails.imageUrl != null
+                  ? Container(
+                margin: const EdgeInsets.all(10.0),
+                height: 150,
+                width: double.infinity,
+                child: ExtendedImage.network(
+                  widget.itemDetails.imageUrl,
+                  fit: BoxFit.contain,
+                  handleLoadingProgress: true,
+                  shape: BoxShape.circle,
+                  cache: false,
+                  enableMemoryCache: true,
                 ),
-                Text(
-                  '\$${widget.itemDetails.price}',
+              )
+                  : Container(
+                height: 120,
+                width: 120,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  shape: BoxShape.circle,
                 ),
-              ],
-            ),
-            widget.currentExtraItemDetails.isNotEmpty
-                ? Flexible(
-                    child: Container(
-                      margin: EdgeInsets.all(10.0),
-                      child: extraItemWidget(),
-                    ),
-                  )
-                : Container(),
-            widget.currentExtraItemDetails.isNotEmpty
-                ? Container(
-                    margin: EdgeInsets.all(5.0),
-                    child: DropdownButton(
-                      hint: extraList.isEmpty
-                          ? Text('Select Extras')
-                          : Text('Add More Extras'),
-                      items: widget.currentExtraItemDetails
-                          .map((ExtraItemDetails element) {
-                        return DropdownMenuItem<String>(
-                          value: element.extraItemName,
-                          child: Text('${element.extraItemName}'),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          print(value);
-                          selectedExtras = value;
-                          extraList.add(
-                            widget.currentExtraItemDetails
-                                .where(
-                                    (element) => element.extraItemName == value)
-                                .toList()[0],
-                          );
-                          setState(() {});
-                          print(selectedExtras);
-                        });
-                        setState(() {});
-                      },
-                    ),
-                  )
-                : Container(),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Nmuber Of Plates'),
-                  Row(
-                    children: <Widget>[
-                      Container(
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
 //                        padding: EdgeInsets.symmetric(horizontal: 1.5),
-                        margin: EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: InkWell(
-                          child: Icon(Icons.remove, color: Colors.grey),
-                          onTap: () {
-                            if (numberOfPlates > 1) {
-                              if (mounted) {
-                                setState(() {
-                                  numberOfPlates--;
-                                });
-                              }
-                            }
-                          },
+                      margin: EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: numberOfPlates == 1 ? Colors.grey : Color(
+                              0xFFF27507),
                         ),
                       ),
-                      Text('$numberOfPlates'),
-                      Container(
-                        margin: EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
+                      child: InkWell(
+                        child: Icon(
+                          Icons.remove,
+                          color: numberOfPlates == 1 ? Colors.grey : Color(
+                              0xFFF27507),
                         ),
-                        child: InkWell(
-                          child: Icon(Icons.add, color: Colors.grey),
-                          onTap: () {
+                        onTap: () {
+                          if (numberOfPlates > 1) {
                             if (mounted) {
                               setState(() {
-                                numberOfPlates++;
+                                numberOfPlates--;
                               });
                             }
-                          },
+                          }
+                        },
+                      ),
+                    ),
+                    Text('$numberOfPlates'),
+                    Container(
+                      margin: EdgeInsets.only(left: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xFFF27507),
                         ),
                       ),
-                    ],
-                  )
-                ],
+                      child: InkWell(
+                        child: Icon(
+                          Icons.add,
+                          color: Color(0xFFF27507),
+                        ),
+                        onTap: () {
+                          if (mounted) {
+                            setState(() {
+                              numberOfPlates++;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Divider(
-              thickness: 0.5,
-              color: Colors.black,
-            ),
-            Container(
-              margin: EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Total'),
-                  Text('\$${getTotal()}'),
-                ],
+              Container(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      '${widget.itemDetails.itemName}',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      '$symbol${widget.itemDetails.price}',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            FlatButton(
-              onPressed: () {
-                Map map = FoodCartModel(
-                  itemDetails: widget.itemDetails,
-                  totalPrice: getTotal(),
-                  numberOfPlates: numberOfPlates,
-                  extraItems: extraList,
-                ).toMap();
-                HiveMethods().saveFoodCartToDb(map: map);
+              widget.currentExtraItemDetails.isNotEmpty
+                  ? Container(
+                //     constraints: BoxConstraints(maxHeight: 150),
+                margin: EdgeInsets.all(10.0),
+                child: extraItemWidget(),
+              )
+                  : Container(),
+              widget.currentExtraItemDetails.isNotEmpty
+                  ? Container(
+                margin: EdgeInsets.all(5.0),
+                child: DropdownButton(
+                  hint: extraList.isEmpty
+                      ? Text('Select Extras')
+                      : Text('Add More Extras'),
+                  items: widget.currentExtraItemDetails
+                      .map((ExtraItemDetails element) {
+                    return DropdownMenuItem<String>(
+                      value: element.extraItemName,
+                      child: Text('${element.extraItemName}'),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      print(value);
+                      selectedExtras = value;
+                      extraList.add(
+                        widget.currentExtraItemDetails
+                            .where((element) =>
+                        element.extraItemName == value)
+                            .toList()[0],
+                      );
+                      setState(() {});
+                      print(selectedExtras);
+                    });
+                    setState(() {});
+                  },
+                ),
+              )
+                  : Container(),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Description",
+                      style:
+                      TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      '${widget.itemDetails.shortDescription}',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+//              Container(
+//                child: Row(
+//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                  children: <Widget>[
+//                    Text('Nmuber Of Plates'),
+//                    Row(
+//                      children: <Widget>[
+//                        Container(
+////                        padding: EdgeInsets.symmetric(horizontal: 1.5),
+//                          margin: EdgeInsets.only(right: 10),
+//                          decoration: BoxDecoration(
+//                            border: Border.all(color: Colors.grey),
+//                          ),
+//                          child: InkWell(
+//                            child: Icon(Icons.remove, color: Colors.grey),
+//                            onTap: () {
+//                              if (numberOfPlates > 1) {
+//                                if (mounted) {
+//                                  setState(() {
+//                                    numberOfPlates--;
+//                                  });
+//                                }
+//                              }
+//                            },
+//                          ),
+//                        ),
+//                        Text('$numberOfPlates'),
+//                        Container(
+//                          margin: EdgeInsets.only(left: 10),
+//                          decoration: BoxDecoration(
+//                            border: Border.all(color: Colors.grey),
+//                          ),
+//                          child: InkWell(
+//                            child: Icon(Icons.add, color: Colors.grey),
+//                            onTap: () {
+//                              if (mounted) {
+//                                setState(() {
+//                                  numberOfPlates++;
+//                                });
+//                              }
+//                            },
+//                          ),
+//                        ),
+//                      ],
+//                    )
+//                  ],
+//                ),
+//              ),
+              Divider(
+                thickness: 0.5,
+                color: Colors.black,
+              ),
+              Container(
+                margin: EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'Total:',
+                      style:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '$symbol${getTotal()}',
+                      style:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                child: RaisedButton.icon(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: const EdgeInsets.all(20),
+                    onPressed: () {
+                      Map map = FoodCartModel(
+                        itemDetails: widget.itemDetails,
+                        totalPrice: getTotal(),
+                        numberOfPlates: numberOfPlates,
+                        extraItems: extraList,
+                      ).toMap();
+                      HiveMethods().saveFoodCartToDb(map: map);
 //                Navigator.maybePop(context);
-              },
-              color: Colors.green,
-              child: Text('Add To Cart'),
-            ),
-          ],
+                    },
+                    color: Color(0xFFF27507),
+                    label: Text(
+                      "Add to Cart",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    )),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -225,7 +366,7 @@ class _FoodDialogState extends State<FoodDialog> {
               Text('Extra ${extraItem.extraItemName}'),
               Row(
                 children: <Widget>[
-                  Text('\$${extraItem.price}'),
+                  Text('$symbol${extraItem.price}'),
                   InkWell(
                     onTap: () {
                       setState(() {
@@ -260,7 +401,7 @@ class _FoodDialogState extends State<FoodDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text('Extra ${extraItem.extraItemName}'),
-              Text('\$${extraItem.price}'),
+              Text('$symbol${extraItem.price}'),
             ],
           );
         },

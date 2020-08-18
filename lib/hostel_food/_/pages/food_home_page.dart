@@ -8,6 +8,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../landing_page/landing_page.dart';
+
 class FoodHomePage extends StatefulWidget {
   @override
   _FoodHomePageState createState() => _FoodHomePageState();
@@ -50,15 +52,34 @@ class _FoodHomePageState extends State<FoodHomePage> {
         elevation: 0.0,
         leading: IconButton(
           icon: Icon(
-            Icons.menu,
+            Icons.arrow_back,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () => Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MainHomePage())),
         ),
       ),
       body: Container(
         child: Column(
           children: <Widget>[
+            Container(
+              margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  labelText: "Search",
+                  prefixIcon: IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: null,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.mic),
+                    onPressed: null,
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: Container(
                 child: FutureBuilder(
@@ -100,17 +121,22 @@ class _FoodHomePageState extends State<FoodHomePage> {
 
                           return InkWell(
                             onTap: () {
-                              print(currentFastFood.toMap());
-                              print(currentItemDetails);
-                              print(currentExtraItemDetails);
+                              print("currentFastFood.toMap():${currentFastFood
+                                  .toMap()}");
+                              print(
+                                  "currentItemDetails[0].toMap():${currentItemDetails[0]
+                                      .toMap()}");
+                              //    print("currentExtraItemDetails[0].toMap():${currentExtraItemDetails[0].toMap()}");
+
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => SelectedFastFoodPage(
-                                    currentFastFood: currentFastFood,
-                                    currentExtraItemDetails:
+                                  builder: (context) =>
+                                      SelectedFastFoodPage(
+                                        currentFastFood: currentFastFood,
+                                        currentExtraItemDetails:
                                         currentExtraItemDetails,
-                                    currentItemDetails: currentItemDetails,
-                                  ),
+                                        currentItemDetails: currentItemDetails,
+                                      ),
                                 ),
                               );
                             },
@@ -153,18 +179,33 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                             ),
                                           ),
                                           Text(
-                                            '${currentFastFood.fastFoodName.trim()}',
+                                            '${currentFastFood.fastFoodName
+                                                .trim()}',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
                                           Text(
-                                            '${currentFastFood.address.trim()}',
+                                            '${currentFastFood.openTime
+                                                .trim()}',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w300,
                                             ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(Icons.location_on),
+                                              Text(
+                                                '${currentFastFood.address
+                                                    .trim()}',
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),

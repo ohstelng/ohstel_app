@@ -7,6 +7,7 @@ import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/paid_food_model.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/select_location_page.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
@@ -29,6 +30,8 @@ class _CartPageState extends State<CartPage> {
   bool onCampus = false;
   bool isLoading = true;
   Map addressDetails;
+  Runes input = Runes('\u20a6');
+  var symbol;
 
   List<ExtraItemDetails> getExtraFromMap({@required List data}) {
     List<ExtraItemDetails> _extraList = [];
@@ -298,6 +301,8 @@ class _CartPageState extends State<CartPage> {
     PaystackPlugin.initialize(
       publicKey: 'pk_test_d0490fa7b5ae91bf5317ebdbd761760c8f14fd8f',
     );
+    symbol = String.fromCharCodes(input);
+
     super.initState();
   }
 
@@ -305,7 +310,20 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Food Cart'),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+            color: Colors.black,
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop()),
+        title: Text(
+          "Cart",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 17,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: isLoading
           ? Container(
@@ -320,6 +338,7 @@ class _CartPageState extends State<CartPage> {
                       child: Text("Cart list is empty"),
                     );
                   }
+
                   return Column(
                     children: <Widget>[
                       Flexible(
@@ -329,86 +348,253 @@ class _CartPageState extends State<CartPage> {
                           itemBuilder: (context, index) {
                             numbers = box.values.length;
                             Map data = box.getAt(index);
+                            int numberOfPlates = data['numberOfPlates'];
                             ItemDetails currentItemDetails =
                                 ItemDetails.formMap(data['itemDetails']
                                     .cast<String, dynamic>());
                             List<ExtraItemDetails> currentExtraItemDetails =
                                 getExtraFromMap(data: data['extraItems']);
 
-                            return Container(
-                              margin: EdgeInsets.all(15.0),
-                              child: Column(
-                                children: <Widget>[
-                                  Column(
-                                    children: <Widget>[
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(
-                                              '${currentItemDetails.itemName}'),
-                                          Text('${currentItemDetails.price}'),
-                                        ],
-                                      ),
-                                      getExtraWidget(
-                                          extras: currentExtraItemDetails),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 10.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text('Number Of Plates'),
-                                            Text('${data['numberOfPlates']}'),
-                                          ],
+                            return Column(
+                              children: [
+                                Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                                  width: double.infinity,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      currentItemDetails.imageUrl != null
+                                          ? Container(
+                                              height: 80,
+                                              width: 80,
+                                              child: ExtendedImage.network(
+                                                currentItemDetails.imageUrl,
+                                                fit: BoxFit.contain,
+                                                handleLoadingProgress: true,
+                                                shape: BoxShape.rectangle,
+                                                cache: false,
+                                                enableMemoryCache: true,
+                                              ),
+                                            )
+                                          : Container(
+                                              height: 120,
+                                              width: 120,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey,
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                      Flexible(
+                                        child: Container(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 0, 10, 0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                '${currentItemDetails.itemName}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.clip,
+                                                style: TextStyle(fontSize: 24),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                '${currentItemDetails.itemFastFoodName}',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.grey),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                '$symbol${currentItemDetails.price}',
+                                                style: TextStyle(fontSize: 20),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                      Divider(),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+//
+//                                      getExtraWidget(
+//                                          extras: currentExtraItemDetails),
+//                                      Container(
+//                                        margin: EdgeInsets.only(top: 10.0),
+//                                        child: Row(
+//                                          mainAxisAlignment:
+//                                              MainAxisAlignment.spaceBetween,
+//                                          children: <Widget>[
+//                                            Text('Number Of Plates'),
+//                                            Text('${data['numberOfPlates']}'),
+//                                          ],
+//                                        ),
+//                                      ),
+
                                       Container(
                                         child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
-                                            Text(''),
                                             Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
                                               children: <Widget>[
-                                                Text('Remove'),
                                                 InkWell(
                                                   child: Icon(
-                                                    Icons.delete,
-                                                    color: Colors.red,
+                                                    Icons.delete_outline,
+                                                    // color: Colors.red,
                                                   ),
                                                   onTap: () {
                                                     cartBox.deleteAt(index);
                                                   },
-                                                )
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    cartBox.deleteAt(index);
+                                                  },
+                                                  child: Text(
+                                                    'Remove',
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 17),
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ],
                                         ),
                                       ),
-                                      Divider(),
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.favorite_border,
+                                                color: Colors.grey,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {});
+                                              },
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Container(
+//                        padding: EdgeInsets.symmetric(horizontal: 1.5),
+                                              margin:
+                                                  EdgeInsets.only(right: 10),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: numberOfPlates == 1
+                                                      ? Colors.grey
+                                                      : Color(0xFFF27507),
+                                                ),
+                                              ),
+                                              child: InkWell(
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  color: numberOfPlates == 1
+                                                      ? Colors.grey
+                                                      : Color(0xFFF27507),
+                                                ),
+                                                onTap: () {
+                                                  if (numberOfPlates > 1) {
+                                                    if (mounted) {
+                                                      setState(() {
+                                                        numberOfPlates--;
+                                                      });
+                                                    }
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                            Text('$numberOfPlates'),
+                                            Container(
+                                              margin: EdgeInsets.only(left: 10),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Color(0xFFF27507),
+                                                ),
+                                              ),
+                                              child: InkWell(
+                                                child: Icon(
+                                                  Icons.add,
+                                                  color: Color(0xFFF27507),
+                                                ),
+                                                onTap: () {
+                                                  if (mounted) {
+                                                    setState(() {
+                                                      numberOfPlates++;
+                                                    });
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                  child: Divider(
+                                    thickness: 0.5,
+                                    color: Colors.black,
+                                  ),
+                                )
+                              ],
                             );
                           },
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.all(15.0),
+                        padding: EdgeInsets.fromLTRB(20, 40, 20, 0),
                         child: Column(
                           children: <Widget>[
-                            Divider(
-                              thickness: 1.5,
-                              color: Colors.black,
-                            ),
+//                            Divider(
+//                              thickness: 1.5,
+//                              color: Colors.black,
+//                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text('Total'),
-                                Text('${getGrandTotal()}'),
+                                Text(
+                                  'Total Amount:',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  '$symbol${getGrandTotal()}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
                             ),
                             Divider(
