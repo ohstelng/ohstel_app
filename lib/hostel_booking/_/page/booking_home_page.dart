@@ -505,7 +505,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(130),
-          child: AppBar(backgroundColor: Colors.white,
+          child: AppBar(
+            backgroundColor: Colors.white,
             flexibleSpace: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -513,8 +514,16 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 Expanded(
                   child: TabBar(
                     tabs: [
-                      Tab(child: Text("Explore",style: TextStyle(color: Colors.black),)),
-                      Tab(child: Text("Saved",style: TextStyle(color: Colors.black),)),
+                      Tab(
+                          child: Text(
+                        "Explore",
+                        style: TextStyle(color: Colors.black),
+                      )),
+                      Tab(
+                          child: Text(
+                        "Saved",
+                        style: TextStyle(color: Colors.black),
+                      )),
                     ],
                   ),
                 ),
@@ -611,7 +620,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       controller: scrollController,
       shrinkWrap: false,
       primary: false,
-      itemCount: searchList.length ,
+      itemCount: searchList.length,
       itemBuilder: (context, index) {
         print(index);
         HostelModel currentHostelModel = searchList[index];
@@ -771,7 +780,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               height: 40,
               margin: EdgeInsets.only(right: 5),
               decoration: BoxDecoration(
-                ),
+              ),
               child: MaterialButton(
                 onPressed: () {
 //                  SubLocationViewModel.loadSubLocationsFromApi(
@@ -790,9 +799,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Icon(
-                      Icons.search,
-                      color: Colors.black,
-                      size:19
+                        Icons.search,
+                        color: Colors.black,
+                        size: 19
                     ),
                     SizedBox(width: 24),
                     Text(
@@ -804,7 +813,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                       ),
                     ),
                     Spacer(),
-                    Icon(Icons.mic,size: 19)
+                    Icon(Icons.mic, size: 19)
                   ],
                 ),
               ),

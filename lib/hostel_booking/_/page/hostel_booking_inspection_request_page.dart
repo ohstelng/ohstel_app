@@ -266,12 +266,16 @@ class _HostelBookingInspectionRequestPageState
                             Icon(
                               Icons.date_range,
                               size: 18.0,
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                             ),
                             Text(
                               " $date",
                               style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme
+                                      .of(context)
+                                      .primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18.0),
                             ),
@@ -283,7 +287,9 @@ class _HostelBookingInspectionRequestPageState
                   Text(
                     " Fix a Date",
                     style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0),
                   ),
@@ -338,12 +344,16 @@ class _HostelBookingInspectionRequestPageState
                             Icon(
                               Icons.access_time,
                               size: 18.0,
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                             ),
                             Text(
                               " $time",
                               style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme
+                                      .of(context)
+                                      .primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18.0),
                             ),
@@ -355,7 +365,9 @@ class _HostelBookingInspectionRequestPageState
                   Text(
                     "  Change",
                     style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme
+                            .of(context)
+                            .primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0),
                   ),
