@@ -1,6 +1,7 @@
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -110,12 +111,13 @@ class _HostelBookingInspectionRequestPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appbar(),
-      body: Column(
-        children: <Widget>[
-          Expanded(child: _body()),
-          saveButton(),
-        ],
+      resizeToAvoidBottomPadding: false,
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            _body(),
+          ],
+        ),
       ),
     );
   }
@@ -123,15 +125,20 @@ class _HostelBookingInspectionRequestPageState
   Widget saveButton() {
     return Container(
       margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-      child: FlatButton(
-        color: Theme.of(context).primaryColor,
-        onPressed: () {
+      child: InkWell(
+        onTap: () {
           validateAndSave();
         },
-        child: Center(
-          child: Text(
-            'Save',
-            style: TextStyle(color: Colors.white),
+        child: Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(8)),
+          child: Center(
+            child: Text(
+              'Send',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
       ),
@@ -139,8 +146,32 @@ class _HostelBookingInspectionRequestPageState
   }
 
   Widget _body() {
-    return ListView(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+
+              Text(
+                'Review your Booking',
+                style: TextStyle(color: Colors.black, fontSize: 20),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 24),
         Container(
           margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
           child: TextField(
@@ -149,7 +180,7 @@ class _HostelBookingInspectionRequestPageState
             autocorrect: true,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
-                border: OutlineInputBorder(), hintText: 'Full Name'),
+                border: OutlineInputBorder(), labelText: 'Full Name'),
             onChanged: (text) {
               print(text);
             },
@@ -167,7 +198,7 @@ class _HostelBookingInspectionRequestPageState
             autocorrect: true,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
-                border: OutlineInputBorder(), hintText: 'Email'),
+                border: OutlineInputBorder(), labelText: 'Email'),
             onChanged: (text) {
               print(text);
             },
@@ -185,7 +216,7 @@ class _HostelBookingInspectionRequestPageState
             autocorrect: true,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
-                border: OutlineInputBorder(), hintText: 'Phone Number'),
+                border: OutlineInputBorder(), labelText: 'Phone Number'),
             onChanged: (text) {
               print(text);
             },
@@ -205,6 +236,8 @@ class _HostelBookingInspectionRequestPageState
               DatePicker.showDatePicker(
                 context,
                 theme: DatePickerTheme(
+                  doneStyle: TextStyle(color: Theme.of(context).primaryColor),
+                  itemStyle: TextStyle(color: Colors.black),
                   containerHeight: 210.0,
                 ),
                 showTitleActions: true,
@@ -233,12 +266,12 @@ class _HostelBookingInspectionRequestPageState
                             Icon(
                               Icons.date_range,
                               size: 18.0,
-                              color: Colors.teal,
+                              color: Theme.of(context).primaryColor,
                             ),
                             Text(
                               " $date",
                               style: TextStyle(
-                                  color: Colors.teal,
+                                  color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18.0),
                             ),
@@ -248,9 +281,9 @@ class _HostelBookingInspectionRequestPageState
                     ],
                   ),
                   Text(
-                    "  Change",
+                    " Fix a Date",
                     style: TextStyle(
-                        color: Colors.teal,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0),
                   ),
@@ -305,12 +338,12 @@ class _HostelBookingInspectionRequestPageState
                             Icon(
                               Icons.access_time,
                               size: 18.0,
-                              color: Colors.teal,
+                              color: Theme.of(context).primaryColor,
                             ),
                             Text(
                               " $time",
                               style: TextStyle(
-                                  color: Colors.teal,
+                                  color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18.0),
                             ),
@@ -322,7 +355,7 @@ class _HostelBookingInspectionRequestPageState
                   Text(
                     "  Change",
                     style: TextStyle(
-                        color: Colors.teal,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0),
                   ),
@@ -332,17 +365,17 @@ class _HostelBookingInspectionRequestPageState
             color: Colors.white,
           ),
         ),
+        saveButton(),
       ],
     );
   }
 
   Widget _appbar() {
     return AppBar(
-      backgroundColor: Colors.white,
       elevation: 0.0,
       centerTitle: true,
       title: Text(
-        'Request For Inspection',
+        'Review your Booking',
         style: TextStyle(
           color: Colors.black,
         ),
@@ -352,7 +385,7 @@ class _HostelBookingInspectionRequestPageState
           Navigator.of(context).pop();
         },
         icon: Icon(
-          Icons.arrow_back_ios,
+          Icons.arrow_back,
           color: Colors.black,
         ),
       ),

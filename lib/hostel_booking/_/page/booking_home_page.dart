@@ -32,7 +32,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   var tempSearchStore = [];
   List<HostelModel> searchList;
   var query = '';
-  int perPage = 3;
+  int perPage = 6;
   bool gettingMoreHostels = false;
   bool moreHostelAvailable = true;
   HostelModel lastHostel;
@@ -505,7 +505,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(130),
-          child: AppBar(
+          child: AppBar(backgroundColor: Colors.white,
             flexibleSpace: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -513,8 +513,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 Expanded(
                   child: TabBar(
                     tabs: [
-                      Tab(text: "Explore"),
-                      Tab(text: "Saved"),
+                      Tab(child: Text("Explore",style: TextStyle(color: Colors.black),)),
+                      Tab(child: Text("Saved",style: TextStyle(color: Colors.black),)),
                     ],
                   ),
                 ),
@@ -609,9 +609,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       ),
       physics: BouncingScrollPhysics(),
       controller: scrollController,
-      shrinkWrap: true,
+      shrinkWrap: false,
       primary: false,
-      itemCount: searchList.length,
+      itemCount: searchList.length ,
       itemBuilder: (context, index) {
         print(index);
         HostelModel currentHostelModel = searchList[index];
@@ -766,19 +766,12 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-              flex: 1,
-              child: Icon(
-                Icons.menu,
-                color: Colors.white,
-              )),
-          Expanded(
             flex: 8,
             child: Container(
-              height: 50,
+              height: 40,
               margin: EdgeInsets.only(right: 5),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-              ),
+                ),
               child: MaterialButton(
                 onPressed: () {
 //                  SubLocationViewModel.loadSubLocationsFromApi(
@@ -791,7 +784,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 },
                 color: Colors.grey[200],
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
+
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -799,16 +792,19 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                     Icon(
                       Icons.search,
                       color: Colors.black,
+                      size:19
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: 24),
                     Text(
-                      'Search Hostel',
+                      'Search',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.grey,
                         fontWeight: FontWeight.w400,
-                        fontSize: 20.0,
+                        fontSize: 17.0,
                       ),
                     ),
+                    Spacer(),
+                    Icon(Icons.mic,size: 19)
                   ],
                 ),
               ),

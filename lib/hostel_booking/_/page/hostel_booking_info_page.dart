@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
@@ -24,6 +24,8 @@ class HostelBookingInFoPage extends StatefulWidget {
 
 class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   Map userData;
+
+  int _current = 0;
 
   Future<void> getUserData() async {
     Map data = await HiveMethods().getUserData();
@@ -154,7 +156,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                           },
                           child: Center(
                             child: Icon(
-                              Icons.arrow_back_ios,
+                              Icons.arrow_back,
                               color: Colors.white,
                             ),
                           ),
@@ -165,7 +167,6 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                           child: Text('Hostel Details',
                               style: TextStyle(
                                   fontSize: 24,
-                                  fontWeight: FontWeight.bold,
                                   color: Colors.white))),
                       Expanded(
                         flex: 1,
@@ -196,24 +197,28 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
   Widget footer() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
             flex: 5,
-            child: FlatButton(
-              color: Theme.of(context).primaryColor,
-              onPressed: () {
+            child: InkWell(
+              onTap: () {
                 chargeCard();
               },
-              child: Text('Make Payment'),
+              child: Container(padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(8)),
+                child: Center(child: Text('Make Payment',style: TextStyle(color: Colors.white),)),
+              ),
             ),
           ),
           Expanded(
             flex: 5,
             child: FlatButton(
-              color: Theme.of(context).buttonColor,
+              color: Colors.transparent,
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -232,12 +237,12 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   }
 
   Widget hostelDetails() {
-    TextStyle _titlestyle = TextStyle(
-        fontSize: 22, fontWeight: FontWeight.bold);
+    TextStyle _titlestyle =
+        TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
     return DefaultTabController(
       length: 2,
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
           color: Colors.transparent,
         ),
@@ -246,19 +251,25 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Text('${widget.hostelModel.hostelName}', style: _titlestyle,),
+                Text(
+                  '${widget.hostelModel.hostelName}',
+                  style: _titlestyle,
+                ),
                 Spacer(),
-                Text('₦${formatCurrency.format(widget.hostelModel.price)}',
-                  style: _titlestyle,),
+                Text(
+                  '₦${formatCurrency.format(widget.hostelModel.price)}',
+                  style: _titlestyle,
+                ),
               ],
-            ), SizedBox(height: 8),
+            ),
+            SizedBox(height: 8),
             Row(
               children: <Widget>[
                 Text('${widget.hostelModel.hostelLocation}'),
                 Spacer(),
                 Text(widget.hostelModel.isSchoolHostel
                     ? 'Roommate Needed'
-                    : '')
+                    : 'Roomate not Needed')
               ],
             ),
             SizedBox(height: 8),
@@ -267,13 +278,12 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 Icons.location_on,
                 size: 16,
               ),
-
-
               Text(
-                  '${widget.hostelModel
-                      .distanceFromSchoolInKm}KM from Unilorin'),
+                  '${widget.hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
               Spacer(),
+              Text("12/12/2020")
             ]),
+            SizedBox(height: 16),
 //          Text('Des: ${widget.hostelModel.description}'),
 //          Text('Price: ${widget.hostelModel.price}'),
 //          Text('ratings: ${widget.hostelModel.ratings}'),
@@ -285,22 +295,22 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
             Container(
               child: TabBar(
                 tabs: <Widget>[
-                  Tab(child: Text(
-                    'Details', style: TextStyle(color: Colors.black),),
-
+                  Tab(
+                    child: Text(
+                      'Details',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                   Tab(
                       child: Text(
-                        'Reviews', style: TextStyle(color: Colors.black),
-                      ))
+                    'Reviews',
+                    style: TextStyle(color: Colors.black),
+                  ))
                 ],
               ),
             ),
             Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.22,
+                height: MediaQuery.of(context).size.height * 0.20,
                 child: TabBarView(
                   children: <Widget>[
                     Padding(
@@ -310,8 +320,9 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(child: Text(
-                          'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat')),
+                      child: SingleChildScrollView(
+                          child: Text(
+                              'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat')),
                     )
                   ],
                 ))
@@ -322,45 +333,73 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   }
 
   Widget displayMultiPic({@required List imageList}) {
+    List imgs = imageList.map(
+      (images) {
+        return Container(
+          child: ExtendedImage.network(
+            images,
+            fit: BoxFit.cover,
+            handleLoadingProgress: true,
+            shape: BoxShape.rectangle,
+            cache: false,
+            enableMemoryCache: true,
+          ),
+        );
+      },
+    ).toList();
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery
-            .of(context)
-            .size
-            .height * 0.5,
-        maxWidth: MediaQuery
-            .of(context)
-            .size
-            .width,
+        maxHeight: MediaQuery.of(context).size.height * 0.5,
+        maxWidth: MediaQuery.of(context).size.width,
       ),
-      child: ClipRRect(borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
-        child: Carousel(
-          images: imageList.map(
-                (images) {
-              return Container(
-                child: ExtendedImage.network(
-                  images,
-                  fit: BoxFit.fill,
-                  handleLoadingProgress: true,
-                  shape: BoxShape.rectangle,
-                  cache: false,
-                  enableMemoryCache: true,
-                ),
-              );
-            },
-          ).toList(),
-          autoplay: true,
-          indicatorBgPadding: 16.0,
-          dotPosition: DotPosition.bottomCenter,
-          dotSpacing: 15.0,
-          dotSize: 4,
-          dotIncreaseSize: 2.5,
-          dotIncreasedColor: Colors.deepOrange,
-          dotBgColor: Colors.transparent,
-          animationCurve: Curves.fastOutSlowIn,
-          animationDuration: Duration(milliseconds: 2000),
-        ),
+      child: Column(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+            child: CarouselSlider(
+              items: imgs,
+              options: CarouselOptions(
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _current = index;
+                  });
+                },
+                height: 350.0,
+                aspectRatio: 2.0,
+                viewportFraction: 1,
+                initialPage: 0,
+                enableInfiniteScroll: true,
+                reverse: false,
+                autoPlay: true,
+                autoPlayInterval: Duration(seconds: 3),
+                autoPlayAnimationDuration: Duration(milliseconds: 800),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enlargeCenterPage: false,
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
+          ),
+          SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: imageList.map(
+              (index) {
+                return Container(
+                  width: 8.0,
+                  height: 8.0,
+                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _current == index
+                          ? Colors.grey
+                          : Colors.black),
+                );
+              }).toList()
+
+          )
+
+        ],
       ),
     );
   }
