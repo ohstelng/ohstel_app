@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         title: 'Ohstel',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+//          fontFamily: 'Lato',
           primaryColor: Color(0xfff27507),
           primarySwatch: Colors.deepOrange,
           visualDensity: VisualDensity.adaptivePlatformDensity,
