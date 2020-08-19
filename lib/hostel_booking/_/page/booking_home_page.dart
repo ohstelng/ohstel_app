@@ -500,46 +500,69 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle tabStyle = TextStyle(
+        color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal);
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(130),
+          preferredSize: Size.fromHeight(144),
           child: AppBar(
             backgroundColor: Colors.white,
-            flexibleSpace: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                searchInputControl(),
-                Expanded(
-                  child: TabBar(
+            flexibleSpace: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {},
+                      ),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(Icons.notifications_none),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                  searchInputControl(),
+                  TabBar(
                     tabs: [
                       Tab(
                           child: Text(
                         "Explore",
-                        style: TextStyle(color: Colors.black),
+                        style: tabStyle,
                       )),
                       Tab(
                           child: Text(
                         "Saved",
-                        style: TextStyle(color: Colors.black),
+                        style: tabStyle,
                       )),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
         body: TabBarView(
           children: [
             Container(
-              width: MediaQuery.of(context).size.width * 0.97,
-              height: MediaQuery.of(context).size.height * 0.77,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.97,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.77,
               child: isStillLoadingData
                   ? Center(
-                      child: CircularProgressIndicator(),
-                    )
+                child: CircularProgressIndicator(),
+              )
                   : sortBy == 'distance' ? sortByDistance() : resultList(),
             ),
             Container(
@@ -547,8 +570,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               height: MediaQuery.of(context).size.height * 0.77,
               child: isStillLoadingData
                   ? Center(
-                      child: CircularProgressIndicator(),
-                    )
+                child: CircularProgressIndicator(),
+              )
                   : resultList(),
             )
           ],
@@ -679,8 +702,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 '${hostel.hostelName}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18.0,
-                  color: Colors.deepOrange[500],
+                  fontSize: 17.0,
+                  color: Colors.black,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -689,7 +712,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           SizedBox(height: 5),
           Row(
             children: <Widget>[
-              Icon(Icons.location_on, size: 16, color: Colors.black),
+              Icon(Icons.location_on, size: 16, color: Colors.grey),
               SizedBox(width: 8),
               Text(
                 '${hostel.hostelLocation}',
@@ -757,7 +780,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         indicatorBgPadding: 0.0,
         dotPosition: DotPosition.bottomCenter,
         dotSpacing: 15.0,
-        dotSize: 4,
+        dotSize: 0,
         dotIncreaseSize: 2.5,
         dotIncreasedColor: Colors.deepOrange,
         dotBgColor: Colors.transparent,
@@ -769,7 +792,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Widget searchInputControl() {
     return Container(
-      padding: EdgeInsets.only(top: 40, left: 8, right: 8, bottom: 8),
+      padding: EdgeInsets.only(left: 8, right: 8,),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -779,8 +802,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             child: Container(
               height: 40,
               margin: EdgeInsets.only(right: 5),
-              decoration: BoxDecoration(
-              ),
+              decoration: BoxDecoration(),
               child: MaterialButton(
                 onPressed: () {
 //                  SubLocationViewModel.loadSubLocationsFromApi(
@@ -791,18 +813,12 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                     ),
                   );
                 },
-                color: Colors.grey[200],
-                shape: RoundedRectangleBorder(
-
-                ),
+                color: Colors.grey[50],
+                shape: RoundedRectangleBorder(),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Icon(
-                        Icons.search,
-                        color: Colors.black,
-                        size: 19
-                    ),
+                    Icon(Icons.search, color: Colors.black, size: 19),
                     SizedBox(width: 24),
                     Text(
                       'Search',
@@ -819,7 +835,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
             ),
           ),
-          Expanded(flex: 2, child: dropdownButton()),
+//          Expanded(flex: 2, child: dropdownButton()),
         ],
       ),
     );
@@ -1005,7 +1021,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     );
   }
 }
-
 
 //TODO: implement save hostel
 //TODO: implement save hostel

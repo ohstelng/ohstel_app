@@ -5,7 +5,6 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_inspection_request_page.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +25,14 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   Map userData;
 
   int _current = 0;
+
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
 
   Future<void> getUserData() async {
     Map data = await HiveMethods().getUserData();
@@ -142,6 +149,31 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
           children: <Widget>[
             Stack(children: [
               displayMultiPic(imageList: widget.hostelModel.imageUrl),
+              Positioned(
+                  top: 0.0,
+                  child: Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.2,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.grey[900].withOpacity(0.9),
+                              Colors.grey[800].withOpacity(0.9),
+                              Colors.grey[800].withOpacity(0.9),
+                              Colors.grey[800].withOpacity(0.7),
+                              Colors.grey[800].withOpacity(0.6),
+                              Colors.grey[800].withOpacity(0.2),
+                              Colors.transparent
+
+                            ])),
+                  )),
               SafeArea(
                 child: Container(
                   padding: EdgeInsets.only(right: 10, top: 10, left: 4),
@@ -166,8 +198,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                           flex: 6,
                           child: Text('Hostel Details',
                               style: TextStyle(
-                                  fontSize: 24,
-                                  color: Colors.white))),
+                                  fontSize: 20, color: Colors.white))),
                       Expanded(
                         flex: 1,
                         child: InkWell(
@@ -210,13 +241,15 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
               child: Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
                     borderRadius: BorderRadius.circular(8)),
                 child: Center(
                     child: Text(
-                  'Make Payment',
-                  style: TextStyle(color: Colors.white),
-                )),
+                      'Make Payment',
+                      style: TextStyle(color: Colors.white),
+                    )),
               ),
             ),
           ),
@@ -320,7 +353,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 height: MediaQuery
                     .of(context)
                     .size
-                    .height * 0.20,
+                    .height * 0.15,
                 child: TabBarView(
                   children: <Widget>[
                     Padding(
@@ -400,23 +433,16 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
           SizedBox(height: 8),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: imageList.map(
-                      (index) {
-                    return Container(
-                      width: 8.0,
-                      height: 8.0,
-                      margin: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 2.0),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _current == index
-                              ? Colors.grey
-                              : Colors.black),
-                    );
-                  }).toList()
-
-          )
-
+              children: map<Widget>(imageList, (index, url) {
+                return Container(
+                  width: 8.0,
+                  height: 8.0,
+                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _current == index ? Colors.grey : Colors.black),
+                );
+              }).toList())
         ],
       ),
     );

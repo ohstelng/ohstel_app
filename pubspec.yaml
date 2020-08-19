@@ -39,7 +39,9 @@ dependencies:
   flutter_datetime_picker: ^1.4.0
   flutter_paystack: ^1.0.3+1
   flutter_spinkit: ^4.1.2+1
+  carousel_slider: ^2.2.1
   url_launcher:
+
 
 
 
