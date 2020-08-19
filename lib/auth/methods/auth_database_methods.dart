@@ -14,6 +14,7 @@ class AuthDatabaseMethods {
     @required String schoolLocation,
     @required String phoneNumber,
     @required String uniName,
+    @required Map uniDetails,
   }) {
     return userDataCollectionRef.document(uid).setData(
       {
@@ -21,9 +22,8 @@ class AuthDatabaseMethods {
         'email': email,
         'fullName': fullName,
         'userName': userName,
-        'schoolLocation': schoolLocation,
         'phoneNumber': phoneNumber,
-        'uniName': uniName,
+        'uniDetails': uniDetails,
       },
       merge: true,
     );

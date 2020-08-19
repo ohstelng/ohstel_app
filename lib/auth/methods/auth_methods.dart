@@ -50,6 +50,7 @@ class AuthService {
     @required String schoolLocation,
     @required String phoneNumber,
     @required String uniName,
+    @required Map uniDetails,
   }) async {
     try {
       AuthResult result = await auth.createUserWithEmailAndPassword(
@@ -60,14 +61,14 @@ class AuthService {
 
       // add user details to firestore database
       await AuthDatabaseMethods().createUserDataInFirestore(
-        uid: user.uid,
-        email: email,
-        fullName: fullName,
-        userName: userName,
-        schoolLocation: schoolLocation,
-        phoneNumber: phoneNumber,
-        uniName: uniName,
-      );
+          uid: user.uid,
+          email: email,
+          fullName: fullName,
+          userName: userName,
+          schoolLocation: schoolLocation,
+          phoneNumber: phoneNumber,
+          uniName: uniName,
+          uniDetails: uniDetails);
 
       // save user info to local database using hive
       getUserDetails(uid: user.uid);

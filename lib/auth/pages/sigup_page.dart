@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
   final Function toggleView;
@@ -28,13 +31,16 @@ class _SignUpPageState extends State<SignUpPage> {
   String phoneNumber;
   String schoolLocation;
   Timestamp timeCreated;
+  String _uniName = 'Selected Uni Name';
+  bool _obscureText = true;
 
   String fullName;
   String password;
+  Map uniDetails;
 
   Future<void> validateAndSave() async {
     final form = formKey.currentState;
-    if (form.validate()) {
+    if (form.validate() && uniDetails != null) {
       form.save();
       setState(() {
         password = _passwordAgain;
@@ -63,10 +69,17 @@ class _SignUpPageState extends State<SignUpPage> {
       schoolLocation: schoolLocation,
       phoneNumber: phoneNumber,
       uniName: uniName,
+      uniDetails: uniDetails,
     );
   }
 
-  bool _obscureText = true;
+  Future<Map> getAllUniNamesFromApi() async {
+    String url = "http://ohstel.pythonanywhere.com/hostelSearchKey";
+    var response = await http.get(url);
+    Map data = json.decode(response.body);
+
+    return data;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +125,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           )),
                       Container(
                         padding:
-                        EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
@@ -126,25 +139,17 @@ class _SignUpPageState extends State<SignUpPage> {
                                 color: Colors.white,
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Color.fromRGBO(
-                                        225,
-                                        95,
-                                        27,
-                                        .3,
-                                      ),
-                                      blurRadius: 20,
-                                      offset: Offset(0, 10))
+                                    color: Color.fromRGBO(225, 95, 27, .3),
+                                    blurRadius: 20,
+                                    offset: Offset(0, 10),
+                                  )
                                 ],
                               ),
                               child: TextFormField(
                                 validator: (value) {
-                                  if (value
-                                      .trim()
-                                      .isEmpty) {
+                                  if (value.trim().isEmpty) {
                                     return 'First Name Can\'t Be Empty';
-                                  } else if (value
-                                      .trim()
-                                      .length < 3) {
+                                  } else if (value.trim().length < 3) {
                                     return 'First Name Must Be More Than 2 Characters';
                                   } else {
                                     return null;
@@ -157,7 +162,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 onSaved: (value) => firstName = value.trim(),
                               ),
                               padding: EdgeInsets.symmetric(horizontal: 15),
-
                             ),
                             SizedBox(height: 10),
                             Container(
@@ -178,16 +182,12 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                               child: Padding(
                                 padding:
-                                const EdgeInsets.only(left: 15, right: 15),
+                                    const EdgeInsets.only(left: 15, right: 15),
                                 child: TextFormField(
                                   validator: (value) {
-                                    if (value
-                                        .trim()
-                                        .isEmpty) {
+                                    if (value.trim().isEmpty) {
                                       return 'Last Name Can\'t Be Empty';
-                                    } else if (value
-                                        .trim()
-                                        .length < 3) {
+                                    } else if (value.trim().length < 3) {
                                       return 'Last Name Must Be More Than 2 Characters';
                                     } else {
                                       return null;
@@ -224,13 +224,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                                 child: TextFormField(
                                   validator: (value) {
-                                    if (value
-                                        .trim()
-                                        .isEmpty) {
+                                    if (value.trim().isEmpty) {
                                       return 'UserName Can\'t Be Empty';
-                                    } else if (value
-                                        .trim()
-                                        .length <= 3) {
+                                    } else if (value.trim().length <= 3) {
                                       return 'UserName Must Be More Than 3 Characters';
                                     } else {
                                       return null;
@@ -267,9 +263,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                                 child: TextFormField(
                                   validator: (value) {
-                                    if (value
-                                        .trim()
-                                        .isEmpty) {
+                                    if (value.trim().isEmpty) {
                                       return 'Field Can\'t Be Empty';
                                     } else {
                                       return null;
@@ -279,7 +273,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                       labelText: 'Phone Number',
                                       border: InputBorder.none),
                                   onSaved: (value) =>
-                                  phoneNumber = value.trim(),
+                                      phoneNumber = value.trim(),
                                 ),
                               ),
                             ),
@@ -307,54 +301,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                                 child: TextFormField(
                                   validator: (value) {
-                                    if (value
-                                        .trim()
-                                        .isEmpty) {
+                                    if (value.trim().isEmpty) {
                                       return 'Field Can\'t Be Empty';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                  decoration: InputDecoration(
-                                      labelText: 'School Location',
-                                      border: InputBorder.none),
-                                  onSaved: (value) =>
-                                  schoolLocation = value.trim(),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Color.fromRGBO(
-                                        225,
-                                        95,
-                                        27,
-                                        .3,
-                                      ),
-                                      blurRadius: 20,
-                                      offset: Offset(0, 10))
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 15,
-                                  right: 15,
-                                ),
-                                child: TextFormField(
-                                  validator: (value) {
-                                    if (value
-                                        .trim()
-                                        .isEmpty) {
-                                      return 'Email Can\'t Be Empty';
-//                    } else if (!EmailValidator.validate(value.trim())) {
-//                      return 'Not a vaild Email';
-                                    } else if (!value.trim().endsWith('.com')) {
-                                      return 'Invalid Email';
                                     } else {
                                       return null;
                                     }
@@ -363,8 +311,77 @@ class _SignUpPageState extends State<SignUpPage> {
                                       labelText: 'Email',
                                       border: InputBorder.none),
                                   onSaved: (value) => email = value.trim(),
-                                  keyboardType: TextInputType.emailAddress,
                                 ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 40),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey)),
+                              child: ExpansionTile(
+                                key: GlobalKey(),
+                                title: Text('$_uniName'),
+                                leading: Icon(Icons.location_on),
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        .30,
+                                    child: FutureBuilder(
+                                      future: getAllUniNamesFromApi(),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        } else {
+                                          Map uniNameMaps = snapshot.data;
+                                          List uniList =
+                                              uniNameMaps.keys.toList();
+                                          return ListView.builder(
+                                            physics: BouncingScrollPhysics(),
+                                            itemCount: uniNameMaps.length,
+                                            itemBuilder: (context, index) {
+                                              Map currentUniName =
+                                                  uniNameMaps[uniList[index]];
+                                              return InkWell(
+                                                onTap: () {
+                                                  if (mounted) {
+                                                    setState(() {
+                                                      _uniName = currentUniName[
+                                                          'name'];
+                                                      uniDetails =
+                                                          currentUniName;
+                                                    });
+                                                  }
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.all(5.0),
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.add_location,
+                                                        color: Colors.grey,
+                                                      ),
+                                                      Text(
+                                                        '${currentUniName['name']}',
+                                                        style: TextStyle(
+                                                            fontSize: 16.0,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             SizedBox(height: 10),
@@ -391,13 +408,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                                 child: TextFormField(
                                   validator: (value) {
-                                    if (value
-                                        .trim()
-                                        .isEmpty) {
+                                    if (value.trim().isEmpty) {
                                       return 'Password Can\'t Be Empty';
-                                    } else if (value
-                                        .trim()
-                                        .length < 6) {
+                                    } else if (value.trim().length < 6) {
                                       return 'Password Must Be More Than 6 Characters';
                                     } else {
                                       return null;
@@ -412,7 +425,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                             : Icons.visibility_off),
                                         onTap: () {
                                           setState(() =>
-                                          _obscureText = !_obscureText);
+                                              _obscureText = !_obscureText);
                                         },
                                       )),
                                   obscureText: !_obscureText,
@@ -427,27 +440,27 @@ class _SignUpPageState extends State<SignUpPage> {
                           ],
                         ),
                       ),
-              ],
-            ),
-          ),
-        ),
-      )
+                    ],
+                  ),
+                ),
+              ),
+            )
           : Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SpinKitChasingDots(
-              color: Colors.deepOrange,
-              size: 50.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SpinKitChasingDots(
+                    color: Colors.deepOrange,
+                    size: 50.0,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text('Loading......')
+                ],
+              ),
             ),
-            SizedBox(
-              height: 30,
-            ),
-            Text('Loading......')
-          ],
-        ),
-      ),
     );
   }
 
@@ -476,10 +489,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ]),
         ),
         margin: EdgeInsets.symmetric(vertical: 20),
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         height: 60,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -494,10 +504,7 @@ class _SignUpPageState extends State<SignUpPage> {
         widget.toggleView();
       },
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         height: 60,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
