@@ -11,8 +11,6 @@ import 'package:Ohstel_app/hostel_food/_/pages/selected_snacks_page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../hive_methods/hive_class.dart';
-import '../models/food_cart_model.dart';
 
 class SelectedFastFoodPage extends StatefulWidget {
   final List<ExtraItemDetails> currentExtraItemDetails;
@@ -126,10 +124,9 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
     } else if (selectedFoodBar == 'Snacks') {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) =>
-              SnackDialog(
-                itemDetails: itemDetails,
-              ),
+          builder: (context) => SnackDialog(
+            itemDetails: itemDetails,
+          ),
         ),
       );
     } else if (selectedFoodBar == 'Drinks') {
@@ -404,14 +401,14 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         IconButton(
           color: Colors.grey,
-          icon: Icon(Icons.shopping_cart),
+          icon: Icon(Icons.shopping_cart, color: Colors.black87),
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(

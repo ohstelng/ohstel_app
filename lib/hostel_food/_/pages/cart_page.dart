@@ -359,7 +359,7 @@ class _CartPageState extends State<CartPage> {
                               children: [
                                 Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                                      const EdgeInsets.fromLTRB(20, 20, 20, 10),
                                   width: double.infinity,
                                   child: Row(
                                     crossAxisAlignment:
@@ -605,30 +605,40 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       Container(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
                         child: getAddress(),
                       ),
                       Container(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+                        width: double.infinity,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
                               margin: EdgeInsets.all(10.0),
                               child: FlatButton(
-                                color: Colors.green,
+                                color: Color(0xFFF27507),
                                 onPressed: () {
                                   selectDeliveryLocation();
                                 },
-                                child: Text('Select Loactions'),
+                                child: Text(
+                                  'Select Loactions',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.all(10.0),
                               child: FlatButton(
-                                color: Colors.green,
+                                color: Color(0xFFF27507),
                                 onPressed: () {
                                   pay();
                                 },
-                                child: Text('Pay'),
+                                child: Text(
+                                  'Pay',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                           ],
