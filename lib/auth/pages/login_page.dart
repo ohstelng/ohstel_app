@@ -81,6 +81,7 @@ class _LogInPageState extends State<LogInPage> {
     );
   }
 
+  var _user = "Timmy";
   bool _obscureText = true;
   BoxDecoration _textField = BoxDecoration(
     borderRadius: BorderRadius.circular(15),
@@ -111,14 +112,14 @@ class _LogInPageState extends State<LogInPage> {
                             Row(
                               children: <Widget>[
                                 Text(
-                                  'Welcome,',
+                                  'Welcome, ',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 24.0,
                                       fontWeight: FontWeight.normal),
                                 ),
                                 Text(
-                                  ' Timmy',
+                                  "$_user",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 24.0,
