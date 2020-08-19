@@ -28,11 +28,6 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
   String selectedFoodBar = 'Fast Food';
   StreamController<String> toDisplayContoller = StreamController();
 
-  //TODO: implement drinks backend!!!!
-  //TODO: implement drinks backend!!!!
-  //TODO: implement drinks backend!!!!
-  //TODO: implement drinks backend!!!!
-
   @override
   void initState() {
     toDisplayContoller.add('Fast Food');
@@ -259,9 +254,9 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
           itemCount: 3,
           itemBuilder: (context, index) {
             List<String> list = [
-              '    Fast Food   ',
-              '    Snacks    ',
-              '    Drinks    '
+              'Fast Food',
+              'Snacks',
+              'Drinks',
             ];
             return Container(
               margin: EdgeInsets.all(10.0),

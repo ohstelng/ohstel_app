@@ -7,6 +7,7 @@ class FastFoodModel {
   String logoImageUrl;
   List itemDetails;
   List extraItems;
+  List itemCategoriesList;
   bool haveExtras;
   String uniName;
 
@@ -17,29 +18,10 @@ class FastFoodModel {
     @required this.logoImageUrl,
     @required this.itemDetails,
     @required this.extraItems,
+    @required this.itemCategoriesList,
     @required this.haveExtras,
     @required this.uniName,
   });
-
-//  List<ItemDetails> getItemDetails(List<Map> data) {
-//    List<ItemDetails> _itemDetails = List<ItemDetails>();
-//
-//    for (var d in data) {
-//      _itemDetails.add(ItemDetails.formMap(d));
-//    }
-//
-//    return _itemDetails;
-//  }
-//
-//  List<ExtraItemDetails> getExtraItemDetails(List<Map> data) {
-//    List<ExtraItemDetails> _extraItemDetails = List<ExtraItemDetails>();
-//
-//    for (var d in data) {
-//      _extraItemDetails.add(ItemDetails.formMap(d));
-//    }
-//
-//    return _extraItemDetails;
-//  }
 
   FastFoodModel.fromMap(Map<String, dynamic> mapData) {
     this.fastFoodName = mapData['fastFood'];
@@ -48,6 +30,7 @@ class FastFoodModel {
     this.logoImageUrl = mapData['logoImageUrl'];
     this.itemDetails = mapData['itemsDetails'];
     this.extraItems = mapData['extraItems'];
+    this.itemCategoriesList = mapData['itemCategoriesList'];
     this.haveExtras = mapData['haveExtras'];
     this.uniName = mapData['uniName'];
   }
@@ -60,6 +43,7 @@ class FastFoodModel {
     data['logoImageUrl'] = this.logoImageUrl;
     data['itemDetails'] = this.itemDetails;
     data['extraItems'] = this.extraItems;
+    data['itemCategoriesList'] = this.itemCategoriesList;
     data['haveExtras'] = this.haveExtras;
     data['uniName'] = this.uniName;
 
