@@ -31,7 +31,6 @@ class MarketMethods {
         dataList.add(data);
       }
     } catch (e) {
-      print(e);
       Fluttertoast.showToast(msg: '${e}');
     }
 
@@ -43,15 +42,12 @@ class MarketMethods {
       await marketOrderCollection.document(data.id).setData(data.toMap());
       Fluttertoast.showToast(msg: 'Order Complete!');
     } catch (e) {
-      print(e);
       Fluttertoast.showToast(msg: '${e}');
     }
   }
 
   Future<List<ProductModel>> getProductByKeyword(
       {@required String keyword}) async {
-    print('pppppppppppppp');
-    print(keyword);
     List<ProductModel> productList = List<ProductModel>();
 
     QuerySnapshot querySnapshot = await marketCollection
@@ -65,8 +61,6 @@ class MarketMethods {
     for (var i = 0; i < querySnapshot.documents.length; i++) {
       productList.add(ProductModel.fromMap(querySnapshot.documents[i].data));
     }
-
-    print(productList);
 
     return productList;
   }
@@ -89,8 +83,6 @@ class MarketMethods {
     for (var i = 0; i < querySnapshot.documents.length; i++) {
       productList.add(ProductModel.fromMap(querySnapshot.documents[i].data));
     }
-
-    print(productList);
 
     return productList;
   }

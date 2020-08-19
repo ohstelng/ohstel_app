@@ -46,6 +46,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
             } else {
               moreProductAvailable = true;
             }
+
             searchList = list;
             lastProduct = searchList[searchList.length - 1];
             isStillLoadingData = false;

@@ -21,6 +21,7 @@ class _SelectDeliveryLocationPageState
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFFF27507),
 //          backgroundColor: Colors.teal,
           elevation: 0.0,
           leading: Container(),
@@ -159,7 +160,7 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
               },
             ),
             FlatButton(
-              color: Colors.green,
+              color: Color(0xFFF27507),
               onPressed: () {
                 if (address != null && address.length > 3) {
                   Map addressDetails = {
@@ -175,7 +176,10 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
                   Fluttertoast.showToast(msg: 'Please Fill All Input!');
                 }
               },
-              child: Text('submit'),
+              child: Text(
+                'Submit',
+                style: TextStyle(color: Colors.white),
+              ),
             )
           ],
         ),
@@ -214,22 +218,25 @@ class _OnCampusLocationState extends State<OnCampusLocation> {
                 print(val);
               },
             ),
-            FlatButton(
-              color: Colors.green,
-              onPressed: () {
-                if (address != null && address.length > 3) {
-                  Map addressDetails = {
-                    'address': address,
-                    'areaName': 'inside campus',
-                    'onCampus': true,
-                  };
-                  print(addressDetails);
-                  HiveMethods()
-                      .saveFoodLocationDetailsToDb(map: addressDetails);
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('submit'),
+            Container(
+              width: double.infinity,
+              child: FlatButton(
+                color: Color(0xFFF27507),
+                onPressed: () {
+                  if (address != null && address.length > 3) {
+                    Map addressDetails = {
+                      'address': address,
+                      'areaName': 'inside campus',
+                      'onCampus': true,
+                    };
+                    print(addressDetails);
+                    HiveMethods()
+                        .saveFoodLocationDetailsToDb(map: addressDetails);
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text('Submit', style: TextStyle(color: Colors.white),),
+              ),
             )
           ],
         ),
