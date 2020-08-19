@@ -51,8 +51,8 @@ class HiveMethods {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
 
     Map uniDetails = userDataBox.get(0)['uniDetails'];
-    String uniName =
-        uniDetails.values.toList()[0]['abbr'].toString().toLowerCase();
+    print(uniDetails);
+    String uniName = uniDetails['abbr'].toString().toLowerCase();
     return uniName;
   }
 
@@ -63,10 +63,6 @@ class HiveMethods {
     return address;
   }
 
-  //TODO: implement userData checker
-  //TODO: implement userData checker
-  //TODO: implement userData checker
-  //TODO: implement userData checker
   Future<Map> getUserData() async {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
 
@@ -94,6 +90,8 @@ class HiveMethods {
   //Todo: implement update address
   //Todo: implement update address
   //Todo: implement update address
+
+
   Future<void> updateUserAddress({@required Map map}) async {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
 

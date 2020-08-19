@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
+import 'package:Ohstel_app/hostel_booking/_/model/save_hostel_model.dart';
+import 'package:Ohstel_app/hostel_booking/_/page/get_hostel_by_id_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_info_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_search_page.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -37,6 +39,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   bool moreHostelAvailable = true;
   HostelModel lastHostel;
   String uniName;
+  Map userDetails;
 
   // 5 option available are default(by date Added), price, distance,
   // roomMate needed, on campus Only(school hostel)
@@ -474,8 +477,11 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Future<void> getUniName() async {
     String name = await HiveMethods().getUniName();
+    Map data = await HiveMethods().getUserData();
     print(name);
+    print(data);
     uniName = name;
+    userDetails = data;
   }
 
   Future getUniList() async {
@@ -540,7 +546,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : resultList(),
+                  : saveHostelPage(),
             )
           ],
         ),
@@ -548,10 +554,85 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     );
   }
 
-  Widget sortByDistance() {
-    print('distance');
+  Widget saveHostelPage() {
     return PaginateFirestore(
-      itemsPerPage: 2,
+      itemsPerPage: 4,
+      initialLoader: Container(
+        height: 50,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+      bottomLoader: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      emptyDisplay: Center(
+        child: Text('No Hostel Has Been Saved!!'),
+      ),
+      query: Firestore.instance
+          .collection('savedHostel')
+          .document(userDetails['uid'])
+          .collection('all')
+          .orderBy('timestamp', descending: true),
+      itemBuilder: (context, DocumentSnapshot documentSnapshot) {
+        SavedHostelModel savedHostelModel =
+            SavedHostelModel.fromMap(documentSnapshot.data);
+
+        return Card(
+          elevation: 2.5,
+          child: InkWell(
+            onTap: () {
+              print(savedHostelModel.hostelID);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      GetHostelByIDPage(id: savedHostelModel.hostelID),
+                ),
+              );
+            },
+            child: Container(
+//              margin: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  displayMultiPic(imageList: savedHostelModel.hostelImageUrls),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Container(
+                    height: 140,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          '${savedHostelModel.hostelName}',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '${savedHostelModel.hostelLocation}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget sortByDistance() {
+    return PaginateFirestore(
+      itemsPerPage: 3,
       initialLoader: Container(
         height: 50,
         child: Center(
@@ -1000,9 +1081,3 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     );
   }
 }
-
-
-//TODO: implement save hostel
-//TODO: implement save hostel
-//TODO: implement save hostel
-//TODO: implement save hostel

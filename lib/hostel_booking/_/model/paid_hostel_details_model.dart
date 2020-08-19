@@ -1,35 +1,29 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class HostelBookingInspectionModel {
+class PaidHostelModel {
   String fullName;
   String phoneNumber;
   String email;
-  String date;
-  String time;
+  int price;
   String id;
   Map hostelDetails;
-  Timestamp timestamp;
 
-  HostelBookingInspectionModel({
+  PaidHostelModel({
     @required this.fullName,
     @required this.phoneNumber,
     @required this.email,
-    @required this.date,
-    @required this.time,
+    @required this.price,
     @required this.id,
     @required this.hostelDetails,
   });
 
-  HostelBookingInspectionModel.fromMap(Map<String, dynamic> mapData) {
+  PaidHostelModel.fromMap(Map<String, dynamic> mapData) {
     this.fullName = mapData['fullName'];
     this.phoneNumber = mapData['phoneNumber'];
     this.email = mapData['email'];
-    this.date = mapData['date'];
-    this.time = mapData['time'];
+    this.price = mapData['price'];
     this.id = mapData['id'];
     this.hostelDetails = mapData['hostelDetails'];
-    this.timestamp = mapData['timestamp'];
   }
 
   Map toMap() {
@@ -37,11 +31,9 @@ class HostelBookingInspectionModel {
     data['fullName'] = this.fullName;
     data['phoneNumber'] = this.phoneNumber;
     data['email'] = this.email;
-    data['date'] = this.date;
-    data['time'] = this.time;
+    data['price'] = this.price;
     data['id'] = this.id;
     data['hostelDetails'] = this.hostelDetails;
-    data['timestamp'] = Timestamp.now();
 
     return data;
   }

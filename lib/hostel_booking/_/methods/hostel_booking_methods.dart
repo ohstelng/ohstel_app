@@ -1,5 +1,7 @@
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_booking_inspection_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
+import 'package:Ohstel_app/hostel_booking/_/model/paid_hostel_details_model.dart';
+import 'package:Ohstel_app/hostel_booking/_/model/save_hostel_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,6 +11,15 @@ class HostelBookingMethods {
   // collection ref
   final CollectionReference hostelCollection =
       Firestore.instance.collection('hostelBookings');
+
+  final CollectionReference bookingInspectionRef =
+      Firestore.instance.collection('bookingInspections');
+
+  final CollectionReference paidHostelRef =
+      Firestore.instance.collection('paidHostel');
+
+  final CollectionReference savedHostelRef =
+      Firestore.instance.collection('savedHostel');
 
   Future<List<HostelModel>> fetchAllHostel({@required String uniName}) async {
     List<HostelModel> hostelList = List<HostelModel>();
@@ -335,9 +346,6 @@ class HostelBookingMethods {
     @required String time,
     @required HostelModel hostelDetails,
   }) async {
-    final CollectionReference bookingInspectionRef =
-        Firestore.instance.collection('bookingInspections');
-
     final String id = Uuid().v4();
 
     try {
@@ -367,5 +375,86 @@ class HostelBookingMethods {
       );
       return -1;
     }
+  }
+
+  Future<int> savePaidHostelDetailsDetails({
+    @required String fullName,
+    @required String phoneNumber,
+    @required String email,
+    @required int price,
+    @required HostelModel hostelDetails,
+  }) async {
+    final String id = Uuid().v4();
+
+    try {
+      PaidHostelModel bookingInspectionInfo = PaidHostelModel(
+        fullName: fullName,
+        phoneNumber: phoneNumber,
+        email: email,
+        price: price,
+        id: id,
+        hostelDetails: hostelDetails.toMap(),
+      );
+      print(bookingInspectionInfo.toMap());
+      print(id);
+
+      await paidHostelRef.document(id).setData(bookingInspectionInfo.toMap());
+      print('save inspection details');
+
+      return 0;
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: '${e.message}',
+        gravity: ToastGravity.CENTER,
+      );
+      return -1;
+    }
+  }
+
+  Future<void> archiveHostel({
+    @required Map userDetails,
+    @required HostelModel hostelDetails,
+  }) async {
+    SavedHostelModel savedHostelModel = SavedHostelModel(
+      hostelID: hostelDetails.id,
+      userDetails: userDetails,
+      hostelImageUrls: hostelDetails.imageUrl,
+      hostelName: hostelDetails.hostelName,
+      hostelLocation: hostelDetails.hostelLocation,
+    );
+
+    try {
+      await savedHostelRef
+          .document(userDetails['uid'].toString())
+          .collection('all')
+          .document()
+          .setData(savedHostelModel.toMap());
+
+      Fluttertoast.showToast(
+        msg: 'Saved!!',
+        gravity: ToastGravity.CENTER,
+      );
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: '${e.message}',
+        gravity: ToastGravity.CENTER,
+      );
+    }
+  }
+
+  Future<HostelModel> getHostelByID({@required String id}) async {
+    HostelModel hostelModel;
+
+    try {
+      DocumentSnapshot doc = await hostelCollection.document(id).get();
+      hostelModel = HostelModel.fromMap(doc.data);
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: '${e.message}',
+        gravity: ToastGravity.CENTER,
+      );
+    }
+
+    return hostelModel;
   }
 }

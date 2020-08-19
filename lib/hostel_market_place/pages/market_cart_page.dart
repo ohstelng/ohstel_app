@@ -25,13 +25,6 @@ class _MarketCartPageState extends State<MarketCartPage> {
   Map userData;
 
 
-  //Todo: implement userData checker
-  //Todo: implement userData checker
-  //Todo: implement userData checker
-  //Todo: implement userData checker
-  //Todo: implement userData checker
-
-
   String _getReference() {
     String platform;
     if (Platform.isIOS) {

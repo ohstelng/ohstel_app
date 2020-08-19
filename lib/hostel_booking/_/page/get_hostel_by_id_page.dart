@@ -8,23 +8,34 @@ import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_inspection_request_page.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-class HostelBookingInFoPage extends StatefulWidget {
-  final HostelModel hostelModel;
+class GetHostelByIDPage extends StatefulWidget {
+  final String id;
 
-  HostelBookingInFoPage({@required this.hostelModel});
+  GetHostelByIDPage({@required this.id});
 
   @override
-  _HostelBookingInFoPageState createState() => _HostelBookingInFoPageState();
+  _GetHostelByIDPageState createState() => _GetHostelByIDPageState();
 }
 
-class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
+class _GetHostelByIDPageState extends State<GetHostelByIDPage> {
   Map userData;
+  HostelModel hostelModel;
+  bool isLoading = true;
+
+  Future getHostel() async {
+    setState(() {
+      isLoading = true;
+    });
+    hostelModel = await HostelBookingMethods().getHostelByID(id: widget.id);
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   Future<void> getUserData() async {
     Map data = await HiveMethods().getUserData();
@@ -118,8 +129,8 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
       fullName: userData['fullName'],
       phoneNumber: userData['phoneNumber'],
       email: userData['email'],
-      price: widget.hostelModel.price,
-      hostelDetails: widget.hostelModel,
+      price: hostelModel.price,
+      hostelDetails: hostelModel,
     );
 
     if (result == 0) {
@@ -137,6 +148,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
   @override
   void initState() {
+    getHostel();
     getUserData();
     PaystackPlugin.initialize(
       publicKey: 'pk_test_d0490fa7b5ae91bf5317ebdbd761760c8f14fd8f',
@@ -147,11 +159,13 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          body(),
-          footer(),
-        ],
+      body: SafeArea(
+        child: isLoading == false ? Column(
+          children: <Widget>[
+            body(),
+            footer(),
+          ],
+        ) : Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -162,54 +176,52 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
         child: Column(
           children: <Widget>[
             Stack(children: [
-              displayMultiPic(imageList: widget.hostelModel.imageUrl),
-              SafeArea(
-                child: Container(
-                  padding: EdgeInsets.only(right: 10, top: 10, left: 4),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Center(
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.white,
-                            ),
+              displayMultiPic(imageList: hostelModel.imageUrl),
+              Container(
+                padding: EdgeInsets.only(right: 10, top: 10, left: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                      Expanded(
-                          flex: 6,
-                          child: Text('Hostel Details',
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white))),
-                      Expanded(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: () {
-                            HostelBookingMethods().archiveHostel(
-                              userDetails: userData,
-                              hostelDetails: widget.hostelModel,
-                            );
-                          },
-                          child: Center(
-                            child: Icon(
-                              Icons.bookmark_border,
-                              color: Colors.white,
-                              size: 24,
-                            ),
+                    ),
+                    Expanded(
+                        flex: 6,
+                        child: Text('Hostel Details',
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white))),
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: () {
+                          HostelBookingMethods().archiveHostel(
+                            userDetails: userData,
+                            hostelDetails: hostelModel,
+                          );
+                        },
+                        child: Center(
+                          child: Icon(
+                            Icons.bookmark_border,
+                            color: Colors.white,
+                            size: 24,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               )
             ]),
@@ -244,7 +256,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => HostelBookingInspectionRequestPage(
-                      hostelModel: widget.hostelModel,
+                      hostelModel: hostelModel,
                     ),
                   ),
                 );
@@ -259,7 +271,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
   Widget hostelDetails() {
     TextStyle _titlestyle =
-        TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+    TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
     return DefaultTabController(
       length: 2,
       child: Container(
@@ -273,12 +285,12 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
             Row(
               children: <Widget>[
                 Text(
-                  '${widget.hostelModel.hostelName}',
+                  '${hostelModel.hostelName}',
                   style: _titlestyle,
                 ),
                 Spacer(),
                 Text(
-                  '₦${formatCurrency.format(widget.hostelModel.price)}',
+                  '₦${formatCurrency.format(hostelModel.price)}',
                   style: _titlestyle,
                 ),
               ],
@@ -286,9 +298,9 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
             SizedBox(height: 8),
             Row(
               children: <Widget>[
-                Text('${widget.hostelModel.hostelLocation}'),
+                Text('${hostelModel.hostelLocation}'),
                 Spacer(),
-                Text(widget.hostelModel.isSchoolHostel ? 'Roommate Needed' : '')
+                Text(hostelModel.isSchoolHostel ? 'Roommate Needed' : '')
               ],
             ),
             SizedBox(height: 8),
@@ -298,7 +310,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 size: 16,
               ),
               Text(
-                  '${widget.hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
+                  '${hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
               Spacer(),
             ]),
             Container(
@@ -312,9 +324,9 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                   ),
                   Tab(
                       child: Text(
-                    'Reviews',
-                    style: TextStyle(color: Colors.black),
-                  ))
+                        'Reviews',
+                        style: TextStyle(color: Colors.black),
+                      ))
                 ],
               ),
             ),
@@ -325,7 +337,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SingleChildScrollView(
-                          child: Text('${widget.hostelModel.description}')),
+                          child: Text('${hostelModel.description}')),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -352,7 +364,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
             bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
         child: Carousel(
           images: imageList.map(
-            (images) {
+                (images) {
               return Container(
                 child: ExtendedImage.network(
                   images,

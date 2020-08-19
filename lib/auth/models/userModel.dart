@@ -21,12 +21,6 @@ class UserModel {
     @required this.uniDetails,
   });
 
-  //TODO: implement toMap here
-  //TODO: implement toMap here
-  //TODO: implement toMap here
-  //TODO: implement toMap here
-  //TODO: implement toMap here
-
   UserModel.fromMap(Map<String, dynamic> mapData) {
     this.uid = mapData['uid'];
     this.email = mapData['email'];
@@ -36,5 +30,19 @@ class UserModel {
     this.phoneNumber = mapData['phoneNumber'];
     this.uniName = mapData['uniName'];
     this.uniDetails = mapData['uniDetails'];
+  }
+
+  Map toMap(){
+    Map<String, dynamic> data = Map<String, dynamic>();
+    data['uid'] = this.uid;
+    data['email'] = this.email;
+    data['fullName'] = this.fullName;
+    data['userName'] = this.userName;
+    data['schoolLocation'] = this.schoolLocation;
+    data['phoneNumber'] = this.phoneNumber;
+    data['uniName'] = this.uniName;
+    data['uniDetails'] = this.uniDetails;
+
+    return data;
   }
 }
