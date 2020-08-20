@@ -755,11 +755,7 @@ packages:
       name: typed_data
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "1.1.6"
-=======
-    version: "1.2.0"
->>>>>>> 60341b9012cf6371a620655f650a4a6b81b92174
   url_launcher:
     dependency: "direct main"
     description:

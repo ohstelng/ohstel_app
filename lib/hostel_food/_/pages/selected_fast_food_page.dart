@@ -10,10 +10,7 @@ import 'package:Ohstel_app/hostel_food/_/pages/selected_fries_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_snacks_page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
 import 'package:intl/intl.dart';
->>>>>>> 60341b9012cf6371a620655f650a4a6b81b92174
 
 class SelectedFastFoodPage extends StatefulWidget {
   final List<ExtraItemDetails> currentExtraItemDetails;
@@ -214,7 +211,6 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                             children: <Widget>[
                               fastFoodList[index].imageUrl != null
                                   ? Container(
-<<<<<<< HEAD
                                       height: 150,
                                       width: 150,
                                       decoration: BoxDecoration(
@@ -225,25 +221,11 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                         fit: BoxFit.contain,
                                         handleLoadingProgress: true,
                                         shape: BoxShape.circle,
-=======
-                                height: 100,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                ),
-                                child: ExtendedImage.network(
-                                  fastFoodList[index].imageUrl,
-                                  fit: BoxFit.fitWidth,
-                                  handleLoadingProgress: true,
-                                  shape: BoxShape.rectangle,
->>>>>>> 60341b9012cf6371a620655f650a4a6b81b92174
-//                        borderRadius: BorderRadius.circular(10),
                                         cache: false,
                                         enableMemoryCache: true,
                                       ),
                                     )
                                   : Container(
-<<<<<<< HEAD
                                       height: 120,
                                       width: 120,
                                       decoration: BoxDecoration(
@@ -251,31 +233,17 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                         shape: BoxShape.circle,
                                       ),
                                     ),
-=======
-                                height: 120,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  shape: BoxShape.rectangle,
-                                ),
-                              ),
->>>>>>> 60341b9012cf6371a620655f650a4a6b81b92174
                               Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Column(
                                   mainAxisAlignment:
-<<<<<<< HEAD
                                       MainAxisAlignment.spaceBetween,
-=======
-                                  MainAxisAlignment.start,
->>>>>>> 60341b9012cf6371a620655f650a4a6b81b92174
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
                                       '${fastFoodList[index].itemName}',
                                       style: TextStyle(fontSize: 20),
                                     ),
-<<<<<<< HEAD
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -318,23 +286,21 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                               ),
                                             ),
                                           ),
-                                        )
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        Text(
+                                          '$symbol ${formatCurrency.format(
+                                              fastFoodList[index].price)}',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        Text("Rating will be here")
                                       ],
-=======
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Text(
-                                      '$symbol ${formatCurrency.format(
-                                          fastFoodList[index].price)}',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    SizedBox(
-                                      height: 15,
->>>>>>> 60341b9012cf6371a620655f650a4a6b81b92174
-                                    ),
-                                    Text("Rating will be here")
 //                                    Row(
 //                                      mainAxisAlignment:
 //                                      MainAxisAlignment.spaceBetween,
@@ -377,7 +343,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
 //                                        )
 //                                      ],
 //                                    ),
-                                  ],
+                                    )],
                                 ),
                               )
                             ],
@@ -437,11 +403,8 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
       }
     }
 
-<<<<<<< HEAD
     var width = MediaQuery.of(context).size.width;
-=======
     //var width = MediaQuery.of(context).size.width;
->>>>>>> 60341b9012cf6371a620655f650a4a6b81b92174
     return SizedBox(
       height: 60,
       child: Container(
@@ -451,15 +414,9 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
           itemCount: 3,
           itemBuilder: (context, index) {
             List<String> list = [
-<<<<<<< HEAD
               'Fast Food',
               'Snacks',
               'Drinks',
-=======
-              '    Fast Food   ',
-              '    Snacks    ',
-              '    Drinks    '
->>>>>>> 60341b9012cf6371a620655f650a4a6b81b92174
             ];
             return Container(
               margin: EdgeInsets.all(5.0),
