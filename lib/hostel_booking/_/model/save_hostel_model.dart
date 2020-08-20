@@ -16,7 +16,6 @@ class SavedHostelModel {
     @required this.hostelImageUrls,
     @required this.hostelName,
     @required this.hostelLocation,
-    @required this.timestamp,
   });
 
   SavedHostelModel.fromMap(Map<String, dynamic> mapData) {

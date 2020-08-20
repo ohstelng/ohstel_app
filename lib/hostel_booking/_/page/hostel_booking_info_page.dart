@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
+import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_inspection_request_page.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,35 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   Map userData;
 
   int _current = 0;
+
+  Future<void> savePaidDataToServer() async {
+    int result = await HostelBookingMethods().savePaidHostelDetailsDetails(
+      fullName: userData['fullName'],
+      phoneNumber: userData['phoneNumber'],
+      email: userData['email'],
+      price: widget.hostelModel.price,
+      hostelDetails: widget.hostelModel,
+    );
+
+    if (result == 0) {
+      Fluttertoast.showToast(
+        msg: 'Sent Sucessfully!!',
+        gravity: ToastGravity.CENTER,
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: 'An Error Occur :(',
+        gravity: ToastGravity.CENTER,
+      );
+    }
+  }
+
+  Future<void> archivePost() async {
+    await HostelBookingMethods().archiveHostel(
+      userDetails: userData,
+      hostelDetails: widget.hostelModel,
+    );
+  }
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -96,6 +127,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
       if (body['data']['status'] == 'success') {
         Fluttertoast.showToast(msg: 'SucessFull!!!! :)');
+        savePaidDataToServer();
         //do something with the response. show success
       } else {}
     } catch (e) {
@@ -152,27 +184,21 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
               Positioned(
                   top: 0.0,
                   child: Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.2,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.2,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(begin: Alignment.topCenter,
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Colors.grey[900].withOpacity(0.9),
-                              Colors.grey[800].withOpacity(0.9),
-                              Colors.grey[800].withOpacity(0.9),
-                              Colors.grey[800].withOpacity(0.7),
-                              Colors.grey[800].withOpacity(0.6),
-                              Colors.grey[800].withOpacity(0.2),
-                              Colors.transparent
-
-                            ])),
+                          Colors.grey[900].withOpacity(0.9),
+                          Colors.grey[800].withOpacity(0.9),
+                          Colors.grey[800].withOpacity(0.9),
+                          Colors.grey[800].withOpacity(0.7),
+                          Colors.grey[800].withOpacity(0.6),
+                          Colors.grey[800].withOpacity(0.2),
+                          Colors.transparent
+                        ])),
                   )),
               SafeArea(
                 child: Container(
@@ -203,7 +229,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                         flex: 1,
                         child: InkWell(
                           onTap: () {
-                            // TODO: implement bookmarking of post
+                            archivePost();
                           },
                           child: Center(
                             child: Icon(
@@ -241,15 +267,13 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
               child: Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
+                    color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(8)),
                 child: Center(
                     child: Text(
-                      'Make Payment',
-                      style: TextStyle(color: Colors.white),
-                    )),
+                  'Make Payment',
+                  style: TextStyle(color: Colors.white),
+                )),
               ),
             ),
           ),
@@ -260,10 +284,9 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        HostelBookingInspectionRequestPage(
-                          hostelModel: widget.hostelModel,
-                        ),
+                    builder: (context) => HostelBookingInspectionRequestPage(
+                      hostelModel: widget.hostelModel,
+                    ),
                   ),
                 );
               },
@@ -277,7 +300,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
   Widget hostelDetails() {
     TextStyle _titlestyle =
-    TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+        TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
     return DefaultTabController(
       length: 2,
       child: Container(
@@ -319,8 +342,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 size: 16,
               ),
               Text(
-                  '${widget.hostelModel
-                      .distanceFromSchoolInKm}KM from Unilorin'),
+                  '${widget.hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
               Spacer(),
               Text("12/12/2020")
             ]),
@@ -344,17 +366,14 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                   ),
                   Tab(
                       child: Text(
-                        'Reviews',
-                        style: TextStyle(color: Colors.black),
-                      ))
+                    'Reviews',
+                    style: TextStyle(color: Colors.black),
+                  ))
                 ],
               ),
             ),
             Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.13,
+                height: MediaQuery.of(context).size.height * 0.13,
                 child: TabBarView(
                   children: <Widget>[
                     Padding(
@@ -378,7 +397,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
   Widget displayMultiPic({@required List imageList}) {
     List imgs = imageList.map(
-          (images) {
+      (images) {
         return Container(
           child: ExtendedImage.network(
             images,
@@ -393,14 +412,8 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
     ).toList();
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery
-            .of(context)
-            .size
-            .height * 0.55,
-        maxWidth: MediaQuery
-            .of(context)
-            .size
-            .width,
+        maxHeight: MediaQuery.of(context).size.height * 0.55,
+        maxWidth: MediaQuery.of(context).size.width,
       ),
       child: Column(
         children: <Widget>[
