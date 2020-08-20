@@ -131,7 +131,7 @@ class HiveMethods {
 
   Future<void> getLocationDateFromApi() async {
     try {
-      String url = "http://ohstel.pythonanywhere.com/get_all_locations";
+      String url = "https://quiz-demo-de79d.appspot.com/hostel_api/all_sub_locations";
       var response = await http.get(url);
       Map data = json.decode(response.body);
       data['lastUpdate'] = DateTime.now().millisecondsSinceEpoch;

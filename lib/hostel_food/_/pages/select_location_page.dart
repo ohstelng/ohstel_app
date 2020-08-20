@@ -71,8 +71,7 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
 
   Future<Map> getAreaNamesFromApi() async {
     String uniName = await HiveMethods().getUniName();
-    String url =
-        "http://ohstel.pythonanywhere.com/${uniName.toLowerCase()}_areaName";
+    String url = 'https://quiz-demo-de79d.appspot.com/food_api/unilorin';
     var response = await http.get(url);
     Map data = json.decode(response.body);
 
@@ -235,7 +234,10 @@ class _OnCampusLocationState extends State<OnCampusLocation> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text('Submit', style: TextStyle(color: Colors.white),),
+                child: Text(
+                  'Submit',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             )
           ],

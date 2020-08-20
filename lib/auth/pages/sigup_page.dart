@@ -74,7 +74,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<Map> getAllUniNamesFromApi() async {
-    String url = "http://ohstel.pythonanywhere.com/hostelSearchKey";
+    String url = "https://quiz-demo-de79d.appspot.com/hostel_api/searchKeys";
     var response = await http.get(url);
     Map data = json.decode(response.body);
 
