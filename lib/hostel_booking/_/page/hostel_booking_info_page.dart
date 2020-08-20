@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_inspection_request_page.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +25,16 @@ class HostelBookingInFoPage extends StatefulWidget {
 
 class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   Map userData;
+
+  int _current = 0;
+
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
 
   Future<void> getUserData() async {
     Map data = await HiveMethods().getUserData();
@@ -163,6 +173,31 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
           children: <Widget>[
             Stack(children: [
               displayMultiPic(imageList: widget.hostelModel.imageUrl),
+              Positioned(
+                  top: 0.0,
+                  child: Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.2,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.grey[900].withOpacity(0.9),
+                              Colors.grey[800].withOpacity(0.9),
+                              Colors.grey[800].withOpacity(0.9),
+                              Colors.grey[800].withOpacity(0.7),
+                              Colors.grey[800].withOpacity(0.6),
+                              Colors.grey[800].withOpacity(0.2),
+                              Colors.transparent
+
+                            ])),
+                  )),
               SafeArea(
                 child: Container(
                   padding: EdgeInsets.only(right: 10, top: 10, left: 4),
@@ -177,7 +212,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                           },
                           child: Center(
                             child: Icon(
-                              Icons.arrow_back_ios,
+                              Icons.arrow_back,
                               color: Colors.white,
                             ),
                           ),
@@ -187,9 +222,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                           flex: 6,
                           child: Text('Hostel Details',
                               style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white))),
+                                  fontSize: 20, color: Colors.white))),
                       Expanded(
                         flex: 1,
                         child: InkWell(
@@ -222,30 +255,42 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
   Widget footer() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
             flex: 5,
-            child: FlatButton(
-              color: Theme.of(context).primaryColor,
-              onPressed: () {
+            child: InkWell(
+              onTap: () {
                 chargeCard();
               },
-              child: Text('Make Payment'),
+              child: Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
+                    borderRadius: BorderRadius.circular(8)),
+                child: Center(
+                    child: Text(
+                      'Make Payment',
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ),
             ),
           ),
           Expanded(
             flex: 5,
             child: FlatButton(
-              color: Theme.of(context).buttonColor,
+              color: Colors.transparent,
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => HostelBookingInspectionRequestPage(
-                      hostelModel: widget.hostelModel,
-                    ),
+                    builder: (context) =>
+                        HostelBookingInspectionRequestPage(
+                          hostelModel: widget.hostelModel,
+                        ),
                   ),
                 );
               },
@@ -260,10 +305,12 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   Widget hostelDetails() {
     TextStyle _titlestyle =
         TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+
+    TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
     return DefaultTabController(
       length: 2,
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
           color: Colors.transparent,
         ),
@@ -288,7 +335,12 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
               children: <Widget>[
                 Text('${widget.hostelModel.hostelLocation}'),
                 Spacer(),
-                Text(widget.hostelModel.isSchoolHostel ? 'Roommate Needed' : '')
+
+                Text(widget.hostelModel.isSchoolHostel ? 'Roommate Needed' : ''),
+
+                Text(widget.hostelModel.isSchoolHostel
+                    ? 'Roommate Needed'
+                    : 'Roomate not Needed')
               ],
             ),
             SizedBox(height: 8),
@@ -300,7 +352,18 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
               Text(
                   '${widget.hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
               Spacer(),
+              Text("12/12/2020")
             ]),
+
+            SizedBox(height: 16),
+//          Text('Des: ${widget.hostelModel.description}'),
+//          Text('Price: ${widget.hostelModel.price}'),
+//          Text('ratings: ${widget.hostelModel.ratings}'),
+//          Text('Features: ${widget.hostelModel.extraFeatures}'),
+//          Text('lank Mark Close by: ${widget.hostelModel.landMark}'),
+//          Text('School Hostel?: ${widget.hostelModel.isRoomMateNeeded}'),
+//          Text('Roommate needed? : ${widget.hostelModel.isSchoolHostel}'),
+//          Text('and lots more..............'),
             Container(
               child: TabBar(
                 tabs: <Widget>[
@@ -315,11 +378,20 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                     'Reviews',
                     style: TextStyle(color: Colors.black),
                   ))
+
+//                        'Reviews',
+//                        style: TextStyle(color: Colors.black),
+//                      ))
+
                 ],
               ),
             ),
             Container(
-                height: MediaQuery.of(context).size.height * 0.22,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.15,
+
                 child: TabBarView(
                   children: <Widget>[
                     Padding(
@@ -342,6 +414,20 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   }
 
   Widget displayMultiPic({@required List imageList}) {
+    List imgs = imageList.map(
+          (images) {
+        return Container(
+          child: ExtendedImage.network(
+            images,
+            fit: BoxFit.cover,
+            handleLoadingProgress: true,
+            shape: BoxShape.rectangle,
+            cache: false,
+            enableMemoryCache: true,
+          ),
+        );
+      },
+    ).toList();
     return Container(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.5,
@@ -376,7 +462,8 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
           animationCurve: Curves.fastOutSlowIn,
           animationDuration: Duration(milliseconds: 2000),
         ),
-      ),
-    );
+
+    ));
   }
+
 }
