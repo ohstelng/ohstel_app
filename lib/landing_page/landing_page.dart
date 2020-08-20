@@ -6,6 +6,7 @@ import 'package:Ohstel_app/hostel_hire/pages/hire_home_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:Ohstel_app/landing_page/homepage.dart';
 
 class MainHomePage extends StatefulWidget {
   @override
@@ -51,20 +52,9 @@ class _MainHomePageState extends State<MainHomePage> {
         children: <Widget>[
           HostelBookingHomePage(),
           FoodHomePage(),
+          Homepage(),
           MarketHomePage(),
           HireHomePage(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Account\n SignOut'),
-              IconButton(
-                icon: Icon(Icons.phonelink_erase),
-                onPressed: () async {
-                  await AuthService().signOut();
-                },
-              ),
-            ],
-          )
         ],
         controller: pageController,
         onPageChanged: pageChanged,
@@ -77,38 +67,35 @@ class _MainHomePageState extends State<MainHomePage> {
         inactiveColor: Colors.grey,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Image.asset("asset/hostel.png"),
             title: Text(
-              'Booking',
-              style: TextStyle(fontSize: 14),
+              'Hostel',
+              style: TextStyle(fontSize: 12),
             ),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
+            icon: Image.asset("asset/food.png"),
             title: Text(
               'Food',
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 12),
             ),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_shopping_cart),
+            icon: Image.asset("asset/OHstel.png"),
+
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset("asset/market.png"),
             title: Text(
-              'Mall',
-              style: TextStyle(fontSize: 14),
+              'Market',
+              style: TextStyle(fontSize: 12),
             ),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: Image.asset("asset/hire.png"),
             title: Text(
-              'Hire',
-              style: TextStyle(fontSize: 14),
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet),
-            title: Text(
-              'Wallet',
-              style: TextStyle(fontSize: 14),
+              'Other Services',
+              style: TextStyle(fontSize: 12),
             ),
           ),
         ],
@@ -116,3 +103,5 @@ class _MainHomePageState extends State<MainHomePage> {
     );
   }
 }
+
+

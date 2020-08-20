@@ -15,6 +15,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class CartPage extends StatefulWidget {
   @override
@@ -31,6 +32,8 @@ class _CartPageState extends State<CartPage> {
   bool isLoading = true;
   Map addressDetails;
   Runes input = Runes('\u20a6');
+  final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
+
   var symbol;
 
   List<ExtraItemDetails> getExtraFromMap({@required List data}) {
@@ -415,7 +418,7 @@ class _CartPageState extends State<CartPage> {
                                                 height: 5,
                                               ),
                                               Text(
-                                                '$symbol${currentItemDetails.price}',
+                                                '$symbol ${formatCurrency.format(currentItemDetails.price)}',
                                                 style: TextStyle(fontSize: 20),
                                               ),
                                             ],
@@ -494,7 +497,7 @@ class _CartPageState extends State<CartPage> {
                                             IconButton(
                                               icon: Icon(
                                                 Icons.favorite_border,
-                                                color: Colors.grey,
+                                                color: Colors.black87,
                                               ),
                                               onPressed: () {
                                                 setState(() {});
@@ -573,7 +576,7 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.fromLTRB(20, 40, 20, 0),
+                        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                         child: Column(
                           children: <Widget>[
 //                            Divider(
@@ -586,21 +589,22 @@ class _CartPageState extends State<CartPage> {
                                 Text(
                                   'Total Amount:',
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w400),
                                 ),
                                 Text(
-                                  '$symbol${getGrandTotal()}',
+                                  '$symbol ${formatCurrency.format(
+                                      getGrandTotal())}',
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w400),
                                 ),
                               ],
                             ),
-                            Divider(
-                              thickness: 1.5,
-                              color: Colors.black,
-                            ),
+//                            Divider(
+//                              thickness: 1.5,
+//                              color: Colors.black,
+//                            ),
                           ],
                         ),
                       ),

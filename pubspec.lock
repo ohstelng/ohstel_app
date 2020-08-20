@@ -373,6 +373,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.3"
+  font_awesome_flutter:
+    dependency: "direct main"
+    description:
+      name: font_awesome_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "8.8.1"
   glob:
     dependency: transitive
     description:
@@ -748,7 +755,11 @@ packages:
       name: typed_data
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.1.6"
+=======
+    version: "1.2.0"
+>>>>>>> 60341b9012cf6371a620655f650a4a6b81b92174
   url_launcher:
     dependency: "direct main"
     description:

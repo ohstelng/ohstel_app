@@ -3,6 +3,7 @@ import 'package:Ohstel_app/hostel_food/_/models/food_cart_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'cart_page.dart';
 
@@ -18,6 +19,8 @@ class SnackDialog extends StatefulWidget {
 }
 
 class _SnackDialogState extends State<SnackDialog> {
+  final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
+
   Runes input = Runes('\u20a6');
   var symbol;
   int number = 1;
@@ -64,26 +67,26 @@ class _SnackDialogState extends State<SnackDialog> {
           children: <Widget>[
             widget.itemDetails.imageUrl != null
                 ? Container(
-                    margin: EdgeInsets.all(10.0),
+              // margin: EdgeInsets.all(10.0),
                     height: 150,
-                    width: double.infinity,
-                    child: ExtendedImage.network(
-                      widget.itemDetails.imageUrl,
-                      fit: BoxFit.contain,
-                      handleLoadingProgress: true,
-                      shape: BoxShape.circle,
-                      cache: false,
-                      enableMemoryCache: true,
-                    ),
-                  )
+              width: double.infinity,
+              child: ExtendedImage.network(
+                widget.itemDetails.imageUrl,
+                fit: BoxFit.fitWidth,
+                handleLoadingProgress: true,
+                shape: BoxShape.rectangle,
+                cache: false,
+                enableMemoryCache: true,
+              ),
+            )
                 : Container(
-                    height: 120,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
+              height: 120,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                shape: BoxShape.rectangle,
+              ),
+            ),
             Container(
               padding: const EdgeInsets.all(20),
               child: Row(
@@ -145,14 +148,41 @@ class _SnackDialogState extends State<SnackDialog> {
                 children: <Widget>[
                   Text(
                     '${widget.itemDetails.itemName}',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    '$symbol${widget.itemDetails.price}',
-                    style: TextStyle(fontSize: 20),
+                    '$symbol${formatCurrency.format(widget.itemDetails.price)}',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
+            ),
+            Container(
+              constraints: BoxConstraints(minWidth: 90),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.alarm,
+                          color: Color(0xFFF27507),
+                          size: 16,
+                        ),
+                        Text(
+                          "delivery time will be here",
+                          style: TextStyle(color: Color(0xFFF27507)),
+                        )
+                      ],
+                    ),
+                  ),
+                  Text("Ratings will be here")
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 30,
             ),
             Container(
               child: Column(
@@ -160,7 +190,7 @@ class _SnackDialogState extends State<SnackDialog> {
                 children: <Widget>[
                   Text(
                     "Description",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     height: 10,
@@ -190,7 +220,7 @@ class _SnackDialogState extends State<SnackDialog> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    '$symbol${getTotal()}',
+                    '$symbol ${formatCurrency.format(getTotal())}',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],

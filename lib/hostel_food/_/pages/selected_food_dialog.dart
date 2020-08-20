@@ -6,6 +6,7 @@ import 'package:Ohstel_app/hostel_food/_/models/food_cart_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'cart_page.dart';
 
@@ -23,6 +24,8 @@ class FoodDialog extends StatefulWidget {
 }
 
 class _FoodDialogState extends State<FoodDialog> {
+  final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
+
   Runes input = Runes('\u20a6');
   var symbol;
   StreamController<List<ExtraItemDetails>> extraListController =
@@ -61,6 +64,10 @@ class _FoodDialogState extends State<FoodDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery
+        .of(context)
+        .size;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -120,15 +127,17 @@ class _FoodDialogState extends State<FoodDialog> {
                       margin: EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: numberOfPlates == 1 ? Colors.grey : Color(
-                              0xFFF27507),
+                          color: numberOfPlates == 1
+                              ? Colors.grey
+                              : Color(0xFFF27507),
                         ),
                       ),
                       child: InkWell(
                         child: Icon(
                           Icons.remove,
-                          color: numberOfPlates == 1 ? Colors.grey : Color(
-                              0xFFF27507),
+                          color: numberOfPlates == 1
+                              ? Colors.grey
+                              : Color(0xFFF27507),
                         ),
                         onTap: () {
                           if (numberOfPlates > 1) {
@@ -173,12 +182,41 @@ class _FoodDialogState extends State<FoodDialog> {
                   children: <Widget>[
                     Text(
                       '${widget.itemDetails.itemName}',
-                      style: TextStyle(fontSize: 20),
+                      style:
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      '$symbol${widget.itemDetails.price}',
+                      '$symbol ${formatCurrency.format(
+                          widget.itemDetails.price)}',
                       style: TextStyle(fontSize: 20),
                     ),
+                  ],
+                ),
+              ),
+              Container(
+                constraints: BoxConstraints(
+                    minWidth: 90
+                ),
+
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.alarm,
+                            color: Color(0xFFF27507),
+                            size: 16,
+                          ),
+                          Text(
+                            "delivery time will be here",
+                            style: TextStyle(color: Color(0xFFF27507)),
+                          )
+                        ],
+                      ),
+                    ),
+                    Text("Ratings will be here")
                   ],
                 ),
               ),
@@ -221,6 +259,9 @@ class _FoodDialogState extends State<FoodDialog> {
                 ),
               )
                   : Container(),
+              SizedBox(
+                height: 30,
+              ),
               Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,7 +348,7 @@ class _FoodDialogState extends State<FoodDialog> {
                       TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '$symbol${getTotal()}',
+                      '$symbol ${formatCurrency.format(getTotal())}',
                       style:
                       TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),

@@ -81,7 +81,12 @@ class _LogInPageState extends State<LogInPage> {
     );
   }
 
+  var _user = "Timmy";
   bool _obscureText = true;
+  BoxDecoration _textField = BoxDecoration(
+    borderRadius: BorderRadius.circular(15),
+    color: Colors.green[50],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -89,73 +94,76 @@ class _LogInPageState extends State<LogInPage> {
       resizeToAvoidBottomPadding: false,
       body: loading != true
           ? Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(begin: Alignment.topCenter, colors: [
-                Colors.deepOrange[800],
-                Colors.deepOrange[400],
-                Colors.deepOrange[100]
-              ])),
               child: Form(
                 key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 60, horizontal: 20),
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Login',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 40.0,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text('Welcome Back to Ohstel',
-                              style: TextStyle(color: Colors.white))
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        padding:
-                        EdgeInsets.symmetric(vertical: 70, horizontal: 20),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(60),
-                                topRight: Radius.circular(60))),
+                child: SafeArea(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      IconButton(
+                          icon: Icon(Icons.arrow_back), onPressed: () {}),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.19),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
-                          children: <Widget>[
-                            emailInputFieldBox(),
-                            SizedBox(
-                              height: 20,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  'Welcome, ',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                                Text(
+                                  "$_user",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
                             ),
-                            passwordInputFieldBox(),
-                            forgotPassword(),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            logInButton(),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Text(
-                              "New to Ohstel??",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            signUpButton(),
+                            Row(
+                              children: <Widget>[
+                                Text('Cheers! On becoming an',
+                                    style: TextStyle(color: Colors.black)),
+                                Text(' OHSTELLER',
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor))
+                              ],
+                            )
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 70, horizontal: 20),
+                          child: Column(
+                            children: <Widget>[
+                              emailInputFieldBox(),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              passwordInputFieldBox(),
+                              SizedBox(
+                                height: 38,
+                              ),
+                              logInButton(),
+                              SizedBox(
+                                height: 14,
+                              ),
+                              forgotPassword(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )
@@ -193,50 +201,23 @@ class _LogInPageState extends State<LogInPage> {
           }
         },
         decoration: InputDecoration(
-            labelText: "Email",
-            border: InputBorder.none,
-            prefixIcon: Icon(Icons.email)),
+          labelText: "Email",
+          suffixIcon: Icon(Icons.person),
+          border: InputBorder.none,
+        ),
         onSaved: (value) => email = value.trim(),
         keyboardType: TextInputType.emailAddress,
       ),
       padding: EdgeInsets.symmetric(
         horizontal: 15,
       ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-              color: Color.fromRGBO(
-                225,
-                95,
-                27,
-                .3,
-              ),
-              blurRadius: 20,
-              offset: Offset(0, 10))
-        ],
-      ),
+      decoration: _textField,
     );
   }
 
   Widget passwordInputFieldBox() {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-              color: Color.fromRGBO(
-                225,
-                95,
-                27,
-                .3,
-              ),
-              blurRadius: 20,
-              offset: Offset(0, 10))
-        ],
-      ),
+      decoration: _textField,
       child: Padding(
         padding: const EdgeInsets.only(
           left: 15,
@@ -255,11 +236,9 @@ class _LogInPageState extends State<LogInPage> {
           decoration: InputDecoration(
               border: InputBorder.none,
               labelText: 'Password',
-              prefixIcon: Icon(Icons.security),
               suffixIcon: GestureDetector(
                 child: Icon(
-                    _obscureText ? Icons.visibility_off : Icons.visibility
-                ),
+                    _obscureText ? Icons.visibility_off : Icons.visibility),
                 onTap: () {
                   setState(() => _obscureText = !_obscureText);
                 },
@@ -284,35 +263,23 @@ class _LogInPageState extends State<LogInPage> {
         height: 60,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.deepOrange[400],
-              Colors.deepOrange[500],
-              Colors.deepOrange[500],
-              Colors.deepOrange[400]
-            ],
-          ),
-          borderRadius: BorderRadius.circular(40),
+          color: Theme
+              .of(context)
+              .primaryColor,
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text(
-              "Login",
+              "Sign In",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.normal),
             ),
             SizedBox(
               width: 10,
             ),
-            Icon(
-              Icons.account_balance,
-              color: Colors.white,
-              size: 30,
-            )
           ]),
         ),
       ),
@@ -371,14 +338,14 @@ class _LogInPageState extends State<LogInPage> {
           widget.toggleView();
         },
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Forgot Password ??',
+              'Forgot Password ? or Sign up',
               style: TextStyle(
                   fontSize: 14.0,
-                  color: Colors.deepOrange[300],
-                  fontWeight: FontWeight.bold),
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal),
             ),
           ],
         ),
@@ -386,4 +353,3 @@ class _LogInPageState extends State<LogInPage> {
     );
   }
 }
-
