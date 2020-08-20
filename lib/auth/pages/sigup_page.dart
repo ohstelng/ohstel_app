@@ -93,6 +93,26 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
+          bottom: PreferredSize(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Create your Account",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w800, fontSize: 24)),
+                    Text(
+                      "Let's get to know you better",
+                      style: TextStyle(
+                          fontSize: 10, fontWeight: FontWeight.normal),
+                    )
+                  ],
+                ),
+              ),
+              preferredSize: Size.fromHeight(30)),
           elevation: 0,
           leading: IconButton(
               icon: Icon(
@@ -110,6 +130,31 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 child: Column(
                   children: <Widget>[
+                    Container(
+                      decoration: _textField,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 15),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value
+                                .trim()
+                                .isEmpty) {
+                              return 'Last Name Can\'t Be Empty';
+                            } else if (value
+                                .trim()
+                                .length < 3) {
+                              return 'Last Name Must Be More Than 2 Characters';
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              labelText: 'First Name',
+                              border: InputBorder.none),
+                          onSaved: (value) => firstName = value.trim(),
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 8),
                     Container(
                       decoration: _textField,
@@ -117,9 +162,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
                           validator: (value) {
-                            if (value.trim().isEmpty) {
+                            if (value
+                                .trim()
+                                .isEmpty) {
                               return 'Last Name Can\'t Be Empty';
-                            } else if (value.trim().length < 3) {
+                            } else if (value
+                                .trim()
+                                .length < 3) {
                               return 'Last Name Must Be More Than 2 Characters';
                             } else {
                               return null;
@@ -129,21 +178,6 @@ class _SignUpPageState extends State<SignUpPage> {
                               labelText: 'Last Name', border: InputBorder.none),
                           onSaved: (value) => lastName = value.trim(),
                         ),
-                      ),
-                    ),
-                    Container(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value.trim().isEmpty) {
-                            return 'Field Can\'t Be Empty';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Phone Number',
-                            border: InputBorder.none),
-                        onSaved: (value) => phoneNumber = value.trim(),
                       ),
                     ),
                     SizedBox(height: 8),
@@ -193,32 +227,23 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 8),
                     Container(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value.trim().isEmpty) {
-                            return 'Field Can\'t Be Empty';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Email', border: InputBorder.none),
-                        onSaved: (value) => email = value.trim(),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 40),
-                      decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor)),
                       child: ExpansionTile(
                         key: GlobalKey(),
                         title: Text('$_uniName'),
                         leading: Icon(Icons.location_on),
                         children: <Widget>[
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * .30,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * .30,
                             child: FutureBuilder(
                               future: getAllUniNamesFromApi(),
                               builder: (context, snapshot) {
@@ -270,56 +295,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Color.fromRGBO(
-                                225,
-                                95,
-                                27,
-                                .3,
-                              ),
-                              blurRadius: 20,
-                              offset: Offset(0, 10))
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 15,
-                          right: 15,
-                        ),
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value.trim().isEmpty) {
-                              return 'Password Can\'t Be Empty';
-                            } else if (value.trim().length < 6) {
-                              return 'Password Must Be More Than 6 Characters';
-                            } else {
-                              return null;
-                            }
-                          },
-                          decoration: InputDecoration(
-                              labelText: 'Password',
-                              border: InputBorder.none,
-                              suffixIcon: GestureDetector(
-                                child: Icon(_obscureText
-                                    ? Icons.visibility
-                                    : Icons.visibility_off),
-                                onTap: () {
-                                  setState(() => _obscureText = !_obscureText);
-                                },
-                              )),
-                          obscureText: !_obscureText,
-                          onSaved: (value) {
-                            _passwordAgain = value.trim();
-                          },
-                        ),
                       ),
                     ),
                     SizedBox(height: 8),
@@ -470,7 +445,6 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           ]),
         ),
-        margin: EdgeInsets.symmetric(vertical: 20),
         width: MediaQuery.of(context).size.width,
         height: 60,
         padding: EdgeInsets.all(10),
@@ -486,22 +460,11 @@ class _SignUpPageState extends State<SignUpPage> {
         widget.toggleView();
       },
       child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 60,
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.deepOrange[400],
-              Colors.deepOrange[500],
-              Colors.deepOrange[500],
-              Colors.deepOrange[400]
-            ],
-          ),
-          borderRadius: BorderRadius.circular(40),
-        ),
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        padding: EdgeInsets.symmetric(vertical: 10),
         child: Center(
           child: Text(
             "Already have an account ? Sign in",

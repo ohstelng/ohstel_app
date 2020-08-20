@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_inspection_request_page.dart';
@@ -97,8 +95,8 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
       final Map body = json.decode(response.body);
 
       if (body['data']['status'] == 'success') {
-        Fluttertoast.showToast(msg: 'Payment Successfull');
-        savePaidDataToServer();
+        Fluttertoast.showToast(msg: 'SucessFull!!!! :)');
+        //do something with the response. show success
       } else {}
     } catch (e) {
       print(e);
@@ -120,28 +118,6 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
       _verifyOnServer(response.reference);
     } else {
       print('error');
-    }
-  }
-
-  Future<void> savePaidDataToServer() async {
-    int result = await HostelBookingMethods().savePaidHostelDetailsDetails(
-      fullName: userData['fullName'],
-      phoneNumber: userData['phoneNumber'],
-      email: userData['email'],
-      price: widget.hostelModel.price,
-      hostelDetails: widget.hostelModel,
-    );
-
-    if (result == 0) {
-      Fluttertoast.showToast(
-        msg: 'Sent Sucessfully!!',
-        gravity: ToastGravity.CENTER,
-      );
-    } else {
-      Fluttertoast.showToast(
-        msg: 'An Error Occur :(',
-        gravity: ToastGravity.CENTER,
-      );
     }
   }
 
@@ -227,10 +203,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                         flex: 1,
                         child: InkWell(
                           onTap: () {
-                            HostelBookingMethods().archiveHostel(
-                              userDetails: userData,
-                              hostelDetails: widget.hostelModel,
-                            );
+                            // TODO: implement bookmarking of post
                           },
                           child: Center(
                             child: Icon(
@@ -304,12 +277,11 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
   Widget hostelDetails() {
     TextStyle _titlestyle =
-        TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
-
     TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
     return DefaultTabController(
       length: 2,
       child: Container(
+        height: MediaQuery.of(context).size.height * 0.35,
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
           color: Colors.transparent,
@@ -335,9 +307,6 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
               children: <Widget>[
                 Text('${widget.hostelModel.hostelLocation}'),
                 Spacer(),
-
-                Text(widget.hostelModel.isSchoolHostel ? 'Roommate Needed' : ''),
-
                 Text(widget.hostelModel.isSchoolHostel
                     ? 'Roommate Needed'
                     : 'Roomate not Needed')
@@ -350,11 +319,11 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 size: 16,
               ),
               Text(
-                  '${widget.hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
+                  '${widget.hostelModel
+                      .distanceFromSchoolInKm}KM from Unilorin'),
               Spacer(),
               Text("12/12/2020")
             ]),
-
             SizedBox(height: 16),
 //          Text('Des: ${widget.hostelModel.description}'),
 //          Text('Price: ${widget.hostelModel.price}'),
@@ -375,14 +344,9 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                   ),
                   Tab(
                       child: Text(
-                    'Reviews',
-                    style: TextStyle(color: Colors.black),
-                  ))
-
-//                        'Reviews',
-//                        style: TextStyle(color: Colors.black),
-//                      ))
-
+                        'Reviews',
+                        style: TextStyle(color: Colors.black),
+                      ))
                 ],
               ),
             ),
@@ -390,8 +354,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 height: MediaQuery
                     .of(context)
                     .size
-                    .height * 0.15,
-
+                    .height * 0.13,
                 child: TabBarView(
                   children: <Widget>[
                     Padding(
@@ -430,40 +393,59 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
     ).toList();
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.5,
-        maxWidth: MediaQuery.of(context).size.width,
+        maxHeight: MediaQuery
+            .of(context)
+            .size
+            .height * 0.55,
+        maxWidth: MediaQuery
+            .of(context)
+            .size
+            .width,
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
-        child: Carousel(
-          images: imageList.map(
-            (images) {
-              return Container(
-                child: ExtendedImage.network(
-                  images,
-                  fit: BoxFit.fill,
-                  handleLoadingProgress: true,
-                  shape: BoxShape.rectangle,
-                  cache: false,
-                  enableMemoryCache: true,
-                ),
-              );
-            },
-          ).toList(),
-          autoplay: true,
-          indicatorBgPadding: 16.0,
-          dotPosition: DotPosition.bottomCenter,
-          dotSpacing: 15.0,
-          dotSize: 4,
-          dotIncreaseSize: 2.5,
-          dotIncreasedColor: Colors.deepOrange,
-          dotBgColor: Colors.transparent,
-          animationCurve: Curves.fastOutSlowIn,
-          animationDuration: Duration(milliseconds: 2000),
-        ),
-
-    ));
+      child: Column(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20)),
+            child: CarouselSlider(
+              items: imgs,
+              options: CarouselOptions(
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _current = index;
+                  });
+                },
+                height: 400.0,
+                aspectRatio: 2.0,
+                viewportFraction: 1,
+                initialPage: 0,
+                enableInfiniteScroll: true,
+                reverse: false,
+                autoPlay: true,
+                autoPlayInterval: Duration(seconds: 3),
+                autoPlayAnimationDuration: Duration(milliseconds: 800),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enlargeCenterPage: false,
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
+          ),
+          SizedBox(height: 8),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: map<Widget>(imageList, (index, url) {
+                return Container(
+                  width: 8.0,
+                  height: 8.0,
+                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _current == index ? Colors.grey : Colors.black),
+                );
+              }).toList())
+        ],
+      ),
+    );
   }
-
 }
