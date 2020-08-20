@@ -1,12 +1,11 @@
-import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/food_home_page.dart';
 import 'package:Ohstel_app/hostel_hire/pages/hire_home_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
+import 'package:Ohstel_app/landing_page/homepage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:Ohstel_app/landing_page/homepage.dart';
 
 class MainHomePage extends StatefulWidget {
   @override
@@ -61,6 +60,7 @@ class _MainHomePageState extends State<MainHomePage> {
         physics: BouncingScrollPhysics(),
       ),
       bottomNavigationBar: CupertinoTabBar(
+        backgroundColor: Colors.white70,
         currentIndex: getPageIndex,
         onTap: onTapChangePage,
         activeColor: Colors.deepOrange,
@@ -82,7 +82,6 @@ class _MainHomePageState extends State<MainHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Image.asset("asset/OHstel.png"),
-
           ),
           BottomNavigationBarItem(
             icon: Image.asset("asset/market.png"),
@@ -103,5 +102,3 @@ class _MainHomePageState extends State<MainHomePage> {
     );
   }
 }
-
-
