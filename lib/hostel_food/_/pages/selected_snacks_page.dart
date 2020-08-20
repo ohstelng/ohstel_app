@@ -62,13 +62,20 @@ class _SnackDialogState extends State<SnackDialog> {
         ],
       ),
       body: Container(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: ListView(
           children: <Widget>[
+
+            Container(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Text(
+                  "${widget.itemDetails.itemFastFoodName}",
+                  style: TextStyle(fontSize: 24),
+                )),
+
             widget.itemDetails.imageUrl != null
                 ? Container(
               // margin: EdgeInsets.all(10.0),
-                    height: 150,
+              height: 200,
               width: double.infinity,
               child: ExtendedImage.network(
                 widget.itemDetails.imageUrl,
@@ -142,7 +149,7 @@ class _SnackDialogState extends State<SnackDialog> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -151,13 +158,14 @@ class _SnackDialogState extends State<SnackDialog> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    '$symbol${formatCurrency.format(widget.itemDetails.price)}',
+                    '$symbol${formatCurrency.format(getTotal())}',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
             ),
             Container(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
               constraints: BoxConstraints(minWidth: 90),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -185,6 +193,7 @@ class _SnackDialogState extends State<SnackDialog> {
               height: 30,
             ),
             Container(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -206,29 +215,30 @@ class _SnackDialogState extends State<SnackDialog> {
             SizedBox(
               height: 10,
             ),
-            Divider(
-              thickness: 0.5,
-              color: Colors.black,
-            ),
+//            Divider(
+//              thickness: 0.5,
+//              color: Colors.black,
+//            ),
+//            Container(
+//              margin: EdgeInsets.all(10.0),
+//              child: Row(
+//                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                children: <Widget>[
+//                  Text(
+//                    'Total:',
+//                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//                  ),
+//                  Text(
+//                    '$symbol ${formatCurrency.format(getTotal())}',
+//                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//                  ),
+//                ],
+//              ),
+//            ),
             Container(
-              margin: EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Total:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '$symbol ${formatCurrency.format(getTotal())}',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-            Container(
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
               width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+
               child: RaisedButton.icon(
                   elevation: 0,
                   shape: RoundedRectangleBorder(

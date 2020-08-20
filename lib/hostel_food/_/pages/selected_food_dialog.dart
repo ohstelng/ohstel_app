@@ -64,9 +64,7 @@ class _FoodDialogState extends State<FoodDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery
-        .of(context)
-        .size;
+    var size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -92,19 +90,24 @@ class _FoodDialogState extends State<FoodDialog> {
       ),
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: ListView(
             children: <Widget>[
+              Container(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: Text(
+                    "${widget.itemDetails.itemFastFoodName}",
+                    style: TextStyle(fontSize: 24),
+                  )),
               widget.itemDetails.imageUrl != null
                   ? Container(
-                margin: const EdgeInsets.all(10.0),
-                height: 150,
+                //  margin: const EdgeInsets.all(10.0),
+                height: 200,
                 width: double.infinity,
                 child: ExtendedImage.network(
                   widget.itemDetails.imageUrl,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fitWidth,
                   handleLoadingProgress: true,
-                  shape: BoxShape.circle,
+                  shape: BoxShape.rectangle,
                   cache: false,
                   enableMemoryCache: true,
                 ),
@@ -176,7 +179,7 @@ class _FoodDialogState extends State<FoodDialog> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -186,18 +189,15 @@ class _FoodDialogState extends State<FoodDialog> {
                       TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      '$symbol ${formatCurrency.format(
-                          widget.itemDetails.price)}',
+                      '$symbol ${formatCurrency.format(getTotal())}',
                       style: TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
               ),
               Container(
-                constraints: BoxConstraints(
-                    minWidth: 90
-                ),
-
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                constraints: BoxConstraints(minWidth: 90),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -222,6 +222,7 @@ class _FoodDialogState extends State<FoodDialog> {
               ),
               widget.currentExtraItemDetails.isNotEmpty
                   ? Container(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 //     constraints: BoxConstraints(maxHeight: 150),
                 margin: EdgeInsets.all(10.0),
                 child: extraItemWidget(),
@@ -229,6 +230,7 @@ class _FoodDialogState extends State<FoodDialog> {
                   : Container(),
               widget.currentExtraItemDetails.isNotEmpty
                   ? Container(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 margin: EdgeInsets.all(5.0),
                 child: DropdownButton(
                   hint: extraList.isEmpty
@@ -263,6 +265,7 @@ class _FoodDialogState extends State<FoodDialog> {
                 height: 30,
               ),
               Container(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -333,31 +336,31 @@ class _FoodDialogState extends State<FoodDialog> {
 //                  ],
 //                ),
 //              ),
-              Divider(
-                thickness: 0.5,
-                color: Colors.black,
-              ),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Total:',
-                      style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '$symbol ${formatCurrency.format(getTotal())}',
-                      style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
+//              Divider(
+//                thickness: 0.5,
+//                color: Colors.black,
+//              ),
+//              Container(
+//                margin: EdgeInsets.all(10.0),
+//                child: Row(
+//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                  children: <Widget>[
+//                    Text(
+//                      'Total:',
+//                      style:
+//                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//                    ),
+//                    Text(
+//                      '$symbol ${formatCurrency.format(getTotal())}',
+//                      style:
+//                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+//                    ),
+//                  ],
+//                ),
+//              ),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: RaisedButton.icon(
                     elevation: 0,
                     shape: RoundedRectangleBorder(

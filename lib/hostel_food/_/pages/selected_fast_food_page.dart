@@ -28,8 +28,6 @@ class SelectedFastFoodPage extends StatefulWidget {
 }
 
 class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
-
-
   final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
   String selectedFoodBar = 'Fast Food';
   StreamController<String> toDisplayContoller = StreamController();
@@ -72,8 +70,8 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
   Widget body({BuildContext context}) {
     List<ItemDetails> cookedItemsList = widget.currentItemDetails
         .where((element) =>
-    element.itemCategory == 'cookedFood' ||
-        element.itemCategory == 'cookFood')
+            element.itemCategory == 'cookedFood' ||
+            element.itemCategory == 'cookFood')
         .toList();
 
     List<ItemDetails> snacksItemsList = widget.currentItemDetails
@@ -117,10 +115,11 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
     if (selectedFoodBar == 'Fast Food') {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => FoodDialog(
-            currentExtraItemDetails: extraItemDetails,
-            itemDetails: itemDetails,
-          ),
+          builder: (context) =>
+              FoodDialog(
+                currentExtraItemDetails: extraItemDetails,
+                itemDetails: itemDetails,
+              ),
         ),
       );
     } else if (selectedFoodBar == 'Snacks') {
@@ -191,17 +190,18 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
               padding: EdgeInsets.all(20),
               //  height: 250,
               child: GridView.count(
-                childAspectRatio: (itemWidth / 320),
+                childAspectRatio: (itemWidth / 340),
                 //  physics: BouncingScrollPhysics(),
                 crossAxisCount: 2,
                 children: List.generate(
                   fastFoodList.length,
-                  (index) {
+                      (index) {
                     return InkWell(
-                      onTap: () => showFoodDialog(
-                        itemDetails: fastFoodList[index],
-                        extraItemDetails: widget.currentExtraItemDetails,
-                      ),
+                      onTap: () =>
+                          showFoodDialog(
+                            itemDetails: fastFoodList[index],
+                            extraItemDetails: widget.currentExtraItemDetails,
+                          ),
                       child: Container(
                         margin: EdgeInsets.all(5),
                         child: Card(
@@ -211,27 +211,30 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                             children: <Widget>[
                               fastFoodList[index].imageUrl != null
                                   ? Container(
-                                      height: 150,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: ExtendedImage.network(
-                                        fastFoodList[index].imageUrl,
-                                        fit: BoxFit.contain,
-                                        handleLoadingProgress: true,
-                                        shape: BoxShape.circle,
-                                        cache: false,
-                                        enableMemoryCache: true,
+                                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                alignment: Alignment.topCenter,
+                                // height: 160,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                ),
+                                child: ExtendedImage.network(
+                                  fastFoodList[index].imageUrl,
+                                  fit: BoxFit.fitWidth,
+                                  handleLoadingProgress: true,
+                                  shape: BoxShape.rectangle,
+                                  cache: false,
+                                  enableMemoryCache: true,
                                       ),
                                     )
                                   : Container(
-                                      height: 120,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        shape: BoxShape.circle,
-                                      ),
+                                alignment: Alignment.topCenter,
+                                height: 120,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  shape: BoxShape.rectangle,
+                                ),
                                     ),
                               Padding(
                                 padding: const EdgeInsets.all(10),
@@ -244,68 +247,27 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                       '${fastFoodList[index].itemName}',
                                       style: TextStyle(fontSize: 20),
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          '$symbol${fastFoodList[index].price}',
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-//                                            Map map = FoodCartModel(
-//                                              itemDetails: widget
-//                                                  .currentItemDetails[index],
-//                                              totalPrice: 1,
-//                                              numberOfPlates: 1,
-////                                              extraItems: widget
-////                                                  .currentExtraItemDetails,
-//                                            ).toMap();
-//                                            HiveMethods()
-//                                                .saveFoodCartToDb(map: map);
-
-                                            showFoodDialog(
-                                              itemDetails: fastFoodList[index],
-                                              extraItemDetails: widget
-                                                  .currentExtraItemDetails,
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFFF27507),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(5.0),
-                                              ),
-                                            ),
-                                            child: Text(
-                                              'Order',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                        Text(
-                                          '$symbol ${formatCurrency.format(
-                                              fastFoodList[index].price)}',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                        Text("Rating will be here")
-                                      ],
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      '$symbol ${formatCurrency.format(
+                                          fastFoodList[index].price)}',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(fontSize: 17),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text("Ratings will be here")
 //                                    Row(
 //                                      mainAxisAlignment:
-//                                      MainAxisAlignment.spaceBetween,
+//                                          MainAxisAlignment.spaceBetween,
 //                                      children: <Widget>[
-//
+//                                        Text(
+//                                          '$symbol${fastFoodList[index].price}',
+//                                          textAlign: TextAlign.start,
+//                                        ),
 //                                        InkWell(
 //                                          onTap: () {
 ////                                            Map map = FoodCartModel(
@@ -340,10 +302,65 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
 //                                              ),
 //                                            ),
 //                                          ),
-//                                        )
+//                                        ),
+//                                        SizedBox(
+//                                          height: 15,
+//                                        ),
+//                                        Text(
+//                                          '$symbol ${formatCurrency.format(
+//                                              fastFoodList[index].price)}',
+//                                          textAlign: TextAlign.start,
+//                                          style: TextStyle(fontSize: 20),
+//                                        ),
+//                                        SizedBox(
+//                                          height: 15,
+//                                        ),
+//                                        Text("Rating will be here")
 //                                      ],
-//                                    ),
-                                    )],
+////                                    Row(
+////                                      mainAxisAlignment:
+////                                      MainAxisAlignment.spaceBetween,
+////                                      children: <Widget>[
+////
+////                                        InkWell(
+////                                          onTap: () {
+//////                                            Map map = FoodCartModel(
+//////                                              itemDetails: widget
+//////                                                  .currentItemDetails[index],
+//////                                              totalPrice: 1,
+//////                                              numberOfPlates: 1,
+////////                                              extraItems: widget
+////////                                                  .currentExtraItemDetails,
+//////                                            ).toMap();
+//////                                            HiveMethods()
+//////                                                .saveFoodCartToDb(map: map);
+////
+////                                            showFoodDialog(
+////                                              itemDetails: fastFoodList[index],
+////                                              extraItemDetails: widget
+////                                                  .currentExtraItemDetails,
+////                                            );
+////                                          },
+////                                          child: Container(
+////                                            padding: EdgeInsets.all(5.0),
+////                                            decoration: BoxDecoration(
+////                                              color: Color(0xFFF27507),
+////                                              borderRadius: BorderRadius.all(
+////                                                Radius.circular(5.0),
+////                                              ),
+////                                            ),
+////                                            child: Text(
+////                                              'Order',
+////                                              style: TextStyle(
+////                                                color: Colors.white,
+////                                              ),
+////                                            ),
+////                                          ),
+////                                        )
+////                                      ],
+////                                    ),
+//                                    )
+                                  ],
                                 ),
                               )
                             ],
