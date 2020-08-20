@@ -5,6 +5,7 @@ import 'package:Ohstel_app/hostel_food/_/models/fast_food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_fast_food_page.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -121,32 +122,31 @@ class _FoodHomePageState extends State<FoodHomePage> {
 
                           return InkWell(
                             onTap: () {
-                              print("currentFastFood.toMap():${currentFastFood
-                                  .toMap()}");
                               print(
-                                  "currentItemDetails[0].toMap():${currentItemDetails[0]
-                                      .toMap()}");
+                                  "currentFastFood.toMap():${currentFastFood.toMap()}");
+                              print(
+                                  "currentItemDetails[0].toMap():${currentItemDetails[0].toMap()}");
                               //    print("currentExtraItemDetails[0].toMap():${currentExtraItemDetails[0].toMap()}");
 
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      SelectedFastFoodPage(
-                                        currentFastFood: currentFastFood,
-                                        currentExtraItemDetails:
+                                  builder: (context) => SelectedFastFoodPage(
+                                    currentFastFood: currentFastFood,
+                                    currentExtraItemDetails:
                                         currentExtraItemDetails,
-                                        currentItemDetails: currentItemDetails,
-                                      ),
+                                    currentItemDetails: currentItemDetails,
+                                  ),
                                 ),
                               );
                             },
                             child: Container(
                               margin: EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 10,
+                                horizontal: 5,
+                                vertical: 5,
                               ),
                               child: Card(
-                                elevation: 2.5,
+                                color: Color(0xFFF4F5F6),
+                                elevation: 1,
                                 child: Row(
                                   children: <Widget>[
                                     Container(
@@ -172,18 +172,25 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            '${currentFastFood.openTime.trim()}',
+                                            '${currentFastFood.fastFoodName
+                                                .trim()}',
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Phone number will be here',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
                                           Text(
-                                            '${currentFastFood.fastFoodName
-                                                .trim()}',
+                                            'Ratings will be here',
                                             style: TextStyle(
                                               fontSize: 18,
-                                              fontWeight: FontWeight.w400,
+                                              fontWeight: FontWeight.w300,
                                             ),
                                           ),
                                           Text(
@@ -196,7 +203,8 @@ class _FoodHomePageState extends State<FoodHomePage> {
                                           ),
                                           Row(
                                             children: [
-                                              Icon(Icons.location_on),
+                                              Icon(Icons.location_on,
+                                                color: Colors.black45,),
                                               Text(
                                                 '${currentFastFood.address
                                                     .trim()}',
