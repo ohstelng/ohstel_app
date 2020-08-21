@@ -6,6 +6,7 @@ import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
 import 'package:Ohstel_app/landing_page/homepage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MainHomePage extends StatefulWidget {
   @override
@@ -67,38 +68,67 @@ class _MainHomePageState extends State<MainHomePage> {
         inactiveColor: Colors.grey,
         items: [
           BottomNavigationBarItem(
-            icon: Image.asset("asset/hostel.png"),
+            icon: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: SvgPicture.asset("asset/hostel.svg"),
+            ),
             title: Text(
               'Hostel',
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 8),
             ),
           ),
           BottomNavigationBarItem(
-            icon: Image.asset("asset/food.png"),
+            icon: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: SvgPicture.asset("asset/food.svg"),
+            ),
             title: Text(
               'Food',
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 8),
             ),
           ),
           BottomNavigationBarItem(
-            icon: Image.asset("asset/OHstel.png"),
+            icon: Container(
+              height: 120,
+              width: 120,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: Color(0xffF4F5F6)),
+              padding: const EdgeInsets.all(4),
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Image.asset("asset/OHstel.png"),
+              ),
+            ),
           ),
           BottomNavigationBarItem(
-            icon: Image.asset("asset/market.png"),
+            icon: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: SvgPicture.asset("asset/market.svg"),
+            ),
             title: Text(
-              'Market',
-              style: TextStyle(fontSize: 12),
+              '  Market',
+              style: TextStyle(fontSize: 8),
             ),
           ),
           BottomNavigationBarItem(
-            icon: Image.asset("asset/hire.png"),
+            icon: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: SvgPicture.asset("asset/hire.svg"),
+            ),
             title: Text(
               'Other Services',
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 8),
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+class BottomLogo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
