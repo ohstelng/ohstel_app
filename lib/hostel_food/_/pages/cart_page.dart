@@ -666,7 +666,7 @@ class _CartPageState extends State<CartPage> {
         margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
         width: double.infinity,
         child: FlatButton(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(15),
           color: Color(0xFF202530),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5.0),
