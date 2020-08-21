@@ -165,11 +165,13 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          body(),
-          footer(),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            body(),
+            footer(),
+          ],
+        ),
       ),
     );
   }
@@ -185,7 +187,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                   top: 0.0,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.2,
+//                    height: MediaQuery.of(context).size.height * 0.2,
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
                             begin: Alignment.topCenter,
@@ -200,48 +202,46 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                           Colors.transparent
                         ])),
                   )),
-              SafeArea(
-                child: Container(
-                  padding: EdgeInsets.only(right: 10, top: 10, left: 4),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Center(
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            ),
+              Container(
+                padding: EdgeInsets.only(right: 10, top: 10, left: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                      Expanded(
-                          flex: 6,
-                          child: Text('Hostel Details',
-                              style: TextStyle(
-                                  fontSize: 20, color: Colors.white))),
-                      Expanded(
-                        flex: 1,
-                        child: InkWell(
-                          onTap: () {
-                            archivePost();
-                          },
-                          child: Center(
-                            child: Icon(
-                              Icons.bookmark_border,
-                              color: Colors.white,
-                              size: 24,
-                            ),
+                    ),
+                    Expanded(
+                        flex: 6,
+                        child: Text('Hostel Details',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white))),
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        onTap: () {
+                          archivePost();
+                        },
+                        child: Center(
+                          child: Icon(
+                            Icons.bookmark_border,
+                            color: Colors.white,
+                            size: 24,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               )
             ]),
@@ -253,47 +253,49 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   }
 
   Widget footer() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: InkWell(
-              onTap: () {
-                chargeCard();
-              },
-              child: Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(8)),
-                child: Center(
-                    child: Text(
-                  'Make Payment',
-                  style: TextStyle(color: Colors.white),
-                )),
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              flex: 5,
+              child: InkWell(
+                onTap: () {
+                  chargeCard();
+                },
+                child: Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Center(
+                      child: Text(
+                    'Make Payment',
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 5,
-            child: FlatButton(
-              color: Colors.transparent,
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => HostelBookingInspectionRequestPage(
-                      hostelModel: widget.hostelModel,
+            Expanded(
+              flex: 5,
+              child: FlatButton(
+                color: Colors.transparent,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => HostelBookingInspectionRequestPage(
+                        hostelModel: widget.hostelModel,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: Text('Request Inspection'),
+                  );
+                },
+                child: Text('Request Inspection'),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -303,50 +305,51 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
         TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
     return DefaultTabController(
       length: 2,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.35,
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text(
-                  '${widget.hostelModel.hostelName}',
-                  style: _titlestyle,
-                ),
-                Spacer(),
-                Text(
-                  '₦${formatCurrency.format(widget.hostelModel.price)}',
-                  style: _titlestyle,
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            Row(
-              children: <Widget>[
-                Text('${widget.hostelModel.hostelLocation}'),
-                Spacer(),
-                Text(widget.hostelModel.isSchoolHostel
-                    ? 'Roommate Needed'
-                    : 'Roomate not Needed')
-              ],
-            ),
-            SizedBox(height: 8),
-            Row(children: <Widget>[
-              Icon(
-                Icons.location_on,
-                size: 16,
+      child: Expanded(
+        child: Container(
+//        height: MediaQuery.of(context).size.height * 0.36,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    '${widget.hostelModel.hostelName}',
+                    style: _titlestyle,
+                  ),
+                  Spacer(),
+                  Text(
+                    '₦${formatCurrency.format(widget.hostelModel.price)}',
+                    style: _titlestyle,
+                  ),
+                ],
               ),
-              Text(
-                  '${widget.hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
-              Spacer(),
-              Text("12/12/2020")
-            ]),
-            SizedBox(height: 16),
+              SizedBox(height: 8),
+              Row(
+                children: <Widget>[
+                  Text('${widget.hostelModel.hostelLocation}'),
+                  Spacer(),
+                  Text(widget.hostelModel.isSchoolHostel
+                      ? 'Roommate Needed'
+                      : 'Roomate not Needed')
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(children: <Widget>[
+                Icon(
+                  Icons.location_on,
+                  size: 16,
+                ),
+                Text(
+                    '${widget.hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
+                Spacer(),
+                Text("12/12/2020")
+              ]),
+              SizedBox(height: 16),
 //          Text('Des: ${widget.hostelModel.description}'),
 //          Text('Price: ${widget.hostelModel.price}'),
 //          Text('ratings: ${widget.hostelModel.ratings}'),
@@ -355,25 +358,26 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 //          Text('School Hostel?: ${widget.hostelModel.isRoomMateNeeded}'),
 //          Text('Roommate needed? : ${widget.hostelModel.isSchoolHostel}'),
 //          Text('and lots more..............'),
-            Container(
-              child: TabBar(
-                tabs: <Widget>[
-                  Tab(
-                    child: Text(
-                      'Details',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  Tab(
+              Container(
+                child: TabBar(
+                  tabs: <Widget>[
+                    Tab(
                       child: Text(
-                    'Reviews',
-                    style: TextStyle(color: Colors.black),
-                  ))
-                ],
+                        'Details',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    Tab(
+                        child: Text(
+                      'Reviews',
+                      style: TextStyle(color: Colors.black),
+                    ))
+                  ],
+                ),
               ),
-            ),
-            Container(
-                height: MediaQuery.of(context).size.height * 0.13,
+              Container(
+//                  height: MediaQuery.of(context).size.height * 0.13,
+                  child: Expanded(
                 child: TabBarView(
                   children: <Widget>[
                     Padding(
@@ -388,8 +392,10 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                               'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat')),
                     )
                   ],
-                ))
-          ],
+                ),
+              ))
+            ],
+          ),
         ),
       ),
     );
@@ -401,7 +407,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
         return Container(
           child: ExtendedImage.network(
             images,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
             handleLoadingProgress: true,
             shape: BoxShape.rectangle,
             cache: false,
@@ -412,7 +418,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
     ).toList();
     return Container(
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.55,
+        maxHeight: MediaQuery.of(context).size.height * 0.474,
         maxWidth: MediaQuery.of(context).size.width,
       ),
       child: Column(
@@ -429,7 +435,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                     _current = index;
                   });
                 },
-                height: 400.0,
+                height: 310.0,
                 aspectRatio: 2.0,
                 viewportFraction: 1,
                 initialPage: 0,

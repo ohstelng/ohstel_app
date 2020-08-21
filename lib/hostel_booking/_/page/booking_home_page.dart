@@ -4,7 +4,6 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/save_hostel_model.dart';
-import 'package:Ohstel_app/hostel_booking/_/page/get_hostel_by_id_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_info_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_search_page.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -610,12 +609,12 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           child: InkWell(
             onTap: () {
               print(savedHostelModel.hostelID);
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) =>
-                      GetHostelByIDPage(id: savedHostelModel.hostelID),
-                ),
-              );
+//              Navigator.of(context).push(
+//                MaterialPageRoute(
+//                  builder: (context) =>
+//                      GetHostelByIDPage(id: savedHostelModel.hostelID),
+//                ),
+//              );
             },
             child: Container(
 //              margin: EdgeInsets.all(10),
@@ -743,10 +742,15 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          displayMultiPic(
-                              imageList: currentHostelModel.imageUrl),
-                          hostelDetails(hostel: currentHostelModel),
-                          SizedBox(height: 5),
+                          Expanded(
+                            flex: 4,
+                            child: displayMultiPic(
+                                imageList: currentHostelModel.imageUrl),
+                          ),
+                          Expanded(
+                              flex: 3,
+                              child: hostelDetails(hostel: currentHostelModel)),
+//                          SizedBox(height: 5),
                         ],
                       ),
                     ),
@@ -770,6 +774,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
+          SizedBox(height: 8,),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -784,7 +789,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
             ],
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 2),
           Row(
             children: <Widget>[
               Icon(Icons.location_on, size: 16, color: Colors.grey),
@@ -812,7 +817,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
             ],
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 2),
           Row(children: <Widget>[
             Text(
               '₦  ${formatCurrency.format(hostel.price)}',
@@ -823,7 +828,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
               overflow: TextOverflow.ellipsis,
             )
-          ])
+          ]),
+          SizedBox(height: 8,)
         ],
       ),
     );

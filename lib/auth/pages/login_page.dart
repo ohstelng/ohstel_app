@@ -2,8 +2,8 @@ import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/auth/pages/sigup_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ToggleBetweenLoginAndSignUpPage extends StatefulWidget {
   @override
@@ -91,56 +91,49 @@ class _LogInPageState extends State<LogInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+//      resizeToAvoidBottomPadding: false,
       body: loading != true
-          ? Container(
-              child: Form(
-                key: formKey,
-                child: SafeArea(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      IconButton(
-                          icon: Icon(Icons.arrow_back), onPressed: () {}),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.19),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  'Welcome, ',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                Text(
-                                  "$_user",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
+          ? SingleChildScrollView(
+              child: Container(
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+//                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+//                      IconButton(
+//                          icon: Icon(Icons.arrow_back), onPressed: () {}),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.19),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              'Welcome, ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.normal),
                             ),
-                            Row(
-                              children: <Widget>[
-                                Text('Cheers! On becoming an',
-                                    style: TextStyle(color: Colors.black)),
-                                Text(' OHSTELLER',
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor))
-                              ],
+                            Text(
+                              "$_user",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold),
                             )
                           ],
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
+                        Row(
+                          children: <Widget>[
+                            Text('Cheers! On becoming an',
+                                style: TextStyle(color: Colors.black)),
+                            Text(' OHSTELLER',
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor))
+                          ],
+                        ),
+                        Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 70, horizontal: 20),
                           child: Column(
@@ -161,8 +154,8 @@ class _LogInPageState extends State<LogInPage> {
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -192,9 +185,7 @@ class _LogInPageState extends State<LogInPage> {
     return Container(
       child: TextFormField(
         validator: (value) {
-          if (value
-              .trim()
-              .isEmpty) {
+          if (value.trim().isEmpty) {
             return 'Email Can\'t Be Empty';
           } else {
             return null;
@@ -225,9 +216,7 @@ class _LogInPageState extends State<LogInPage> {
         ),
         child: TextFormField(
           validator: (value) {
-            if (value
-                .trim()
-                .isEmpty) {
+            if (value.trim().isEmpty) {
               return 'Password Can\'t Be Empty';
             } else {
               return null;
@@ -256,16 +245,11 @@ class _LogInPageState extends State<LogInPage> {
         validateAndSave();
       },
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         height: 60,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Theme
-              .of(context)
-              .primaryColor,
+          color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
@@ -293,10 +277,7 @@ class _LogInPageState extends State<LogInPage> {
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         height: 60,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -328,10 +309,7 @@ class _LogInPageState extends State<LogInPage> {
 
   Widget forgotPassword() {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.all(10),
       child: InkWell(
         onTap: () {

@@ -120,7 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 color: Colors.black,
               ),
               onPressed: () => widget.toggleView())),
-      resizeToAvoidBottomPadding: false,
+//      resizeToAvoidBottomPadding: false,
       body: loading == false
           ? SingleChildScrollView(
               child: Container(
@@ -136,13 +136,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
                           validator: (value) {
-                            if (value
-                                .trim()
-                                .isEmpty) {
+                            if (value.trim().isEmpty) {
                               return 'Last Name Can\'t Be Empty';
-                            } else if (value
-                                .trim()
-                                .length < 3) {
+                            } else if (value.trim().length < 3) {
                               return 'Last Name Must Be More Than 2 Characters';
                             } else {
                               return null;
@@ -162,13 +158,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         padding: const EdgeInsets.only(left: 15, right: 15),
                         child: TextFormField(
                           validator: (value) {
-                            if (value
-                                .trim()
-                                .isEmpty) {
+                            if (value.trim().isEmpty) {
                               return 'Last Name Can\'t Be Empty';
-                            } else if (value
-                                .trim()
-                                .length < 3) {
+                            } else if (value.trim().length < 3) {
                               return 'Last Name Must Be More Than 2 Characters';
                             } else {
                               return null;
@@ -231,19 +223,14 @@ class _SignUpPageState extends State<SignUpPage> {
                     Container(
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor)),
+                              color: Theme.of(context).primaryColor)),
                       child: ExpansionTile(
                         key: GlobalKey(),
                         title: Text('$_uniName'),
                         leading: Icon(Icons.location_on),
                         children: <Widget>[
                           SizedBox(
-                            height: MediaQuery
-                                .of(context)
-                                .size
-                                .height * .30,
+                            height: MediaQuery.of(context).size.height * .30,
                             child: FutureBuilder(
                               future: getAllUniNamesFromApi(),
                               builder: (context, snapshot) {
@@ -277,12 +264,17 @@ class _SignUpPageState extends State<SignUpPage> {
                                                 Icons.add_location,
                                                 color: Colors.grey,
                                               ),
-                                              Text(
-                                                '${currentUniName['name']}',
-                                                style: TextStyle(
+                                              Expanded(
+                                                child: Text(
+                                                  '${currentUniName['name']}',
+                                                  style: TextStyle(
                                                     fontSize: 16.0,
-                                                    fontWeight:
-                                                        FontWeight.w400),
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
                                               )
                                             ],
                                           ),
@@ -460,10 +452,7 @@ class _SignUpPageState extends State<SignUpPage> {
         widget.toggleView();
       },
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 10),
         child: Center(
           child: Text(

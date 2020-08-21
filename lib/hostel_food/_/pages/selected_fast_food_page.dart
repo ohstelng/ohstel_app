@@ -110,16 +110,16 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
     );
   }
 
-  void showFoodDialog({@required ItemDetails itemDetails,
-    @required List<ExtraItemDetails> extraItemDetails}) {
+  void showFoodDialog(
+      {@required ItemDetails itemDetails,
+      @required List<ExtraItemDetails> extraItemDetails}) {
     if (selectedFoodBar == 'Fast Food') {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) =>
-              FoodDialog(
-                currentExtraItemDetails: extraItemDetails,
-                itemDetails: itemDetails,
-              ),
+          builder: (context) => FoodDialog(
+            currentExtraItemDetails: extraItemDetails,
+            itemDetails: itemDetails,
+          ),
         ),
       );
     } else if (selectedFoodBar == 'Snacks') {
@@ -190,18 +190,17 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
               padding: EdgeInsets.all(20),
               //  height: 250,
               child: GridView.count(
-                childAspectRatio: (itemWidth / 340),
+                childAspectRatio: 0.7,
                 //  physics: BouncingScrollPhysics(),
                 crossAxisCount: 2,
                 children: List.generate(
                   fastFoodList.length,
-                      (index) {
+                  (index) {
                     return InkWell(
-                      onTap: () =>
-                          showFoodDialog(
-                            itemDetails: fastFoodList[index],
-                            extraItemDetails: widget.currentExtraItemDetails,
-                          ),
+                      onTap: () => showFoodDialog(
+                        itemDetails: fastFoodList[index],
+                        extraItemDetails: widget.currentExtraItemDetails,
+                      ),
                       child: Container(
                         margin: EdgeInsets.all(5),
                         child: Card(
@@ -210,31 +209,35 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               fastFoodList[index].imageUrl != null
-                                  ? Container(
-                                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                alignment: Alignment.topCenter,
-                                // height: 160,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                ),
-                                child: ExtendedImage.network(
-                                  fastFoodList[index].imageUrl,
-                                  fit: BoxFit.fitWidth,
-                                  handleLoadingProgress: true,
-                                  shape: BoxShape.rectangle,
-                                  cache: false,
-                                  enableMemoryCache: true,
+                                  ? Expanded(
+                                      child: Container(
+                                        height: 120,
+                                        width: double.infinity,
+                                        margin:
+                                            EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                        alignment: Alignment.topCenter,
+                                        // height: 160,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                        ),
+                                        child: ExtendedImage.network(
+                                          fastFoodList[index].imageUrl,
+                                          fit: BoxFit.fill,
+                                          handleLoadingProgress: true,
+                                          shape: BoxShape.rectangle,
+                                          cache: false,
+                                          enableMemoryCache: true,
+                                        ),
                                       ),
                                     )
                                   : Container(
-                                alignment: Alignment.topCenter,
-                                height: 120,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  shape: BoxShape.rectangle,
-                                ),
+                                      alignment: Alignment.topCenter,
+                                      height: 120,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        shape: BoxShape.rectangle,
+                                      ),
                                     ),
                               Padding(
                                 padding: const EdgeInsets.all(10),
@@ -251,8 +254,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                       height: 10,
                                     ),
                                     Text(
-                                      '$symbol ${formatCurrency.format(
-                                          fastFoodList[index].price)}',
+                                      '$symbol ${formatCurrency.format(fastFoodList[index].price)}',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(fontSize: 17),
                                     ),
