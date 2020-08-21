@@ -35,7 +35,7 @@ dependencies:
   paginate_firestore: ^0.1.1+1
   hive: ^1.4.1+1
   hive_flutter: ^0.3.0+2
-  path_provider:
+  path_provider: ^1.6.11
   autocomplete_textfield: ^1.7.3
   flutter_datetime_picker: ^1.4.0
   flutter_paystack: ^1.0.3+1
