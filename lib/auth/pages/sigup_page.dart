@@ -422,11 +422,11 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget signUpButton() {
-    return Container(
-        child: InkWell(
-          onTap: () {
-            validateAndSave();
-          },
+    return InkWell(
+      onTap: () {
+        validateAndSave();
+      },
+      child: Container(
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text(
               "Create Account",
@@ -436,14 +436,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   fontWeight: FontWeight.normal),
             ),
           ]),
-        ),
-        width: MediaQuery.of(context).size.width,
-        height: 60,
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(15),
-        ));
+          width: MediaQuery.of(context).size.width,
+          height: 60,
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(15),
+          )),
+    );
   }
 
   Widget logInButton() {
