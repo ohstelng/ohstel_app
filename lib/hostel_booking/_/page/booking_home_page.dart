@@ -742,9 +742,14 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          displayMultiPic(
-                              imageList: currentHostelModel.imageUrl),
-                          hostelDetails(hostel: currentHostelModel),
+                          Expanded(
+                            flex: 4,
+                            child: displayMultiPic(
+                                imageList: currentHostelModel.imageUrl),
+                          ),
+                          Expanded(
+                              flex: 3,
+                              child: hostelDetails(hostel: currentHostelModel)),
 //                          SizedBox(height: 5),
                         ],
                       ),
@@ -769,6 +774,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
+          SizedBox(height: 8,),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -783,7 +789,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
             ],
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 2),
           Row(
             children: <Widget>[
               Icon(Icons.location_on, size: 16, color: Colors.grey),
@@ -811,7 +817,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
             ],
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 2),
           Row(children: <Widget>[
             Text(
               '₦  ${formatCurrency.format(hostel.price)}',
@@ -822,7 +828,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
               overflow: TextOverflow.ellipsis,
             )
-          ])
+          ]),
+          SizedBox(height: 8,)
         ],
       ),
     );
