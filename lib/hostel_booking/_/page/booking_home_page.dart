@@ -557,18 +557,12 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           children: [
             Container(
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.97,
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.77,
+              width: MediaQuery.of(context).size.width * 0.97,
+              height: MediaQuery.of(context).size.height * 0.77,
               child: isStillLoadingData
                   ? Center(
-                child: CircularProgressIndicator(),
-              )
+                      child: CircularProgressIndicator(),
+                    )
                   : sortBy == 'distance' ? sortByDistance() : resultList(),
             ),
             Container(
@@ -604,7 +598,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       ),
       query: Firestore.instance
           .collection('savedHostel')
-          .document(userDetails['uid'])
+          .document(userDetails == null ? '' : userDetails['uid'])
           .collection('all')
           .orderBy('timestamp', descending: true),
       itemBuilder: (context, DocumentSnapshot documentSnapshot) {
@@ -873,7 +867,10 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Widget searchInputControl() {
     return Container(
-      padding: EdgeInsets.only(left: 8, right: 8,),
+      padding: EdgeInsets.only(
+        left: 8,
+        right: 8,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -1103,9 +1100,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   }
 }
 
-
 //TODO: implement save hostel
 //TODO: implement save hostel
 //TODO: implement save hostel
 //TODO: implement save hostel
-
