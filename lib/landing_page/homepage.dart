@@ -98,86 +98,94 @@ class _HomepageState extends State<Homepage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                            margin: EdgeInsets.all(8),
-                            decoration: _boxDec,
-                            height: 135,
-                            width: 162,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SvgPicture.asset("asset/chostel.svg"),
-                                SizedBox(height: 16),
-                                Text(
-                                  "Hostel",
-                                  style: _tStyle,
-                                )
-                              ],
-                            )),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                              margin: EdgeInsets.all(8),
+                              decoration: _boxDec,
+                              height: 135,
+                              width: 162,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SvgPicture.asset("asset/chostel.svg"),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "Hostel",
+                                    style: _tStyle,
+                                  )
+                                ],
+                              )),
+                        ),
                       ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                            margin: EdgeInsets.all(8),
-                            decoration: _boxDec,
-                            height: 135,
-                            width: 162,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SvgPicture.asset("asset/cfood.svg"),
-                                SizedBox(height: 16),
-                                Text(
-                                  "Food",
-                                  style: _tStyle,
-                                )
-                              ],
-                            )),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                              margin: EdgeInsets.all(8),
+                              decoration: _boxDec,
+                              height: 135,
+                              width: 162,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SvgPicture.asset("asset/cfood.svg"),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "Food",
+                                    style: _tStyle,
+                                  )
+                                ],
+                              )),
+                        ),
                       )
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                            margin: EdgeInsets.all(8),
-                            decoration: _boxDec,
-                            height: 135,
-                            width: 162,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SvgPicture.asset("asset/cmarket.svg"),
-                                SizedBox(height: 16),
-                                Text(
-                                  "Market",
-                                  style: _tStyle,
-                                )
-                              ],
-                            )),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                              margin: EdgeInsets.all(8),
+                              decoration: _boxDec,
+                              height: 135,
+                              width: 162,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SvgPicture.asset("asset/cmarket.svg"),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "Market",
+                                    style: _tStyle,
+                                  )
+                                ],
+                              )),
+                        ),
                       ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                            margin: EdgeInsets.all(8),
-                            decoration: _boxDec,
-                            height: 135,
-                            width: 162,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SvgPicture.asset("asset/chire.svg"),
-                                SizedBox(height: 16),
-                                Text(
-                                  "Other Services",
-                                  style: _tStyle,
-                                )
-                              ],
-                            )),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                              margin: EdgeInsets.all(8),
+                              decoration: _boxDec,
+                              height: 135,
+                              width: 162,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SvgPicture.asset("asset/chire.svg"),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "Other Services",
+                                    style: _tStyle,
+                                  )
+                                ],
+                              )),
+                        ),
                       )
                     ],
                   ),

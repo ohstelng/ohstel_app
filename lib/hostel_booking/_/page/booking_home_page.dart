@@ -20,6 +20,7 @@ import 'package:paginate_firestore/paginate_firestore.dart';
 
 final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
 
+
 class HostelBookingHomePage extends StatefulWidget {
   @override
   _HostelBookingHomePageState createState() => _HostelBookingHomePageState();
@@ -43,6 +44,10 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   // 5 option available are default(by date Added), price, distance,
   // roomMate needed, on campus Only(school hostel)
   String sortBy = 'default';
+
+
+
+
 
   void initSearch() {
     try {
@@ -617,18 +622,20 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 //              );
             },
             child: Container(
-//              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   displayMultiPic(imageList: savedHostelModel.hostelImageUrls),
                   SizedBox(
                     width: 8,
                   ),
                   Container(
-                    height: 140,
+                    width: MediaQuery.of(context).size.width * 0.45,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        SizedBox(height: 8,),
                         Text(
                           '${savedHostelModel.hostelName}',
                           style: TextStyle(
@@ -636,13 +643,41 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        SizedBox(height: 8,),
                         Text(
-                          '${savedHostelModel.hostelLocation}',
+                          'Location',
                           style: TextStyle(
+                            color: Color(0xff868686),
                             fontSize: 14,
-                            fontWeight: FontWeight.w300,
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
+                        SizedBox(height: 8,),
+                        Text(
+                          "₦ Price",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+                        Row(
+                          children: [
+                            Icon(Icons.location_on,size:15,color:Color(0xff868686)),
+                            Expanded(
+                              child: Text(
+                                '${savedHostelModel.hostelLocation}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                            Spacer(),
+                            Expanded( child: Text("date",style:TextStyle(color: Color(0xff868686)),))
+                          ],
+                        ),
+
                       ],
                     ),
                   ),
@@ -919,7 +954,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
             ),
           ),
-//          Expanded(flex: 2, child: dropdownButton()),
+          Expanded(flex: 2, child: dropdownButton()),
         ],
       ),
     );
@@ -1012,6 +1047,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   DropdownButton dropdownButton() {
     return DropdownButton<String>(
+      underline:Container(color:Colors.transparent),
       onChanged: (value) {
         print('value: $value');
         if (value == 'changeUni') {
@@ -1031,7 +1067,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       },
       hint: Icon(
         Icons.tune,
-        color: Colors.white,
+        color: Colors.black,
       ),
       isExpanded: true,
       items: [
@@ -1104,7 +1140,13 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       ],
     );
   }
+
+
+
 }
+
+
+
 
 //TODO: implement save hostel
 //TODO: implement save hostel
