@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -8,10 +9,10 @@ import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/paid_food_model.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/select_location_page.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class FoodPaymentPage extends StatefulWidget {
@@ -20,6 +21,7 @@ class FoodPaymentPage extends StatefulWidget {
 }
 
 class _FoodPaymentPageState extends State<FoodPaymentPage> {
+  StreamController<String> numberSteam = StreamController<String>();
   Box<Map> cartBox;
   Box<Map> userDataBox;
   Box<Map> addressDetailsBox;
@@ -27,6 +29,8 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   bool onCampus = false;
   Map userData;
   bool isLoading = true;
+  int deliveryFee = 100;
+  String _phoneNumber;
 
   List<ExtraItemDetails> getExtraFromMap({@required List data}) {
     List<ExtraItemDetails> _extraList = [];
@@ -49,6 +53,8 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     Map data = await HiveMethods().getUserData();
     print(data);
     userData = data;
+//    _phoneNumber = data['phoneNumber'];
+    numberSteam.add(data['phoneNumber']);
     if (mounted) {
       setState(() {
         isLoading = false;
@@ -233,9 +239,9 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       int _currentTotal = 0;
 
       ItemDetails currentItemDetails =
-      ItemDetails.formMap(data['itemDetails'].cast<String, dynamic>());
+          ItemDetails.formMap(data['itemDetails'].cast<String, dynamic>());
       List<ExtraItemDetails> currentExtraItemDetails =
-      getExtraFromMap(data: data['extraItems']);
+          getExtraFromMap(data: data['extraItems']);
       numberPlate = data['numberOfPlates'];
 
       _itemPrice = currentItemDetails.price;
@@ -265,27 +271,48 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     }
   }
 
-  Widget getAddress() {
-    return ValueListenableBuilder(
-      valueListenable: addressDetailsBox.listenable(),
-      builder: (context, Box box, widget) {
-        if (box.values.isEmpty) {
-          return Text('No Adress Found!!');
-        } else {
-          Map data = box.getAt(0);
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text('Address:  '),
-              Expanded(
-                  child: Text(
-                '${data['address']}, ${data['areaName']}',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              )),
-            ],
-          );
-        }
+  void editPhoneNumber() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        String number;
+        return Dialog(
+          child: Container(
+            margin: EdgeInsets.all(15.0),
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextField(
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    hintText: 'Enter You Phone Number',
+                  ),
+                  maxLines: null,
+                  maxLength: 20,
+                  onChanged: (val) {
+                    number = val.trim();
+                  },
+                ),
+                FlatButton(
+                  onPressed: () {
+                    print(number.length);
+                    if (number.length > 10) {
+                      numberSteam.add(number);
+                      Navigator.pop(context);
+                    } else {
+                      Fluttertoast.showToast(msg: 'Input Invaild Number!');
+                    }
+                  },
+                  color: Colors.green,
+                  child: Text('Submit'),
+                )
+              ],
+            ),
+          ),
+        );
       },
     );
   }
@@ -300,7 +327,209 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   }
 
   @override
+  void dispose() {
+    numberSteam.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            header(),
+            isLoading == false
+                ? body()
+                : Center(child: CircularProgressIndicator()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget body() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(left: 10.0),
+            child: Text('Review You Order And Pay'),
+          ),
+          ordersContainer(),
+          address(),
+          payButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget payButton() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.green,
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      width: double.infinity,
+      margin: EdgeInsets.all(15.0),
+      child: FlatButton(
+        onPressed: () {
+          chargeCard(price: (getGrandTotal() + deliveryFee) * 100);
+        },
+        child: Text('Pay'),
+      ),
+    );
+  }
+
+  Widget address() {
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: ListView(
+        shrinkWrap: true,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('Adress Details'),
+              FlatButton(
+                color: Colors.grey[300],
+                onPressed: () async {
+                  addressDetails = await HiveMethods().getFoodLocationDetails();
+                  selectDeliveryLocation();
+                },
+                child: Text('Edit'),
+              ),
+            ],
+          ),
+          getAddress(),
+        ],
+      ),
+    );
+  }
+
+  Widget getAddress() {
+    return ValueListenableBuilder(
+      valueListenable: addressDetailsBox.listenable(),
+      builder: (context, Box box, widget) {
+        if (box.values.isEmpty) {
+          return Text('No Adress Found!!');
+        } else {
+          Map data = box.getAt(0);
+          return Card(
+            elevation: 2.5,
+            child: Container(
+              padding: EdgeInsets.all(15.0),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('${userData['fullName']}'),
+                  Container(
+                    margin: EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      '${data['address']}',
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      '${data['areaName']}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        StreamBuilder<String>(
+                            stream: numberSteam.stream,
+                            builder: (context, snapshot) {
+                              if (snapshot.data == null) {
+                                return Text('No Number Found');
+                              }
+                              return Text(
+                                '${snapshot.data}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              );
+                            }),
+                        Container(
+                          padding: EdgeInsets.all(5.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              editPhoneNumber();
+                            },
+                            child: Text('Edit'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget ordersContainer() {
+    return Container(
+      height: 210,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      margin: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Number Of Item'),
+                Text('${cartBox.length}')
+              ]),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Sub Total'),
+                Text('\$${getGrandTotal()}')
+              ]),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[Text('Delivery Fee'), Text('\$$deliveryFee')]),
+          Divider(),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Total'),
+                Text('\$${getGrandTotal() + deliveryFee}')
+              ]),
+        ],
+      ),
+    );
+  }
+
+  Widget header() {
+    return Row(
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {},
+        )
+      ],
+    );
   }
 }

@@ -6,6 +6,7 @@ import 'package:Ohstel_app/hostel_food/_/methods/fast_food_methods.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/paid_food_model.dart';
+import 'package:Ohstel_app/hostel_food/_/pages/food_payment_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/select_location_page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -575,79 +576,84 @@ class _CartPageState extends State<CartPage> {
                           },
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        child: Column(
-                          children: <Widget>[
-//                            Divider(
-//                              thickness: 1.5,
-//                              color: Colors.black,
+//                      Container(
+//                        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+//                        child: Column(
+//                          children: <Widget>[
+//                            Row(
+//                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                              children: <Widget>[
+//                                Text(
+//                                  'Total Amount:',
+//                                  style: TextStyle(
+//                                      fontSize: 24,
+//                                      fontWeight: FontWeight.w400),
+//                                ),
+//                                Text(
+//                                  '$symbol ${formatCurrency.format(
+//                                      getGrandTotal())}',
+//                                  style: TextStyle(
+//                                      fontSize: 24,
+//                                      fontWeight: FontWeight.w400),
+//                                ),
+//                              ],
 //                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'Total Amount:',
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  '$symbol ${formatCurrency.format(
-                                      getGrandTotal())}',
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-//                            Divider(
-//                              thickness: 1.5,
-//                              color: Colors.black,
+//                          ],
+//                        ),
+//                      ),
+//                      Container(
+//                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+//                        child: getAddress(),
+//                      ),
+//                      Container(
+//                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
+//                        width: double.infinity,
+//                        child: Row(
+//                          mainAxisSize: MainAxisSize.min,
+//                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                          children: <Widget>[
+//                            Container(
+//                              margin: EdgeInsets.all(10.0),
+//                              child: FlatButton(
+//                                color: Color(0xFFF27507),
+//                                onPressed: () {
+//                                  selectDeliveryLocation();
+//                                },
+//                                child: Text(
+//                                  'Select Loactions',
+//                                  style: TextStyle(color: Colors.white),
+//                                ),
+//                              ),
 //                            ),
-                          ],
-                        ),
-                      ),
+//                            Container(
+//                              margin: EdgeInsets.all(10.0),
+//                              child: FlatButton(
+//                                color: Color(0xFFF27507),
+//                                onPressed: () {
+//                                  pay();
+//                                },
+//                                child: Text(
+//                                  'Pay',
+//                                  style: TextStyle(color: Colors.white),
+//                                ),
+//                              ),
+//                            ),
+//                          ],
+//                        ),
+//                      ),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
-                        child: getAddress(),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.all(10.0),
-                              child: FlatButton(
-                                color: Color(0xFFF27507),
-                                onPressed: () {
-                                  selectDeliveryLocation();
-                                },
-                                child: Text(
-                                  'Select Loactions',
-                                  style: TextStyle(color: Colors.white),
-                                ),
+                        child: FlatButton(
+                          color: Colors.blueGrey,
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => FoodPaymentPage(),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(10.0),
-                              child: FlatButton(
-                                color: Color(0xFFF27507),
-                                onPressed: () {
-                                  pay();
-                                },
-                                child: Text(
-                                  'Pay',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ],
+                            );
+                          },
+                          child: Text('Proceed To Payment'),
                         ),
-                      ),
+                      )
                     ],
                   );
                 },

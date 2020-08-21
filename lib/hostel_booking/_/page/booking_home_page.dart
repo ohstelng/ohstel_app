@@ -4,7 +4,6 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/save_hostel_model.dart';
-import 'package:Ohstel_app/hostel_booking/_/page/get_hostel_by_id_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_info_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_search_page.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -557,18 +556,12 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           children: [
             Container(
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.97,
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.77,
+              width: MediaQuery.of(context).size.width * 0.97,
+              height: MediaQuery.of(context).size.height * 0.77,
               child: isStillLoadingData
                   ? Center(
-                child: CircularProgressIndicator(),
-              )
+                      child: CircularProgressIndicator(),
+                    )
                   : sortBy == 'distance' ? sortByDistance() : resultList(),
             ),
             Container(
@@ -604,7 +597,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       ),
       query: Firestore.instance
           .collection('savedHostel')
-          .document(userDetails['uid'])
+          .document(userDetails == null ? '' : userDetails['uid'])
           .collection('all')
           .orderBy('timestamp', descending: true),
       itemBuilder: (context, DocumentSnapshot documentSnapshot) {
@@ -616,12 +609,12 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           child: InkWell(
             onTap: () {
               print(savedHostelModel.hostelID);
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) =>
-                      GetHostelByIDPage(id: savedHostelModel.hostelID),
-                ),
-              );
+//              Navigator.of(context).push(
+//                MaterialPageRoute(
+//                  builder: (context) =>
+//                      GetHostelByIDPage(id: savedHostelModel.hostelID),
+//                ),
+//              );
             },
             child: Container(
 //              margin: EdgeInsets.all(10),
@@ -752,7 +745,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                           displayMultiPic(
                               imageList: currentHostelModel.imageUrl),
                           hostelDetails(hostel: currentHostelModel),
-                          SizedBox(height: 5),
+//                          SizedBox(height: 5),
                         ],
                       ),
                     ),
@@ -873,7 +866,10 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Widget searchInputControl() {
     return Container(
-      padding: EdgeInsets.only(left: 8, right: 8,),
+      padding: EdgeInsets.only(
+        left: 8,
+        right: 8,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -1103,9 +1099,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   }
 }
 
-
 //TODO: implement save hostel
 //TODO: implement save hostel
 //TODO: implement save hostel
 //TODO: implement save hostel
-
