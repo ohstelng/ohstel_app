@@ -14,6 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class FoodPaymentPage extends StatefulWidget {
   @override
@@ -31,6 +32,11 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   bool isLoading = true;
   int deliveryFee = 100;
   String _phoneNumber;
+
+  Runes input = Runes('\u20a6');
+  final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
+
+  var symbol;
 
   List<ExtraItemDetails> getExtraFromMap({@required List data}) {
     List<ExtraItemDetails> _extraList = [];
@@ -142,8 +148,6 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       print('error');
     }
   }
-
-  ///
 
   void clearCart() {
     cartBox.clear();
@@ -323,6 +327,8 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     PaystackPlugin.initialize(
       publicKey: 'pk_test_d0490fa7b5ae91bf5317ebdbd761760c8f14fd8f',
     );
+
+    symbol = String.fromCharCodes(input);
     super.initState();
   }
 
@@ -355,7 +361,10 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(left: 10.0),
-            child: Text('Review You Order And Pay'),
+            child: Text(
+              'Review Your Payment',
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+            ),
           ),
           ordersContainer(),
           address(),
@@ -368,7 +377,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   Widget payButton() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.green,
+        color: Color(0xffF27509),
         borderRadius: BorderRadius.circular(15.0),
       ),
       width: double.infinity,
@@ -377,7 +386,10 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
         onPressed: () {
           chargeCard(price: (getGrandTotal() + deliveryFee) * 100);
         },
-        child: Text('Pay'),
+        child: Text(
+          'Make Payment',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
@@ -505,17 +517,29 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text('Sub Total'),
-                Text('\$${getGrandTotal()}')
+                Text('$symbol ${formatCurrency.format(getGrandTotal())}')
               ]),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[Text('Delivery Fee'), Text('\$$deliveryFee')]),
-          Divider(),
+              children: <Widget>[
+                Text('Delivery Fee'),
+                Text('$symbol ${formatCurrency.format(deliveryFee)}')
+              ]),
+          Divider(
+            thickness: .5,
+            color: Colors.black45,
+          ),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Total'),
-                Text('\$${getGrandTotal() + deliveryFee}')
+                Text(
+                  'Total',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                ),
+                Text(
+                  '$symbol ${formatCurrency.format(getGrandTotal() + deliveryFee)}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                )
               ]),
         ],
       ),
@@ -526,8 +550,10 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     return Row(
       children: <Widget>[
         IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {},
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         )
       ],
     );

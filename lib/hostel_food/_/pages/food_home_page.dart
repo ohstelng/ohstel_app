@@ -76,6 +76,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
           autoPlayCurve: Curves.fastOutSlowIn,
           enlargeCenterPage: true,
           scrollDirection: Axis.horizontal,
+
         ),
         items: [1, 2, 3, 4].map((i) {
           return Builder(
@@ -101,6 +102,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
   Widget foodList() {
     return Expanded(
       child: Container(
+        padding: EdgeInsets.all(10),
         child: FutureBuilder(
           future: FastFoodMethods().getFoodsFromDb(uniName: uniName),
           builder: (context, snapshot) {
@@ -242,24 +244,49 @@ class _FoodHomePageState extends State<FoodHomePage> {
   }
 
   Widget searchBar() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
-      child: TextField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          labelText: "Search",
-          prefixIcon: IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              AuthService().signOut();
-            },
+
+   return Container(
+      margin: EdgeInsets.fromLTRB(10,30,10,10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 8,
+            child: Container(
+              height: 40,
+              margin: EdgeInsets.only(right: 5),
+              decoration: BoxDecoration(),
+              child: MaterialButton(
+                onPressed: () {
+//
+                },
+                color: Colors.grey[50],
+                shape: RoundedRectangleBorder(),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Icon(Icons.search, color: Colors.black, size: 19),
+                    SizedBox(width: 24),
+                    Text(
+                      'Search',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 17.0,
+                      ),
+                    ),
+                    Spacer(),
+                    Icon(Icons.mic, size: 19)
+                  ],
+                ),
+              ),
+            ),
           ),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.mic),
-            onPressed: null,
-          ),
-        ),
+        //  Expanded(flex: 2, child: dropdownButton()),
+        ],
       ),
     );
+
   }
 }

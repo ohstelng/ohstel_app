@@ -334,6 +334,7 @@ class _CartPageState extends State<CartPage> {
               child: Center(child: CircularProgressIndicator()),
             )
           : Container(
+              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: ValueListenableBuilder(
                 valueListenable: cartBox.listenable(),
                 builder: (context, box, widget) {
@@ -570,7 +571,7 @@ class _CartPageState extends State<CartPage> {
                                     thickness: 0.5,
                                     color: Colors.black,
                                   ),
-                                )
+                                ),
                               ],
                             );
                           },
@@ -640,18 +641,20 @@ class _CartPageState extends State<CartPage> {
 //                            ),
 //                          ],
 //                        ),
-//                      ),
+//                      ),To
                       Container(
-                        child: FlatButton(
-                          color: Colors.blueGrey,
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => FoodPaymentPage(),
-                              ),
-                            );
-                          },
-                          child: Text('Proceed To Payment'),
+                        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Total Amount:",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                                "$symbol ${formatCurrency.format(getGrandTotal())}",
+                                style: TextStyle(fontSize: 20))
+                          ],
                         ),
                       )
                     ],
@@ -659,6 +662,28 @@ class _CartPageState extends State<CartPage> {
                 },
               ),
             ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+        width: double.infinity,
+        child: FlatButton(
+          padding: EdgeInsets.all(20),
+          color: Color(0xFF202530),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => FoodPaymentPage(),
+              ),
+            );
+          },
+          child: Text(
+            'PROCEED TO PAYMENT',
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ),
+      ),
     );
   }
 
