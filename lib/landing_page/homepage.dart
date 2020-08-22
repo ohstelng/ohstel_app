@@ -1,4 +1,5 @@
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
+import 'package:Ohstel_app/landing_page/profile_page.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,14 @@ class _HomepageState extends State<Homepage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Image.asset("asset/timmy.png"),
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage()));
+                      },
+                      child: Image.asset("asset/timmy.png")),
                   SizedBox(
                     height: 16,
                   ),
@@ -40,8 +48,8 @@ class _HomepageState extends State<Homepage> {
                       ),
                       Text(
                         'Timmy',
-                        style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
@@ -50,14 +58,11 @@ class _HomepageState extends State<Homepage> {
                   ),
                   Center(
                     child: Padding(
-                      padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 30.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 30.0),
                       child: Container(
                         height: 147,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.78,
+                        width: MediaQuery.of(context).size.width * 0.78,
                         child: CarouselSlider(
                           options: CarouselOptions(
                             height: 400.0,
@@ -65,8 +70,8 @@ class _HomepageState extends State<Homepage> {
                             autoPlay: true,
                             autoPlayInterval: Duration(seconds: 3),
                             pauseAutoPlayOnTouch: true,
-                            autoPlayAnimationDuration: Duration(
-                                milliseconds: 800),
+                            autoPlayAnimationDuration:
+                                Duration(milliseconds: 800),
                             autoPlayCurve: Curves.fastOutSlowIn,
                             enlargeCenterPage: true,
                             scrollDirection: Axis.horizontal,
@@ -75,10 +80,7 @@ class _HomepageState extends State<Homepage> {
                             return Builder(
                               builder: (BuildContext context) {
                                 return Container(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width,
+                                  width: MediaQuery.of(context).size.width,
                                   margin: EdgeInsets.symmetric(horizontal: 5.0),
                                   decoration: BoxDecoration(color: Colors.grey),
                                   child: Center(
