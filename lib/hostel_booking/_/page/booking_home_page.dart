@@ -6,6 +6,7 @@ import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/save_hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_info_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_search_page.dart';
+import 'package:Ohstel_app/hostel_booking/_/page/saved_hostel_page.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
@@ -576,7 +577,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : saveHostelPage(),
+                  : SavedHostelPage(),
             )
           ],
         ),
@@ -584,111 +585,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     );
   }
 
-  Widget saveHostelPage() {
-    return PaginateFirestore(
-      itemsPerPage: 4,
-      initialLoader: Container(
-        height: 50,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-      bottomLoader: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-      emptyDisplay: Center(
-        child: Text('No Hostel Has Been Saved!!'),
-      ),
-      query: Firestore.instance
-          .collection('savedHostel')
-          .document(userDetails == null ? '' : userDetails['uid'])
-          .collection('all')
-          .orderBy('timestamp', descending: true),
-      itemBuilder: (context, DocumentSnapshot documentSnapshot) {
-        SavedHostelModel savedHostelModel =
-            SavedHostelModel.fromMap(documentSnapshot.data);
 
-        return Card(
-          elevation: 2.5,
-          child: InkWell(
-            onTap: () {
-              print(savedHostelModel.hostelID);
-//              Navigator.of(context).push(
-//                MaterialPageRoute(
-//                  builder: (context) =>
-//                      GetHostelByIDPage(id: savedHostelModel.hostelID),
-//                ),
-//              );
-            },
-            child: Container(
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  displayMultiPic(imageList: savedHostelModel.hostelImageUrls),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 8,),
-                        Text(
-                          '${savedHostelModel.hostelName}',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8,),
-                        Text(
-                          'Location',
-                          style: TextStyle(
-                            color: Color(0xff868686),
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                        SizedBox(height: 8,),
-                        Text(
-                          "₦ Price",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8,),
-                        Row(
-                          children: [
-                            Icon(Icons.location_on,size:15,color:Color(0xff868686)),
-                            Expanded(
-                              child: Text(
-                                '${savedHostelModel.hostelLocation}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ),
-                            Spacer(),
-                            Expanded( child: Text("date",style:TextStyle(color: Color(0xff868686)),))
-                          ],
-                        ),
-
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   Widget sortByDistance() {
     return PaginateFirestore(

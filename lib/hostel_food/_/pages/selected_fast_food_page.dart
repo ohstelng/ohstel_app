@@ -188,7 +188,6 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
           Expanded(
             child: Container(
               padding: EdgeInsets.all(20),
-              //  height: 250,
               child: GridView.count(
                 childAspectRatio: 0.7,
                 //  physics: BouncingScrollPhysics(),
@@ -209,20 +208,19 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               fastFoodList[index].imageUrl != null
-                                  ? Expanded(
+                                  ? Flexible(
                                       child: Container(
-                                        height: 120,
                                         width: double.infinity,
                                         margin:
                                             EdgeInsets.fromLTRB(0, 0, 0, 10),
                                         alignment: Alignment.topCenter,
-                                        // height: 160,
+                                        //  height: 150,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.rectangle,
                                         ),
                                         child: ExtendedImage.network(
                                           fastFoodList[index].imageUrl,
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.cover,
                                           handleLoadingProgress: true,
                                           shape: BoxShape.rectangle,
                                           cache: false,
