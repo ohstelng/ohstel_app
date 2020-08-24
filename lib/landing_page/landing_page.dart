@@ -15,7 +15,7 @@ class MainHomePage extends StatefulWidget {
 
 class _MainHomePageState extends State<MainHomePage> {
   PageController pageController;
-  int getPageIndex = 0;
+  int getPageIndex = 2;
 
   void pageChanged(int pageIndex) {
     setState(() {
@@ -27,6 +27,8 @@ class _MainHomePageState extends State<MainHomePage> {
     pageController.animateToPage(pageIndex,
         duration: Duration(milliseconds: 200), curve: Curves.bounceInOut);
   }
+
+  TextStyle _bottomStyle = TextStyle(fontSize: 9);
 
   @override
   void initState() {
@@ -50,6 +52,7 @@ class _MainHomePageState extends State<MainHomePage> {
     return Scaffold(
       body: PageView(
         children: <Widget>[
+
           HostelBookingHomePage(),
           FoodHomePage(),
           Homepage(),
@@ -74,7 +77,7 @@ class _MainHomePageState extends State<MainHomePage> {
             ),
             title: Text(
               'Hostel',
-              style: TextStyle(fontSize: 8),
+              style: _bottomStyle,
             ),
           ),
           BottomNavigationBarItem(
@@ -84,7 +87,7 @@ class _MainHomePageState extends State<MainHomePage> {
             ),
             title: Text(
               'Food',
-              style: TextStyle(fontSize: 8),
+              style: _bottomStyle,
             ),
           ),
           BottomNavigationBarItem(
@@ -107,7 +110,7 @@ class _MainHomePageState extends State<MainHomePage> {
             ),
             title: Text(
               '  Market',
-              style: TextStyle(fontSize: 8),
+              style: _bottomStyle,
             ),
           ),
           BottomNavigationBarItem(
@@ -116,8 +119,8 @@ class _MainHomePageState extends State<MainHomePage> {
               child: SvgPicture.asset("asset/hire.svg"),
             ),
             title: Text(
-              'Other Services',
-              style: TextStyle(fontSize: 8),
+              'Hire',
+              style:_bottomStyle,
             ),
           ),
         ],
@@ -126,9 +129,3 @@ class _MainHomePageState extends State<MainHomePage> {
   }
 }
 
-class BottomLogo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}

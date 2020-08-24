@@ -9,7 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
-import 'file:///C:/Users/olamilekan/flutter_projects/work_space/Ohstel_app/lib/hostel_market_place/pages/market_summary_page.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/market_summary_page.dart';
 
 class MarketCheckOutPage extends StatefulWidget {
   @override

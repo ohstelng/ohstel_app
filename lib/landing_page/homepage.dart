@@ -1,4 +1,4 @@
-import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
+//import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/landing_page/profile_page.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -182,7 +182,7 @@ class _HomepageState extends State<Homepage> {
                                   SvgPicture.asset("asset/chire.svg"),
                                   SizedBox(height: 16),
                                   Text(
-                                    "Other Services",
+                                    "Hire",
                                     style: _tStyle,
                                   )
                                 ],
