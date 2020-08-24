@@ -59,22 +59,30 @@ class _MarketHomePageState extends State<MarketHomePage> {
             margin: EdgeInsets.all(10),
             child: Column(
               children: <Widget>[
+                SizedBox(height: 8,),
                 appBar(),
-                SizedBox(height: 28),
+                SizedBox(height: 16),
                 searchBar(),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.72,
-                  child: ListView(
-                    children: [
-                      SizedBox(height: 30),
-                        advertBanner(),
-                        categories(),
-                        SizedBox(height: 24),
-                        tabBar(),
-                        SizedBox(height: 8),
-                        tabBarView()
+                SizedBox(height: 16),
+                Expanded(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.70,
+                    child: ListView(
+                      children: [
+                        SizedBox(height: 16),
+                          advertBanner(),
+                          categories(),
+                          SizedBox(height: 24),
+                          tabBar(),
+                          SizedBox(height: 8),
+                          tabBarView(),
+                          SizedBox(height: 8,),
+                          topBrands(),
+                          SizedBox(height: 16),
+                          recommended4U(),
 
-                    ],
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -84,29 +92,72 @@ class _MarketHomePageState extends State<MarketHomePage> {
       ),
     );
   }
-  Widget appBar(){return Row(
-    children: <Widget>[
-      InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProfilePage()));
-          },
-          child: Image.asset("asset/timmy.png")),
-      Spacer(),
-      InkWell(onTap: () {
+
+  Widget recommended4U() {
+    return Container(
+      height: 300,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Recommended for you", style: TextStyle(fontSize: 16),),
+          SizedBox(height: 8,),
+          latestProduct(),
+          SizedBox(height: 8),
+          latestProduct()
+        ],
+      ),
+    );
+  }
+
+  Widget appBar(){
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal:16),
+        child: Row(
+      children: <Widget>[
+        InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfilePage()));
+            },
+            child: Image.asset("asset/timmy.png")),
+        Spacer(),
+        InkWell(onTap: () {
 //            saveProduct();
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => MarketCartPage(),
-          ),
-        );
-      },child: SvgPicture.asset("asset/cart.svg")),
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MarketCartPage(),
+            ),
+          );
+        },child: SvgPicture.asset("asset/cart.svg")),
 
 //                header(),
-    ],
-  );
+      ],
+    ));
+  }
+
+  Widget topBrands(){
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(color: Color(0xffC4C4C4)),
+      width: MediaQuery.of(context).size.width,
+      height: 214,
+      child:Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Top Brands",style: TextStyle(fontSize: 16),),
+          SizedBox(height: 25),
+          Expanded(child:Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CircleAvatar(radius: 70,backgroundColor: Colors.white,),
+              CircleAvatar(radius: 70,backgroundColor: Colors.white,)
+            ],
+          ))
+
+
+        ],) ,);
   }
 
   Widget tabBar(){
@@ -197,16 +248,22 @@ class _MarketHomePageState extends State<MarketHomePage> {
                         width: 153,
                         height: 104,
                         padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Container(
-                          child: ExtendedImage.network(
-                            currentProductModel.imageUrls[0],
-                            fit: BoxFit.contain,
-                            handleLoadingProgress: true,
-                            shape: BoxShape.rectangle,
-                            cache: false,
-                            enableMemoryCache: true,
+                        child:Stack(children: [
+                          Container(
+                            decoration: BoxDecoration(color:Colors.black12 ),
+                            child: ExtendedImage.network(
+                              currentProductModel.imageUrls[0],
+                              fit: BoxFit.fill,
+                              handleLoadingProgress: true,
+                              shape: BoxShape.rectangle,
+                              cache: false,
+                              enableMemoryCache: true,
+                            ),
                           ),
-                        ),
+                          Positioned(
+                              bottom:7,right: 7,
+                              child: SvgPicture.asset("asset/Shape.svg"))
+                        ],),
                       ),
                     ),
                     Expanded(flex:2,
@@ -263,26 +320,27 @@ class _MarketHomePageState extends State<MarketHomePage> {
               ],
             ),
           ),
-          Flexible(
-            child: SizedBox(
-              height: 210,
-              width: MediaQuery.of(context).size.width,
+          SizedBox(
+            height: 210,
+            width: MediaQuery.of(context).size.width,
 
-              child: FutureBuilder(
-                  future: MarketMethods().getAllCategories(),
-                  builder: (context, snapshot) {
-                    List<Map> currentDataList = snapshot.data;
-                    if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
-                    } else {
-                      if (currentDataList.isEmpty) {
-                        return Container(
-                          child: Center(
-                            child: Text('Empty'),
-                          ),
-                        );
-                      }
-                      return GridView.count(
+            child: FutureBuilder(
+                future: MarketMethods().getAllCategories(),
+                builder: (context, snapshot) {
+                  List<Map> currentDataList = snapshot.data;
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  } else {
+                    if (currentDataList.isEmpty) {
+                      return Container(
+                        child: Center(
+                          child: Text('Empty'),
+                        ),
+                      );
+                    }
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: GridView.count(
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
@@ -303,40 +361,26 @@ class _MarketHomePageState extends State<MarketHomePage> {
                                   ),
                                 );
                               },
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 5.0, vertical: 5.0),
-                                      child: ExtendedImage.network(
-                                        currentData['imageUrl'],
-                                        fit: BoxFit.fill,
-                                        handleLoadingProgress: true,
-                                        shape: BoxShape.rectangle,
-                                        cache: false,
-                                        enableMemoryCache: true,
-                                      ),
-                                    ),
+                              child: Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                                  child: ExtendedImage.network(
+                                    currentData['imageUrl'],
+                                    fit: BoxFit.fill,
+                                    handleLoadingProgress: true,
+                                    shape: BoxShape.rectangle,
+                                    cache: false,
+                                    enableMemoryCache: true,
                                   ),
-//                                  Container(
-//                                    margin:
-//                                        EdgeInsets.symmetric(horizontal: 2.0),
-//                                    child: Text(
-//                                      '${currentData['searchKey']}',
-//                                      maxLines: 1,
-//                                      overflow: TextOverflow.ellipsis,
-//                                    ),
-//                                  )
-                                ],
+                                ),
                               ),
                             );
                           },
                         ),
-                      );
-                    }
-                  }),
-            ),
+                      ),
+                    );
+                  }
+                }),
           ),
         ],
       ),
