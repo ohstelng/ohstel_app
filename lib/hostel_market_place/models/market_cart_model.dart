@@ -5,6 +5,7 @@ class MarketCartModel {
   List<String> imageUrls;
   String productCategory;
   String productSubCategory;
+  String productOriginLocation;
   String productDescription;
   int productPrice;
   String productShopName;
@@ -18,6 +19,7 @@ class MarketCartModel {
     @required this.imageUrls,
     @required this.productCategory,
     @required this.productDescription,
+    @required this.productOriginLocation,
     @required this.productSubCategory,
     @required this.productPrice,
     @required this.productShopName,
@@ -31,6 +33,7 @@ class MarketCartModel {
     this.imageUrls = mapData['imageUrls'].cast<String>();
     this.productCategory = mapData['productCategory'];
     this.productSubCategory = mapData['productSubCategory'];
+    this.productOriginLocation = mapData['productOriginLocation'];
     this.productDescription = mapData['productDescription'];
     this.productPrice = mapData['productPrice'];
     this.productShopName = mapData['productShopName'];
@@ -61,6 +64,7 @@ class MarketCartModel {
     data['productSubCategory'] = this.productSubCategory.toLowerCase();
     data['productDescription'] = this.productDescription.toLowerCase();
     data['productShopName'] = this.productShopName.toLowerCase();
+    data['productOriginLocation'] = this.productOriginLocation.toLowerCase();
     data['productShopOwnerEmail'] = this.productShopOwnerEmail;
     data['units'] = this.units;
     data['productShopOwnerPhoneNumber'] =

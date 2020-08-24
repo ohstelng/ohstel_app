@@ -7,6 +7,8 @@ class PaidOrderModel {
   String buyerEmail;
   String buyerPhoneNumber;
   String buyerAddress;
+  String buyerID;
+  String deliveryStatus;
   Timestamp timestamp;
   List<String> listOfShopsPurchasedFrom;
   List<Map> orders;
@@ -17,7 +19,8 @@ class PaidOrderModel {
     @required this.buyerEmail,
     @required this.buyerPhoneNumber,
     @required this.buyerAddress,
-    @required this.timestamp,
+    @required this.buyerID,
+    @required this.deliveryStatus,
     @required this.listOfShopsPurchasedFrom,
     @required this.orders,
   });
@@ -27,6 +30,8 @@ class PaidOrderModel {
     this.buyerEmail = mapData['buyerEmail'];
     this.buyerPhoneNumber = mapData['buyerPhoneNumber'];
     this.buyerAddress = mapData['buyerAddress'];
+    this.buyerID = mapData['buyerID'];
+    this.deliveryStatus = mapData['deliveryStatus'];
     this.timestamp = mapData['timestamp'];
     this.listOfShopsPurchasedFrom = mapData['listOfShopsPurchasedFrom'];
     this.orders = mapData['orders'];
@@ -39,7 +44,9 @@ class PaidOrderModel {
     data['buyerEmail'] = this.buyerEmail;
     data['buyerPhoneNumber'] = this.buyerPhoneNumber;
     data['buyerAddress'] = this.buyerAddress;
-    data['timestamp'] = this.timestamp;
+    data['buyerID'] = this.buyerID;
+    data['deliveryStatus'] = this.deliveryStatus;
+    data['timestamp'] = Timestamp.now();
     data['listOfShopsPurchasedFrom'] = this.listOfShopsPurchasedFrom;
     data['orders'] = this.orders;
     data['id'] = this.id;

@@ -30,7 +30,7 @@ class _MainHomePageState extends State<MainHomePage> {
 
   @override
   void initState() {
-    pageController = PageController();
+    pageController = PageController(initialPage: 2, keepPage: true);
     //TODO: implement connectivity checker
     //TODO: implement connectivity checker
     //TODO: implement connectivity checker

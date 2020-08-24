@@ -41,6 +41,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
       imageUrls: productModel.imageUrls,
       productCategory: productModel.productCategory,
       productDescription: productModel.productDescription,
+      productOriginLocation: productModel.productOriginLocation,
       productSubCategory: productModel.productSubCategory,
       productPrice: productModel.productPrice,
       productShopName: productModel.productShopName,

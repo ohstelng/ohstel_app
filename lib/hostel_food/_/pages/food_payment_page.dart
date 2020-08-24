@@ -31,7 +31,6 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   Map userData;
   bool isLoading = true;
   int deliveryFee = 100;
-  String _phoneNumber;
 
   Runes input = Runes('\u20a6');
   final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
@@ -384,7 +383,9 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       margin: EdgeInsets.all(15.0),
       child: FlatButton(
         onPressed: () {
-          chargeCard(price: (getGrandTotal() + deliveryFee) * 100);
+          print(userData);
+//          if(userData)
+//          chargeCard(price: (getGrandTotal() + deliveryFee) * 100);
         },
         child: Text(
           'Make Payment',
@@ -552,6 +553,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
         IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
+//            AuthService().signOut();
             Navigator.of(context).pop();
           },
         )

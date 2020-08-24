@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
-import 'package:Ohstel_app/hostel_booking/_/model/save_hostel_model.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_info_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_search_page.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/saved_hostel_page.dart';
@@ -20,7 +19,6 @@ import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
 final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
-
 
 class HostelBookingHomePage extends StatefulWidget {
   @override
@@ -46,10 +44,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   // roomMate needed, on campus Only(school hostel)
   String sortBy = 'default';
 
-
-
-
-
   void initSearch() {
     try {
       isStillLoadingData = true;
@@ -57,6 +51,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       HostelBookingMethods().fetchAllHostel(uniName: uniName).then(
         (List<HostelModel> list) {
           if (list != null) {
+            if (list.length < 6) {
+              moreHostelAvailable = false;
+            }
             setState(() {
               searchList = list;
               isStillLoadingData = false;
@@ -84,6 +81,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         (List<HostelModel> list) {
           if (list != null && list.isNotEmpty) {
             setState(() {
+              if (list.length < 6) {
+                moreHostelAvailable = false;
+              }
               searchList = list;
               isStillLoadingData = false;
               lastHostel = searchList[searchList.length - 1];
@@ -114,6 +114,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         (List<HostelModel> list) {
           if (list != null && list.isNotEmpty) {
             setState(() {
+              if (list.length < 6) {
+                moreHostelAvailable = false;
+              }
               searchList = list;
               isStillLoadingData = false;
               lastHostel = searchList[searchList.length - 1];
@@ -144,6 +147,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         (List<HostelModel> list) {
           if (list != null && list.isNotEmpty) {
             setState(() {
+              if (list.length < 6) {
+                moreHostelAvailable = false;
+              }
               searchList = list;
               isStillLoadingData = false;
               lastHostel = searchList[searchList.length - 1];
@@ -176,6 +182,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         (List<HostelModel> list) {
           if (list != null && list.isNotEmpty) {
             setState(() {
+              if (list.length < 6) {
+                moreHostelAvailable = false;
+              }
               searchList = list;
               isStillLoadingData = false;
               lastHostel = searchList[searchList.length - 1];
@@ -208,6 +217,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         (List<HostelModel> list) {
           if (list != null && list.isNotEmpty) {
             setState(() {
+              if (list.length < 6) {
+                moreHostelAvailable = false;
+              }
               searchList = list;
               isStillLoadingData = false;
               lastHostel = searchList[searchList.length - 1];
@@ -490,7 +502,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   }
 
   Future getUniList() async {
-    String url = "http://ohstel.pythonanywhere.com/hostelSearchKey";
+    String url = "https://quiz-demo-de79d.appspot.com/hostel_api/searchKeys";
     var response = await http.get(url);
     var result = json.decode(response.body);
     print(result);
@@ -585,8 +597,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     );
   }
 
-
-
   Widget sortByDistance() {
     return PaginateFirestore(
       itemsPerPage: 3,
@@ -614,9 +624,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           child: InkWell(
             onTap: () {
               print(currentHostelModel.id);
-//              Navigator.of(context).push(MaterialPageRoute(
-//                  builder: (context) =>
-//                      HostelBookingInFoPage(hostelModel: currentHostelModel)));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      HostelBookingInFoPage(hostelModel: currentHostelModel)));
             },
             child: Container(
               margin: EdgeInsets.all(10),
@@ -706,7 +716,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -761,7 +773,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               overflow: TextOverflow.ellipsis,
             )
           ]),
-          SizedBox(height: 8,)
+          SizedBox(
+            height: 8,
+          )
         ],
       ),
     );
@@ -944,8 +958,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   DropdownButton dropdownButton() {
     return DropdownButton<String>(
-      underline:Container(color:Colors.transparent),
-      onChanged: (value) {
+      underline: Container(color: Colors.transparent),
+      onChanged: (value) async {
         print('value: $value');
         if (value == 'changeUni') {
           print('Change uin');
@@ -955,11 +969,15 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           });
         } else {
           setState(() {
+            isStillLoadingData = true;
             sortBy = value;
           });
           print(sortBy);
           print(sortBy);
-          performSearchController();
+          await performSearchController();
+          setState(() {
+            isStillLoadingData = false;
+          });
         }
       },
       hint: Icon(
@@ -1037,15 +1055,4 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       ],
     );
   }
-
-
-
 }
-
-
-
-
-//TODO: implement save hostel
-//TODO: implement save hostel
-//TODO: implement save hostel
-//TODO: implement save hostel
