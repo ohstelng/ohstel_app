@@ -7,10 +7,13 @@ import 'package:Ohstel_app/hostel_market_place/pages/market_search_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/markets_orders_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_categrioes_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_product_page.dart';
+import 'package:Ohstel_app/landing_page/profile_page.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
 class MarketHomePage extends StatefulWidget {
@@ -20,6 +23,18 @@ class MarketHomePage extends StatefulWidget {
 
 class _MarketHomePageState extends State<MarketHomePage> {
   String uniName;
+
+  List _imgList = [1, 2, 3, 4];
+
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+
+  int _current = 0;
 
   Future<void> getUniName() async {
     String name = await HiveMethods().getUniName();
@@ -34,21 +49,49 @@ class _MarketHomePageState extends State<MarketHomePage> {
   }
 
   @override
+  TextStyle _tabBarStyle = TextStyle(color: Colors.black);
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Row(
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        body: SafeArea(
+          child: Container(
+            margin: EdgeInsets.all(10),
+            child: Column(
               children: <Widget>[
+                SizedBox(
+                  height: 8,
+                ),
+                appBar(),
+                SizedBox(height: 16),
                 searchBar(),
                 popMenu(),
+                SizedBox(height: 16),
+                Expanded(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.70,
+                    child: ListView(
+                      children: [
+                        SizedBox(height: 16),
+                        advertBanner(),
+                        categories(),
+                        SizedBox(height: 24),
+                        tabBar(),
+                        SizedBox(height: 8),
+                        tabBarView(),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        topBrands(),
+                        SizedBox(height: 16),
+                        recommended4U(),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
-            advertBanner(),
-            categories(),
-            lastestProduct(),
-          ],
+          ),
         ),
       ),
     );
@@ -105,7 +148,134 @@ class _MarketHomePageState extends State<MarketHomePage> {
             ]);
   }
 
-  Widget lastestProduct() {
+  Widget recommended4U() {
+    return Container(
+      height: 300,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Recommended for you",
+            style: TextStyle(fontSize: 16),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          latestProduct(),
+          SizedBox(height: 8),
+          latestProduct()
+        ],
+      ),
+    );
+  }
+
+  Widget appBar() {
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: <Widget>[
+            InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()));
+                },
+                child: Image.asset("asset/timmy.png")),
+            Spacer(),
+            InkWell(
+                onTap: () {
+//            saveProduct();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MarketCartPage(),
+                    ),
+                  );
+                },
+                child: SvgPicture.asset("asset/cart.svg")),
+
+//                header(),
+          ],
+        ));
+  }
+
+  Widget topBrands() {
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(color: Color(0xffC4C4C4)),
+      width: MediaQuery.of(context).size.width,
+      height: 214,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Top Brands",
+            style: TextStyle(fontSize: 16),
+          ),
+          SizedBox(height: 25),
+          Expanded(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CircleAvatar(
+                radius: 70,
+                backgroundColor: Colors.white,
+              ),
+              CircleAvatar(
+                radius: 70,
+                backgroundColor: Colors.white,
+              )
+            ],
+          ))
+        ],
+      ),
+    );
+  }
+
+  Widget tabBar() {
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TabBar(
+            isScrollable: true,
+            tabs: <Widget>[
+              Tab(
+                child: Text(
+                  'New in',
+                  style: _tabBarStyle,
+                ),
+              ),
+              Tab(
+                  child: Text(
+                'Best Sell',
+                style: _tabBarStyle,
+              ))
+            ],
+          ),
+          Spacer(),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              "See All",
+              style: _tabBarStyle,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget tabBarView() {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        height: 160, //
+        child: Expanded(
+          child: TabBarView(
+            children: <Widget>[latestProduct(), latestProduct()],
+          ),
+        ));
+  }
+
+  Widget latestProduct() {
     return Expanded(
       child: PaginateFirestore(
         scrollDirection: Axis.horizontal,
@@ -116,7 +286,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
             child: CircularProgressIndicator(),
           ),
         ),
-        bottomLoader: CircularProgressIndicator(),
+        bottomLoader: Center(child: CircularProgressIndicator()),
         shrinkWrap: true,
         query: Firestore.instance
             .collection('market')
@@ -128,7 +298,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
           ProductModel currentProductModel =
               ProductModel.fromMap(documentSnapshot.data);
           return Card(
-            elevation: 2.5,
+            elevation: 0,
             child: InkWell(
               onTap: () {
                 Navigator.of(context).push(
@@ -139,36 +309,58 @@ class _MarketHomePageState extends State<MarketHomePage> {
                   ),
                 );
               },
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.30,
-                      margin: EdgeInsets.all(10),
+              child: Container(
+                height: 153,
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
                       child: Container(
-                        child: ExtendedImage.network(
-                          currentProductModel.imageUrls[0],
-                          fit: BoxFit.fill,
-                          handleLoadingProgress: true,
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(10),
-                          cache: false,
-                          enableMemoryCache: true,
+                        width: 153,
+                        height: 104,
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(color: Colors.black12),
+                              child: ExtendedImage.network(
+                                currentProductModel.imageUrls[0],
+                                fit: BoxFit.fill,
+                                handleLoadingProgress: true,
+                                shape: BoxShape.rectangle,
+                                cache: false,
+                                enableMemoryCache: true,
+                              ),
+                            ),
+                            Positioned(
+                                bottom: 7,
+                                right: 7,
+                                child: SvgPicture.asset("asset/Shape.svg"))
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text('${currentProductModel.productName}'),
-                        Text('\$${currentProductModel.productPrice}'),
-                      ],
-                    ),
-                  )
-                ],
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        width: 153,
+                        height: 46,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('${currentProductModel.productName}'),
+                            Text(
+                              '\₦${currentProductModel.productPrice}',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -183,19 +375,16 @@ class _MarketHomePageState extends State<MarketHomePage> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
+            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('categories'),
+                Text(
+                  'Top Categories',
+                  style: TextStyle(fontSize: 16),
+                ),
                 InkWell(
                   child: Container(
-                    padding: EdgeInsets.all(2.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
                     child: Text('See All'),
                   ),
                   onTap: () {
@@ -209,24 +398,26 @@ class _MarketHomePageState extends State<MarketHomePage> {
               ],
             ),
           ),
-          Flexible(
-            child: SizedBox(
-              height: 210,
-              child: FutureBuilder(
-                  future: MarketMethods().getAllCategories(),
-                  builder: (context, snapshot) {
-                    List<Map> currentDataList = snapshot.data;
-                    if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
-                    } else {
-                      if (currentDataList.isEmpty) {
-                        return Container(
-                          child: Center(
-                            child: Text('Empty'),
-                          ),
-                        );
-                      }
-                      return GridView.count(
+          SizedBox(
+            height: 210,
+            width: MediaQuery.of(context).size.width,
+            child: FutureBuilder(
+                future: MarketMethods().getAllCategories(),
+                builder: (context, snapshot) {
+                  List<Map> currentDataList = snapshot.data;
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  } else {
+                    if (currentDataList.isEmpty) {
+                      return Container(
+                        child: Center(
+                          child: Text('Empty'),
+                        ),
+                      );
+                    }
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: GridView.count(
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
@@ -247,46 +438,27 @@ class _MarketHomePageState extends State<MarketHomePage> {
                                   ),
                                 );
                               },
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 10.0, vertical: 2.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0)),
-                                      ),
-                                      child: ExtendedImage.network(
-                                        currentData['imageUrl'],
-                                        fit: BoxFit.fill,
-                                        handleLoadingProgress: true,
-                                        shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.circular(10),
-                                        cache: false,
-                                        enableMemoryCache: true,
-                                      ),
-                                    ),
+                              child: Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 10),
+                                  child: ExtendedImage.network(
+                                    currentData['imageUrl'],
+                                    fit: BoxFit.fill,
+                                    handleLoadingProgress: true,
+                                    shape: BoxShape.rectangle,
+                                    cache: false,
+                                    enableMemoryCache: true,
                                   ),
-                                  Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 2.0),
-                                    child: Text(
-                                      '${currentData['searchKey']}',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  )
-                                ],
+                                ),
                               ),
                             );
                           },
                         ),
-                      );
-                    }
-                  }),
-            ),
+                      ),
+                    );
+                  }
+                }),
           ),
         ],
       ),
@@ -294,43 +466,103 @@ class _MarketHomePageState extends State<MarketHomePage> {
   }
 
   Widget advertBanner() {
-    return Container(
-      margin: EdgeInsets.all(5.0),
-      padding: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      height: 150,
-      width: double.infinity,
-      child: Center(child: Text('Adverts')),
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 0),
+          height: 150,
+          width: double.infinity,
+          child: Center(
+              child: CarouselSlider(
+            options: CarouselOptions(
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _current = index;
+                });
+              },
+              height: 400.0,
+              aspectRatio: 2.0,
+              initialPage: 0,
+              viewportFraction: 0.8,
+              autoPlay: true,
+              autoPlayInterval: Duration(seconds: 3),
+              pauseAutoPlayOnTouch: true,
+              enableInfiniteScroll: false,
+              autoPlayAnimationDuration: Duration(milliseconds: 800),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enlargeCenterPage: true,
+              scrollDirection: Axis.horizontal,
+            ),
+            items: _imgList.map((i) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(color: Colors.grey),
+                    child: Center(
+                      child: Text(
+                        'image $i',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          )),
+        ),
+        Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: map<Widget>(_imgList, (index, url) {
+              return Container(
+                width: _current == index ? 24 : 11,
+                height: 4.0,
+                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    shape: BoxShape.rectangle,
+                    color: _current == index
+                        ? Theme.of(context).primaryColor
+                        : Colors.black),
+              );
+            }).toList())
+      ],
     );
   }
 
   Widget searchBar() {
-    return Expanded(
-      child: Container(
-        margin: EdgeInsets.all(10.0),
-        padding: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => MarketSearchPage(),
+    return Container(
+      height: 48,
+      decoration: BoxDecoration(),
+      child: MaterialButton(
+        onPressed: () {
+//                  SubLocationViewModel.loadSubLocationsFromApi(
+//                      uniName: uniName);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MarketSearchPage(),
+            ),
+          );
+        },
+        color: Colors.grey[50],
+        shape: RoundedRectangleBorder(),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Icon(Icons.search, color: Colors.black, size: 19),
+            SizedBox(width: 24),
+            Text(
+              'Search',
+              style: TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.w400,
+                fontSize: 17.0,
               ),
-            );
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('Search For Product'),
-              Icon(Icons.search),
-            ],
-          ),
+            ),
+            Spacer(),
+            Icon(Icons.mic, size: 19)
+          ],
         ),
       ),
     );

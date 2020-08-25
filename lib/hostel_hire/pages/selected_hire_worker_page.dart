@@ -1,7 +1,7 @@
 import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 
 class SelectedHireWorkerPage extends StatefulWidget {
   final HireWorkerModel hireWorker;
@@ -13,15 +13,15 @@ class SelectedHireWorkerPage extends StatefulWidget {
 }
 
 class _SelectedHireWorkerPageState extends State<SelectedHireWorkerPage> {
-  void makeCall() async {
-    String _phoneNumber = "tel:${widget.hireWorker.workerPhoneNumber}";
-
-    if (await canLaunch(_phoneNumber)) {
-      await launch(_phoneNumber);
-    } else {
-      throw 'Could not call';
-    }
-  }
+//  void makeCall() async {
+//    String _phoneNumber = "tel:${widget.hireWorker.workerPhoneNumber}";
+//
+//    if (await canLaunch(_phoneNumber)) {
+//      await launch(_phoneNumber);
+//    } else {
+//      throw 'Could not call';
+//    }
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class _SelectedHireWorkerPageState extends State<SelectedHireWorkerPage> {
               ),
               FlatButton(
                 onPressed: () {
-                  makeCall();
+//                  makeCall();
                 },
                 color: Colors.green,
                 child: Text('Place A Call'),
