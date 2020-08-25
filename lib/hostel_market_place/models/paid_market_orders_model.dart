@@ -8,7 +8,6 @@ class PaidOrderModel {
   String buyerPhoneNumber;
   String buyerAddress;
   String buyerID;
-  String deliveryStatus;
   Timestamp timestamp;
   List<String> listOfShopsPurchasedFrom;
   List<Map> orders;
@@ -20,7 +19,6 @@ class PaidOrderModel {
     @required this.buyerPhoneNumber,
     @required this.buyerAddress,
     @required this.buyerID,
-    @required this.deliveryStatus,
     @required this.listOfShopsPurchasedFrom,
     @required this.orders,
   });
@@ -31,7 +29,7 @@ class PaidOrderModel {
     this.buyerPhoneNumber = mapData['buyerPhoneNumber'];
     this.buyerAddress = mapData['buyerAddress'];
     this.buyerID = mapData['buyerID'];
-    this.deliveryStatus = mapData['deliveryStatus'];
+
     this.timestamp = mapData['timestamp'];
     this.listOfShopsPurchasedFrom = mapData['listOfShopsPurchasedFrom'];
     this.orders = mapData['orders'];
@@ -45,7 +43,6 @@ class PaidOrderModel {
     data['buyerPhoneNumber'] = this.buyerPhoneNumber;
     data['buyerAddress'] = this.buyerAddress;
     data['buyerID'] = this.buyerID;
-    data['deliveryStatus'] = this.deliveryStatus;
     data['timestamp'] = Timestamp.now();
     data['listOfShopsPurchasedFrom'] = this.listOfShopsPurchasedFrom;
     data['orders'] = this.orders;
@@ -60,6 +57,7 @@ class EachPaidOrderModel {
   List<String> imageUrls;
   String productCategory;
   int productPrice;
+  String deliveryStatus;
   String productShopName;
   String productShopOwnerEmail;
   int productShopOwnerPhoneNumber;
@@ -81,6 +79,7 @@ class EachPaidOrderModel {
     this.imageUrls = mapData['imageUrls'].cast<String>();
     this.productCategory = mapData['productCategory'];
     this.productPrice = mapData['productPrice'];
+    this.deliveryStatus = mapData['deliveryStatus'];
     this.productShopName = mapData['productShopName'];
     this.productShopOwnerEmail = mapData['productShopOwnerEmail'];
     this.units = mapData['units'];
@@ -96,6 +95,7 @@ class EachPaidOrderModel {
     data['productCategory'] = this.productCategory.toLowerCase();
     data['productShopName'] = this.productShopName.toLowerCase();
     data['productShopOwnerEmail'] = this.productShopOwnerEmail;
+    data['deliveryStatus'] = 'Awaiting Dispatch';
     data['units'] = this.units;
     data['productShopOwnerPhoneNumber'] =
         this.productShopOwnerPhoneNumber.toString();

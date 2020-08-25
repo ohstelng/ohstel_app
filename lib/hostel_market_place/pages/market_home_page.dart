@@ -4,6 +4,7 @@ import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/all_categories_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_cart_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_search_page.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/markets_orders_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_categrioes_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_product_page.dart';
 import 'package:Ohstel_app/landing_page/profile_page.dart';
@@ -32,7 +33,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
     }
     return result;
   }
-  int _current =0;
+
+  int _current = 0;
 
   Future<void> getUniName() async {
     String name = await HiveMethods().getUniName();
@@ -47,7 +49,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
   }
 
   @override
-
   TextStyle _tabBarStyle = TextStyle(color: Colors.black);
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -58,28 +59,32 @@ class _MarketHomePageState extends State<MarketHomePage> {
             margin: EdgeInsets.all(10),
             child: Column(
               children: <Widget>[
-                SizedBox(height: 8,),
+                SizedBox(
+                  height: 8,
+                ),
                 appBar(),
                 SizedBox(height: 16),
                 searchBar(),
+                popMenu(),
                 SizedBox(height: 16),
                 Expanded(
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.70,
                     child: ListView(
                       children: [
-                          SizedBox(height: 16),
-                          advertBanner(),
-                          categories(),
-                          SizedBox(height: 24),
-                          tabBar(),
-                          SizedBox(height: 8),
-                          tabBarView(),
-                          SizedBox(height: 8,),
-                          topBrands(),
-                          SizedBox(height: 16),
-                          recommended4U(),
-
+                        SizedBox(height: 16),
+                        advertBanner(),
+                        categories(),
+                        SizedBox(height: 24),
+                        tabBar(),
+                        SizedBox(height: 8),
+                        tabBarView(),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        topBrands(),
+                        SizedBox(height: 16),
+                        recommended4U(),
                       ],
                     ),
                   ),
@@ -92,74 +97,140 @@ class _MarketHomePageState extends State<MarketHomePage> {
     );
   }
 
+  Widget popMenu() {
+    return PopupMenuButton(
+        onSelected: (value) {
+          if (value == 1) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => MarketCartPage(),
+              ),
+            );
+          } else if (value == 2) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => MarketOrdersPage(),
+              ),
+            );
+          }
+//          Fluttertoast.showToast(
+//            msg: "You have selected " + value.toString(),
+//            toastLength: Toast.LENGTH_SHORT,
+//            gravity: ToastGravity.BOTTOM,
+//            backgroundColor: Colors.black,
+//            textColor: Colors.white,
+//            fontSize: 16.0,
+//          );
+        },
+        itemBuilder: (context) => [
+              PopupMenuItem(
+                  value: 1,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
+                        child: Icon(Icons.add_shopping_cart),
+                      ),
+                      Text('Cart')
+                    ],
+                  )),
+              PopupMenuItem(
+                  value: 2,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
+                        child: Icon(Icons.history),
+                      ),
+                      Text('Orders')
+                    ],
+                  )),
+            ]);
+  }
+
   Widget recommended4U() {
     return Container(
-      height: 350,
+      height: 300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Recommended for you", style: TextStyle(fontSize: 16),),
-          SizedBox(height: 8,),
-          Expanded(child: latestProduct()),
+          Text(
+            "Recommended for you",
+            style: TextStyle(fontSize: 16),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          latestProduct(),
           SizedBox(height: 8),
-          Expanded(child: latestProduct())
+          latestProduct()
         ],
       ),
     );
   }
 
-  Widget appBar(){
+  Widget appBar() {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal:16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-      children: <Widget>[
-        InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfilePage()));
-            },
-            child: Image.asset("asset/timmy.png")),
-        Spacer(),
-        InkWell(onTap: () {
+          children: <Widget>[
+            InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()));
+                },
+                child: Image.asset("asset/timmy.png")),
+            Spacer(),
+            InkWell(
+                onTap: () {
 //            saveProduct();
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => MarketCartPage(),
-            ),
-          );
-        },child: SvgPicture.asset("asset/cart.svg")),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MarketCartPage(),
+                    ),
+                  );
+                },
+                child: SvgPicture.asset("asset/cart.svg")),
 
 //                header(),
-      ],
-    ));
+          ],
+        ));
   }
 
-  Widget topBrands(){
+  Widget topBrands() {
     return Container(
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(color: Color(0xffC4C4C4)),
       width: MediaQuery.of(context).size.width,
       height: 214,
-      child:Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Top Brands",style: TextStyle(fontSize: 16),),
+          Text(
+            "Top Brands",
+            style: TextStyle(fontSize: 16),
+          ),
           SizedBox(height: 25),
-          Row(
+          Expanded(
+              child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              CircleAvatar(radius: 70,backgroundColor: Colors.white,),
-              CircleAvatar(radius: 70,backgroundColor: Colors.white,)
+              CircleAvatar(
+                radius: 70,
+                backgroundColor: Colors.white,
+              ),
+              CircleAvatar(
+                radius: 70,
+                backgroundColor: Colors.white,
+              )
             ],
-          )
-
-
-        ],) ,);
+          ))
+        ],
+      ),
+    );
   }
 
-  Widget tabBar(){
+  Widget tabBar() {
     return Container(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,114 +246,126 @@ class _MarketHomePageState extends State<MarketHomePage> {
               ),
               Tab(
                   child: Text(
-                    'Best Sell',
-                    style: _tabBarStyle,
-                  ))
+                'Best Sell',
+                style: _tabBarStyle,
+              ))
             ],
           ),
           Spacer(),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 16),
-            child: Text("See All",style: _tabBarStyle,),
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              "See All",
+              style: _tabBarStyle,
+            ),
           )
         ],
       ),
     );
   }
 
-  Widget tabBarView(){
-    return Container(padding: EdgeInsets.symmetric(vertical: 8),
-        height: 160,//
-        child: TabBarView(
-          children: <Widget>[
-            latestProduct(),
-            latestProduct()
-          ],
+  Widget tabBarView() {
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        height: 160, //
+        child: Expanded(
+          child: TabBarView(
+            children: <Widget>[latestProduct(), latestProduct()],
+          ),
         ));
   }
 
   Widget latestProduct() {
-    return PaginateFirestore(
-      scrollDirection: Axis.horizontal,
-      itemsPerPage: 3,
-      initialLoader: Container(
-        height: 50,
-        child: Center(
-          child: CircularProgressIndicator(),
+    return Expanded(
+      child: PaginateFirestore(
+        scrollDirection: Axis.horizontal,
+        itemsPerPage: 3,
+        initialLoader: Container(
+          height: 50,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
         ),
-      ),
-      bottomLoader: Center(child: CircularProgressIndicator()),
-      shrinkWrap: true,
-      query: Firestore.instance
-          .collection('market')
-          .document('products')
-          .collection('allProducts')
-          .orderBy('dateAdded', descending: true),
-      itemBuilder: (context, DocumentSnapshot documentSnapshot) {
+        bottomLoader: Center(child: CircularProgressIndicator()),
+        shrinkWrap: true,
+        query: Firestore.instance
+            .collection('market')
+            .document('products')
+            .collection('allProducts')
+            .orderBy('dateAdded', descending: true),
+        itemBuilder: (context, DocumentSnapshot documentSnapshot) {
 //          print(documentSnapshot.data);
-        ProductModel currentProductModel =
-            ProductModel.fromMap(documentSnapshot.data);
-        return Card(
-          elevation: 0,
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => SelectedProductPage(
-                    productModel: currentProductModel,
-                  ),
-                ),
-              );
-            },
-            child: Container(
-              height: 153,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    flex:3,
-                    child: Container(
-                      width: 153,
-                      height: 104,
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child:Stack(children: [
-                        Container(
-                          decoration: BoxDecoration(color:Colors.black12 ),
-                          child: ExtendedImage.network(
-                            currentProductModel.imageUrls[0],
-                            fit: BoxFit.fill,
-                            handleLoadingProgress: true,
-                            shape: BoxShape.rectangle,
-                            cache: false,
-                            enableMemoryCache: true,
-                          ),
-                        ),
-                        Positioned(
-                            bottom:7,right: 7,
-                            child: SvgPicture.asset("asset/Shape.svg"))
-                      ],),
+          ProductModel currentProductModel =
+              ProductModel.fromMap(documentSnapshot.data);
+          return Card(
+            elevation: 0,
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => SelectedProductPage(
+                      productModel: currentProductModel,
                     ),
                   ),
-                  Expanded(
-                    flex:2,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12,vertical: 8),
-                      width: 153,
-                      height: 46,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(child: Text('${currentProductModel.productName}')),
-                          Expanded(child: Text('\₦${currentProductModel.productPrice}',style: TextStyle(fontSize: 16))),
-                        ],
+                );
+              },
+              child: Container(
+                height: 153,
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        width: 153,
+                        height: 104,
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(color: Colors.black12),
+                              child: ExtendedImage.network(
+                                currentProductModel.imageUrls[0],
+                                fit: BoxFit.fill,
+                                handleLoadingProgress: true,
+                                shape: BoxShape.rectangle,
+                                cache: false,
+                                enableMemoryCache: true,
+                              ),
+                            ),
+                            Positioned(
+                                bottom: 7,
+                                right: 7,
+                                child: SvgPicture.asset("asset/Shape.svg"))
+                          ],
+                        ),
                       ),
                     ),
-                  )
-                ],
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        width: 153,
+                        height: 46,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('${currentProductModel.productName}'),
+                            Text(
+                              '\₦${currentProductModel.productPrice}',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -302,7 +385,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
                 ),
                 InkWell(
                   child: Container(
-
                     child: Text('See All'),
                   ),
                   onTap: () {
@@ -319,7 +401,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
           SizedBox(
             height: 210,
             width: MediaQuery.of(context).size.width,
-
             child: FutureBuilder(
                 future: MarketMethods().getAllCategories(),
                 builder: (context, snapshot) {
@@ -357,15 +438,18 @@ class _MarketHomePageState extends State<MarketHomePage> {
                                   ),
                                 );
                               },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-                                child: ExtendedImage.network(
-                                  currentData['imageUrl'],
-                                  fit: BoxFit.fill,
-                                  handleLoadingProgress: true,
-                                  shape: BoxShape.rectangle,
-                                  cache: false,
-                                  enableMemoryCache: true,
+                              child: Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 10),
+                                  child: ExtendedImage.network(
+                                    currentData['imageUrl'],
+                                    fit: BoxFit.fill,
+                                    handleLoadingProgress: true,
+                                    shape: BoxShape.rectangle,
+                                    cache: false,
+                                    enableMemoryCache: true,
+                                  ),
                                 ),
                               ),
                             );
@@ -385,16 +469,17 @@ class _MarketHomePageState extends State<MarketHomePage> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 5.0,vertical: 0),
+          margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 0),
           height: 150,
           width: double.infinity,
-          child: Center(child: CarouselSlider(
+          child: Center(
+              child: CarouselSlider(
             options: CarouselOptions(
               onPageChanged: (index, reason) {
                 setState(() {
                   _current = index;
                 });
-                },
+              },
               height: 400.0,
               aspectRatio: 2.0,
               initialPage: 0,
@@ -403,8 +488,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
               autoPlayInterval: Duration(seconds: 3),
               pauseAutoPlayOnTouch: true,
               enableInfiniteScroll: false,
-              autoPlayAnimationDuration:
-              Duration(milliseconds: 800),
+              autoPlayAnimationDuration: Duration(milliseconds: 800),
               autoPlayCurve: Curves.fastOutSlowIn,
               enlargeCenterPage: true,
               scrollDirection: Axis.horizontal,
@@ -438,7 +522,9 @@ class _MarketHomePageState extends State<MarketHomePage> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     shape: BoxShape.rectangle,
-                    color: _current == index ? Theme.of(context).primaryColor : Color(0xffC4C4C4)),
+                    color: _current == index
+                        ? Theme.of(context).primaryColor
+                        : Colors.black),
               );
             }).toList())
       ],
@@ -492,7 +578,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
             color: Colors.grey,
           ),
           onPressed: () {
-//            saveProduct();
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => MarketCartPage(),
@@ -504,5 +589,3 @@ class _MarketHomePageState extends State<MarketHomePage> {
     );
   }
 }
-
-
