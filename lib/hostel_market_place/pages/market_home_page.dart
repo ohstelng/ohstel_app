@@ -65,7 +65,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
                 appBar(),
                 SizedBox(height: 16),
                 searchBar(),
-                popMenu(),
                 SizedBox(height: 16),
                 Expanded(
                   child: Container(
@@ -171,7 +170,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
 
   Widget appBar() {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 4),
         child: Row(
           children: <Widget>[
             InkWell(
@@ -191,6 +190,9 @@ class _MarketHomePageState extends State<MarketHomePage> {
                   );
                 },
                 child: SvgPicture.asset("asset/cart.svg")),
+            popMenu()
+
+
 
 //                header(),
           ],
@@ -350,10 +352,12 @@ class _MarketHomePageState extends State<MarketHomePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text('${currentProductModel.productName}'),
-                            Text(
-                              '\₦${currentProductModel.productPrice}',
-                              style: TextStyle(fontSize: 16),
+                            Expanded( child: Text('${currentProductModel.productName}')),
+                            Expanded(
+                              child: Text(
+                                '\₦${currentProductModel.productPrice}',
+                                style: TextStyle(fontSize: 16),
+                              ),
                             ),
                           ],
                         ),
