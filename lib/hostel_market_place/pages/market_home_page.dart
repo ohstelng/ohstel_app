@@ -57,7 +57,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
         body: SafeArea(
           child: Container(
             margin: EdgeInsets.all(10),
-            child: Column(
+            child: ListView(
               children: <Widget>[
                 SizedBox(
                   height: 8,
@@ -66,28 +66,37 @@ class _MarketHomePageState extends State<MarketHomePage> {
                 SizedBox(height: 16),
                 searchBar(),
                 SizedBox(height: 16),
-                Expanded(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.70,
-                    child: ListView(
-                      children: [
-                        SizedBox(height: 16),
-                        advertBanner(),
-                        categories(),
-                        SizedBox(height: 24),
-                        tabBar(),
-                        SizedBox(height: 8),
-                        tabBarView(),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        topBrands(),
-                        SizedBox(height: 16),
-                        recommended4U(),
-                      ],
-                    ),
-                  ),
-                )
+                advertBanner(),
+                categories(),
+                SizedBox(height: 24),
+                tabBar(),
+                SizedBox(height: 8),
+                tabBarView(),
+                SizedBox(height: 8),
+                topBrands(),
+                SizedBox(height: 16),
+                recommended4U(),
+
+//                Container(
+//                  height: MediaQuery.of(context).size.height * 0.70,
+//                  child: ListView(
+//                    children: [
+//                      SizedBox(height: 16),
+//                      advertBanner(),
+//                      categories(),
+//                      SizedBox(height: 24),
+//                      tabBar(),
+//                      SizedBox(height: 8),
+//                      tabBarView(),
+//                      SizedBox(
+//                        height: 8,
+//                      ),
+//                      topBrands(),
+//                      SizedBox(height: 16),
+//                      recommended4U(),
+//                    ],
+//                  ),
+//                )
               ],
             ),
           ),
@@ -192,8 +201,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
                 child: SvgPicture.asset("asset/cart.svg")),
             popMenu()
 
-
-
 //                header(),
           ],
         ));
@@ -268,108 +275,109 @@ class _MarketHomePageState extends State<MarketHomePage> {
 
   Widget tabBarView() {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        height: 160, //
-        child: Expanded(
-          child: TabBarView(
-            children: <Widget>[latestProduct(), latestProduct()],
-          ),
-        ));
+      padding: EdgeInsets.symmetric(vertical: 8),
+      height: 160, //
+      child: TabBarView(
+        children: <Widget>[
+          latestProduct(),
+          latestProduct(),
+        ],
+      ),
+    );
   }
 
   Widget latestProduct() {
-    return Expanded(
-      child: PaginateFirestore(
-        scrollDirection: Axis.horizontal,
-        itemsPerPage: 3,
-        initialLoader: Container(
-          height: 50,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
+    return PaginateFirestore(
+      scrollDirection: Axis.horizontal,
+      itemsPerPage: 3,
+      initialLoader: Container(
+        height: 50,
+        child: Center(
+          child: CircularProgressIndicator(),
         ),
-        bottomLoader: Center(child: CircularProgressIndicator()),
-        shrinkWrap: true,
-        query: Firestore.instance
-            .collection('market')
-            .document('products')
-            .collection('allProducts')
-            .orderBy('dateAdded', descending: true),
-        itemBuilder: (context, DocumentSnapshot documentSnapshot) {
+      ),
+      bottomLoader: Center(child: CircularProgressIndicator()),
+      shrinkWrap: true,
+      query: Firestore.instance
+          .collection('market')
+          .document('products')
+          .collection('allProducts')
+          .orderBy('dateAdded', descending: true),
+      itemBuilder: (context, DocumentSnapshot documentSnapshot) {
 //          print(documentSnapshot.data);
-          ProductModel currentProductModel =
-              ProductModel.fromMap(documentSnapshot.data);
-          return Card(
-            elevation: 0,
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => SelectedProductPage(
-                      productModel: currentProductModel,
+        ProductModel currentProductModel =
+            ProductModel.fromMap(documentSnapshot.data);
+        return Card(
+          elevation: 0,
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SelectedProductPage(
+                    productModel: currentProductModel,
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              height: 153,
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      width: 153,
+                      height: 104,
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(color: Colors.black12),
+                            child: ExtendedImage.network(
+                              currentProductModel.imageUrls[0],
+                              fit: BoxFit.fill,
+                              handleLoadingProgress: true,
+                              shape: BoxShape.rectangle,
+                              cache: false,
+                              enableMemoryCache: true,
+                            ),
+                          ),
+                          Positioned(
+                              bottom: 7,
+                              right: 7,
+                              child: SvgPicture.asset("asset/Shape.svg"))
+                        ],
+                      ),
                     ),
                   ),
-                );
-              },
-              child: Container(
-                height: 153,
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 3,
-                      child: Container(
-                        width: 153,
-                        height: 104,
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(color: Colors.black12),
-                              child: ExtendedImage.network(
-                                currentProductModel.imageUrls[0],
-                                fit: BoxFit.fill,
-                                handleLoadingProgress: true,
-                                shape: BoxShape.rectangle,
-                                cache: false,
-                                enableMemoryCache: true,
-                              ),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      width: 153,
+                      height: 46,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                              child:
+                                  Text('${currentProductModel.productName}')),
+                          Expanded(
+                            child: Text(
+                              '\₦${currentProductModel.productPrice}',
+                              style: TextStyle(fontSize: 16),
                             ),
-                            Positioned(
-                                bottom: 7,
-                                right: 7,
-                                child: SvgPicture.asset("asset/Shape.svg"))
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                        width: 153,
-                        height: 46,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Expanded( child: Text('${currentProductModel.productName}')),
-                            Expanded(
-                              child: Text(
-                                '\₦${currentProductModel.productPrice}',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -442,18 +450,16 @@ class _MarketHomePageState extends State<MarketHomePage> {
                                   ),
                                 );
                               },
-                              child: Expanded(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 10),
-                                  child: ExtendedImage.network(
-                                    currentData['imageUrl'],
-                                    fit: BoxFit.fill,
-                                    handleLoadingProgress: true,
-                                    shape: BoxShape.rectangle,
-                                    cache: false,
-                                    enableMemoryCache: true,
-                                  ),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                child: ExtendedImage.network(
+                                  currentData['imageUrl'],
+                                  fit: BoxFit.fill,
+                                  handleLoadingProgress: true,
+                                  shape: BoxShape.rectangle,
+                                  cache: false,
+                                  enableMemoryCache: true,
                                 ),
                               ),
                             );
