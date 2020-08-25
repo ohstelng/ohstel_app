@@ -4,6 +4,7 @@ import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/all_categories_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_cart_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_search_page.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/markets_orders_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_categrioes_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_product_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,7 +42,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
             Row(
               children: <Widget>[
                 searchBar(),
-                header(),
+                popMenu(),
               ],
             ),
             advertBanner(),
@@ -51,6 +52,57 @@ class _MarketHomePageState extends State<MarketHomePage> {
         ),
       ),
     );
+  }
+
+  Widget popMenu() {
+    return PopupMenuButton(
+        onSelected: (value) {
+          if (value == 1) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => MarketCartPage(),
+              ),
+            );
+          } else if (value == 2) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => MarketOrdersPage(),
+              ),
+            );
+          }
+//          Fluttertoast.showToast(
+//            msg: "You have selected " + value.toString(),
+//            toastLength: Toast.LENGTH_SHORT,
+//            gravity: ToastGravity.BOTTOM,
+//            backgroundColor: Colors.black,
+//            textColor: Colors.white,
+//            fontSize: 16.0,
+//          );
+        },
+        itemBuilder: (context) => [
+              PopupMenuItem(
+                  value: 1,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
+                        child: Icon(Icons.add_shopping_cart),
+                      ),
+                      Text('Cart')
+                    ],
+                  )),
+              PopupMenuItem(
+                  value: 2,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
+                        child: Icon(Icons.history),
+                      ),
+                      Text('Orders')
+                    ],
+                  )),
+            ]);
   }
 
   Widget lastestProduct() {
@@ -294,7 +346,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
             color: Colors.grey,
           ),
           onPressed: () {
-//            saveProduct();
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => MarketCartPage(),

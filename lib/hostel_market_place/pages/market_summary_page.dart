@@ -166,7 +166,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
       buyerPhoneNumber: widget.phoneNumber,
       buyerAddress: userData['address'],
       buyerID: userData['uid'],
-      deliveryStatus: 'Delivery In progress.....',
+//      deliveryStatus: 'Delivery In progress.....',
       listOfShopsPurchasedFrom: shopsList,
       orders: orderList,
     );
