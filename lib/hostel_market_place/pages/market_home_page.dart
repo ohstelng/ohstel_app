@@ -169,9 +169,9 @@ class _MarketHomePageState extends State<MarketHomePage> {
           SizedBox(
             height: 8,
           ),
-          latestProduct(),
+          Expanded(child: latestProduct()),
           SizedBox(height: 8),
-          latestProduct()
+          Expanded(child: latestProduct()),
         ],
       ),
     );
