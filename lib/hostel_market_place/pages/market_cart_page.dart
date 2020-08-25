@@ -1,7 +1,11 @@
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_checkout_page.dart';
 import 'package:Ohstel_app/hostel_market_place/models/market_cart_model.dart';
+import 'package:flutter/cupertino.dart';
+//import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
+//import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -71,10 +75,14 @@ class _MarketCartPageState extends State<MarketCartPage> {
           )
         : Scaffold(
             appBar: AppBar(
+              centerTitle: true,actions: [
+                InkWell(child: SvgPicture.asset("asset/slider.svg")),
+                SizedBox(width: 16)
+            ],
               backgroundColor: Colors.white,
               leading: IconButton(
                 icon: Icon(
-                  Icons.arrow_back_ios,
+                  Icons.arrow_back,
                   color: Colors.black,
                 ),
                 onPressed: () {
@@ -83,11 +91,14 @@ class _MarketCartPageState extends State<MarketCartPage> {
               ),
               elevation: 0.0,
               title: Text(
-                'Food Cart',
+                'Cart',
                 style: TextStyle(color: Colors.black),
-              ),
+              )
             ),
             body: Container(
+              height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.all(8),
+              color: Colors.white,
               child: ValueListenableBuilder(
                 valueListenable: cartBox.listenable(),
                 builder: (context, box, widget) {
@@ -111,57 +122,69 @@ class _MarketCartPageState extends State<MarketCartPage> {
                           );
 
                           return Container(
-                            margin: EdgeInsets.all(15.0),
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.all(15.0),
                             child: Column(
                               children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text('${currentCartItem.productName}'),
-                                        Text('${currentCartItem.productPrice}'),
-                                      ],
-                                    ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
                                     Container(
-                                      margin: EdgeInsets.only(top: 10.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                      height: 80,width: 80,child: Image.asset("asset/image1.jpg",fit: BoxFit.contain,),),
+                                    SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text('units'),
-                                          Text('${currentCartItem.units}'),
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(),
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(''),
+                                          SizedBox(height: 10),
+                                          Text('${currentCartItem.productName}',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                          SizedBox(height: 8),
                                           Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
-                                              Text('Remove'),
-                                              InkWell(
-                                                child: Icon(
-                                                  Icons.delete,
-                                                  color: Colors.red,
-                                                ),
-                                                onTap: () {
-                                                  cartBox.deleteAt(index);
-                                                },
-                                              )
-                                            ],
+                                              Text('Store',style: TextStyle(fontSize: 17,color: Color(0xffB9BBBE)),),
+                                              ],
                                           ),
-                                        ],
+                                          SizedBox(height: 8),
+                                          Text('₦${currentCartItem.productPrice}',style: TextStyle(fontSize: 17),),
+                                          ],
                                       ),
                                     ),
-                                    Divider(),
+
                                   ],
                                 ),
+                                SizedBox(height: 16),
+                                Row(
+                                   children: <Widget>[
+                                     InkWell(
+                                       onTap: () {
+                                         cartBox.deleteAt(index);
+                                       },
+                                       child: Row(
+                                         children: [
+                                           SvgPicture.asset("asset/Vector.svg"),
+                                           SizedBox(width: 8),
+                                           Text('Remove',style: TextStyle(fontSize: 17,color: Color(0xffC4C4C4)),)
+                                         ],
+                                       ),
+                                     ),
+                                     Expanded(child: SizedBox(width: MediaQuery.of(context).size.width * 0.5)),
+                                     SvgPicture.asset("asset/heart.svg"),
+                                     SizedBox(width: 24),
+                                     SvgPicture.asset("asset/minus.svg"),
+                                     SizedBox(width: 16),
+                                     Text('${currentCartItem.units}'),
+                                     SizedBox(width: 16),
+                                     SvgPicture.asset("asset/plus.svg")
+
+                                   ],
+                                ),
+                                Divider(
+                                  thickness: 1.5,
+                                  color: Color(0xffc4c4c4),
+                                )
                               ],
                             ),
                           );
@@ -171,43 +194,55 @@ class _MarketCartPageState extends State<MarketCartPage> {
                         margin: EdgeInsets.all(15.0),
                         child: Column(
                           children: <Widget>[
-                            Divider(
-                              thickness: 1.5,
-                              color: Colors.black,
-                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text('Total'),
-                                Text('${getGrandTotal()}'),
+                                Text('Total',style: TextStyle(fontSize: 20),),
+                                Text('₦${getGrandTotal()}',style: TextStyle(fontSize: 20,color: Color(0xffC4C4C4)),),
                               ],
                             ),
-                            Divider(
-                              thickness: 1.5,
-                              color: Colors.black,
-                            ),
+
                           ],
                         ),
                       ),
-                      Container(
-                        child: FlatButton(
-                          color: Colors.green,
-                          onPressed: () async {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => MarketCheckOutPage(),
-                              ),
-                            );
-//                            pay();
-                          },
-                          child: Text('Check Out'),
-                        ),
-                      )
+
+
                     ],
                   );
                 },
               ),
             ),
+            bottomSheet: ValueListenableBuilder(
+              valueListenable: cartBox.listenable(),
+              builder: (context, box, widget) {
+                if (box.values.isEmpty) {
+                  return Center(
+                    child: Text("Cart is Empty"),
+                  );
+                }
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical:8.0,horizontal:20),
+                  child: InkWell(
+                    onTap: () async {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MarketCheckOutPage(),
+                        ),
+                      );
+//                            pay();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(color: Color(0xff1f2430),borderRadius: BorderRadius.circular(10)),
+                      height: 55,
+                      child: Center(
+                        child:
+                        Text('PROCEED TO PAYMENT',
+                          style: TextStyle(color: Color(0xffFFFFFF),fontSize: 20, fontWeight: FontWeight.bold),),),
+                    ),
+                  ),
+                ) ;
+              },
+            )
           );
   }
 }

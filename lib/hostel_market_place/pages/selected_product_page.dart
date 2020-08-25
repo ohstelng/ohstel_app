@@ -8,6 +8,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SelectedProductPage extends StatefulWidget {
   final ProductModel productModel;
@@ -257,19 +258,15 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
         },
       ),
       actions: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.shopping_cart,
-            color: Colors.grey,
-          ),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => MarketCartPage(),
-              ),
-            );
-          },
-        ),
+        InkWell(onTap: () {
+//            saveProduct();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => MarketCartPage(),
+            ),
+          );
+        },child: SvgPicture.asset("asset/cart.svg")),
+        SizedBox(width: 8)
       ],
     );
   }
