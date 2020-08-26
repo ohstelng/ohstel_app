@@ -1,4 +1,5 @@
 import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
+import 'package:Ohstel_app/hostel_hire/pages/select_laundry_page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 //import 'package:url_launcher/url_launcher.dart';
@@ -13,6 +14,21 @@ class SelectedHireWorkerPage extends StatefulWidget {
 }
 
 class _SelectedHireWorkerPageState extends State<SelectedHireWorkerPage> {
+  void book() {
+    if (widget.hireWorker.workType.toLowerCase() == 'laundry') {
+      print(widget.hireWorker.laundryList.length);
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) =>
+              SelectLaundryPage(laundryList: widget.hireWorker.laundryList),
+        ),
+      );
+    } else {
+      //TODO: implement call sells rep
+    }
+  }
+
 //  void makeCall() async {
 //    String _phoneNumber = "tel:${widget.hireWorker.workerPhoneNumber}";
 //
@@ -88,10 +104,19 @@ class _SelectedHireWorkerPageState extends State<SelectedHireWorkerPage> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Text(
+                      '${widget.hireWorker.workType}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
               FlatButton(
                 onPressed: () {
+                  book();
 //                  makeCall();
                 },
                 color: Colors.green,
