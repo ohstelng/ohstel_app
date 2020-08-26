@@ -63,12 +63,99 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
 
   Widget body() {
     return Container(
+      margin: EdgeInsets.all(10),
       child: ListView(
         children: <Widget>[
           displayMultiPic(imageList: widget.productModel.imageUrls),
           productDetails(),
+          SizedBox(
+            height: 16,
+          ),
           unitController(),
+          SizedBox(height: 24),
           addToCartButton(),
+          SizedBox(height: 8),
+          ExpansionTile(
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            expandedAlignment: Alignment.centerLeft,
+            title: Text(
+              "Product Details",
+              style: TextStyle(fontSize: 20),
+            ),
+            children: [
+              Text(
+                '${widget.productModel.productDescription}',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              )
+            ],
+          ),
+          ExpansionTile(
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            expandedAlignment: Alignment.centerLeft,
+            title: Text(
+              "Delivery Information",
+              style: TextStyle(fontSize: 20),
+            ),
+            children: [
+              Text(
+                '${widget.productModel.productDescription}',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              )
+            ],
+          ),
+          ExpansionTile(
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            expandedAlignment: Alignment.centerLeft,
+            title: Text(
+              "Reviews",
+              style: TextStyle(fontSize: 20),
+            ),
+            children: [
+              Text(
+                '${widget.productModel.productDescription}',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              )
+            ],
+          ),
+          ExpansionTile(
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            expandedCrossAxisAlignment: CrossAxisAlignment.start,
+            expandedAlignment: Alignment.centerLeft,
+            title: Text(
+              "About Brand",
+              style: TextStyle(fontSize: 20),
+            ),
+            children: [
+              Text(
+                '${widget.productModel.productShopName} Shop',
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 20,
+                ),
+              ),
+              Text(
+                '${widget.productModel.productShopOwnerPhoneNumber}',
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 20,
+                ),
+              ),
+              Text(
+                '${widget.productModel.productShopOwnerEmail} Shop',
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 20,
+                ),
+              )
+            ],
+          ),
+
         ],
       ),
     );
@@ -76,20 +163,41 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
 
   Widget addToCartButton() {
     return Container(
-      margin: EdgeInsets.all(20.0),
-      child: FlatButton(
-        onPressed: () {
+      padding: EdgeInsets.symmetric(vertical: 16),
+      child: InkWell(
+        onTap: () {
           saveInfoToCart();
         },
-        color: Colors.green,
-        child: Text('Add to Cart'),
+        child: Container(
+            height: 55,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).primaryColor),
+            child: Center(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Add to Cart',
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                SvgPicture.asset(
+                  "asset/cart.svg",
+                  color: Colors.white,
+                )
+              ],
+            ))),
       ),
     );
   }
 
   Widget unitController() {
     return Container(
-      margin: EdgeInsets.all(15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -155,50 +263,26 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
 
   Widget productDetails() {
     return Container(
-      margin: EdgeInsets.only(top: 15.0, left: 5.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          SizedBox(height: 8,),
           Text(
             '${widget.productModel.productName}',
             style: TextStyle(
+              color: Color(0xff3A3A3A),
               fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: 24,
             ),
           ),
-          Text(
-            'Price: \$${widget.productModel.productPrice}',
-            style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 20,
-            ),
+          SizedBox(
+            height: 15,
           ),
           Text(
-            'des: ${widget.productModel.productDescription}',
+            '₦${widget.productModel.productPrice}',
             style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 20,
-            ),
-          ),
-          Text(
-            'shop name: ${widget.productModel.productShopName} Shop',
-            style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 20,
-            ),
-          ),
-          Text(
-            'shop Phone Number: ${widget.productModel.productShopOwnerPhoneNumber}',
-            style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 20,
-            ),
-          ),
-          Text(
-            'shop email: ${widget.productModel.productShopOwnerEmail} Shop',
-            style: TextStyle(
-              fontWeight: FontWeight.w300,
+              color: Colors.black,
               fontSize: 20,
             ),
           ),
@@ -209,10 +293,10 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
 
   Widget displayMultiPic({@required List imageList}) {
     return Container(
-      color: Colors.grey,
+      color: Colors.transparent,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.45,
-        maxWidth: MediaQuery.of(context).size.width * .98,
+        maxHeight: MediaQuery.of(context).size.height * 0.3,
+        maxWidth: MediaQuery.of(context).size.width * .75,
       ),
       child: Carousel(
         images: imageList.map(
@@ -231,12 +315,12 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
           },
         ).toList(),
         autoplay: true,
-        indicatorBgPadding: 0.0,
+        indicatorBgPadding: 8,
         dotPosition: DotPosition.bottomCenter,
         dotSpacing: 15.0,
         dotSize: 4,
         dotIncreaseSize: 2.5,
-        dotIncreasedColor: Colors.teal,
+        dotIncreasedColor: Theme.of(context).primaryColor,
         dotBgColor: Colors.transparent,
         animationCurve: Curves.fastOutSlowIn,
         animationDuration: Duration(milliseconds: 2000),
@@ -250,7 +334,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
       elevation: 0.0,
       leading: IconButton(
         icon: Icon(
-          Icons.arrow_back_ios,
+          Icons.arrow_back,
           color: Colors.black,
         ),
         onPressed: () {
@@ -258,15 +342,21 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
         },
       ),
       actions: <Widget>[
-        InkWell(onTap: () {
+        SvgPicture.asset("asset/slider.svg"),
+        SizedBox(
+          width: 8,
+        ),
+        InkWell(
+            onTap: () {
 //            saveProduct();
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => MarketCartPage(),
-            ),
-          );
-        },child: SvgPicture.asset("asset/cart.svg")),
-        SizedBox(width: 8)
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MarketCartPage(),
+                ),
+              );
+            },
+            child: SvgPicture.asset("asset/cart.svg")),
+        SizedBox(width: 16)
       ],
     );
   }
