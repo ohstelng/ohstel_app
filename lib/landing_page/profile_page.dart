@@ -44,9 +44,9 @@ class Body extends StatelessWidget {
         child: Column(
           children: [
             CircleAvatar(
-                radius: 80,
-                backgroundImage: NetworkImage(
-                    "https://lh3.googleusercontent.com/EbZOTY-dQqmhIFqKIZjPSUVUpqn0T7JrUEuj8tTBZ2JP58HB8vEwv0tJ9Q1pR8tZVyRzgg=s85")),
+              radius: 80,
+              backgroundImage: AssetImage("asset/timmy.png"),
+            ),
             Text(
               "Timmy Adebola",
               style: TextStyle(fontSize: 24),

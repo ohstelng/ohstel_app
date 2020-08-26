@@ -1,5 +1,6 @@
 import 'package:Ohstel_app/auth/methods/auth_database_methods.dart';
 import 'package:Ohstel_app/auth/models/login_user_model.dart';
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,7 +85,7 @@ class AuthService {
   // signing out method
   Future signOut() async {
     try {
-      deleteUserDataToDb();
+      await deleteUserDataToDb();
       return await auth.signOut();
     } catch (e) {
       print(e);
@@ -119,8 +120,8 @@ class AuthService {
     print('saved');
   }
 
-  void deleteUserDataToDb() {
-    Box<Map> userDataBox = Hive.box<Map>('userDataBox');
+  Future<void> deleteUserDataToDb() async {
+    Box<Map> userDataBox = await HiveMethods().getOpenBox('userDataBox');
     final key = 0;
 
     userDataBox.delete(key);

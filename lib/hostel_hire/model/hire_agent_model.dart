@@ -1,4 +1,3 @@
-import 'package:Ohstel_app/hostel_hire/methods/hire_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -13,6 +12,7 @@ class HireWorkerModel {
   Timestamp dateJoined;
   String profileImageUrl;
   List searchKeys;
+  List laundryList;
 
   HireWorkerModel({
     @required this.workerName,
@@ -36,6 +36,7 @@ class HireWorkerModel {
     this.dateJoined = mapData['dateJoined'];
     this.profileImageUrl = mapData['profileImageUrl'];
     this.searchKeys = mapData['searchKeys'];
+    this.laundryList = mapData['laundryList'];
   }
 
   Map toMap() {
