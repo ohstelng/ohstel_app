@@ -331,9 +331,10 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
               FocusScope.of(context).unfocus();
               startSearch();
             },
-            child: Center(child: Icon(Icons.search)),
+            child: Center(child: Icon(Icons.search,size: 35,)),
           ),
         ),
+        SizedBox(width: 8,)
       ],
     );
   }
