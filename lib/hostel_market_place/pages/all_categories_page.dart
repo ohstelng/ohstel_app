@@ -41,7 +41,7 @@ class _AllCategoriesState extends State<AllCategories> {
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
                 child: Card(
-                  elevation: 2.5,
+                  elevation: 0,
                   child: InkWell(
                     onTap: () {
                       Navigator.of(context).push(
@@ -63,25 +63,25 @@ class _AllCategoriesState extends State<AllCategories> {
                           decoration: BoxDecoration(
                             color: Colors.grey,
                             border: Border.all(color: Colors.grey),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
                           ),
                           child: ExtendedImage.network(
                             data['imageUrl'],
                             fit: BoxFit.fill,
                             handleLoadingProgress: true,
                             shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(10),
                             cache: false,
                             enableMemoryCache: true,
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 2.0),
-                          child: Text(
-                            '${data['searchKey']}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Text(
+                              '${data['searchKey']}',
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
                           ),
                         )
                       ],
