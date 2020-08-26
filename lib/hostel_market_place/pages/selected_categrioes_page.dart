@@ -6,6 +6,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
 class SelectedCategoriesPage extends StatefulWidget {
@@ -76,7 +77,7 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
             return Container(
               margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
               child: Card(
-                elevation: 2.5,
+                elevation: 0,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -92,11 +93,10 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                         height: 150,
                         width: 200,
                         margin: EdgeInsets.symmetric(
-                            horizontal: 5.0, vertical: 2.0),
+                            horizontal: 5.0, vertical: 5.0),
                         decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.black,
                           border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                         child: Carousel(
                           images: currentProductModel.imageUrls.map(
@@ -107,7 +107,6 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                                   fit: BoxFit.fill,
                                   handleLoadingProgress: true,
                                   shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(10),
                                   cache: false,
                                   enableMemoryCache: true,
                                 ),
@@ -120,7 +119,7 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                           dotSpacing: 15.0,
                           dotSize: 4,
                           dotIncreaseSize: 2.5,
-                          dotIncreasedColor: Colors.teal,
+                          dotIncreasedColor: Theme.of(context).primaryColor,
                           dotBgColor: Colors.transparent,
                           animationCurve: Curves.fastOutSlowIn,
                           animationDuration: Duration(milliseconds: 2000),
@@ -130,23 +129,27 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 2.0),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                '${currentProductModel.productName}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                              Text('${currentProductModel.productName}',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                height: 8,
                               ),
-                              Text(
-                                '\$${currentProductModel.productPrice}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              Text('\₦${currentProductModel.productPrice}',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      color: Color(0xffc4c4c4),
+                                      fontSize: 17,
+                                      )),
+                              SizedBox(height: 8,),
                               Text(
                                 '${currentProductModel.productDescription}',
                                 maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
+
                               ),
                             ],
                           ),
@@ -173,7 +176,7 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
       ),
       leading: IconButton(
         icon: Icon(
-          Icons.arrow_back_ios,
+          Icons.arrow_back,
           color: Colors.black,
         ),
         onPressed: () {
@@ -181,12 +184,9 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
         },
       ),
       actions: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.shopping_cart,
-            color: Colors.grey,
-          ),
-          onPressed: () {
+        InkWell(
+          child: SvgPicture.asset("asset/cart.svg"),
+          onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => MarketCartPage(),
@@ -194,6 +194,9 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
             );
           },
         ),
+        SizedBox(
+          width: 16,
+        )
       ],
     );
   }

@@ -156,7 +156,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
           return Column(
             children: <Widget>[
               Card(
-                elevation: 2.5,
+                elevation: 0,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -172,7 +172,8 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
                       children: <Widget>[
                         displayMultiPic(
                             imageList: currentProductModel.imageUrls),
-                        productDetails(product: currentProductModel),
+                        SizedBox(width: 8,),
+                        Expanded(child: productDetails(product: currentProductModel)),
                       ],
                     ),
                   ),
@@ -204,6 +205,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          SizedBox(height: 8,),
           isShippedFromDifferentState(origin: product.productOriginLocation),
           productNameAndPriceDetails(product: product),
         ],
@@ -213,9 +215,11 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
 
   Widget productNameAndPriceDetails({@required ProductModel product}) {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          SizedBox(height: 8,),
           Text(
             '${product.productName} ',
             style: TextStyle(
@@ -223,22 +227,21 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
               fontSize: 18,
             ),
           ),
+          SizedBox(height: 8,),
           Text(
-            '${product.productDescription}',
+            '₦${product.productPrice}',
             style: TextStyle(
-              fontWeight: FontWeight.w300,
-              fontSize: 14,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            '\$${product.productPrice}',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
+              color: Color(0xffc4c4c4),
               fontSize: 18,
             ),
           ),
+          SizedBox(height: 8,),
+          Text(
+            '${product.productDescription}',
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          )
         ],
       ),
     );
@@ -248,12 +251,11 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
     if (uniName != null) {
       if (uniName != origin) {
         return Container(
-          margin: EdgeInsets.only(bottom: 12.0),
+          padding: EdgeInsets.symmetric(horizontal: 4.0,vertical: 4),
           decoration: BoxDecoration(
-            color: Colors.blueAccent,
-            border: Border.all(color: Colors.black),
+            color: Colors.deepOrangeAccent,
           ),
-          child: Text('Shipped From Other State'),
+          child: Text('Shipped From Other State',style: TextStyle(color: Colors.white),),
         );
       } else {
         return Container();
@@ -293,7 +295,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
         dotSpacing: 15.0,
         dotSize: 4,
         dotIncreaseSize: 2.5,
-        dotIncreasedColor: Colors.teal,
+        dotIncreasedColor: Theme.of(context).primaryColor,
         dotBgColor: Colors.transparent,
         animationCurve: Curves.fastOutSlowIn,
         animationDuration: Duration(milliseconds: 2000),
@@ -306,7 +308,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
       children: <Widget>[
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(5.0, 5.0, 2.0, 5.0),
+            padding: const EdgeInsets.all(8),
             child: TextField(
               textInputAction: TextInputAction.done,
               controller: searchController,
@@ -319,7 +321,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
                   contentPadding: EdgeInsets.only(left: 25.0),
                   hintText: 'Search by Product Name',
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4.0))),
+                      )),
             ),
           ),
         ),
