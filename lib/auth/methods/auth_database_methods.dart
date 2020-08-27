@@ -72,6 +72,18 @@ class AuthDatabaseMethods {
     }
   }
 
+  Future<void> updateUserPhoneNumber(
+      {@required String uid, @required String phoneNumber}) async {
+    try {
+      await userDataCollectionRef.document(uid).updateData(
+        {'phoneNumber': phoneNumber},
+      );
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '${e.message}');
+    }
+  }
+
   void saveUserDataToDb({@required Map userData}) {
     Box<Map> userDataBox = Hive.box<Map>('userDataBox');
     final key = 0;

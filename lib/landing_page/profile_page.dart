@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:Ohstel_app/auth/methods/auth_database_methods.dart';
@@ -7,6 +8,8 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/landing_page/homepage.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -66,6 +69,150 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  void editingController({@required int index}) {
+    if (index == 0) {
+      _showEditPhoneNumberDailog();
+    } else if (index == 1) {
+      _showEditUniDailog();
+    }
+  }
+
+  void _showEditPhoneNumberDailog() {
+    String phoneNumber;
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Edit PhoneNumber'),
+            content: TextField(
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.number,
+              maxLength: 30,
+              maxLines: null,
+              onChanged: (val) {
+                phoneNumber = val;
+              },
+            ),
+            actions: [
+              FlatButton(
+                onPressed: () async {
+                  print(phoneNumber);
+                  Navigator.pop(context);
+
+                  await auth.updateUserPhoneNumber(
+                    uid: userData['uid'],
+                    phoneNumber: phoneNumber,
+                  );
+
+                  Map _userData = await HiveMethods().getUserData();
+                  _userData['phoneNumber'] = phoneNumber;
+                  AuthService().saveUserDataToDb(userData: _userData);
+                  userData = _userData;
+                  setState(() {});
+
+                  Fluttertoast.showToast(msg: 'Phone Number Update!');
+                },
+                child: Text('Submit'),
+              ),
+            ],
+          );
+        });
+  }
+
+  void _showEditUniDailog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Select Uni'),
+          content: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.55,
+            child: FutureBuilder(
+              future: getUniList(),
+              builder: (context, snapshot) {
+                print(snapshot.data);
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                print(snapshot.data);
+                Map data = snapshot.data;
+                return Container(
+                  width: double.maxFinite,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      List<String> uniList = data.keys.toList();
+                      uniList.sort();
+                      Map currentUniDetails = data[uniList[index]];
+
+                      return Column(
+                        children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                              child: ListTile(
+                                onTap: () {
+                                  print(currentUniDetails);
+//                                    print(currentUniDetails['abbr']
+//                                        .toString()
+//                                        .toLowerCase());
+//                                    uniName = currentUniDetails['abbr']
+//                                        .toString()
+//                                        .toLowerCase();
+////                                  print(uniName);
+//                                    Navigator.pop(context);
+//                                    search();
+                                },
+                                title: Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Colors.grey,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '${currentUniDetails['name']}',
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                subtitle: Text(
+                                  '${currentUniDetails['abbr']}',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              )),
+                          Divider(),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future getUniList() async {
+    String url = "https://quiz-demo-de79d.appspot.com/hostel_api/searchKeys";
+    var response = await http.get(url);
+    var result = json.decode(response.body);
+    print(result);
+    return result;
+  }
+
   @override
   void initState() {
     getUserData();
@@ -103,69 +250,102 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: EdgeInsets.symmetric(vertical: 16),
         height: MediaQuery.of(context).size.height,
         color: Colors.white,
-        child: Column(
+        child: ListView(
           children: [
-            Stack(
+            Column(
               children: [
-                userModel.profilePicUrl == null
-                    ? CircleAvatar(
-                        backgroundColor: Colors.blueGrey[400],
-                        radius: 80,
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.grey[400],
-                        ))
-                    : Container(
-                        height: 160,
-                        width: 160,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: ExtendedImage.network(
-                            userData['profilePicUrl'],
-                            fit: BoxFit.fill,
-                            handleLoadingProgress: true,
-                            shape: BoxShape.rectangle,
-                            cache: false,
-                            enableMemoryCache: true,
+                Stack(
+                  children: [
+                    userModel.profilePicUrl == null
+                        ? CircleAvatar(
+                            backgroundColor: Colors.blueGrey[400],
+                            radius: 80,
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.grey[400],
+                            ))
+                        : Container(
+                            height: 160,
+                            width: 160,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: ExtendedImage.network(
+                                userData['profilePicUrl'],
+                                fit: BoxFit.fill,
+                                handleLoadingProgress: true,
+                                shape: BoxShape.rectangle,
+                                cache: false,
+                                enableMemoryCache: true,
+                              ),
+                            ),
                           ),
+                    Positioned(
+                      bottom: 0.0,
+                      right: 0.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,
                         ),
-                      ),
-                Positioned(
-                  bottom: 0.0,
-                  right: 0.0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
-                    ),
-                    child: isUpdatingPic
-                        ? CircularProgressIndicator()
-                        : IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () {
+                        child: isUpdatingPic
+                            ? CircularProgressIndicator()
+                            : IconButton(
+                                icon: Icon(Icons.add),
+                                onPressed: () {
 //                              print(userData);
-                              pickImage();
-                            },
-                          ),
-                  ),
+                                  pickImage();
+                                },
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  "${userModel.fullName}",
+                  style: TextStyle(fontSize: 24),
+                ),
+                Text(
+                  "${userModel.phoneNumber}",
+                  style: TextStyle(fontSize: 15),
+                ),
+                Text(
+                  "${userModel.email}",
+                  style: TextStyle(fontSize: 15),
                 ),
               ],
-            ),
-            Text(
-              "${userModel.fullName}",
-              style: TextStyle(fontSize: 24),
-            ),
-            Text(
-              "${userModel.phoneNumber}",
-              style: TextStyle(fontSize: 15),
-            ),
-            Text(
-              "${userModel.email}",
-              style: TextStyle(fontSize: 15),
             ),
             SizedBox(
               height: 40,
             ),
+            ExpansionTile(
+              key: GlobalKey(),
+              title: Text('Edit Profile Details'),
+              leading: Icon(Icons.location_on),
+              children: <Widget>[
+                SizedBox(
+//                  height: MediaQuery.of(context).size.height * .30,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: 2,
+                    itemBuilder: (context, index) {
+                      List optionList = [
+                        'Change Phone Number',
+                        'Change University',
+                      ];
+                      return ListTile(
+                        title: Text('${optionList[index]}'),
+                        subtitle: Text('Tap To Edit'),
+                        onTap: () {
+                          editingController(index: index);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Divider(),
             ListTile(
               leading: CircleAvatar(
                   radius: 37,
@@ -185,23 +365,21 @@ class _ProfilePageState extends State<ProfilePage> {
               "Legal",
             ),
             Divider(),
-            Expanded(
-              child: ListTile(
-                leading: CircleAvatar(
-                    radius: 37,
-                    backgroundColor: Color(0xffebf1ef),
-                    child: Icon(
-                      Icons.exit_to_app,
-                      color: Colors.black,
-                      size: 30,
-                    )),
-                title: Text('Log Out'),
-                trailing: Icon(Icons.arrow_forward_ios),
-                onTap: () async {
-                  await AuthService().signOut();
-                  Navigator.pop(context);
-                },
-              ),
+            ListTile(
+              leading: CircleAvatar(
+                  radius: 37,
+                  backgroundColor: Color(0xffebf1ef),
+                  child: Icon(
+                    Icons.exit_to_app,
+                    color: Colors.black,
+                    size: 30,
+                  )),
+              title: Text('Log Out'),
+              trailing: Icon(Icons.arrow_forward_ios),
+              onTap: () async {
+                await AuthService().signOut();
+                Navigator.pop(context);
+              },
             ),
             Divider()
           ],
@@ -238,22 +416,20 @@ class _ItemsState extends State<Items> {
       child: Column(
         children: [
           Divider(),
-          Expanded(
-            child: ListTile(
-              leading: CircleAvatar(
-                  radius: 37,
-                  backgroundColor: Color(0xffebf1ef),
-                  child: Icon(
-                    widget._icon,
-                    color: Colors.black,
-                    size: 30,
-                  )),
-              title: Text(widget._title),
-              trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () {
-                _navigate();
-              },
-            ),
+          ListTile(
+            leading: CircleAvatar(
+                radius: 37,
+                backgroundColor: Color(0xffebf1ef),
+                child: Icon(
+                  widget._icon,
+                  color: Colors.black,
+                  size: 30,
+                )),
+            title: Text(widget._title),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              _navigate();
+            },
           ),
         ],
       ),
