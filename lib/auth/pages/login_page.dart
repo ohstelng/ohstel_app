@@ -166,10 +166,7 @@ class _LogInPageState extends State<LogInPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SpinKitChasingDots(
-                      color: Colors.deepOrange,
-                      size: 50.0,
-                    ),
+                    CircularProgressIndicator(),
                     SizedBox(
                       height: 30,
                     ),

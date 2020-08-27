@@ -17,6 +17,8 @@ class MarketCheckOutPage extends StatefulWidget {
 }
 
 class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
+  TextStyle _mainText =TextStyle(fontSize: 16,color: Color(0xff000000));
+  TextStyle _subText = TextStyle(fontSize: 16,color: Color(0xffc4c4c4));
   StreamController<String> numberSteam = StreamController<String>.broadcast();
   Box<Map> cartBox;
   Box<Map> userDataBox;
@@ -288,7 +290,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
       );
     } else {
       Fluttertoast.showToast(
-        msg: 'Plase Provide a delivery Location!',
+        msg: 'Please Provide a delivery Location!',
         gravity: ToastGravity.CENTER,
         toastLength: Toast.LENGTH_LONG,
       );
@@ -304,21 +306,75 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar(),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : SafeArea(
               child: cartBox.isNotEmpty
-                  ? ListView(
-                      children: [
-                        getAddress(),
-                        productDetails(),
-                        priceInfo(),
-                        button(),
-                      ],
+                  ? Container(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      color: Color(0xffE5E5E5),
+                      child: ListView(
+                        children: [
+                          getAddress(),
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            height: 45,
+                            child: Text("Details",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),),
+                          productDetails(),
+                          Container(height: 45,),
+                          priceInfo(),
+                          button(),
+                          modifybutton()
+                        ],
+                      ),
                     )
                   : emptyCart(),
             ),
     );
+  }
+
+  Widget appBar() {
+    return AppBar(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Color(0xffE5E5E5),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            )),
+        title: Text(
+          "Cart",
+          style: TextStyle(fontSize: 24, color: Colors.black),
+        ),
+        bottom: PreferredSize(
+            preferredSize: Size.fromHeight(60),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text("Delivery",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).primaryColor)),
+                      Spacer(),
+                      Text("Summary", style: TextStyle(fontSize: 14)),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text("Payment", style: TextStyle(fontSize: 14))
+                    ],
+                  ),
+                  Divider()
+                ],
+              ),
+            )));
   }
 
   Widget emptyCart() {
@@ -331,54 +387,73 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
 
   Widget button() {
     return Container(
-      child: FlatButton(
-        color: Colors.green,
-        onPressed: () async {
+      margin: EdgeInsets.only(top: 24,bottom: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: InkWell(
+        onTap: () async {
           proceedToPay();
         },
-        child: Text('Procced To Pay'),
+        child: Container(
+          decoration: BoxDecoration(color: Color(0xff1f2430),borderRadius: BorderRadius.circular(10)),
+          height: 55,
+          child: Center(
+            child:
+            Text('Next',
+              style: TextStyle(color: Color(0xffFFFFFF),fontSize: 20, fontWeight: FontWeight.bold),),),
+        ),
       ),
     );
   }
-
-  Widget priceInfo() {
+  Widget modifybutton() {
     return Container(
-      margin: EdgeInsets.all(15.0),
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: InkWell(
+        onTap: () async {
+          Navigator.pop(context);
+        },
+        child: Container(
+          margin: EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(border: Border.all(color:Color(0xff1f2430),width: 2),color: Colors.white,borderRadius: BorderRadius.circular(10)),
+          height: 55,
+          child: Center(
+            child:
+            Text('Modify Cart',
+              style: TextStyle(color: Color(0xff000000),fontSize: 20, fontWeight: FontWeight.bold),),),
+        ),
+      ),
+    );
+  }
+  Widget priceInfo() {
+    return Container(color: Colors.white,
+      padding: EdgeInsets.all(15.0),
       child: Column(
         children: <Widget>[
-          Divider(
-            thickness: 1.5,
-            color: Colors.black,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Sub Total'),
-              Text('${getSubTotal()}'),
+              Text('Product Amount',style: _mainText,),
+              Text('₦${getSubTotal()}',style: _mainText,),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Delivery Fee'),
-              Text('${deliveryFee()}'),
+              Text('Delivery Fees',style: _mainText,),
+              Text('₦${deliveryFee()}',style: _mainText,),
             ],
           ),
           Divider(
             thickness: 1.5,
-            color: Colors.black,
+            color: Color(0xffc4c4c4),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Total'),
-              Text('${getGrandTotal()}'),
+              Text('Total',style: _mainText,),
+              Text('₦${getGrandTotal()}',style: _mainText,),
             ],
           ),
-          Divider(
-            thickness: 1.5,
-            color: Colors.black,
-          ),
+
         ],
       ),
     );
@@ -408,7 +483,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
               children: <Widget>[
                 Text('Shipped From ${currentCartItem.productOriginLocation}'),
                 Text(
-                    '${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['price']}'),
+                    '₦${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['price']}'),
               ],
             ),
           ),
@@ -419,7 +494,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
               children: <Widget>[
                 Text('Delivery Time'),
                 Text(
-                    '${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['delivery_time']} Day'),
+                    '₦${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['delivery_time']} Day'),
               ],
             ),
           ),
@@ -433,6 +508,8 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
           _uniMap = value;
         }
       });
+      TextStyle _mainText =TextStyle(fontSize: 16,color: Color(0xff000000));
+      TextStyle _subText = TextStyle(fontSize: 16,color: Color(0xffc4c4c4));
       return Column(
         children: [
           Container(
@@ -440,8 +517,8 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Shipped From ${currentCartItem.productOriginLocation}'),
-                Text('${_uniMap[schoolNameAbbr.toLowerCase()]['price']}'),
+                Text('Shipped From ${currentCartItem.productOriginLocation}',style:_mainText ,),
+                Text('${_uniMap[schoolNameAbbr.toLowerCase()]['price']}',style: _subText,),
               ],
             ),
           ),
@@ -450,9 +527,9 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Delivery Time'),
+                Text('Delivery Time',style: _mainText,),
                 Text(
-                    '${_uniMap[schoolNameAbbr.toLowerCase()]['delivery_time']} Day'),
+                    '${_uniMap[schoolNameAbbr.toLowerCase()]['delivery_time']} Day',style: _subText,),
               ],
             ),
           ),
@@ -462,7 +539,9 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
   }
 
   Widget productDetails() {
-    return Container(
+    TextStyle _mainText = TextStyle(fontSize: 16,color: Colors.black);
+    TextStyle _subText = TextStyle(fontSize: 16,color: Color(0xffc4c4c4));
+    return Container(color: Colors.white,
       child: FutureBuilder(
           future: getDeliveryInfoFromApi(),
           builder: (context, snapshot) {
@@ -498,8 +577,8 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text('${currentCartItem.productName}'),
-                                    Text('${currentCartItem.productPrice}'),
+                                    Text('${currentCartItem.productName}',style: _mainText,),
+                                    Text('${currentCartItem.productPrice}',style: _subText,),
                                   ],
                                 ),
                                 deliveryInfo(
@@ -512,39 +591,13 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
-                                      Text('units'),
-                                      Text('${currentCartItem.units}'),
+                                      Text("Units",style: _mainText,),
+                                      Text('${currentCartItem.units}',style: _subText,),
                                     ],
                                   ),
                                 ),
                                 Divider(),
-                                Container(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text(''),
-                                      Row(
-                                        children: <Widget>[
-                                          Text('Remove'),
-                                          InkWell(
-                                            child: Icon(
-                                              Icons.delete,
-                                              color: Colors.red,
-                                            ),
-                                            onTap: () {
-//                                            print(currentCartItem.productOriginLocation);
-//                                            print(locationList);
-                                              cartBox.deleteAt(index);
-                                              setState(() {});
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Divider(),
+
                               ],
                             ),
                           ],
@@ -570,6 +623,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
         if (box.values.isEmpty)
           return Center(
             child: Card(
+              elevation: 0,
               child: Text("User Details is empty"),
             ),
           );
@@ -583,29 +637,32 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Address "),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            color: Colors.grey[300],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(" Address "),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              color: Colors.grey[300],
+                            ),
+                            padding: EdgeInsets.all(8.0),
+                            child: InkWell(
+                              child: Text("Edit"),
+                              onTap: () {
+                                editAddressDialog();
+                              },
+                            ),
                           ),
-                          padding: EdgeInsets.all(8.0),
-                          child: InkWell(
-                            child: Text("Edit"),
-                            onTap: () {
-                              editAddressDialog();
-                            },
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Container(
                       width: double.infinity,
                       child: Card(
-                        elevation: 2.5,
+                        elevation: 0,
                         child: Column(
                           children: [
                             Container(
@@ -622,81 +679,81 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
             }
             return Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Address "),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.grey[300],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 16),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Delivery Method ",
+                        style: TextStyle(fontSize: 16, fontWeight:FontWeight.bold,color: Colors.black),
                       ),
-                      padding: EdgeInsets.all(8.0),
-                      child: InkWell(
-                        child: Text("Edit"),
-                        onTap: () {
-                          editAddressDialog();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Card(
-                  elevation: 2.5,
-                  child: Container(
-                    padding: EdgeInsets.all(15.0),
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text('${userData['fullName']}'),
-                        Container(
-                          margin: EdgeInsets.only(top: 5.0),
+                      Spacer(),
+                      Container(
+                        child: InkWell(
                           child: Text(
-                            '${userData['address']}',
+                            "Change Address",
+                            style: TextStyle(
+                                fontSize: 16, color: Color(0xffc4c4c4)),
+                          ),
+                          onTap: () {
+                            editAddressDialog();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container
+                  (
+                  decoration: BoxDecoration(color: Colors.white),
+                  padding: EdgeInsets.symmetric(horizontal: 16,vertical:15.0),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('${userData['fullName']}'),
+                      Container(
+                        margin: EdgeInsets.only(top: 5.0),
+                        child: Text(
+                          '${userData['address']}',
 //                        ']}',
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          maxLines: 4,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              StreamBuilder<String>(
-                                  stream: numberSteam.stream,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.data == null) {
-                                      _phoneNumber = userData['phoneNumber'];
-                                      return Text('${userData['phoneNumber']}');
-                                    } else {
-                                      _phoneNumber = snapshot.data;
-                                      return Text(
-                                        '${snapshot.data}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      );
-                                    }
-                                  }),
-                              Container(
-                                padding: EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: InkWell(
-                                  onTap: () {
-                                    editPhoneNumber();
-                                  },
-                                  child: Text('Edit'),
-                                ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            StreamBuilder<String>(
+                                stream: numberSteam.stream,
+                                builder: (context, snapshot) {
+                                  if (snapshot.data == null) {
+                                    _phoneNumber = userData['phoneNumber'];
+                                    return Text('${userData['phoneNumber']}');
+                                  } else {
+                                    _phoneNumber = snapshot.data;
+                                    return Text(
+                                      '${snapshot.data}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    );
+                                  }
+                                }),
+                            Container(
+                              padding: EdgeInsets.all(5.0),
+                             child: InkWell(
+                                onTap: () {
+                                  editPhoneNumber();
+                                },
+                                child: Text('Edit Phone Number',style: TextStyle(color: Color(0xffc4c4c4)),),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
