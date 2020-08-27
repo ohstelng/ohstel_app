@@ -112,8 +112,8 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                       Fluttertoast.showToast(msg: 'Input Invaild Number!');
                     }
                   },
-                  color: Colors.green,
-                  child: Text('Submit'),
+                  color: Theme.of(context).primaryColor,
+                  child: Text('Submit',style: TextStyle(color: Colors.white),),
                 )
               ],
             ),
@@ -133,7 +133,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
         return Dialog(
           child: Container(
             margin: EdgeInsets.all(15.0),
-//            height: 200,
+            height: 200,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -141,6 +141,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
+
                     hintText: 'Enter Your Address',
                   ),
                   maxLines: null,
@@ -170,8 +171,8 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                       Fluttertoast.showToast(msg: 'Input Invaild Input!');
                     }
                   },
-                  color: Colors.green,
-                  child: Text('Submit'),
+                  color: Theme.of(context).primaryColor,
+                  child: Text('Submit',style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),
@@ -423,6 +424,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
       ),
     );
   }
+
   Widget priceInfo() {
     return Container(color: Colors.white,
       padding: EdgeInsets.all(15.0),
