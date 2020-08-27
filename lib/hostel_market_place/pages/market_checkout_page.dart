@@ -3,13 +3,12 @@ import 'dart:convert';
 
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_market_place/models/market_cart_model.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/market_summary_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:Ohstel_app/hostel_market_place/pages/market_summary_page.dart';
 
 class MarketCheckOutPage extends StatefulWidget {
   @override
@@ -388,16 +387,26 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
       {@required MarketCartModel currentCartItem, @required Map apiData}) {
     String schoolName = userData['uniDetails']['name'].toString();
     String schoolNameAbbr = userData['uniDetails']['abbr'].toString();
+    print(userData);
+    print(schoolName);
+    print(schoolNameAbbr);
 
     if (currentCartItem.productOriginLocation !=
         userData['uniDetails']['abbr'].toString().toLowerCase()) {
       Map _uniMap;
 
       apiData.forEach((key, value) {
+//        print('ggggggggggggggggggggggggggg');
+//        print(value);
+//        print(key);
         if (key.toString().toLowerCase() == schoolName.toLowerCase()) {
+//          print('ggggggggggggggggggggggggggg');
+//          print(value);
           _uniMap = value;
         }
       });
+
+      print(_uniMap);
 
       return Column(
         children: [

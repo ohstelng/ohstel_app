@@ -1,5 +1,6 @@
 import 'package:Ohstel_app/auth/methods/auth_database_methods.dart';
 import 'package:Ohstel_app/auth/models/login_user_model.dart';
+import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,17 +63,30 @@ class AuthService {
 
       // add user details to firestore database
       await AuthDatabaseMethods().createUserDataInFirestore(
-          uid: user.uid,
-          email: email,
-          fullName: fullName,
-          userName: userName,
-          schoolLocation: schoolLocation,
-          phoneNumber: phoneNumber,
-          uniName: uniName,
-          uniDetails: uniDetails);
+        uid: user.uid,
+        email: email,
+        fullName: fullName,
+        userName: userName,
+        schoolLocation: schoolLocation,
+        phoneNumber: phoneNumber,
+        uniName: uniName,
+        uniDetails: uniDetails,
+      );
+
+      UserModel userData = UserModel(
+        uid: user.uid,
+        email: email,
+        fullName: fullName,
+        userName: userName,
+        schoolLocation: schoolLocation,
+        phoneNumber: phoneNumber,
+        uniName: uniName,
+        uniDetails: uniDetails,
+      );
 
       // save user info to local database using hive
-      getUserDetails(uid: user.uid);
+      saveUserDataToDb(userData: userData.toMap());
+//      getUserDetails(uid: user.uid);
 
       return userFromFirebase(user);
     } catch (e) {
@@ -85,7 +99,7 @@ class AuthService {
   // signing out method
   Future signOut() async {
     try {
-      await deleteUserDataToDb();
+      await deleteAllUserDataToDb();
       return await auth.signOut();
     } catch (e) {
       print(e);
@@ -120,8 +134,10 @@ class AuthService {
     print('saved');
   }
 
-  Future<void> deleteUserDataToDb() async {
+  Future<void> deleteAllUserDataToDb() async {
     Box<Map> userDataBox = await HiveMethods().getOpenBox('userDataBox');
+    Box<Map> marketDataBox = await HiveMethods().getOpenBox('cart');
+    Box<Map> foodDataBox = await HiveMethods().getOpenBox('marketCart');
     final key = 0;
 
     userDataBox.delete(key);

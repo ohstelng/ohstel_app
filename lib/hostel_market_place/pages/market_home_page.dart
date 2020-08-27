@@ -23,6 +23,7 @@ class MarketHomePage extends StatefulWidget {
 
 class _MarketHomePageState extends State<MarketHomePage> {
   String uniName;
+  bool isLoading = true;
 
   List _imgList = [1, 2, 3, 4];
 
@@ -37,9 +38,19 @@ class _MarketHomePageState extends State<MarketHomePage> {
   int _current = 0;
 
   Future<void> getUniName() async {
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+      });
+    }
     String name = await HiveMethods().getUniName();
     print(name);
     uniName = name;
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -55,27 +66,29 @@ class _MarketHomePageState extends State<MarketHomePage> {
       length: 2,
       child: Scaffold(
         body: SafeArea(
-          child: Container(
-            margin: EdgeInsets.all(10),
-            child: ListView(
-              children: <Widget>[
-                SizedBox(
-                  height: 8,
-                ),
-                appBar(),
-                SizedBox(height: 16),
-                searchBar(),
-                SizedBox(height: 16),
-                advertBanner(),
-                categories(),
-                SizedBox(height: 24),
-                tabBar(),
-                SizedBox(height: 8),
-                tabBarView(),
-                SizedBox(height: 8),
-                topBrands(),
-                SizedBox(height: 16),
-                recommended4U(),
+          child: isLoading
+              ? Center(child: CircularProgressIndicator())
+              : Container(
+                  margin: EdgeInsets.all(10),
+                  child: ListView(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 8,
+                      ),
+                      appBar(),
+                      SizedBox(height: 16),
+                      searchBar(),
+                      SizedBox(height: 16),
+                      advertBanner(),
+                      categories(),
+                      SizedBox(height: 24),
+                      tabBar(),
+                      SizedBox(height: 8),
+                      tabBarView(),
+                      SizedBox(height: 8),
+                      topBrands(),
+                      SizedBox(height: 16),
+                      recommended4U(),
 
 //                Container(
 //                  height: MediaQuery.of(context).size.height * 0.70,
@@ -97,9 +110,9 @@ class _MarketHomePageState extends State<MarketHomePage> {
 //                    ],
 //                  ),
 //                )
-              ],
-            ),
-          ),
+                    ],
+                  ),
+                ),
         ),
       ),
     );
