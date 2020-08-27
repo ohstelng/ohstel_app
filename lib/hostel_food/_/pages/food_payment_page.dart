@@ -384,8 +384,9 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       child: FlatButton(
         onPressed: () {
           print(userData);
-//          if(userData)
-//          chargeCard(price: (getGrandTotal() + deliveryFee) * 100);
+          if (userData != null) {
+            chargeCard(price: (getGrandTotal() + deliveryFee) * 100);
+          }
         },
         child: Text(
           'Make Payment',

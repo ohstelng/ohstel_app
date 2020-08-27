@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive/hive.dart';
 
 class AuthDatabaseMethods {
   // collection ref
@@ -27,5 +32,52 @@ class AuthDatabaseMethods {
       },
       merge: true,
     );
+  }
+
+  Future<String> uploadFile({@required File image}) async {
+    int currentDateTime = DateTime.now().millisecondsSinceEpoch;
+    String imageUrl;
+
+    try {
+      StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('profileImage/$currentDateTime}');
+
+      StorageUploadTask uploadTask = storageReference.putFile(image);
+
+      await uploadTask.onComplete;
+
+      print('File Uploaded');
+      await storageReference.getDownloadURL().then((fileURL) {
+        imageUrl = fileURL;
+        print(imageUrl);
+      });
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '${e.message}');
+    }
+
+    return imageUrl;
+  }
+
+  Future<void> updateProfilePic(
+      {@required String uid, @required String url}) async {
+    try {
+      await userDataCollectionRef.document(uid).updateData(
+        {'profilePicUrl': url},
+      );
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '${e.message}');
+    }
+  }
+
+  void saveUserDataToDb({@required Map userData}) {
+    Box<Map> userDataBox = Hive.box<Map>('userDataBox');
+    final key = 0;
+    final value = userData;
+
+    userDataBox.put(key, value);
+    print('saved');
   }
 }

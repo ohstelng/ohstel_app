@@ -142,23 +142,4 @@ class AuthService {
 
     userDataBox.delete(key);
   }
-
-//  Future<void> update() async {
-//    final CollectionReference hostelCollectionRef =
-//        Firestore.instance.collection('hostelBookings');
-//
-//    try {
-//      QuerySnapshot querySnapshot = await hostelCollectionRef.getDocuments();
-//      for (var i = 0; i < querySnapshot.documents.length; i++) {
-//        String id = querySnapshot.documents[i].documentID;
-//        await hostelCollectionRef.document(id).updateData({
-//          'uniName': 'unilorin',
-//        });
-//        print(id);
-//      }
-//    } catch (e) {
-//      print(e);
-//      Fluttertoast.showToast(msg: '${e.message}');
-//    }
-//  }
 }

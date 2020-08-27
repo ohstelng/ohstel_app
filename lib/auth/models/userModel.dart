@@ -8,6 +8,7 @@ class UserModel {
   String schoolLocation;
   String phoneNumber;
   String uniName;
+  String profilePicUrl;
   Map uniDetails;
 
   UserModel({
@@ -30,9 +31,10 @@ class UserModel {
     this.phoneNumber = mapData['phoneNumber'];
     this.uniName = mapData['uniName'];
     this.uniDetails = mapData['uniDetails'];
+    this.profilePicUrl = mapData['profilePicUrl'];
   }
 
-  Map toMap(){
+  Map toMap() {
     Map<String, dynamic> data = Map<String, dynamic>();
     data['uid'] = this.uid;
     data['email'] = this.email;
@@ -42,6 +44,7 @@ class UserModel {
     data['phoneNumber'] = this.phoneNumber;
     data['uniName'] = this.uniName;
     data['uniDetails'] = this.uniDetails;
+    data['profilePicUrl'] = this.profilePicUrl;
 
     return data;
   }
