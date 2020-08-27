@@ -153,15 +153,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: ListTile(
                                 onTap: () {
                                   print(currentUniDetails);
-//                                    print(currentUniDetails['abbr']
-//                                        .toString()
-//                                        .toLowerCase());
-//                                    uniName = currentUniDetails['abbr']
-//                                        .toString()
-//                                        .toLowerCase();
-////                                  print(uniName);
-//                                    Navigator.pop(context);
-//                                    search();
+                                  updateUni(uniDetails: currentUniDetails);
                                 },
                                 title: Row(
                                   children: <Widget>[
@@ -203,6 +195,23 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       },
     );
+  }
+
+  Future<void> updateUni({@required Map uniDetails}) async {
+    await auth.updateUserUniversity(
+      uid: userData['uid'],
+      uniDetail: uniDetails,
+    );
+
+    Navigator.pop(context);
+
+    Map _userData = await HiveMethods().getUserData();
+    _userData['uniDetails'] = uniDetails;
+    AuthService().saveUserDataToDb(userData: _userData);
+    userData = _userData;
+    setState(() {});
+
+    Fluttertoast.showToast(msg: 'UNiversity Updated!');
   }
 
   Future getUniList() async {
@@ -310,6 +319,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Text(
                   "${userModel.email}",
+                  style: TextStyle(fontSize: 15),
+                ),
+                Text(
+                  "@${userModel.uniDetails['name']}",
                   style: TextStyle(fontSize: 15),
                 ),
               ],
