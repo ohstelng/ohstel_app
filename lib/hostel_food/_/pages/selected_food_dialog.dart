@@ -100,26 +100,26 @@ class _FoodDialogState extends State<FoodDialog> {
                   )),
               widget.itemDetails.imageUrl != null
                   ? Container(
-                //  margin: const EdgeInsets.all(10.0),
-                height: 200,
-                width: double.infinity,
-                child: ExtendedImage.network(
-                  widget.itemDetails.imageUrl,
-                  fit: BoxFit.fitWidth,
-                  handleLoadingProgress: true,
-                  shape: BoxShape.rectangle,
-                  cache: false,
-                  enableMemoryCache: true,
-                ),
-              )
+                      //  margin: const EdgeInsets.all(10.0),
+                      height: 200,
+                      width: double.infinity,
+                      child: ExtendedImage.network(
+                        widget.itemDetails.imageUrl,
+                        fit: BoxFit.fitWidth,
+                        handleLoadingProgress: true,
+                        shape: BoxShape.rectangle,
+                        cache: false,
+                        enableMemoryCache: true,
+                      ),
+                    )
                   : Container(
-                height: 120,
-                width: 120,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  shape: BoxShape.circle,
-                ),
-              ),
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
               Container(
                 padding: const EdgeInsets.all(20),
                 child: Row(
@@ -186,7 +186,7 @@ class _FoodDialogState extends State<FoodDialog> {
                     Text(
                       '${widget.itemDetails.itemName}',
                       style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                     ),
                     Text(
                       '$symbol ${formatCurrency.format(getTotal())}',
@@ -222,44 +222,55 @@ class _FoodDialogState extends State<FoodDialog> {
               ),
               widget.currentExtraItemDetails.isNotEmpty
                   ? Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                //     constraints: BoxConstraints(maxHeight: 150),
-                margin: EdgeInsets.all(10.0),
-                child: extraItemWidget(),
-              )
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Card(
+                        elevation: 1.5,
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          //     constraints: BoxConstraints(maxHeight: 150),
+                          margin: EdgeInsets.all(10.0),
+                          child: extraItemWidget(),
+                        ),
+                      ),
+                    )
                   : Container(),
               widget.currentExtraItemDetails.isNotEmpty
                   ? Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                margin: EdgeInsets.all(5.0),
-                child: DropdownButton(
-                  hint: extraList.isEmpty
-                      ? Text('Select Extras')
-                      : Text('Add More Extras'),
-                  items: widget.currentExtraItemDetails
-                      .map((ExtraItemDetails element) {
-                    return DropdownMenuItem<String>(
-                      value: element.extraItemName,
-                      child: Text('${element.extraItemName}'),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      print(value);
-                      selectedExtras = value;
-                      extraList.add(
-                        widget.currentExtraItemDetails
-                            .where((element) =>
-                        element.extraItemName == value)
-                            .toList()[0],
-                      );
-                      setState(() {});
-                      print(selectedExtras);
-                    });
-                    setState(() {});
-                  },
-                ),
-              )
+                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      margin: EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: DropdownButton(
+                        underline: Container(),
+                        hint: extraList.isEmpty
+                            ? Text('Select Extras')
+                            : Text('Add More Extras'),
+                        items: widget.currentExtraItemDetails
+                            .map((ExtraItemDetails element) {
+                          return DropdownMenuItem<String>(
+                            value: element.extraItemName,
+                            child: Text('${element.extraItemName}'),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            print(value);
+                            selectedExtras = value;
+                            extraList.add(
+                              widget.currentExtraItemDetails
+                                  .where((element) =>
+                                      element.extraItemName == value)
+                                  .toList()[0],
+                            );
+                            setState(() {});
+                            print(selectedExtras);
+                          });
+                          setState(() {});
+                        },
+                      ),
+                    )
                   : Container(),
               SizedBox(
                 height: 30,
@@ -272,7 +283,7 @@ class _FoodDialogState extends State<FoodDialog> {
                     Text(
                       "Description",
                       style:
-                      TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: 10,
@@ -280,7 +291,7 @@ class _FoodDialogState extends State<FoodDialog> {
                     Text(
                       '${widget.itemDetails.shortDescription}',
                       textAlign: TextAlign.justify,
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 17),
                     ),
                   ],
                 ),
@@ -396,7 +407,16 @@ class _FoodDialogState extends State<FoodDialog> {
 
   Widget extraItemWidget() {
     if (extraList == [] || extraList.isEmpty) {
-      return Container(child: Text('Add Extras'));
+      return Container(
+          child: Text(
+        'No Extras Selected..',
+        style: TextStyle(
+          fontSize: 15,
+          color: Colors.grey[600],
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ));
     } else {
       return ListView.builder(
         shrinkWrap: true,

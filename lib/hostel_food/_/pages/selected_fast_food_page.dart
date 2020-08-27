@@ -30,7 +30,7 @@ class SelectedFastFoodPage extends StatefulWidget {
 class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
   final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
   String selectedFoodBar = 'Fast Food';
-  StreamController<String> toDisplayContoller = StreamController();
+  StreamController<String> toDisplayController = StreamController();
 
   Runes input = Runes('\u20a6');
 
@@ -41,13 +41,13 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
 
   @override
   void initState() {
-    toDisplayContoller.add('Fast Food');
+    toDisplayController.add('Fast Food');
     super.initState();
   }
 
   @override
   void dispose() {
-    toDisplayContoller.close();
+    toDisplayController.close();
     super.dispose();
   }
 
@@ -87,7 +87,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
         .toList();
 
     return StreamBuilder<String>(
-      stream: toDisplayContoller.stream,
+      stream: toDisplayController.stream,
       builder: (context, snapshot) {
         List<ItemDetails> listToPass = [];
         if (snapshot.data == 'Fast Food') {
@@ -163,34 +163,12 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-//          Container(
-//              padding: const EdgeInsets.fromLTRB(5,0,5,10),
-//              child: Row(
-//                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                children: [
-//                  Text(
-//                    "$selectedFoodBar",
-//                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 24),
-//                  ),
-//                  FlatButton(
-//                    child: Text(
-//                      "Show all",
-//                      style: TextStyle(
-//                        fontSize: 24,
-//                        fontWeight: FontWeight.w400,
-//                        color: Color(0xFFF27507),
-//                      ),
-//                    ),
-//                    onPressed: () {},
-//                  )
-//                ],
-//              )),
           Expanded(
             child: Container(
               padding: EdgeInsets.all(20),
               child: GridView.count(
-                childAspectRatio: 0.7,
-                //  physics: BouncingScrollPhysics(),
+                childAspectRatio: 0.85,
+                physics: BouncingScrollPhysics(),
                 crossAxisCount: 2,
                 children: List.generate(
                   fastFoodList.length,
@@ -205,12 +183,14 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                         child: Card(
                           color: Color(0xFFF4F5F6),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               fastFoodList[index].imageUrl != null
-                                  ? Flexible(
+                                  ? Expanded(
                                       child: Container(
                                         width: double.infinity,
+//                                        height: 150,
                                         margin:
                                             EdgeInsets.fromLTRB(0, 0, 0, 10),
                                         alignment: Alignment.topCenter,
@@ -220,7 +200,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                         ),
                                         child: ExtendedImage.network(
                                           fastFoodList[index].imageUrl,
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.contain,
                                           handleLoadingProgress: true,
                                           shape: BoxShape.rectangle,
                                           cache: false,
@@ -238,7 +218,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                       ),
                                     ),
                               Padding(
-                                padding: const EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(5.0),
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -246,120 +226,21 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                   children: <Widget>[
                                     Text(
                                       '${fastFoodList[index].itemName}',
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.grey[600],
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     SizedBox(
-                                      height: 10,
+                                      height: 5,
                                     ),
                                     Text(
                                       '$symbol ${formatCurrency.format(fastFoodList[index].price)}',
                                       textAlign: TextAlign.start,
-                                      style: TextStyle(fontSize: 17),
+                                      style: TextStyle(fontSize: 15),
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text("Ratings will be here")
-//                                    Row(
-//                                      mainAxisAlignment:
-//                                          MainAxisAlignment.spaceBetween,
-//                                      children: <Widget>[
-//                                        Text(
-//                                          '$symbol${fastFoodList[index].price}',
-//                                          textAlign: TextAlign.start,
-//                                        ),
-//                                        InkWell(
-//                                          onTap: () {
-////                                            Map map = FoodCartModel(
-////                                              itemDetails: widget
-////                                                  .currentItemDetails[index],
-////                                              totalPrice: 1,
-////                                              numberOfPlates: 1,
-//////                                              extraItems: widget
-//////                                                  .currentExtraItemDetails,
-////                                            ).toMap();
-////                                            HiveMethods()
-////                                                .saveFoodCartToDb(map: map);
-//
-//                                            showFoodDialog(
-//                                              itemDetails: fastFoodList[index],
-//                                              extraItemDetails: widget
-//                                                  .currentExtraItemDetails,
-//                                            );
-//                                          },
-//                                          child: Container(
-//                                            padding: EdgeInsets.all(5.0),
-//                                            decoration: BoxDecoration(
-//                                              color: Color(0xFFF27507),
-//                                              borderRadius: BorderRadius.all(
-//                                                Radius.circular(5.0),
-//                                              ),
-//                                            ),
-//                                            child: Text(
-//                                              'Order',
-//                                              style: TextStyle(
-//                                                color: Colors.white,
-//                                              ),
-//                                            ),
-//                                          ),
-//                                        ),
-//                                        SizedBox(
-//                                          height: 15,
-//                                        ),
-//                                        Text(
-//                                          '$symbol ${formatCurrency.format(
-//                                              fastFoodList[index].price)}',
-//                                          textAlign: TextAlign.start,
-//                                          style: TextStyle(fontSize: 20),
-//                                        ),
-//                                        SizedBox(
-//                                          height: 15,
-//                                        ),
-//                                        Text("Rating will be here")
-//                                      ],
-////                                    Row(
-////                                      mainAxisAlignment:
-////                                      MainAxisAlignment.spaceBetween,
-////                                      children: <Widget>[
-////
-////                                        InkWell(
-////                                          onTap: () {
-//////                                            Map map = FoodCartModel(
-//////                                              itemDetails: widget
-//////                                                  .currentItemDetails[index],
-//////                                              totalPrice: 1,
-//////                                              numberOfPlates: 1,
-////////                                              extraItems: widget
-////////                                                  .currentExtraItemDetails,
-//////                                            ).toMap();
-//////                                            HiveMethods()
-//////                                                .saveFoodCartToDb(map: map);
-////
-////                                            showFoodDialog(
-////                                              itemDetails: fastFoodList[index],
-////                                              extraItemDetails: widget
-////                                                  .currentExtraItemDetails,
-////                                            );
-////                                          },
-////                                          child: Container(
-////                                            padding: EdgeInsets.all(5.0),
-////                                            decoration: BoxDecoration(
-////                                              color: Color(0xFFF27507),
-////                                              borderRadius: BorderRadius.all(
-////                                                Radius.circular(5.0),
-////                                              ),
-////                                            ),
-////                                            child: Text(
-////                                              'Order',
-////                                              style: TextStyle(
-////                                                color: Colors.white,
-////                                              ),
-////                                            ),
-////                                          ),
-////                                        )
-////                                      ],
-////                                    ),
-//                                    )
                                   ],
                                 ),
                               )
@@ -406,17 +287,17 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
         setState(() {
           selectedFoodBar = 'Fast Food';
         });
-        toDisplayContoller.add('Fast Food');
+        toDisplayController.add('Fast Food');
       } else if (input.trim() == 'Snacks') {
         setState(() {
           selectedFoodBar = 'Snacks';
         });
-        toDisplayContoller.add('Snacks');
+        toDisplayController.add('Snacks');
       } else if (input.trim() == 'Drinks') {
         setState(() {
           selectedFoodBar = 'Drinks';
         });
-        toDisplayContoller.add('Drinks');
+        toDisplayController.add('Drinks');
       }
     }
 

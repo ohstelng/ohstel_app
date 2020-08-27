@@ -1,4 +1,3 @@
-import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_food/_/methods/fast_food_methods.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
@@ -49,7 +48,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          child: Column(
+          child: ListView(
             children: <Widget>[
               searchBar(),
               imageList(),
@@ -76,7 +75,6 @@ class _FoodHomePageState extends State<FoodHomePage> {
           autoPlayCurve: Curves.fastOutSlowIn,
           enlargeCenterPage: true,
           scrollDirection: Axis.horizontal,
-
         ),
         items: [1, 2, 3, 4].map((i) {
           return Builder(
@@ -100,153 +98,152 @@ class _FoodHomePageState extends State<FoodHomePage> {
   }
 
   Widget foodList() {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: FutureBuilder(
-          future: FastFoodMethods().getFoodsFromDb(uniName: uniName),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.none &&
-                snapshot.hasData == null) {
-              //print('project snapshot data is: ${projectSnap.data}');
-              return Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  FastFoodModel currentFastFood =
-                      FastFoodModel.fromMap(snapshot.data[index]);
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: FutureBuilder(
+        future: FastFoodMethods().getFoodsFromDb(uniName: uniName),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.none &&
+              snapshot.hasData == null) {
+            //print('project snapshot data is: ${projectSnap.data}');
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                FastFoodModel currentFastFood =
+                    FastFoodModel.fromMap(snapshot.data[index]);
 
-                  List<ItemDetails> currentItemDetails =
-                      getItemDetails(snapshot.data[index]['itemDetails']);
+                List<ItemDetails> currentItemDetails =
+                    getItemDetails(snapshot.data[index]['itemDetails']);
 
-                  List<ExtraItemDetails> currentExtraItemDetails =
-                      getExtraItemDetails(snapshot.data[index]['extraItems']);
+                List<ExtraItemDetails> currentExtraItemDetails =
+                    getExtraItemDetails(snapshot.data[index]['extraItems']);
 
-                  return InkWell(
-                    onTap: () {
-                      print(
-                          "currentFastFood.toMap():${currentFastFood.toMap()}");
-                      print(
-                          "currentItemDetails[0].toMap():${currentItemDetails[0].toMap()}");
+                return InkWell(
+                  onTap: () {
+                    print(
+                        "currentFastFood.toMap():${currentFastFood.toMap()}");
+                    print(
+                        "currentItemDetails[0].toMap():${currentItemDetails[0].toMap()}");
 
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => SelectedFastFoodPage(
-                            currentFastFood: currentFastFood,
-                            currentExtraItemDetails: currentExtraItemDetails,
-                            currentItemDetails: currentItemDetails,
-                          ),
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SelectedFastFoodPage(
+                          currentFastFood: currentFastFood,
+                          currentExtraItemDetails: currentExtraItemDetails,
+                          currentItemDetails: currentItemDetails,
                         ),
-                      );
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 5,
                       ),
-                      child: Card(
-                        color: Color(0xFFF4F5F6),
-                        elevation: 1,
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              height: 150,
-                              width: 150,
-                              child: ExtendedImage.network(
-                                currentFastFood.logoImageUrl,
-                                fit: BoxFit.fill,
-                                handleLoadingProgress: true,
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(10),
-                                cache: false,
-                                enableMemoryCache: true,
-                              ),
+                    );
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 5,
+                    ),
+                    child: Card(
+                      color: Color(0xFFF4F5F6),
+                      elevation: 1,
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.all(8.0),
+                            height: 150,
+                            width: 150,
+                            child: ExtendedImage.network(
+                              currentFastFood.logoImageUrl,
+                              fit: BoxFit.fill,
+                              handleLoadingProgress: true,
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10),
+                              cache: false,
+                              enableMemoryCache: true,
                             ),
-                            Container(
-                              height: 120,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    '${currentFastFood.fastFoodName.trim()}',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                          ),
+                          Container(
+                            height: 120,
+                            child: Column(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  '${currentFastFood.fastFoodName.trim()}',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                  Text(
-                                    '0801 345 6767',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  '0801 345 6767',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
                                   ),
-                                  Text(
-                                    '${currentFastFood.openTime.trim()}',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  '${currentFastFood.openTime.trim()}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w300,
                                   ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.location_on,
-                                        color: Colors.black45,
-                                        size: 14,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Colors.black45,
+                                      size: 14,
+                                    ),
+                                    Text(
+                                      '${currentFastFood.address.trim()}',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300,
                                       ),
-                                      Text(
-                                        '${currentFastFood.address.trim()}',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-              );
-            }
-          },
-        ),
+                  ),
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
 
   Widget searchBar() {
-
-   return Container(
-      margin: EdgeInsets.fromLTRB(10,30,10,10),
+    return Container(
+      margin: EdgeInsets.fromLTRB(10, 30, 10, 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -283,10 +280,9 @@ class _FoodHomePageState extends State<FoodHomePage> {
               ),
             ),
           ),
-        //  Expanded(flex: 2, child: dropdownButton()),
+          //  Expanded(flex: 2, child: dropdownButton()),
         ],
       ),
     );
-
   }
 }
