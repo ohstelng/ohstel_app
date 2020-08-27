@@ -5,6 +5,7 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_market_place/methods/market_methods.dart';
 import 'package:Ohstel_app/hostel_market_place/models/market_cart_model.dart';
 import 'package:Ohstel_app/hostel_market_place/models/paid_market_orders_model.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/market_cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,6 +24,8 @@ class MarketSummaryPage extends StatefulWidget {
 }
 
 class _MarketSummaryPageState extends State<MarketSummaryPage> {
+  TextStyle _normText = TextStyle(fontSize: 16);
+
   Box<Map> cartBox;
   Box<Map> userDataBox;
   Map userData;
@@ -51,6 +54,8 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
       });
     }
   }
+
+
 
   Future getDeliveryInfoFromApi() async {
     String url = "http://quiz-demo-de79d.appspot.com/market_api/deliveryInfo";
@@ -284,35 +289,66 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBar(),
       body: isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : ListView(
-              children: [
-                header(),
-                ordersContainer(),
-                getAddress(),
-                cartItems(),
-                buttons(),
-              ],
-            ),
+          : Container(
+            color: Color(0xffE5E5E5),
+            child: ListView(
+                children: [
+                  header(),
+                  ordersContainer(),
+                  getAddress(),
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    child: Text("Your Items",style: _normText,),),
+                  cartItems(),
+                  button(),
+                  modifybutton()
+                ],
+              ),
+          ),
     );
   }
 
-  Widget buttons() {
+  Widget modifybutton() {
     return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: 15.0,
-        vertical: 10.0,
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: InkWell(
+        onTap: () async {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> MarketCartPage()));
+        },
+        child: Container(
+          margin: EdgeInsets.only(bottom: 16),
+          decoration: BoxDecoration(border: Border.all(color:Color(0xff1f2430),width: 2),color: Colors.white,borderRadius: BorderRadius.circular(10)),
+          height: 55,
+          child: Center(
+            child:
+            Text('Modify Cart',
+              style: TextStyle(color: Color(0xff000000),fontSize: 20, fontWeight: FontWeight.bold),),),
+        ),
       ),
-      width: double.infinity,
-      child: RaisedButton(
-        onPressed: () {
+    );
+  }
+
+  Widget button() {
+    return Container(
+      margin: EdgeInsets.only(top: 24,bottom: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: InkWell(
+        onTap: ()  {
           pay();
         },
-        color: Colors.green,
-        child: Text('Pay'),
+        child: Container(
+          decoration: BoxDecoration(color:Theme.of(context).primaryColor,borderRadius: BorderRadius.circular(10)),
+          height: 55,
+          child: Center(
+            child:
+            Text('Pay',
+              style: TextStyle(color: Color(0xffFFFFFF),fontSize: 20, fontWeight: FontWeight.bold),),),
+        ),
       ),
     );
   }
@@ -326,50 +362,48 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
             child: Text("Cart list is empty"),
           );
         }
-        return Card(
-          elevation: 2.5,
-          child: ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: box.values.length,
-            itemBuilder: (context, index) {
+        return ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: box.values.length,
+          itemBuilder: (context, index) {
 //                numbers = box.values.length;
-              Map data = box.getAt(index);
-              MarketCartModel currentCartItem = MarketCartModel.fromMap(
-                data.cast<String, dynamic>(),
-              );
+            Map data = box.getAt(index);
+            MarketCartModel currentCartItem = MarketCartModel.fromMap(
+              data.cast<String, dynamic>(),
+            );
 
-              return Container(
-                margin: EdgeInsets.all(15.0),
-                child: Column(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Row(
+            return Container(
+              color: Colors.white,
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text('${currentCartItem.productName}',style: _normText,),
+                          Text('₦${currentCartItem.productPrice}',style: _normText,),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10.0),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text('${currentCartItem.productName}'),
-                            Text('${currentCartItem.productPrice}'),
+                            Text('Units',style: _normText,),
+                            Text('${currentCartItem.units}',style: _normText,),
                           ],
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text('units'),
-                              Text('${currentCartItem.units}'),
-                            ],
-                          ),
-                        ),
-                        Divider(),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                      ),
+
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
         );
       },
     );
@@ -398,7 +432,8 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Address "),
+                        Text("Your Address"),
+                        Text("Change Address")
                       ],
                     ),
                     Container(
@@ -421,38 +456,39 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
             }
             return Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Address "),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Your Address",style: _normText,),
+
+                    ],
+                  ),
                 ),
-                Card(
-                  elevation: 2.5,
-                  child: Container(
-                    padding: EdgeInsets.all(15.0),
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text('${userData['fullName']}'),
-                        Container(
-                          margin: EdgeInsets.only(top: 5.0),
-                          child: Text(
-                            '${userData['address']}',
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.all(16.0),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('${userData['fullName']}',style: _normText,),
+                      Container(
+                        margin: EdgeInsets.only(top: 5.0),
+                        child: Text(
+                          '${userData['address']}',
+                          style: _normText,
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[Text('${widget.phoneNumber}')],
-                          ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[Text('${widget.phoneNumber}',style: _normText,)],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -464,49 +500,48 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
   }
 
   Widget ordersContainer() {
+
     return Container(
       height: 210,
       decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      margin: EdgeInsets.all(10.0),
-      padding: EdgeInsets.all(10.0),
+        color: Colors.white,
+        ),
+      padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Number Of Item'),
-                Text('${cartBox.length}')
+                Text('Number Of Item',style: _normText),
+                Text('${cartBox.length}',style: _normText,)
               ]),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Sub Total'),
-                Text('\$ ${formatCurrency.format(getGrandTotal())}')
+                Text('Sub Total',style: _normText,),
+                Text('₦${formatCurrency.format(getGrandTotal())}',style: _normText,)
               ]),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Delivery Fee'),
-                Text('\$${formatCurrency.format(deliveryFee())}')
+                Text('Delivery Fee',style: _normText,),
+                Text('₦${formatCurrency.format(deliveryFee())}',style: _normText,)
               ]),
           Divider(
-            thickness: .5,
-            color: Colors.black45,
+            thickness: 1,
+            color: Color(0xffc4c4c4),
           ),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   'Total',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                  style:_normText,
                 ),
                 Text(
-                  '\$ ${formatCurrency.format(getGrandTotal() + deliveryFee())}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                  '₦ ${formatCurrency.format(getGrandTotal() + deliveryFee())}',
+                  style: _normText,
                 )
               ]),
         ],
@@ -514,14 +549,57 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
     );
   }
 
+  Widget appBar() {
+    return AppBar(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Color(0xffE5E5E5),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            )),
+        title: Text(
+          "Cart",
+          style: TextStyle(fontSize: 24, color: Colors.black),
+        ),
+        bottom: PreferredSize(
+            preferredSize: Size.fromHeight(60),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text("Delivery",
+                          style: TextStyle(
+                              fontSize: 14,
+                          )),
+                      Spacer(),
+                      Text("Summary", style: TextStyle(fontSize: 14,color: Theme.of(context).primaryColor)),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text("Payment", style: TextStyle(fontSize: 14))
+                    ],
+                  ),
+                  Divider()
+                ],
+              ),
+            )));
+  }
+
   Widget header() {
     return Container(
-      margin: EdgeInsets.all(10.0),
+      margin: EdgeInsets.all(16.0),
       child: Row(
         children: [
           Text(
-            'Summary Page',
-            style: TextStyle(fontSize: 20.0),
+            'Order Summary',
+            style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.w600),
           ),
         ],
       ),
