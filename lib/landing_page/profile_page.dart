@@ -333,7 +333,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ExpansionTile(
               key: GlobalKey(),
               title: Text('Edit Profile Details'),
-              leading: Icon(Icons.location_on),
+              leading: Icon(Icons.settings),
               children: <Widget>[
                 SizedBox(
 //                  height: MediaQuery.of(context).size.height * .30,
@@ -357,20 +357,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ],
-            ),
-            Divider(),
-            ListTile(
-              leading: CircleAvatar(
-                  radius: 37,
-                  backgroundColor: Color(0xffebf1ef),
-                  child: Icon(
-                    Icons.exit_to_app,
-                    color: Colors.black,
-                    size: 30,
-                  )),
-              title: Text('Edit Profile Details'),
-              trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () async {},
             ),
             Items(Icons.lock_outline, "Privacy & Services"),
             Items(

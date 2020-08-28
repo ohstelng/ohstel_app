@@ -16,8 +16,8 @@ class MarketCheckOutPage extends StatefulWidget {
 }
 
 class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
-  TextStyle _mainText =TextStyle(fontSize: 16,color: Color(0xff000000));
-  TextStyle _subText = TextStyle(fontSize: 16,color: Color(0xffc4c4c4));
+  TextStyle _mainText = TextStyle(fontSize: 16, color: Color(0xff000000));
+  TextStyle _subText = TextStyle(fontSize: 16, color: Color(0xffc4c4c4));
   StreamController<String> numberSteam = StreamController<String>.broadcast();
   Box<Map> cartBox;
   Box<Map> userDataBox;
@@ -112,7 +112,10 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                     }
                   },
                   color: Theme.of(context).primaryColor,
-                  child: Text('Submit',style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 )
               ],
             ),
@@ -140,7 +143,6 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-
                     hintText: 'Enter Your Address',
                   ),
                   maxLines: null,
@@ -171,7 +173,10 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                     }
                   },
                   color: Theme.of(context).primaryColor,
-                  child: Text('Submit',style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
@@ -320,9 +325,16 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                           Container(
                             padding: EdgeInsets.all(16),
                             height: 45,
-                            child: Text("Details",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),),
+                            child: Text(
+                              "Details",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                           productDetails(),
-                          Container(height: 45,),
+                          Container(
+                            height: 45,
+                          ),
                           priceInfo(),
                           button(),
                           modifybutton()
@@ -387,23 +399,31 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
 
   Widget button() {
     return Container(
-      margin: EdgeInsets.only(top: 24,bottom: 8),
+      margin: EdgeInsets.only(top: 24, bottom: 8),
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: InkWell(
         onTap: () async {
           proceedToPay();
         },
         child: Container(
-          decoration: BoxDecoration(color: Color(0xff1f2430),borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(
+              color: Color(0xff1f2430),
+              borderRadius: BorderRadius.circular(10)),
           height: 55,
           child: Center(
-            child:
-            Text('Next',
-              style: TextStyle(color: Color(0xffFFFFFF),fontSize: 20, fontWeight: FontWeight.bold),),),
+            child: Text(
+              'Next',
+              style: TextStyle(
+                  color: Color(0xffFFFFFF),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
       ),
     );
   }
+
   Widget modifybutton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
@@ -413,34 +433,55 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(border: Border.all(color:Color(0xff1f2430),width: 2),color: Colors.white,borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(
+              border: Border.all(color: Color(0xff1f2430), width: 2),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)),
           height: 55,
           child: Center(
-            child:
-            Text('Modify Cart',
-              style: TextStyle(color: Color(0xff000000),fontSize: 20, fontWeight: FontWeight.bold),),),
+            child: Text(
+              'Modify Cart',
+              style: TextStyle(
+                  color: Color(0xff000000),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
       ),
     );
   }
 
   Widget priceInfo() {
-    return Container(color: Colors.white,
+    return Container(
+      color: Colors.white,
       padding: EdgeInsets.all(15.0),
       child: Column(
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Product Amount',style: _mainText,),
-              Text('₦${getSubTotal()}',style: _mainText,),
+              Text(
+                'Product Amount',
+                style: _mainText,
+              ),
+              Text(
+                '₦${getSubTotal()}',
+                style: _mainText,
+              ),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Delivery Fees',style: _mainText,),
-              Text('₦${deliveryFee()}',style: _mainText,),
+              Text(
+                'Delivery Fees',
+                style: _mainText,
+              ),
+              Text(
+                '₦${deliveryFee()}',
+                style: _mainText,
+              ),
             ],
           ),
           Divider(
@@ -450,11 +491,16 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Total',style: _mainText,),
-              Text('₦${getGrandTotal()}',style: _mainText,),
+              Text(
+                'Total',
+                style: _mainText,
+              ),
+              Text(
+                '₦${getGrandTotal()}',
+                style: _mainText,
+              ),
             ],
           ),
-
         ],
       ),
     );
@@ -464,21 +510,18 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
       {@required MarketCartModel currentCartItem, @required Map apiData}) {
     String schoolName = userData['uniDetails']['name'].toString();
     String schoolNameAbbr = userData['uniDetails']['abbr'].toString();
-    print(userData);
-    print(schoolName);
-    print(schoolNameAbbr);
+//    print(userData);
+//    print(schoolName);
+//    print(schoolNameAbbr);
 
-    if (currentCartItem.productOriginLocation !=
+    if (currentCartItem.productOriginLocation.toLowerCase() !=
         userData['uniDetails']['abbr'].toString().toLowerCase()) {
       Map _uniMap;
 
       apiData.forEach((key, value) {
-//        print('ggggggggggggggggggggggggggg');
-//        print(value);
+//        print(schoolName);
 //        print(key);
         if (key.toString().toLowerCase() == schoolName.toLowerCase()) {
-//          print('ggggggggggggggggggggggggggg');
-//          print(value);
           _uniMap = value;
         }
       });
@@ -519,8 +562,8 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
           _uniMap = value;
         }
       });
-      TextStyle _mainText =TextStyle(fontSize: 16,color: Color(0xff000000));
-      TextStyle _subText = TextStyle(fontSize: 16,color: Color(0xffc4c4c4));
+      TextStyle _mainText = TextStyle(fontSize: 16, color: Color(0xff000000));
+      TextStyle _subText = TextStyle(fontSize: 16, color: Color(0xffc4c4c4));
       return Column(
         children: [
           Container(
@@ -528,8 +571,14 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Shipped From ${currentCartItem.productOriginLocation}',style:_mainText ,),
-                Text('${_uniMap[schoolNameAbbr.toLowerCase()]['price']}',style: _subText,),
+                Text(
+                  'Shipped From ${currentCartItem.productOriginLocation}',
+                  style: _mainText,
+                ),
+                Text(
+                  '${_uniMap[schoolNameAbbr.toLowerCase()]['price']}',
+                  style: _subText,
+                ),
               ],
             ),
           ),
@@ -538,9 +587,14 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('Delivery Time',style: _mainText,),
                 Text(
-                    '${_uniMap[schoolNameAbbr.toLowerCase()]['delivery_time']} Day',style: _subText,),
+                  'Delivery Time',
+                  style: _mainText,
+                ),
+                Text(
+                  '${_uniMap[schoolNameAbbr.toLowerCase()]['delivery_time']} Day',
+                  style: _subText,
+                ),
               ],
             ),
           ),
@@ -550,9 +604,10 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
   }
 
   Widget productDetails() {
-    TextStyle _mainText = TextStyle(fontSize: 16,color: Colors.black);
-    TextStyle _subText = TextStyle(fontSize: 16,color: Color(0xffc4c4c4));
-    return Container(color: Colors.white,
+    TextStyle _mainText = TextStyle(fontSize: 16, color: Colors.black);
+    TextStyle _subText = TextStyle(fontSize: 16, color: Color(0xffc4c4c4));
+    return Container(
+      color: Colors.white,
       child: FutureBuilder(
           future: getDeliveryInfoFromApi(),
           builder: (context, snapshot) {
@@ -588,8 +643,14 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text('${currentCartItem.productName}',style: _mainText,),
-                                    Text('${currentCartItem.productPrice}',style: _subText,),
+                                    Text(
+                                      '${currentCartItem.productName}',
+                                      style: _mainText,
+                                    ),
+                                    Text(
+                                      '${currentCartItem.productPrice}',
+                                      style: _subText,
+                                    ),
                                   ],
                                 ),
                                 deliveryInfo(
@@ -602,13 +663,18 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
-                                      Text("Units",style: _mainText,),
-                                      Text('${currentCartItem.units}',style: _subText,),
+                                      Text(
+                                        "Units",
+                                        style: _mainText,
+                                      ),
+                                      Text(
+                                        '${currentCartItem.units}',
+                                        style: _subText,
+                                      ),
                                     ],
                                   ),
                                 ),
                                 Divider(),
-
                               ],
                             ),
                           ],
@@ -691,12 +757,16 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 16),
                   child: Row(
                     children: [
                       Text(
                         "Delivery Method ",
-                        style: TextStyle(fontSize: 16, fontWeight:FontWeight.bold,color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                       ),
                       Spacer(),
                       Container(
@@ -714,10 +784,9 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                     ],
                   ),
                 ),
-                Container
-                  (
+                Container(
                   decoration: BoxDecoration(color: Colors.white),
-                  padding: EdgeInsets.symmetric(horizontal: 16,vertical:15.0),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15.0),
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -754,11 +823,14 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                                 }),
                             Container(
                               padding: EdgeInsets.all(5.0),
-                             child: InkWell(
+                              child: InkWell(
                                 onTap: () {
                                   editPhoneNumber();
                                 },
-                                child: Text('Edit Phone Number',style: TextStyle(color: Color(0xffc4c4c4)),),
+                                child: Text(
+                                  'Edit Phone Number',
+                                  style: TextStyle(color: Color(0xffc4c4c4)),
+                                ),
                               ),
                             ),
                           ],
