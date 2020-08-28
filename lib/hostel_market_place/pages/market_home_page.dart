@@ -24,6 +24,19 @@ class MarketHomePage extends StatefulWidget {
 class _MarketHomePageState extends State<MarketHomePage> {
   String uniName;
   bool isLoading = true;
+  Map userData;
+
+  Future<void> getUserData() async {
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = true;
+    });
+    userData = await HiveMethods().getUserData();
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   List _imgList = [1, 2, 3, 4];
 
@@ -56,6 +69,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
   @override
   void initState() {
     getUniName();
+    getUserData();
     super.initState();
   }
 
@@ -196,11 +210,30 @@ class _MarketHomePageState extends State<MarketHomePage> {
         child: Row(
           children: <Widget>[
             InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()));
-                },
-                child: Image.asset("asset/timmy.png")),
+            onTap: () {
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+    builder: (context) => ProfilePage(),
+    ),
+    );
+    },
+      child: CircleAvatar(
+        backgroundColor: Colors.blueGrey[400],
+        radius: 25,
+        child: userData['profilePicUrl'] == null
+            ? Icon(Icons.person, color: Color(0xffebf1ef))
+            : ExtendedImage.network(
+          userData['profilePicUrl'],
+          fit: BoxFit.fill,
+          handleLoadingProgress: true,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(160),
+          cache: false,
+          enableMemoryCache: true,
+        ),
+      ),
+    ),
             Spacer(),
             InkWell(
                 onTap: () {
