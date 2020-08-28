@@ -54,43 +54,50 @@ class _HomepageState extends State<Homepage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(height: 24,),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProfilePage(),
-                            ),
-                          );
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: Colors.blueGrey[400],
-                          radius: 50,
-                          child: userData['profilePicUrl'] == null
-                              ? Icon(Icons.person, color: Color(0xffebf1ef))
-                              : ExtendedImage.network(
-                                  userData['profilePicUrl'],
-                                  fit: BoxFit.fill,
-                                  handleLoadingProgress: true,
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(160),
-                                  cache: false,
-                                  enableMemoryCache: true,
-                                ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal:
+                            16),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfilePage(),
+                              ),
+                            );
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.blueGrey[400],
+                            radius: 50,
+                            child: userData['profilePicUrl'] == null
+                                ? Icon(Icons.person, color: Color(0xffebf1ef))
+                                : ExtendedImage.network(
+                                    userData['profilePicUrl'],
+                                    fit: BoxFit.fill,
+                                    handleLoadingProgress: true,
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(160),
+                                    cache: false,
+                                    enableMemoryCache: true,
+                                  ),
+                          ),
                         ),
                       ),
                       SizedBox(
                         height: 16,
                       ),
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            'Welcome, ',
-                            style: TextStyle(
-                                fontSize: 24, ),
-                          ),
-                          iD(),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal:16.0),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              'Welcome, ',
+                              style: TextStyle(
+                                  fontSize: 24, ),
+                            ),
+                            iD(),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 30,
