@@ -7,6 +7,7 @@ import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/landing_page/homepage.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -262,68 +263,153 @@ class _ProfilePageState extends State<ProfilePage> {
         child: ListView(
           children: [
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Stack(
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    userModel.profilePicUrl == null
-                        ? CircleAvatar(
-                            backgroundColor: Colors.blueGrey[400],
-                            radius: 80,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.grey[400],
-                            ))
-                        : Container(
-                            height: 160,
-                            width: 160,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: ExtendedImage.network(
-                                userData['profilePicUrl'],
-                                fit: BoxFit.fill,
-                                handleLoadingProgress: true,
-                                shape: BoxShape.rectangle,
-                                cache: false,
-                                enableMemoryCache: true,
-                              ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8),
+                      child: Stack(
+                        children: [
+                          userModel.profilePicUrl == null
+                              ? CircleAvatar(
+                                  backgroundColor: Colors.blueGrey[400],
+                                  radius: 80,
+                                  child: Icon(
+                                    Icons.person,
+                                    color: Colors.grey[400],
+                                  ))
+                              : Container(
+                                  height: 160,
+                                  width: 160,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(160),
+                                    child: ExtendedImage.network(
+                                      userData['profilePicUrl'],
+                                      fit: BoxFit.cover,
+                                      handleLoadingProgress: true,
+                                      shape: BoxShape.rectangle,
+                                      cache: false,
+                                      enableMemoryCache: true,
+                                    ),
+                                  ),
+                                ),
+                          Positioned(
+                            bottom: 3.0,
+                            right: 3.0,
+                            child: CircleAvatar(
+                              backgroundColor: Color(0xffebf1ef),
+                              child: isUpdatingPic
+                                  ? CircularProgressIndicator()
+                                  : IconButton(
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: Colors.deepOrange,
+                                      ),
+                                      onPressed: () {
+//                              print(userData);
+                                        pickImage();
+                                      },
+                                    ),
                             ),
                           ),
-                    Positioned(
-                      bottom: 0.0,
-                      right: 0.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          shape: BoxShape.circle,
-                        ),
-                        child: isUpdatingPic
-                            ? CircularProgressIndicator()
-                            : IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () {
-//                              print(userData);
-                                  pickImage();
-                                },
-                              ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${userModel.fullName}",
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.deepOrange,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2.0),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                    radius: 16,
+                                    backgroundColor: Color(0xffebf1ef),
+                                    child: Icon(
+                                      Icons.phone,
+                                      size: 16,
+                                    )),
+                                SizedBox(
+                                  width: 16,
+                                ),
+                                Text(
+                                  "${userModel.phoneNumber}",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2.0),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                    radius: 16,
+                                    backgroundColor: Color(0xffebf1ef),
+                                    child: Icon(
+                                      Icons.email,
+                                      size: 16,
+                                    )),
+                                SizedBox(
+                                  width: 16,
+                                ),
+                                Text(
+                                  "${userModel.email}",
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                    backgroundColor: Color(0xffebf1ef),
+                                    child: Icon(
+                                      Icons.location_on,
+                                      size: 16,
+                                    ),
+                                    radius: 16),
+                                SizedBox(
+                                  width: 16,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "${userModel.uniDetails['name']}",
+                                    style: TextStyle(fontSize: 15),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                ),
-                Text(
-                  "${userModel.fullName}",
-                  style: TextStyle(fontSize: 24),
-                ),
-                Text(
-                  "${userModel.phoneNumber}",
-                  style: TextStyle(fontSize: 15),
-                ),
-                Text(
-                  "${userModel.email}",
-                  style: TextStyle(fontSize: 15),
-                ),
-                Text(
-                  "@${userModel.uniDetails['name']}",
-                  style: TextStyle(fontSize: 15),
                 ),
               ],
             ),
@@ -331,9 +417,14 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 40,
             ),
             ExpansionTile(
+              childrenPadding: EdgeInsets.symmetric(horizontal: 16),
+              trailing: Icon(Icons.arrow_forward_ios),
               key: GlobalKey(),
               title: Text('Edit Profile Details'),
-              leading: Icon(Icons.settings),
+              leading: CircleAvatar(
+                  backgroundColor: Color(0xffebf1ef),
+                  radius: 37,
+                  child: Icon(Icons.edit)),
               children: <Widget>[
                 SizedBox(
 //                  height: MediaQuery.of(context).size.height * .30,
@@ -370,7 +461,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   backgroundColor: Color(0xffebf1ef),
                   child: Icon(
                     Icons.exit_to_app,
-                    color: Colors.black,
                     size: 30,
                   )),
               title: Text('Log Out'),
@@ -421,7 +511,6 @@ class _ItemsState extends State<Items> {
                 backgroundColor: Color(0xffebf1ef),
                 child: Icon(
                   widget._icon,
-                  color: Colors.black,
                   size: 30,
                 )),
             title: Text(widget._title),
