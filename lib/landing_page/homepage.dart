@@ -1,4 +1,5 @@
 //import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
+import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/landing_page/profile_page.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -35,10 +36,12 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     getUserData();
+
     super.initState();
   }
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
@@ -67,14 +70,14 @@ class _HomepageState extends State<Homepage> {
                             child: userData['profilePicUrl'] == null
                                 ? Icon(
                                     Icons.person,
-                                    color: Colors.grey[400],
+                                    color: Color(0xffebf1ef)
                                   )
                                 : ExtendedImage.network(
                                     userData['profilePicUrl'],
                                     fit: BoxFit.fill,
                                     handleLoadingProgress: true,
                                     shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(160),
                                     cache: false,
                                     enableMemoryCache: true,
                                   ),
@@ -90,11 +93,7 @@ class _HomepageState extends State<Homepage> {
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.normal),
                             ),
-                            Text(
-                              'Timmy',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )
+                            iD(),
                           ],
                         ),
                         SizedBox(
@@ -255,6 +254,15 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
             ),
+    );
+
+  }
+  Widget iD(){
+    UserModel userModel = UserModel.fromMap(userData.cast<String, dynamic>());
+    return Text(
+      '${userModel.userName}',
+      style: TextStyle(
+          fontSize: 20, fontWeight: FontWeight.bold),
     );
   }
 }
