@@ -125,23 +125,25 @@ class _HostelBookingInspectionRequestPageState
   Widget saveButton() {
     return Container(
       margin: EdgeInsets.fromLTRB(30, 10, 30, 10),
-      child: InkWell(
-        onTap: () {
-          validateAndSave();
-        },
-        child: Container(
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(8)),
-          child: Center(
-            child: Text(
-              'Send',
-              style: TextStyle(color: Colors.white),
+      child: isSending
+          ? Center(child: CircularProgressIndicator())
+          : InkWell(
+              onTap: () {
+                validateAndSave();
+              },
+              child: Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(8)),
+                child: Center(
+                  child: Text(
+                    'Send',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -163,7 +165,6 @@ class _HostelBookingInspectionRequestPageState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-
               Text(
                 'Review your Booking',
                 style: TextStyle(color: Colors.black, fontSize: 20),
@@ -266,16 +267,12 @@ class _HostelBookingInspectionRequestPageState
                             Icon(
                               Icons.date_range,
                               size: 18.0,
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                             ),
                             Text(
                               " $date",
                               style: TextStyle(
-                                  color: Theme
-                                      .of(context)
-                                      .primaryColor,
+                                  color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18.0),
                             ),
@@ -287,9 +284,7 @@ class _HostelBookingInspectionRequestPageState
                   Text(
                     " Fix a Date",
                     style: TextStyle(
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0),
                   ),
@@ -344,16 +339,12 @@ class _HostelBookingInspectionRequestPageState
                             Icon(
                               Icons.access_time,
                               size: 18.0,
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                             ),
                             Text(
                               " $time",
                               style: TextStyle(
-                                  color: Theme
-                                      .of(context)
-                                      .primaryColor,
+                                  color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18.0),
                             ),
@@ -365,9 +356,7 @@ class _HostelBookingInspectionRequestPageState
                   Text(
                     "  Change",
                     style: TextStyle(
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0),
                   ),

@@ -33,7 +33,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   var tempSearchStore = [];
   List<HostelModel> searchList;
   var query = '';
-  int perPage = 6;
+  int perPage = 3;
   bool gettingMoreHostels = false;
   bool moreHostelAvailable = true;
   HostelModel lastHostel;
@@ -47,6 +47,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   void initSearch() {
     try {
       isStillLoadingData = true;
+      moreHostelAvailable = true;
 
       HostelBookingMethods().fetchAllHostel(uniName: uniName).then(
         (List<HostelModel> list) {
@@ -738,20 +739,22 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             children: <Widget>[
               Icon(Icons.location_on, size: 16, color: Colors.grey),
               SizedBox(width: 8),
-              Text(
-                '${hostel.hostelLocation}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14.0,
-                  color: Colors.grey,
+              Expanded(
+                child: Text(
+                  '${hostel.hostelLocation}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14.0,
+                    color: Colors.grey,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
               SizedBox(
                 width: 8,
               ),
               Text(
-                '${hostel.distanceFromSchoolInKm}KM',
+                '${hostel.distanceFromSchoolInKm.toLowerCase().contains('km') ? hostel.distanceFromSchoolInKm : hostel.distanceFromSchoolInKm + 'KM'}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,

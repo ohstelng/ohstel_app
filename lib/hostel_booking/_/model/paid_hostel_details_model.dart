@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class PaidHostelModel {
@@ -7,6 +8,7 @@ class PaidHostelModel {
   int price;
   String id;
   Map hostelDetails;
+  Timestamp timestamp;
 
   PaidHostelModel({
     @required this.fullName,
@@ -24,6 +26,7 @@ class PaidHostelModel {
     this.price = mapData['price'];
     this.id = mapData['id'];
     this.hostelDetails = mapData['hostelDetails'];
+    this.timestamp = mapData['timestamp'];
   }
 
   Map toMap() {
@@ -34,6 +37,7 @@ class PaidHostelModel {
     data['price'] = this.price;
     data['id'] = this.id;
     data['hostelDetails'] = this.hostelDetails;
+    data['timestamp'] = Timestamp.now();
 
     return data;
   }

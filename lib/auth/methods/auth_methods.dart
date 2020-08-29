@@ -141,5 +141,7 @@ class AuthService {
     final key = 0;
 
     userDataBox.delete(key);
+    marketDataBox.clear();
+    foodDataBox.clear();
   }
 }

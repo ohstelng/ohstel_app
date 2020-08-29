@@ -15,8 +15,15 @@ class HostelBookingMethods {
   final CollectionReference bookingInspectionRef =
       Firestore.instance.collection('bookingInspections');
 
+  final DocumentReference bookingInspectionInfoRef = Firestore.instance
+      .collection('bookingInspections')
+      .document('hostelInspectionInfo');
+
   final CollectionReference paidHostelRef =
       Firestore.instance.collection('paidHostel');
+
+  final DocumentReference paidHostelInfoRef =
+      Firestore.instance.collection('paidHostel').document('paidHostelInfo');
 
   final CollectionReference savedHostelRef =
       Firestore.instance.collection('savedHostel');
@@ -347,6 +354,10 @@ class HostelBookingMethods {
     @required HostelModel hostelDetails,
   }) async {
     final String id = Uuid().v4();
+    var date = new DateTime.now().toString();
+    var dateParse = DateTime.parse(date);
+    final int month = dateParse.month;
+    final int year = dateParse.year;
 
     try {
       HostelBookingInspectionModel bookingInspectionInfo =
@@ -362,13 +373,30 @@ class HostelBookingMethods {
       print(bookingInspectionInfo.toMap());
       print(id);
 
-      await bookingInspectionRef
-          .document(id)
-          .setData(bookingInspectionInfo.toMap());
+      Firestore db = Firestore.instance;
+
+      var batch = db.batch();
+
+      batch.setData(
+        bookingInspectionRef.document(id),
+        bookingInspectionInfo.toMap(),
+      );
+
+      batch.setData(
+        bookingInspectionInfoRef
+            .collection(year.toString())
+            .document(month.toString()),
+        {"count": FieldValue.increment(1)},
+        merge: true,
+      );
+
+      await batch.commit();
+
       print('save inspection details');
 
       return 0;
     } catch (e) {
+      print(e);
       Fluttertoast.showToast(
         msg: '${e.message}',
         gravity: ToastGravity.CENTER,
@@ -385,9 +413,13 @@ class HostelBookingMethods {
     @required HostelModel hostelDetails,
   }) async {
     final String id = Uuid().v4();
+    var date = new DateTime.now().toString();
+    var dateParse = DateTime.parse(date);
+    final int month = dateParse.month;
+    final int year = dateParse.year;
 
     try {
-      PaidHostelModel bookingInspectionInfo = PaidHostelModel(
+      PaidHostelModel paidHostelInfo = PaidHostelModel(
         fullName: fullName,
         phoneNumber: phoneNumber,
         email: email,
@@ -395,10 +427,28 @@ class HostelBookingMethods {
         id: id,
         hostelDetails: hostelDetails.toMap(),
       );
-      print(bookingInspectionInfo.toMap());
+      print(paidHostelInfo.toMap());
       print(id);
 
-      await paidHostelRef.document(id).setData(bookingInspectionInfo.toMap());
+      Firestore db = Firestore.instance;
+
+      var batch = db.batch();
+
+      batch.setData(
+        paidHostelRef.document(id),
+        paidHostelInfo.toMap(),
+      );
+
+      batch.setData(
+        paidHostelInfoRef
+            .collection(year.toString())
+            .document(month.toString()),
+        {"count": FieldValue.increment(1)},
+        merge: true,
+      );
+
+      await batch.commit();
+
       print('save inspection details');
 
       return 0;

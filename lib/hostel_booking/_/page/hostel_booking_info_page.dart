@@ -128,7 +128,6 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
       if (body['data']['status'] == 'success') {
         Fluttertoast.showToast(msg: 'SucessFull!!!! :)');
         savePaidDataToServer();
-        //do something with the response. show success
       } else {}
     } catch (e) {
       print(e);
@@ -137,7 +136,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
   chargeCard() async {
     Charge charge = Charge()
-      ..amount = 10000
+      ..amount = widget.hostelModel.price * 100
       ..reference = _getReference()
 //..accessCode = _createAcessCode(skTest, _getReference())
       ..email = userData['email'];
@@ -350,14 +349,6 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 Text("12/12/2020")
               ]),
               SizedBox(height: 16),
-//          Text('Des: ${widget.hostelModel.description}'),
-//          Text('Price: ${widget.hostelModel.price}'),
-//          Text('ratings: ${widget.hostelModel.ratings}'),
-//          Text('Features: ${widget.hostelModel.extraFeatures}'),
-//          Text('lank Mark Close by: ${widget.hostelModel.landMark}'),
-//          Text('School Hostel?: ${widget.hostelModel.isRoomMateNeeded}'),
-//          Text('Roommate needed? : ${widget.hostelModel.isSchoolHostel}'),
-//          Text('and lots more..............'),
               Container(
                 child: TabBar(
                   tabs: <Widget>[

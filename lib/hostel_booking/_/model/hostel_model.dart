@@ -8,7 +8,7 @@ class HostelModel {
   String hostelName;
   String hostelLocation;
   int price;
-  double distanceFromSchoolInKm;
+  String distanceFromSchoolInKm;
   bool isRoomMateNeeded;
   int bedSpace;
   bool isSchoolHostel;
@@ -47,7 +47,7 @@ class HostelModel {
     this.hostelLocation = mapData['hostelLocation'];
 
     this.price = mapData['price'];
-    this.distanceFromSchoolInKm = mapData['distanceFromSchoolInKm'];
+    this.distanceFromSchoolInKm = mapData['distanceFromSchoolInKm'].toString();
     this.isRoomMateNeeded = mapData['isRoomMateNeeded'];
     this.bedSpace = mapData['bedSpace'];
     this.isSchoolHostel = mapData['isSchoolHostel'];
