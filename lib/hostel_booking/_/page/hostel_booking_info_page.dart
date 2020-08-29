@@ -344,7 +344,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                   size: 16,
                 ),
                 Text(
-                    '${widget.hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
+                    '${widget.hostelModel.distanceFromSchoolInKm.toLowerCase().contains('km') ? widget.hostelModel.distanceFromSchoolInKm + ' from Unilorin' : widget.hostelModel.distanceFromSchoolInKm + 'KM from Unilorin'}'),
                 Spacer(),
                 Text("12/12/2020")
               ]),

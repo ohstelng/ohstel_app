@@ -129,6 +129,7 @@ class _HostelBookingInspectionRequestPageState
           ? Center(child: CircularProgressIndicator())
           : InkWell(
               onTap: () {
+                print(date);
                 validateAndSave();
               },
               child: Container(

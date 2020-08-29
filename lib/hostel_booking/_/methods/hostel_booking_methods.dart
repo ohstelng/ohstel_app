@@ -354,8 +354,8 @@ class HostelBookingMethods {
     @required HostelModel hostelDetails,
   }) async {
     final String id = Uuid().v4();
-    var date = new DateTime.now().toString();
-    var dateParse = DateTime.parse(date);
+    var _date = new DateTime.now().toString();
+    var dateParse = DateTime.parse(_date);
     final int month = dateParse.month;
     final int year = dateParse.year;
 
