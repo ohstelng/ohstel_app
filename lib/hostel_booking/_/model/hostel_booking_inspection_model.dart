@@ -9,6 +9,7 @@ class HostelBookingInspectionModel {
   String time;
   String id;
   Map hostelDetails;
+  bool inspectionMade;
   Timestamp timestamp;
 
   HostelBookingInspectionModel({
@@ -28,6 +29,7 @@ class HostelBookingInspectionModel {
     this.date = mapData['date'];
     this.time = mapData['time'];
     this.id = mapData['id'];
+    this.inspectionMade = mapData['inspectionMade'];
     this.hostelDetails = mapData['hostelDetails'];
     this.timestamp = mapData['timestamp'];
   }
@@ -41,6 +43,7 @@ class HostelBookingInspectionModel {
     data['time'] = this.time;
     data['id'] = this.id;
     data['hostelDetails'] = this.hostelDetails;
+    data['inspectionMade'] = false;
     data['timestamp'] = Timestamp.now();
 
     return data;

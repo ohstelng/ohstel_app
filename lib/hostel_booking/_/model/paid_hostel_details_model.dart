@@ -9,6 +9,7 @@ class PaidHostelModel {
   String id;
   Map hostelDetails;
   Timestamp timestamp;
+  bool isClaimed;
 
   PaidHostelModel({
     @required this.fullName,
@@ -27,6 +28,8 @@ class PaidHostelModel {
     this.id = mapData['id'];
     this.hostelDetails = mapData['hostelDetails'];
     this.timestamp = mapData['timestamp'];
+    this.timestamp = mapData['timestamp'];
+    this.isClaimed = mapData['isClaimed'];
   }
 
   Map toMap() {
@@ -36,6 +39,7 @@ class PaidHostelModel {
     data['email'] = this.email;
     data['price'] = this.price;
     data['id'] = this.id;
+    data['isClaimed'] = false;
     data['hostelDetails'] = this.hostelDetails;
     data['timestamp'] = Timestamp.now();
 
