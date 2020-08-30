@@ -1,8 +1,8 @@
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
+import 'package:Ohstel_app/auth/pages/forgot_password_page.dart';
 import 'package:Ohstel_app/auth/pages/sigup_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ToggleBetweenLoginAndSignUpPage extends StatefulWidget {
@@ -150,7 +150,7 @@ class _LogInPageState extends State<LogInPage> {
                               SizedBox(
                                 height: 14,
                               ),
-                              forgotPassword(),
+                              moreOptions(),
                             ],
                           ),
                         ),
@@ -304,26 +304,50 @@ class _LogInPageState extends State<LogInPage> {
     );
   }
 
-  Widget forgotPassword() {
+  Widget moreOptions() {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.all(10),
-      child: InkWell(
-        onTap: () {
-          widget.toggleView();
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Forgot Password ? or Sign up',
-              style: TextStyle(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ForgetPasswordPage(),
+                  ),
+                );
+              },
+              child: Text(
+                'Forgot Password ?',
+                style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.black,
-                  fontWeight: FontWeight.normal),
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
             ),
-          ],
-        ),
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            child: InkWell(
+              onTap: () {
+                widget.toggleView();
+              },
+              child: Text(
+                ' Create New Account ',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

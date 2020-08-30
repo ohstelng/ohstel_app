@@ -22,6 +22,8 @@ class _HomepageState extends State<Homepage> {
   Map userData;
 
   Future<void> getUserData() async {
+    await Future.delayed(Duration(seconds: 1));
+
     if (!mounted) return;
 
     setState(() {
@@ -53,10 +55,11 @@ class _HomepageState extends State<Homepage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 24,),
+                      SizedBox(
+                        height: 24,
+                      ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal:
-                            16),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
@@ -87,13 +90,14 @@ class _HomepageState extends State<Homepage> {
                         height: 16,
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal:16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Row(
                           children: <Widget>[
                             Text(
                               'Welcome, ',
                               style: TextStyle(
-                                  fontSize: 24, ),
+                                fontSize: 24,
+                              ),
                             ),
                             iD(),
                           ],
@@ -126,10 +130,9 @@ class _HomepageState extends State<Homepage> {
                                 return Builder(
                                   builder: (BuildContext context) {
                                     return Container(
-                                      width:
-                                          MediaQuery.of(context).size.width,
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 5.0),
+                                      width: MediaQuery.of(context).size.width,
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5.0),
                                       decoration:
                                           BoxDecoration(color: Colors.grey),
                                       child: Center(
@@ -146,7 +149,9 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -159,8 +164,7 @@ class _HomepageState extends State<Homepage> {
                                   height: 135,
                                   width: 162,
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       SvgPicture.asset("asset/chostel.svg"),
                                       SizedBox(height: 16),
@@ -181,8 +185,7 @@ class _HomepageState extends State<Homepage> {
                                   height: 135,
                                   width: 162,
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       SvgPicture.asset("asset/cfood.svg"),
                                       SizedBox(height: 16),
@@ -208,8 +211,7 @@ class _HomepageState extends State<Homepage> {
                                   height: 135,
                                   width: 162,
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       SvgPicture.asset("asset/cmarket.svg"),
                                       SizedBox(height: 16),
@@ -230,8 +232,7 @@ class _HomepageState extends State<Homepage> {
                                   height: 135,
                                   width: 162,
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       SvgPicture.asset("asset/chire.svg"),
                                       SizedBox(height: 16),

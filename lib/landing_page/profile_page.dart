@@ -374,9 +374,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 SizedBox(
                                   width: 16,
                                 ),
-                                Text(
-                                  "${userModel.email}",
-                                  style: TextStyle(fontSize: 15),
+                                Expanded(
+                                  child: Text(
+                                    "${userModel.email}",
+                                    style: TextStyle(fontSize: 15),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ],
                             ),

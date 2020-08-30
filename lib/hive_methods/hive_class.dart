@@ -66,7 +66,7 @@ class HiveMethods {
   Future<Map> getUserData() async {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
 
-    Map userData = userDataBox.getAt(0);
+    Map userData = userDataBox.get(0);
     return userData;
   }
 
@@ -90,7 +90,6 @@ class HiveMethods {
   //Todo: implement update address
   //Todo: implement update address
   //Todo: implement update address
-
 
   Future<void> updateUserAddress({@required Map map}) async {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
@@ -131,7 +130,8 @@ class HiveMethods {
 
   Future<void> getLocationDateFromApi() async {
     try {
-      String url = "https://quiz-demo-de79d.appspot.com/hostel_api/all_sub_locations";
+      String url =
+          "https://quiz-demo-de79d.appspot.com/hostel_api/all_sub_locations";
       var response = await http.get(url);
       Map data = json.decode(response.body);
       data['lastUpdate'] = DateTime.now().millisecondsSinceEpoch;

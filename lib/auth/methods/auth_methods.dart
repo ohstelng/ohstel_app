@@ -107,6 +107,15 @@ class AuthService {
     }
   }
 
+  Future restEmail({@required String email}) async {
+    try {
+      return auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '${e.message}');
+    }
+  }
+
   Future getUserDetails({@required String uid}) async {
     final CollectionReference userDataCollectionRef =
         Firestore.instance.collection('userData');
