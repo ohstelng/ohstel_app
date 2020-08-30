@@ -116,18 +116,18 @@ class AuthService {
     }
   }
 
-  Future getUserDetails({@required String uid}) async {
+//  Future getUserDetails({@required String uid}) async {
+
+  Future<UserModel> getUserDetails({@required String uid}) async {
     final CollectionReference userDataCollectionRef =
         Firestore.instance.collection('userData');
-    print(
-        'uuuuuuuuuuuuuuuuuuuuuuuuiiiiiiiiiiiiiiiiiiiiiiiiiiiiddddddddddddddddddd');
     print(uid.trim());
     try {
       DocumentSnapshot document =
           await userDataCollectionRef.document(uid).get();
-      print('pppppppppppppppppppppppppppppppppppppppppppppppppppppp');
       print(document.data);
       saveUserDataToDb(userData: document.data);
+      return UserModel.fromMap(document.data.cast<String, dynamic>());
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '${e.message}');

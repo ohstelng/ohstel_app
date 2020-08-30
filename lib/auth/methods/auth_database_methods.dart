@@ -29,6 +29,8 @@ class AuthDatabaseMethods {
         'userName': userName,
         'phoneNumber': phoneNumber,
         'uniDetails': uniDetails,
+        'walletBalance': 0,
+        'coinBalance': 0,
       },
       merge: true,
     );

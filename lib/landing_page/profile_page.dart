@@ -6,10 +6,12 @@ import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/landing_page/homepage.dart';
+import 'package:Ohstel_app/wallet/home.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
@@ -284,8 +286,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     color: Colors.grey[400],
                                   ))
                               : Container(
-                                  height: 160,
-                                  width: 160,
+                                  height: 120,
+                                  width: 120,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(160),
                                     child: ExtendedImage.network(
@@ -420,6 +422,12 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(
               height: 40,
             ),
+            Items(
+              Icons.attach_money,
+              "Wallet",
+              action: WalletHome(userModel.uid),
+            ),
+            Divider(),
             ExpansionTile(
               childrenPadding: EdgeInsets.symmetric(horizontal: 16),
               trailing: Icon(Icons.arrow_forward_ios),
@@ -485,11 +493,9 @@ class _ProfilePageState extends State<ProfilePage> {
 class Items extends StatefulWidget {
   final IconData _icon;
   final String _title;
+  final Widget action;
 
-  Items(
-    this._icon,
-    this._title,
-  );
+  Items(this._icon, this._title, {this.action});
 
   @override
   _ItemsState createState() => _ItemsState();
@@ -498,7 +504,10 @@ class Items extends StatefulWidget {
 class _ItemsState extends State<Items> {
   void _navigate() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Homepage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                widget.action != null ? widget.action : Homepage()));
   }
 
   @override
