@@ -3,6 +3,7 @@ import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/auth/models/login_user_model.dart';
 import 'package:Ohstel_app/auth/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'hive_methods/hive_class.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
     // every other sub widget down the widget tree.
     return StreamProvider<LoginUserModel>.value(
       value: AuthService().userStream,
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Ohstel',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
