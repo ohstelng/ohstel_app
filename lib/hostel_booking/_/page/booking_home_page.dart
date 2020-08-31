@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:Ohstel_app/constant/no_connection.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
@@ -8,6 +10,7 @@ import 'package:Ohstel_app/hostel_booking/_/page/hostel_booking_search_page.dart
 import 'package:Ohstel_app/hostel_booking/_/page/saved_hostel_page.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +46,11 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   // 5 option available are default(by date Added), price, distance,
   // roomMate needed, on campus Only(school hostel)
   String sortBy = 'default';
+
+  Connectivity connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> subscription;
+  bool performOnlineActivity;
+  bool toDisplay = true;
 
   void initSearch() {
     try {
@@ -454,6 +462,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   void moreSearchOptionController() {
     // 5 option available are default(by date Added), price, distance, roomMate needed, on campus Only(school hostel)
+    if (performOnlineActivity == false) return;
+
     if (sortBy == 'default') {
       getMoreHostelSearchByDateAdded();
     } else if (sortBy == 'price') {
@@ -467,6 +477,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Future<void> performSearchController() async {
     // 5 option available are default(by date Added), price, distance, roomMate needed, on campus Only(school hostel)
+
+    if (performOnlineActivity == false) return;
 
     await Future.delayed(Duration(seconds: 3));
 
@@ -516,6 +528,20 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       getUniName();
       initSearch();
     });
+    subscription =
+        connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.mobile ||
+          result == ConnectivityResult.wifi) {
+        performOnlineActivity = true;
+        toDisplay = true;
+//        moreHostelAvailable
+        setState(() {});
+      } else if (result == ConnectivityResult.none) {
+        performOnlineActivity = false;
+        toDisplay = false;
+//        setState(() {});
+      }
+    });
     scrollController.addListener(() {
       _scrollListener();
     });
@@ -527,75 +553,79 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     TextStyle tabStyle = TextStyle(
         color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal);
 
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(144),
-          child: AppBar(
-            backgroundColor: Colors.white,
-            flexibleSpace: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {},
-                      ),
-                      Spacer(),
-                      IconButton(
-                        icon: Icon(Icons.notifications_none),
-                        onPressed: () {},
-                      ),
-                    ],
+    return toDisplay != true
+        ? NoConnection()
+        : DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(144),
+                child: AppBar(
+                  backgroundColor: Colors.white,
+                  flexibleSpace: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () {},
+                            ),
+                            Spacer(),
+                            IconButton(
+                              icon: Icon(Icons.notifications_none),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                        searchInputControl(),
+                        TabBar(
+                          tabs: [
+                            Tab(
+                                child: Text(
+                              "Explore",
+                              style: tabStyle,
+                            )),
+                            Tab(
+                                child: Text(
+                              "Saved",
+                              style: tabStyle,
+                            )),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  searchInputControl(),
-                  TabBar(
-                    tabs: [
-                      Tab(
-                          child: Text(
-                        "Explore",
-                        style: tabStyle,
-                      )),
-                      Tab(
-                          child: Text(
-                        "Saved",
-                        style: tabStyle,
-                      )),
-                    ],
+                ),
+              ),
+              body: TabBarView(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                    width: MediaQuery.of(context).size.width * 0.97,
+                    height: MediaQuery.of(context).size.height * 0.77,
+                    child: isStillLoadingData
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : sortBy == 'distance'
+                            ? sortByDistance()
+                            : resultList(),
                   ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.97,
+                    height: MediaQuery.of(context).size.height * 0.77,
+                    child: isStillLoadingData
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : SavedHostelPage(),
+                  )
                 ],
               ),
             ),
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              width: MediaQuery.of(context).size.width * 0.97,
-              height: MediaQuery.of(context).size.height * 0.77,
-              child: isStillLoadingData
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : sortBy == 'distance' ? sortByDistance() : resultList(),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.97,
-              height: MediaQuery.of(context).size.height * 0.77,
-              child: isStillLoadingData
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : SavedHostelPage(),
-            )
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Widget sortByDistance() {

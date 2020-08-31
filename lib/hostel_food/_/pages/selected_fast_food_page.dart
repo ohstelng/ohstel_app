@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
 import 'package:Ohstel_app/hostel_food/_/models/fast_food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
@@ -9,7 +10,10 @@ import 'package:Ohstel_app/hostel_food/_/pages/selected_food_dialog.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_fries_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_snacks_page.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
 class SelectedFastFoodPage extends StatefulWidget {
@@ -30,6 +34,8 @@ class SelectedFastFoodPage extends StatefulWidget {
 class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
   final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
   String selectedFoodBar = 'Fast Food';
+  Box cartBox;
+  bool isLoading = true;
   StreamController<String> toDisplayController = StreamController();
 
   Runes input = Runes('\u20a6');
@@ -39,8 +45,21 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
   //TODO: implement drinks backend!!!!
   //TODO: implement drinks backend!!!!
 
+  void getCart() async {
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = true;
+    });
+    cartBox = await HiveMethods().getOpenBox('cart');
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   void initState() {
+    getCart();
     toDisplayController.add('Fast Food');
     super.initState();
   }
@@ -55,14 +74,16 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            header(),
-            titleBar(),
-            foodBar(),
-            body(context: context),
-          ],
-        ),
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Column(
+                children: <Widget>[
+                  header(),
+                  titleBar(),
+                  foodBar(),
+                  body(context: context),
+                ],
+              ),
       ),
     );
   }
@@ -351,18 +372,79 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
             Navigator.of(context).pop();
           },
         ),
-        IconButton(
-          color: Colors.grey,
-          icon: Icon(Icons.shopping_cart, color: Colors.black87),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CartPage(),
+        cartWidget(),
+      ],
+    );
+  }
+
+  Widget cartWidget() {
+    return Container(
+      margin: EdgeInsets.only(right: 5.0),
+      child: ValueListenableBuilder(
+        valueListenable: cartBox.listenable(),
+        builder: (context, Box box, widget) {
+          if (box.values.isEmpty) {
+            return Container(
+              margin: EdgeInsets.only(right: 5.0),
+              child: IconButton(
+                color: Colors.grey,
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Theme.of(context).primaryColor,
+                  size: 43,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CartPage(),
+                    ),
+                  );
+                },
               ),
             );
-          },
-        )
-      ],
+          } else {
+            int count = box.length;
+
+            return Stack(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 5.0),
+                  child: IconButton(
+                    color: Colors.grey,
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Theme.of(context).primaryColor,
+                      size: 43,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CartPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 8.0,
+                  right: 0.0,
+                  child: Container(
+                    padding: EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '$count',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
     );
   }
 }

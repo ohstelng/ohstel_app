@@ -6,6 +6,8 @@ import 'package:Ohstel_app/hostel_food/_/models/food_cart_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'cart_page.dart';
@@ -25,6 +27,8 @@ class FoodDialog extends StatefulWidget {
 
 class _FoodDialogState extends State<FoodDialog> {
   final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
+  Box cartBox;
+  bool isLoading = true;
 
   Runes input = Runes('\u20a6');
   var symbol;
@@ -34,6 +38,18 @@ class _FoodDialogState extends State<FoodDialog> {
   List<ExtraItemDetails> extraList = [];
   int totalPrice;
   int numberOfPlates = 1;
+
+  void getCart() async {
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = true;
+    });
+    cartBox = await HiveMethods().getOpenBox('cart');
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   int getTotal() {
     int _initialTotal = widget.itemDetails.price;
@@ -57,7 +73,7 @@ class _FoodDialogState extends State<FoodDialog> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    getCart();
     super.initState();
     symbol = String.fromCharCodes(input);
   }
@@ -75,17 +91,7 @@ class _FoodDialogState extends State<FoodDialog> {
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.of(context).pop()),
         actions: [
-          IconButton(
-            color: Colors.black87,
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => CartPage(),
-                ),
-              );
-            },
-          )
+          cartWidget(),
         ],
       ),
       body: SafeArea(
@@ -299,76 +305,6 @@ class _FoodDialogState extends State<FoodDialog> {
               SizedBox(
                 height: 10,
               ),
-//              Container(
-//                child: Row(
-//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                  children: <Widget>[
-//                    Text('Nmuber Of Plates'),
-//                    Row(
-//                      children: <Widget>[
-//                        Container(
-////                        padding: EdgeInsets.symmetric(horizontal: 1.5),
-//                          margin: EdgeInsets.only(right: 10),
-//                          decoration: BoxDecoration(
-//                            border: Border.all(color: Colors.grey),
-//                          ),
-//                          child: InkWell(
-//                            child: Icon(Icons.remove, color: Colors.grey),
-//                            onTap: () {
-//                              if (numberOfPlates > 1) {
-//                                if (mounted) {
-//                                  setState(() {
-//                                    numberOfPlates--;
-//                                  });
-//                                }
-//                              }
-//                            },
-//                          ),
-//                        ),
-//                        Text('$numberOfPlates'),
-//                        Container(
-//                          margin: EdgeInsets.only(left: 10),
-//                          decoration: BoxDecoration(
-//                            border: Border.all(color: Colors.grey),
-//                          ),
-//                          child: InkWell(
-//                            child: Icon(Icons.add, color: Colors.grey),
-//                            onTap: () {
-//                              if (mounted) {
-//                                setState(() {
-//                                  numberOfPlates++;
-//                                });
-//                              }
-//                            },
-//                          ),
-//                        ),
-//                      ],
-//                    )
-//                  ],
-//                ),
-//              ),
-//              Divider(
-//                thickness: 0.5,
-//                color: Colors.black,
-//              ),
-//              Container(
-//                margin: EdgeInsets.all(10.0),
-//                child: Row(
-//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                  children: <Widget>[
-//                    Text(
-//                      'Total:',
-//                      style:
-//                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//                    ),
-//                    Text(
-//                      '$symbol ${formatCurrency.format(getTotal())}',
-//                      style:
-//                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//                    ),
-//                  ],
-//                ),
-//              ),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -471,5 +407,76 @@ class _FoodDialogState extends State<FoodDialog> {
         },
       );
     }
+  }
+
+  Widget cartWidget() {
+    return Container(
+      margin: EdgeInsets.only(right: 5.0),
+      child: ValueListenableBuilder(
+        valueListenable: cartBox.listenable(),
+        builder: (context, Box box, widget) {
+          if (box.values.isEmpty) {
+            return Container(
+              margin: EdgeInsets.only(right: 5.0),
+              child: IconButton(
+                color: Colors.grey,
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Theme.of(context).primaryColor,
+                  size: 43,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CartPage(),
+                    ),
+                  );
+                },
+              ),
+            );
+          } else {
+            int count = box.length;
+
+            return Stack(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 5.0),
+                  child: IconButton(
+                    color: Colors.grey,
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Theme.of(context).primaryColor,
+                      size: 43,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CartPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 8.0,
+                  right: 0.0,
+                  child: Container(
+                    padding: EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '$count',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
+    );
   }
 }

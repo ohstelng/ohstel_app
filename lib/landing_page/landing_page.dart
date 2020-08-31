@@ -52,7 +52,6 @@ class _MainHomePageState extends State<MainHomePage> {
     return Scaffold(
       body: PageView(
         children: <Widget>[
-
           HostelBookingHomePage(),
           FoodHomePage(),
           Homepage(),
@@ -64,13 +63,14 @@ class _MainHomePageState extends State<MainHomePage> {
         physics: BouncingScrollPhysics(),
       ),
       bottomNavigationBar: CupertinoTabBar(
-        backgroundColor: Colors.white70,
+        backgroundColor: Color(0xfff4f5f6),
         currentIndex: getPageIndex,
         onTap: onTapChangePage,
         activeColor: Colors.deepOrange,
         inactiveColor: Colors.grey,
         items: [
           BottomNavigationBarItem(
+            backgroundColor: Color(0xfff4f5f6),
             icon: Padding(
               padding: const EdgeInsets.all(4.0),
               child: SvgPicture.asset("asset/hostel.svg"),
@@ -120,7 +120,7 @@ class _MainHomePageState extends State<MainHomePage> {
             ),
             title: Text(
               'Hire',
-              style:_bottomStyle,
+              style: _bottomStyle,
             ),
           ),
         ],
@@ -128,4 +128,3 @@ class _MainHomePageState extends State<MainHomePage> {
     );
   }
 }
-
