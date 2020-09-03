@@ -66,7 +66,8 @@ class HiveMethods {
   Future<Map> getUserData() async {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
 
-    Map userData = userDataBox.get(0);
+    Map userData = userDataBox.getAt(0);
+    print(userDataBox.isEmpty);
     return userData;
   }
 

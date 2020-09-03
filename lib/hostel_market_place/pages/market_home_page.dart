@@ -14,6 +14,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
 class MarketHomePage extends StatefulWidget {
@@ -25,6 +27,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
   String uniName;
   bool isLoading = true;
   Map userData;
+  Box marketBox;
+  TextStyle _tabBarStyle = TextStyle(color: Colors.black);
 
   Future<void> getUserData() async {
     if (!mounted) return;
@@ -33,6 +37,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
       isLoading = true;
     });
     userData = await HiveMethods().getUserData();
+    marketBox = await HiveMethods().getOpenBox('marketCart');
     setState(() {
       isLoading = false;
     });
@@ -68,13 +73,12 @@ class _MarketHomePageState extends State<MarketHomePage> {
 
   @override
   void initState() {
-    getUniName();
     getUserData();
+    getUniName();
     super.initState();
   }
 
   @override
-  TextStyle _tabBarStyle = TextStyle(color: Colors.black);
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
@@ -210,41 +214,32 @@ class _MarketHomePageState extends State<MarketHomePage> {
         child: Row(
           children: <Widget>[
             InkWell(
-            onTap: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (context) => ProfilePage(),
-    ),
-    );
-    },
-      child: CircleAvatar(
-        backgroundColor: Colors.blueGrey[400],
-        radius: 25,
-        child: userData['profilePicUrl'] == null
-            ? Icon(Icons.person, color: Color(0xffebf1ef))
-            : ExtendedImage.network(
-          userData['profilePicUrl'],
-          fit: BoxFit.fill,
-          handleLoadingProgress: true,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(160),
-          cache: false,
-          enableMemoryCache: true,
-        ),
-      ),
-    ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.blueGrey[400],
+                radius: 25,
+                child: userData['profilePicUrl'] == null
+                    ? Icon(Icons.person, color: Color(0xffebf1ef))
+                    : ExtendedImage.network(
+                        userData['profilePicUrl'],
+                        fit: BoxFit.fill,
+                        handleLoadingProgress: true,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(160),
+                        cache: false,
+                        enableMemoryCache: true,
+                      ),
+              ),
+            ),
             Spacer(),
-            InkWell(
-                onTap: () {
-//            saveProduct();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MarketCartPage(),
-                    ),
-                  );
-                },
-                child: SvgPicture.asset("asset/cart.svg")),
+            cartWidget(),
             popMenu()
 
 //                header(),
@@ -628,20 +623,79 @@ class _MarketHomePageState extends State<MarketHomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.shopping_cart,
-            color: Colors.grey,
-          ),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => MarketCartPage(),
+        cartWidget(),
+      ],
+    );
+  }
+
+  Widget cartWidget() {
+    return Container(
+      margin: EdgeInsets.only(right: 5.0),
+      child: ValueListenableBuilder(
+        valueListenable: marketBox.listenable(),
+        builder: (context, Box box, widget) {
+          if (box.values.isEmpty) {
+            return Container(
+              margin: EdgeInsets.only(right: 5.0),
+              child: IconButton(
+                color: Colors.grey,
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Theme.of(context).primaryColor,
+                  size: 35,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MarketCartPage(),
+                    ),
+                  );
+                },
               ),
             );
-          },
-        )
-      ],
+          } else {
+            int count = box.length;
+
+            return Stack(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 5.0),
+                  child: IconButton(
+                    color: Colors.grey,
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Theme.of(context).primaryColor,
+                      size: 35,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MarketCartPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 5.0,
+                  right: 5.0,
+                  child: Container(
+                    padding: EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '$count',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
     );
   }
 }

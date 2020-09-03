@@ -30,7 +30,9 @@ class AuthService {
       {@required String email, @required String password}) async {
     try {
       AuthResult result = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       FirebaseUser user = result.user;
 
       await getUserDetails(uid: user.uid);
@@ -126,7 +128,7 @@ class AuthService {
       DocumentSnapshot document =
           await userDataCollectionRef.document(uid).get();
       print(document.data);
-      saveUserDataToDb(userData: document.data);
+      await saveUserDataToDb(userData: document.data);
       return UserModel.fromMap(document.data.cast<String, dynamic>());
     } catch (e) {
       print(e);
@@ -134,12 +136,24 @@ class AuthService {
     }
   }
 
-  void saveUserDataToDb({@required Map userData}) {
+  Future<void> saveUserDataToDb({@required Map userData}) async {
+    print('saving..................');
     Box<Map> userDataBox = Hive.box<Map>('userDataBox');
     final key = 0;
     final value = userData;
+    print(userData);
 
-    userDataBox.put(key, value);
+    userData['dateJoined'] = userData["dateJoined"]?.toDate().toString();
+    print(userData);
+
+
+    await userDataBox.put(key, value);
+    print('saved');
+    print('saved');
+    print('saved');
+    print('saved');
+    print('saved');
+    print('saved');
     print('saved');
   }
 

@@ -134,8 +134,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
 
                 return InkWell(
                   onTap: () {
-                    print(
-                        "currentFastFood.toMap():${currentFastFood.toMap()}");
+                    print("currentFastFood.toMap():${currentFastFood.toMap()}");
                     print(
                         "currentItemDetails[0].toMap():${currentItemDetails[0].toMap()}");
 
@@ -176,8 +175,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                           Container(
                             height: 120,
                             child: Column(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(

@@ -6,7 +6,8 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
 class SelectedCategoriesPage extends StatefulWidget {
@@ -24,6 +25,20 @@ class SelectedCategoriesPage extends StatefulWidget {
 
 class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
   String uniName;
+  bool isLoading = true;
+  Box marketBox;
+
+  void getCart() async {
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = true;
+    });
+    marketBox = await HiveMethods().getOpenBox('cart');
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   Future<void> getUniName() async {
     String name = await HiveMethods().getUniName();
@@ -33,6 +48,7 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
 
   @override
   void initState() {
+    getCart();
     getUniName();
     super.initState();
   }
@@ -41,7 +57,7 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: body(),
+      body: isLoading ? Center(child: CircularProgressIndicator()) : body(),
     );
   }
 
@@ -142,14 +158,15 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                               Text('\₦${currentProductModel.productPrice}',
                                   maxLines: 1,
                                   style: TextStyle(
-                                      color: Color(0xffc4c4c4),
-                                      fontSize: 17,
-                                      )),
-                              SizedBox(height: 8,),
+                                    color: Color(0xffc4c4c4),
+                                    fontSize: 17,
+                                  )),
+                              SizedBox(
+                                height: 8,
+                              ),
                               Text(
                                 '${currentProductModel.productDescription}',
                                 maxLines: 3,
-
                               ),
                             ],
                           ),
@@ -184,20 +201,82 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
         },
       ),
       actions: <Widget>[
-        InkWell(
-          child: SvgPicture.asset("asset/cart.svg"),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => MarketCartPage(),
-              ),
-            );
-          },
-        ),
+        cartWidget(),
         SizedBox(
           width: 16,
         )
       ],
+    );
+  }
+
+  Widget cartWidget() {
+    return Container(
+      margin: EdgeInsets.only(right: 5.0),
+      child: ValueListenableBuilder(
+        valueListenable: marketBox.listenable(),
+        builder: (context, Box box, widget) {
+          if (box.values.isEmpty) {
+            return Container(
+              margin: EdgeInsets.only(right: 5.0),
+              child: IconButton(
+                color: Colors.grey,
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Theme.of(context).primaryColor,
+                  size: 35,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MarketCartPage(),
+                    ),
+                  );
+                },
+              ),
+            );
+          } else {
+            int count = box.length;
+
+            return Stack(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 5.0),
+                  child: IconButton(
+                    color: Colors.grey,
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Theme.of(context).primaryColor,
+                      size: 35,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MarketCartPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 5.0,
+                  right: 5.0,
+                  child: Container(
+                    padding: EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '$count',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
     );
   }
 }

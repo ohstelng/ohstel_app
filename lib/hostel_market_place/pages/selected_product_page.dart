@@ -9,6 +9,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class SelectedProductPage extends StatefulWidget {
   final ProductModel productModel;
@@ -22,9 +24,26 @@ class SelectedProductPage extends StatefulWidget {
 class _SelectedProductPageState extends State<SelectedProductPage> {
   StreamController<int> unitStream = StreamController<int>();
   int units = 1;
+  bool isLoading = true;
+  Map userData;
+  Box marketBox;
+
+  Future<void> getUserData() async {
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = true;
+    });
+    userData = await HiveMethods().getUserData();
+    marketBox = await HiveMethods().getOpenBox('marketCart');
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   void initState() {
+    getUserData();
     unitStream.add(1);
     super.initState();
   }
@@ -55,9 +74,87 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: body(),
+    return isLoading
+        ? Container(
+            color: Colors.white,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
+        : Scaffold(
+            appBar: appBar(),
+            body: body(),
+          );
+  }
+
+  Widget cartWidget() {
+    return Container(
+      margin: EdgeInsets.only(right: 5.0),
+      child: ValueListenableBuilder(
+        valueListenable: marketBox.listenable(),
+        builder: (context, Box box, widget) {
+          if (box.values.isEmpty) {
+            return Container(
+              margin: EdgeInsets.only(right: 5.0),
+              child: IconButton(
+                color: Colors.grey,
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Theme.of(context).primaryColor,
+                  size: 35,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MarketCartPage(),
+                    ),
+                  );
+                },
+              ),
+            );
+          } else {
+            int count = box.length;
+
+            return Stack(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(right: 5.0),
+                  child: IconButton(
+                    color: Colors.grey,
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Theme.of(context).primaryColor,
+                      size: 35,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MarketCartPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Positioned(
+                  top: 5.0,
+                  right: 5.0,
+                  child: Container(
+                    padding: EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '$count',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -76,7 +173,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
           addToCartButton(),
           SizedBox(height: 8),
           ExpansionTile(
-            childrenPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             expandedAlignment: Alignment.centerLeft,
             title: Text(
               "Product Details",
@@ -92,7 +189,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
             ],
           ),
           ExpansionTile(
-            childrenPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             expandedAlignment: Alignment.centerLeft,
             title: Text(
               "Delivery Information",
@@ -108,7 +205,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
             ],
           ),
           ExpansionTile(
-            childrenPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             expandedAlignment: Alignment.centerLeft,
             title: Text(
               "Reviews",
@@ -124,7 +221,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
             ],
           ),
           ExpansionTile(
-            childrenPadding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             expandedAlignment: Alignment.centerLeft,
             title: Text(
@@ -155,7 +252,6 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
               )
             ],
           ),
-
         ],
       ),
     );
@@ -267,7 +363,9 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Text(
             '${widget.productModel.productName}',
             style: TextStyle(
@@ -342,21 +440,10 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
         },
       ),
       actions: <Widget>[
-        SvgPicture.asset("asset/slider.svg"),
+        cartWidget(),
         SizedBox(
           width: 8,
         ),
-        InkWell(
-            onTap: () {
-//            saveProduct();
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => MarketCartPage(),
-                ),
-              );
-            },
-            child: SvgPicture.asset("asset/cart.svg")),
-        SizedBox(width: 16)
       ],
     );
   }
