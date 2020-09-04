@@ -1,30 +1,40 @@
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
-import 'package:Ohstel_app/wallet/method.dart';
-import 'package:Ohstel_app/wallet/pages/coin_history.dart';
-import 'package:Ohstel_app/wallet/pages/wallet_history.dart';
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 
 import '../auth/models/userModel.dart';
 
 class WalletHome extends StatefulWidget {
-  final String uid;
-  WalletHome(this.uid, {Key key}) : super(key: key);
-
   _WalletHomeState createState() => _WalletHomeState();
 }
 
 class _WalletHomeState extends State<WalletHome> {
   UserModel userModel;
+  Map userData;
+  bool isLoading = true;
+
+  Future<void> getUserData() async {
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = true;
+    });
+    userData = await HiveMethods().getUserData();
+    setState(() {
+      isLoading = false;
+    });
+
+    getUserDetails();
+  }
+
   @override
   void initState() {
-    getUserDetails();
+    getUserData();
     super.initState();
   }
 
   getUserDetails() {
-    AuthService().getUserDetails(uid: widget.uid).then((data) {
+    AuthService().getUserDetails(uid: userData['uid']).then((data) {
       setState(() {
         userModel = data;
       });
@@ -34,7 +44,7 @@ class _WalletHomeState extends State<WalletHome> {
   @override
   Widget build(BuildContext context) {
     //userModel = widget.userModel;
-    WalletMethods methods = WalletMethods(widget.uid);
+//    WalletMethods methods = WalletMethods(userData['uid']);
     return Scaffold(
       body: userModel == null
           ? Center(child: CircularProgressIndicator())
@@ -77,31 +87,31 @@ class _WalletHomeState extends State<WalletHome> {
                       children: [
                         RaisedButton(
                           onPressed: () async {
-                            methods
-                                .createWalletHistory(10,
-                                    desc: "Wallet funded from online payment")
-                                .then((v) {
-                              getUserDetails();
-                            });
+//                            methods
+//                                .createWalletHistory(10,
+//                                    desc: "Wallet funded from online payment")
+//                                .then((v) {
+//                              getUserDetails();
+//                            });
                           },
                           child: Text("Fund Wallet"),
                         ),
                         RaisedButton(
                           onPressed: () async {
-                            methods
-                                .createCoinHistory(10,
-                                    desc: "Wallet funded from Advert Video")
-                                .then((v) {
-                              getUserDetails();
-                            });
+//                            methods
+//                                .createCoinHistory(10,
+//                                    desc: "Wallet funded from Advert Video")
+//                                .then((v) {
+//                              getUserDetails();
+//                            });
                           },
                           child: Text("Watch Ads"),
                         ),
                         RaisedButton(
                           onPressed: () async {
-                            methods.convertCoin(10).then((v) {
-                              getUserDetails();
-                            });
+//                            methods.convertCoin(10).then((v) {
+//                              getUserDetails();
+//                            });
                           },
                           child: Text("Convert Coin"),
                         )
@@ -112,10 +122,14 @@ class _WalletHomeState extends State<WalletHome> {
                       child: ListView(
                         shrinkWrap: true,
                         children: [
-                          item("Wallet History",
-                              action: () => Get.to(WalletHistory(widget.uid))),
-                          item("Coin History",
-                              action: () => Get.to(CoinHistory(widget.uid))),
+                          item(
+                            "Wallet History",
+//                              action: () => Get.to(WalletHistory(widget.uid)),
+                          ),
+                          item(
+                            "Coin History",
+//                              action: () => Get.to(CoinHistory(widget.uid)),
+                          ),
                           Divider(),
                         ],
                       ),
