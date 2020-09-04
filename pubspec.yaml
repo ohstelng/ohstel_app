@@ -47,6 +47,7 @@ dependencies:
   firebase_storage: ^3.0.3
   get: ^3.5.1
   connectivity: ^0.4.6
+  intl: ^0.16.1
   #  url_launcher: ^5.5.0
   
 

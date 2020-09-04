@@ -8,9 +8,10 @@ class PaidOrderModel {
   String buyerPhoneNumber;
   String buyerAddress;
   String buyerID;
+  int amountPaid;
   Timestamp timestamp;
-  List<String> listOfShopsPurchasedFrom;
-  List<Map> orders;
+  List listOfShopsPurchasedFrom;
+  List orders;
   String id = Uuid().v1().toString();
 
   PaidOrderModel({
@@ -19,6 +20,7 @@ class PaidOrderModel {
     @required this.buyerPhoneNumber,
     @required this.buyerAddress,
     @required this.buyerID,
+    @required this.amountPaid,
     @required this.listOfShopsPurchasedFrom,
     @required this.orders,
   });
@@ -29,7 +31,7 @@ class PaidOrderModel {
     this.buyerPhoneNumber = mapData['buyerPhoneNumber'];
     this.buyerAddress = mapData['buyerAddress'];
     this.buyerID = mapData['buyerID'];
-
+    this.amountPaid = mapData['amountPaid'];
     this.timestamp = mapData['timestamp'];
     this.listOfShopsPurchasedFrom = mapData['listOfShopsPurchasedFrom'];
     this.orders = mapData['orders'];
@@ -43,6 +45,7 @@ class PaidOrderModel {
     data['buyerPhoneNumber'] = this.buyerPhoneNumber;
     data['buyerAddress'] = this.buyerAddress;
     data['buyerID'] = this.buyerID;
+    data['amountPaid'] = this.amountPaid;
     data['timestamp'] = Timestamp.now();
     data['listOfShopsPurchasedFrom'] = this.listOfShopsPurchasedFrom;
     data['orders'] = this.orders;

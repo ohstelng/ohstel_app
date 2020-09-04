@@ -50,7 +50,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
         child: Container(
           child: ListView(
             children: <Widget>[
-              searchBar(),
+//              searchBar(),
               imageList(),
               foodList(),
             ],
@@ -272,7 +272,6 @@ class _FoodHomePageState extends State<FoodHomePage> {
                       ),
                     ),
                     Spacer(),
-                    Icon(Icons.mic, size: 19)
                   ],
                 ),
               ),

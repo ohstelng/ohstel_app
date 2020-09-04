@@ -12,6 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Homepage extends StatefulWidget {
+  final void Function(int) callback;
+
+  Homepage({@required this.callback});
+
   @override
   _HomepageState createState() => _HomepageState();
 }
@@ -88,8 +92,7 @@ class _HomepageState extends State<Homepage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: InkWell(
-                          onTap: () async {
-                            await AuthService().signOut();
+                          onTap: (){
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -185,7 +188,9 @@ class _HomepageState extends State<Homepage> {
                         children: [
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                widget.callback(0);
+                              },
                               child: Container(
                                   margin: EdgeInsets.all(8),
                                   decoration: _boxDec,
@@ -206,7 +211,9 @@ class _HomepageState extends State<Homepage> {
                           ),
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                widget.callback(1);
+                              },
                               child: Container(
                                   margin: EdgeInsets.all(8),
                                   decoration: _boxDec,
@@ -232,7 +239,9 @@ class _HomepageState extends State<Homepage> {
                         children: [
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                widget.callback(3);
+                              },
                               child: Container(
                                   margin: EdgeInsets.all(8),
                                   decoration: _boxDec,
@@ -253,7 +262,9 @@ class _HomepageState extends State<Homepage> {
                           ),
                           Expanded(
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+//                                widget.callback(3);
+                              },
                               child: Container(
                                   margin: EdgeInsets.all(8),
                                   decoration: _boxDec,
@@ -269,18 +280,12 @@ class _HomepageState extends State<Homepage> {
                                         style: _tStyle,
                                       )
                                     ],
-                                  )),
+                                  ),
+                              ),
                             ),
                           )
                         ],
                       ),
-//              Text('Account\n SignOut'),
-//              IconButton(
-//                icon: Icon(Icons.phonelink_erase),
-//                onPressed: () async {
-//                  await AuthService().signOut();
-//                },
-//              ),
                     ],
                   ),
                 ),

@@ -1,9 +1,9 @@
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/food_home_page.dart';
-import 'package:Ohstel_app/hostel_hire/pages/hire_home_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
 import 'package:Ohstel_app/landing_page/homepage.dart';
+import 'package:Ohstel_app/wallet/wallet_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,6 +26,11 @@ class _MainHomePageState extends State<MainHomePage> {
   void onTapChangePage(int pageIndex) {
     pageController.animateToPage(pageIndex,
         duration: Duration(milliseconds: 200), curve: Curves.bounceInOut);
+  }
+
+  void navigatorCallBack(int i) {
+    print(i);
+    onTapChangePage(i);
   }
 
   TextStyle _bottomStyle = TextStyle(fontSize: 9);
@@ -54,9 +59,10 @@ class _MainHomePageState extends State<MainHomePage> {
         children: <Widget>[
           HostelBookingHomePage(),
           FoodHomePage(),
-          Homepage(),
+          Homepage(callback: navigatorCallBack),
           MarketHomePage(),
-          HireHomePage(),
+          WalletHome(),
+//          HireHomePage(),
         ],
         controller: pageController,
         onPageChanged: pageChanged,
@@ -116,10 +122,10 @@ class _MainHomePageState extends State<MainHomePage> {
           BottomNavigationBarItem(
             icon: Padding(
               padding: const EdgeInsets.all(4.0),
-              child: SvgPicture.asset("asset/hire.svg"),
+              child: Icon(Icons.account_balance_wallet, color: Colors.black),
             ),
             title: Text(
-              'Hire',
+              'Wallet',
               style: _bottomStyle,
             ),
           ),

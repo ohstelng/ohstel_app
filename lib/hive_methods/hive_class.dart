@@ -71,10 +71,18 @@ class HiveMethods {
     return userData;
   }
 
+  Future<Box> getCartData() async {
+    Box<Map> cartDataBox = await getOpenBox('cart');
+
+    print(cartDataBox.isEmpty);
+    return cartDataBox;
+  }
+
   Future<void> saveFoodCartToDb({@required Map map}) async {
     Box<Map> cartDataBox = await getOpenBox('cart');
 
     cartDataBox.add(map);
+//    cartDataBox.put('laste', value)
     Fluttertoast.showToast(msg: 'Added To Cart');
     print('saved');
   }

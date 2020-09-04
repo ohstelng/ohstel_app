@@ -1,9 +1,8 @@
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
-import 'package:carousel_pro/carousel_pro.dart';
+import 'package:Ohstel_app/hostel_market_place/models/paid_market_orders_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
 class MarketOrdersPage extends StatefulWidget {
@@ -38,12 +37,17 @@ class _MarketOrdersPageState extends State<MarketOrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Orders'),
+      ),
       body: isLoading ? Container(child: CircularProgressIndicator()) : body(),
     );
   }
 
   Widget body() {
+    print(userData['uid']);
     return Container(
+      margin: EdgeInsets.all(10.0),
       child: PaginateFirestore(
         scrollDirection: Axis.vertical,
         itemsPerPage: 3,
@@ -61,81 +65,34 @@ class _MarketOrdersPageState extends State<MarketOrdersPage> {
         query: Firestore.instance
             .collection('marketOrders')
             .where('buyerID', isEqualTo: userData['uid'])
-            .orderBy('dateAdded', descending: true),
+            .orderBy('timestamp', descending: true),
         itemBuilder: (context, DocumentSnapshot documentSnapshot) {
-          ProductModel currentProductModel =
-              ProductModel.fromMap(documentSnapshot.data);
+          PaidOrderModel currentProductModel =
+              PaidOrderModel.fromMap(documentSnapshot.data);
 
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
-            child: Card(
-              elevation: 2.5,
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: 150,
-                    width: 200,
-                    margin:
-                        EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    ),
-                    child: Carousel(
-                      images: currentProductModel.imageUrls.map(
-                        (images) {
-                          return Container(
-                            child: ExtendedImage.network(
-                              images,
-                              fit: BoxFit.fill,
-                              handleLoadingProgress: true,
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(10),
-                              cache: false,
-                              enableMemoryCache: true,
-                            ),
-                          );
-                        },
-                      ).toList(),
-                      autoplay: true,
-                      indicatorBgPadding: 0.0,
-                      dotPosition: DotPosition.bottomCenter,
-                      dotSpacing: 15.0,
-                      dotSize: 4,
-                      dotIncreaseSize: 2.5,
-                      dotIncreasedColor: Colors.teal,
-                      dotBgColor: Colors.transparent,
-                      animationCurve: Curves.fastOutSlowIn,
-                      animationDuration: Duration(milliseconds: 2000),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 2.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+          DateTime date =
+              DateTime.parse(currentProductModel.timestamp.toDate().toString());
+
+          return InkWell(
+            onTap: () {},
+            child: Container(
+              margin: EdgeInsets.all(5.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            '${currentProductModel.productName}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            '\$${currentProductModel.productPrice}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            '${currentProductModel.productDescription}',
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        children: [
+                          Text('${currentProductModel.id}'),
+                          Text('${DateFormat.yMMMd().add_jm().format(date)}'),
                         ],
                       ),
-                    ),
-                  )
+                      Text('${currentProductModel.amountPaid}'),
+                    ],
+                  ),
+                  Divider(),
                 ],
               ),
             ),

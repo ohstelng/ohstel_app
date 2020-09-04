@@ -535,6 +535,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         performOnlineActivity = true;
         toDisplay = true;
 //        moreHostelAvailable
+        if (!mounted) return;
         setState(() {});
       } else if (result == ConnectivityResult.none) {
         performOnlineActivity = false;
@@ -559,26 +560,13 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             length: 2,
             child: Scaffold(
               appBar: PreferredSize(
-                preferredSize: Size.fromHeight(144),
+                preferredSize: Size.fromHeight(96),
                 child: AppBar(
                   backgroundColor: Colors.white,
                   flexibleSpace: SafeArea(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.arrow_back),
-                              onPressed: () {},
-                            ),
-                            Spacer(),
-                            IconButton(
-                              icon: Icon(Icons.notifications_none),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
                         searchInputControl(),
                         TabBar(
                           tabs: [
@@ -868,8 +856,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               decoration: BoxDecoration(),
               child: MaterialButton(
                 onPressed: () {
-//                  SubLocationViewModel.loadSubLocationsFromApi(
-//                      uniName: uniName);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => HostelBookingSearchPage(),
@@ -891,8 +877,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                         fontSize: 17.0,
                       ),
                     ),
-                    Spacer(),
-                    Icon(Icons.mic, size: 19)
                   ],
                 ),
               ),

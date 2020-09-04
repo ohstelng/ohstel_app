@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_food/_/methods/fast_food_methods.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
@@ -11,11 +8,9 @@ import 'package:Ohstel_app/hostel_food/_/pages/select_location_page.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class CartPage extends StatefulWidget {
@@ -83,7 +78,8 @@ class _CartPageState extends State<CartPage> {
         isLoading = true;
       });
     }
-    cartBox = await HiveMethods().getOpenBox('cart');
+//    cartBox = await HiveMethods().getOpenBox('cart');
+    cartBox = await HiveMethods().getCartData();
     userDataBox = await HiveMethods().getOpenBox('userDataBox');
     addressDetailsBox = await HiveMethods().getOpenBox('addressBox');
     Map data = await HiveMethods().getUserData();
@@ -94,93 +90,6 @@ class _CartPageState extends State<CartPage> {
         isLoading = false;
       });
     }
-  }
-
-  String _getReference() {
-    String platform;
-    if (Platform.isIOS) {
-      platform = 'iOS';
-    } else {
-      platform = 'Android';
-    }
-
-    return 'ChargedFrom${platform}_${DateTime.now().microsecondsSinceEpoch}';
-  }
-
-  Future<String> createAccessCode(skTest, _getReference) async {
-    // skTest -> Secret key
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $skTest'
-    };
-
-    Map data = {
-      "amount": 600,
-      "email": "johnsonoye34@gmail.com",
-      "reference": _getReference
-    };
-
-    String payload = json.encode(data);
-    http.Response response = await http.post(
-      'https://api.paystack.co/transaction/initialize',
-      headers: headers,
-      body: payload,
-    );
-
-    final Map _data = jsonDecode(response.body);
-    String accessCode = _data['data']['access_code'];
-
-    return accessCode;
-  }
-
-  void _verifyOnServer(String reference) async {
-    String skTest = 'sk_test_5df98ac979ca2f2d10789cb1a158715096cde107';
-
-    try {
-      Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $skTest',
-      };
-
-      http.Response response = await http.get(
-          'https://api.paystack.co/transaction/verify/' + reference,
-          headers: headers);
-
-      final Map body = json.decode(response.body);
-
-      if (body['data']['status'] == 'success') {
-        Fluttertoast.showToast(msg: 'Paymeny Sucessfull');
-      } else {}
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  chargeCard({@required int price}) async {
-    Charge charge = Charge()
-      ..amount = price
-      ..reference = _getReference()
-//..accessCode = _createAcessCode(skTest, _getReference())
-      ..email = userData['email'];
-    CheckoutResponse response = await PaystackPlugin.checkout(
-      context,
-      method: CheckoutMethod.card,
-      charge: charge,
-    );
-    if (response.status == true) {
-      _verifyOnServer(response.reference);
-      saveFoodInfoToDb();
-    } else {
-      print('error');
-    }
-  }
-
-  ///
-
-  void clearCart() {
-    cartBox.clear();
   }
 
   Future<void> saveFoodInfoToDb() async {
@@ -232,7 +141,6 @@ class _CartPageState extends State<CartPage> {
     try {
       await FastFoodMethods().saveOrderToDb(data: orderedFood.toMap());
 //      Navigator.maybePop(context);
-      clearCart();
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '$e');
@@ -259,19 +167,6 @@ class _CartPageState extends State<CartPage> {
         );
       },
     );
-  }
-
-  void pay() async {
-    Map addressDetails = await HiveMethods().getFoodLocationDetails();
-    if (addressDetails != null && onCampus != null) {
-      chargeCard(price: getGrandTotal() * 100);
-    } else {
-      Fluttertoast.showToast(
-        msg: 'Plase Provide a delivery Location!',
-        gravity: ToastGravity.CENTER,
-        toastLength: Toast.LENGTH_LONG,
-      );
-    }
   }
 
   Widget getAddress() {
@@ -302,11 +197,7 @@ class _CartPageState extends State<CartPage> {
   @override
   void initState() {
     getUserData();
-    PaystackPlugin.initialize(
-      publicKey: 'pk_test_d0490fa7b5ae91bf5317ebdbd761760c8f14fd8f',
-    );
     symbol = String.fromCharCodes(input);
-
     super.initState();
   }
 
@@ -577,71 +468,6 @@ class _CartPageState extends State<CartPage> {
                           },
                         ),
                       ),
-//                      Container(
-//                        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-//                        child: Column(
-//                          children: <Widget>[
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                              children: <Widget>[
-//                                Text(
-//                                  'Total Amount:',
-//                                  style: TextStyle(
-//                                      fontSize: 24,
-//                                      fontWeight: FontWeight.w400),
-//                                ),
-//                                Text(
-//                                  '$symbol ${formatCurrency.format(
-//                                      getGrandTotal())}',
-//                                  style: TextStyle(
-//                                      fontSize: 24,
-//                                      fontWeight: FontWeight.w400),
-//                                ),
-//                              ],
-//                            ),
-//                          ],
-//                        ),
-//                      ),
-//                      Container(
-//                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
-//                        child: getAddress(),
-//                      ),
-//                      Container(
-//                        padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
-//                        width: double.infinity,
-//                        child: Row(
-//                          mainAxisSize: MainAxisSize.min,
-//                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                          children: <Widget>[
-//                            Container(
-//                              margin: EdgeInsets.all(10.0),
-//                              child: FlatButton(
-//                                color: Color(0xFFF27507),
-//                                onPressed: () {
-//                                  selectDeliveryLocation();
-//                                },
-//                                child: Text(
-//                                  'Select Loactions',
-//                                  style: TextStyle(color: Colors.white),
-//                                ),
-//                              ),
-//                            ),
-//                            Container(
-//                              margin: EdgeInsets.all(10.0),
-//                              child: FlatButton(
-//                                color: Color(0xFFF27507),
-//                                onPressed: () {
-//                                  pay();
-//                                },
-//                                child: Text(
-//                                  'Pay',
-//                                  style: TextStyle(color: Colors.white),
-//                                ),
-//                              ),
-//                            ),
-//                          ],
-//                        ),
-//                      ),To
                       Container(
                         margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                         child: Row(

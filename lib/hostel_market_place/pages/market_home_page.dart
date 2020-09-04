@@ -28,6 +28,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
   bool isLoading = true;
   Map userData;
   Box marketBox;
+  int _current = 0;
+  List _imgList = [1, 2, 3, 4];
   TextStyle _tabBarStyle = TextStyle(color: Colors.black);
 
   Future<void> getUserData() async {
@@ -38,12 +40,15 @@ class _MarketHomePageState extends State<MarketHomePage> {
     });
     userData = await HiveMethods().getUserData();
     marketBox = await HiveMethods().getOpenBox('marketCart');
+    String name = await HiveMethods().getUniName();
+    print(name);
+    uniName = name;
+
+    if (!mounted) return;
     setState(() {
       isLoading = false;
     });
   }
-
-  List _imgList = [1, 2, 3, 4];
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -53,28 +58,9 @@ class _MarketHomePageState extends State<MarketHomePage> {
     return result;
   }
 
-  int _current = 0;
-
-  Future<void> getUniName() async {
-    if (mounted) {
-      setState(() {
-        isLoading = true;
-      });
-    }
-    String name = await HiveMethods().getUniName();
-    print(name);
-    uniName = name;
-    if (mounted) {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     getUserData();
-    getUniName();
     super.initState();
   }
 
@@ -83,18 +69,15 @@ class _MarketHomePageState extends State<MarketHomePage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        body: SafeArea(
-          child: isLoading
-              ? Center(child: CircularProgressIndicator())
-              : Container(
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : SafeArea(
+                child: Container(
                   margin: EdgeInsets.all(10),
                   child: ListView(
                     children: <Widget>[
-                      SizedBox(
-                        height: 8,
-                      ),
                       appBar(),
-                      SizedBox(height: 16),
+                      SizedBox(height: 2),
                       searchBar(),
                       SizedBox(height: 16),
                       advertBanner(),
@@ -107,31 +90,10 @@ class _MarketHomePageState extends State<MarketHomePage> {
                       topBrands(),
                       SizedBox(height: 16),
                       recommended4U(),
-
-//                Container(
-//                  height: MediaQuery.of(context).size.height * 0.70,
-//                  child: ListView(
-//                    children: [
-//                      SizedBox(height: 16),
-//                      advertBanner(),
-//                      categories(),
-//                      SizedBox(height: 24),
-//                      tabBar(),
-//                      SizedBox(height: 8),
-//                      tabBarView(),
-//                      SizedBox(
-//                        height: 8,
-//                      ),
-//                      topBrands(),
-//                      SizedBox(height: 16),
-//                      recommended4U(),
-//                    ],
-//                  ),
-//                )
                     ],
                   ),
                 ),
-        ),
+              ),
       ),
     );
   }
@@ -146,6 +108,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
               ),
             );
           } else if (value == 2) {
+            print(userData['uid']);
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => MarketOrdersPage(),
@@ -588,8 +551,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
       decoration: BoxDecoration(),
       child: MaterialButton(
         onPressed: () {
-//                  SubLocationViewModel.loadSubLocationsFromApi(
-//                      uniName: uniName);
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => MarketSearchPage(),
@@ -611,8 +572,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
                 fontSize: 17.0,
               ),
             ),
-            Spacer(),
-            Icon(Icons.mic, size: 19)
           ],
         ),
       ),

@@ -174,6 +174,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
 //      deliveryStatus: 'Delivery In progress.....',
       listOfShopsPurchasedFrom: shopsList,
       orders: orderList,
+      amountPaid: getGrandTotal() + deliveryFee(),
     );
     MarketMethods().saveOrderToDataBase(data: paidOrderModel);
   }

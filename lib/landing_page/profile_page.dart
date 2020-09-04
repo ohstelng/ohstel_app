@@ -6,12 +6,10 @@ import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/landing_page/homepage.dart';
-import 'package:Ohstel_app/wallet/home.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
@@ -422,11 +420,11 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(
               height: 40,
             ),
-            Items(
-              Icons.attach_money,
-              "Wallet",
-              action: WalletHome(userModel.uid),
-            ),
+//            Items(
+//              Icons.attach_money,
+//              "Wallet",
+//              action: WalletHome(),
+//            ),
             Divider(),
             ExpansionTile(
               childrenPadding: EdgeInsets.symmetric(horizontal: 16),
