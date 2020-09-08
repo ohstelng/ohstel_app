@@ -1,3 +1,4 @@
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/coin_history.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/wallet_history_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,14 +7,129 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class WalletMethods {
   final String uid;
-  WalletMethods(this.uid);
-  final CollectionReference userDataCollectionRef =
-      Firestore.instance.collection('userData');
-  final CollectionReference walletHistoryCollectionRef =
-      Firestore.instance.collection('walletHistory');
-  final CollectionReference coinHistoryCollectionRef =
-      Firestore.instance.collection('coinHistory');
 
+  WalletMethods(this.uid);
+
+  final CollectionReference userDataCollectionRef =
+      FirebaseFirestore.instance.collection('userData');
+  final CollectionReference walletHistoryCollectionRef =
+      FirebaseFirestore.instance.collection('walletHistory');
+  final CollectionReference coinHistoryCollectionRef =
+      FirebaseFirestore.instance.collection('coinHistory');
+
+  ///
+
+  Future<void> fundWallet({@required double amount}) async {
+    Map userData = await HiveMethods().getUserData();
+    String type = 'credit';
+    String ref = 'funded wallet. userID: ${userData['uid']}';
+    String desc =
+        'Funded Wallet With $amount From Paystack By ${userData['fullName']}';
+    try {
+      final DocumentReference userDoc = userDataCollectionRef.doc(uid);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot docSnapshot = await transaction.get(userDoc);
+        double previousAmount =
+            (double.parse(docSnapshot.data()['walletBalance'].toString()) ?? 0);
+        print('ppppppppppppppppppppppppppppppppppppppp');
+        print(previousAmount);
+        int updatedWalletBalance;
+        int balance = docSnapshot.data()['walletBalance'];
+        print(balance);
+
+        if (!docSnapshot.exists) {
+          print('Document does not exist!');
+          throw Exception("Document does not exist!");
+        }
+
+        updatedWalletBalance = (balance == null ? 0 : balance) + amount.toInt();
+
+        print("balance = $updatedWalletBalance");
+
+        transaction.update(
+          userDoc,
+          {'walletBalance': updatedWalletBalance.toInt()},
+        );
+
+        walletHistoryCollectionRef.add({
+          'amount': amount.toString(),
+          'balance': updatedWalletBalance,
+          'previousAmount': previousAmount,
+          'desc': desc,
+          'date': Timestamp.now(),
+          'type': type,
+          'ref': ref,
+          'uid': uid,
+        });
+        return updatedWalletBalance;
+      });
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '${e}');
+    }
+  }
+
+  Future<void> deductWallet(
+      {@required double amount,
+      @required String payingFor,
+      @required String itemId}) async {
+    Map userData = await HiveMethods().getUserData();
+    String type = 'debit';
+    String ref = 'userID: ${userData['uid']} , itemID: $itemId';
+    String desc = '${userData['fullName']} Paided For $payingFor';
+
+    try {
+      final DocumentReference userDoc = userDataCollectionRef.doc(uid);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot docSnapshot = await transaction.get(userDoc);
+        double previousAmount =
+            (double.parse(docSnapshot.data()['walletBalance'].toString()) ?? 0);
+        print('ppppppppppppppppppppppppppppppppppppppp');
+        print(previousAmount);
+        int updatedWalletBalance;
+        int balance = docSnapshot.data()['walletBalance'] ?? 0;
+        print(balance);
+
+        if (!docSnapshot.exists) {
+          print('Document does not exist!');
+          throw Exception("Document does not exist!");
+        }
+
+        if (balance < amount) {
+          print('Insufficient Balance!');
+          throw Exception("Insufficient Balance!!");
+        }
+
+        updatedWalletBalance = balance - amount.toInt();
+
+        print("balance = $updatedWalletBalance");
+
+        transaction.update(
+          userDoc,
+          {'walletBalance': updatedWalletBalance.toInt()},
+        );
+
+        walletHistoryCollectionRef.add({
+          'amount': amount.toString(),
+          'balance': updatedWalletBalance,
+          'previousAmount': previousAmount,
+          'desc': desc,
+          'date': Timestamp.now(),
+          'type': type,
+          'ref': ref,
+          'uid': uid,
+        });
+        return updatedWalletBalance;
+      });
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  ///
   Future<void> createWalletHistory(
     double amount, {
     String type = 'fund',
@@ -21,8 +137,9 @@ class WalletMethods {
     @required String desc,
   }) async {
     try {
-      final DocumentReference userDoc = userDataCollectionRef.document(uid);
-      await Firestore.instance.runTransaction((transaction) async {
+      final DocumentReference userDoc = userDataCollectionRef.doc(uid);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot txSnapshot = await transaction.get(userDoc);
         double updatedWalletBalance;
         if (!txSnapshot.exists) {
@@ -32,16 +149,21 @@ class WalletMethods {
 
         if (type == 'fund') {
           updatedWalletBalance =
-              (double.parse(txSnapshot.data['walletBalance'].toString()) ?? 0) +
+              (double.parse(txSnapshot.data()['walletBalance'].toString()) ??
+                      0) +
                   amount;
         } else {
           updatedWalletBalance =
-              (double.parse(txSnapshot.data['walletBalance'].toString()) ?? 0) -
+              (double.parse(txSnapshot.data()['walletBalance'].toString()) ??
+                      0) -
                   amount;
         }
         print("balance = $updatedWalletBalance");
         transaction.update(
-            userDoc, {'walletBalance': updatedWalletBalance.toString()});
+          userDoc,
+          {'walletBalance': updatedWalletBalance.toString()},
+        );
+
         walletHistoryCollectionRef.add({
           'amount': amount.toString(),
           'balance': updatedWalletBalance,
@@ -66,8 +188,8 @@ class WalletMethods {
     @required String desc,
   }) async {
     try {
-      final DocumentReference userDoc = userDataCollectionRef.document(uid);
-      await Firestore.instance.runTransaction((transaction) async {
+      final DocumentReference userDoc = userDataCollectionRef.doc(uid);
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot txSnapshot = await transaction.get(userDoc);
         double updatedCoinBalance;
         if (!txSnapshot.exists) {
@@ -75,11 +197,11 @@ class WalletMethods {
         }
         if (type == 'credit') {
           updatedCoinBalance =
-              (double.parse(txSnapshot.data['coinBalance'].toString()) ?? 0) +
+              (double.parse(txSnapshot.data()['coinBalance'].toString()) ?? 0) +
                   amount;
         } else {
           updatedCoinBalance =
-              (double.parse(txSnapshot.data['coinBalance'].toString()) ?? 0) -
+              (double.parse(txSnapshot.data()['coinBalance'].toString()) ?? 0) -
                   amount;
         }
         transaction
@@ -110,11 +232,11 @@ class WalletMethods {
           .where('uid', isEqualTo: uid)
           .orderBy('date', descending: true)
           .limit(6)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
         walletHistorys
-            .add(WalletHistoryModel.fromMap(querySnapshot.documents[i].data));
+            .add(WalletHistoryModel.fromMap(querySnapshot.docs[i].data()));
         print(walletHistorys);
       }
     } catch (e) {
@@ -132,11 +254,11 @@ class WalletMethods {
           .where('uid', isEqualTo: uid)
           .orderBy('date', descending: true)
           .limit(6)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
         coinHistorys
-            .add(CoinHistoryModel.fromMap(querySnapshot.documents[i].data));
+            .add(CoinHistoryModel.fromMap(querySnapshot.docs[i].data()));
         print(coinHistorys);
       }
     } catch (e) {
@@ -148,27 +270,27 @@ class WalletMethods {
 
   Future<void> convertCoin(double amount) async {
     try {
-      final DocumentReference userDoc = userDataCollectionRef.document(uid);
-      await Firestore.instance.runTransaction((transaction) async {
+      final DocumentReference userDoc = userDataCollectionRef.doc(uid);
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot txSnapshot = await transaction.get(userDoc);
 
         if (!txSnapshot.exists) {
           throw Exception("Document does not exist!");
         }
 
-        if (double.parse(txSnapshot.data['coinBalance']) < amount) {
+        if (double.parse(txSnapshot.data()['coinBalance']) < amount) {
           return Fluttertoast.showToast(msg: 'Insufficient Coin Balance');
         }
 
         double updatedCoinBalance =
-            (double.parse(txSnapshot.data['coinBalance'].toString()) ?? 0) -
+            (double.parse(txSnapshot.data()['coinBalance'].toString()) ?? 0) -
                 amount;
 
         transaction
             .update(userDoc, {'coinBalance': updatedCoinBalance.toString()});
 
         double updatedWalletBalance =
-            (double.parse(txSnapshot.data['walletBalance'].toString()) ?? 0) +
+            (double.parse(txSnapshot.data()['walletBalance'].toString()) ?? 0) +
                 amount;
 
         transaction.update(

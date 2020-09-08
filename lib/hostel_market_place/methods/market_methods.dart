@@ -6,25 +6,25 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class MarketMethods {
   final CollectionReference marketCollection =
-      Firestore.instance.collection('market');
+      FirebaseFirestore.instance.collection('market');
 
   final CollectionReference marketOrderCollection =
-      Firestore.instance.collection('marketOrders');
+      FirebaseFirestore.instance.collection('marketOrders');
 
   Future<List<Map>> getAllCategories() async {
     List<Map> dataList = List<Map>();
 
     try {
       QuerySnapshot querySnapshot = await marketCollection
-          .document('categories')
+          .doc('categories')
           .collection('productsList')
           .limit(8)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
         Map<String, dynamic> data = Map();
-        String id = querySnapshot.documents[i].data['searchKey'];
-        String imageUrl = querySnapshot.documents[i].data['imageUrl'];
+        String id = querySnapshot.docs[i].data()['searchKey'];
+        String imageUrl = querySnapshot.docs[i].data()['imageUrl'];
 
         data['searchKey'] = id;
         data['imageUrl'] = imageUrl;
@@ -39,7 +39,7 @@ class MarketMethods {
 
   Future<void> saveOrderToDataBase({@required PaidOrderModel data}) async {
     try {
-      await marketOrderCollection.document(data.id).setData(data.toMap());
+      await marketOrderCollection.doc(data.id).set(data.toMap());
       Fluttertoast.showToast(msg: 'Order Complete!');
     } catch (e) {
       Fluttertoast.showToast(msg: '${e}');
@@ -51,15 +51,15 @@ class MarketMethods {
     List<ProductModel> productList = List<ProductModel>();
 
     QuerySnapshot querySnapshot = await marketCollection
-        .document('products')
+        .doc('products')
         .collection('allProducts')
         .orderBy('dateAdded', descending: true)
         .where('searchKeys', arrayContains: keyword)
         .limit(5)
-        .getDocuments();
+        .get();
 
-    for (var i = 0; i < querySnapshot.documents.length; i++) {
-      productList.add(ProductModel.fromMap(querySnapshot.documents[i].data));
+    for (var i = 0; i < querySnapshot.docs.length; i++) {
+      productList.add(ProductModel.fromMap(querySnapshot.docs[i].data()));
     }
 
     return productList;
@@ -72,16 +72,16 @@ class MarketMethods {
     List<ProductModel> productList = List<ProductModel>();
 
     QuerySnapshot querySnapshot = await marketCollection
-        .document('products')
+        .doc('products')
         .collection('allProducts')
         .orderBy('dateAdded', descending: true)
         .where('searchKeys', arrayContains: keyword)
         .startAfter([lastProduct.dateAdded])
         .limit(3)
-        .getDocuments();
+        .get();
 
-    for (var i = 0; i < querySnapshot.documents.length; i++) {
-      productList.add(ProductModel.fromMap(querySnapshot.documents[i].data));
+    for (var i = 0; i < querySnapshot.docs.length; i++) {
+      productList.add(ProductModel.fromMap(querySnapshot.docs[i].data()));
     }
 
     return productList;

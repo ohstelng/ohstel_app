@@ -9,7 +9,7 @@ import 'package:hive/hive.dart';
 class AuthDatabaseMethods {
   // collection ref
   final CollectionReference userDataCollectionRef =
-      Firestore.instance.collection('userData');
+      FirebaseFirestore.instance.collection('userData');
 
   Future createUserDataInFirestore({
     @required String uid,
@@ -21,7 +21,7 @@ class AuthDatabaseMethods {
     @required String uniName,
     @required Map uniDetails,
   }) {
-    return userDataCollectionRef.document(uid).setData(
+    return userDataCollectionRef.doc(uid).set(
       {
         'uid': uid,
         'email': email,
@@ -32,7 +32,7 @@ class AuthDatabaseMethods {
         'walletBalance': 0,
         'coinBalance': 0,
       },
-      merge: true,
+//      merge: true,
     );
   }
 
@@ -65,7 +65,7 @@ class AuthDatabaseMethods {
   Future<void> updateProfilePic(
       {@required String uid, @required String url}) async {
     try {
-      await userDataCollectionRef.document(uid).updateData(
+      await userDataCollectionRef.doc(uid).update(
         {'profilePicUrl': url},
       );
     } catch (e) {
@@ -77,7 +77,7 @@ class AuthDatabaseMethods {
   Future<void> updateUserPhoneNumber(
       {@required String uid, @required String phoneNumber}) async {
     try {
-      await userDataCollectionRef.document(uid).updateData(
+      await userDataCollectionRef.doc(uid).update(
         {'phoneNumber': phoneNumber},
       );
     } catch (e) {
@@ -89,7 +89,7 @@ class AuthDatabaseMethods {
   Future<void> updateUserUniversity(
       {@required String uid, @required Map uniDetail}) async {
     try {
-      await userDataCollectionRef.document(uid).updateData(
+      await userDataCollectionRef.doc(uid).update(
         {'uniDetails': uniDetail},
       );
     } catch (e) {

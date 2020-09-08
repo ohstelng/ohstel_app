@@ -302,15 +302,15 @@ class _MarketHomePageState extends State<MarketHomePage> {
       ),
       bottomLoader: Center(child: CircularProgressIndicator()),
       shrinkWrap: true,
-      query: Firestore.instance
+      query: FirebaseFirestore.instance
           .collection('market')
-          .document('products')
+          .doc('products')
           .collection('allProducts')
           .orderBy('dateAdded', descending: true),
-      itemBuilder: (context, DocumentSnapshot documentSnapshot) {
+      itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
 //          print(documentSnapshot.data);
         ProductModel currentProductModel =
-            ProductModel.fromMap(documentSnapshot.data);
+            ProductModel.fromMap(documentSnapshot.data());
         return Card(
           elevation: 0,
           child: InkWell(
@@ -381,7 +381,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
             ),
           ),
         );
-      },
+      }, itemBuilderType: dynamic,
     );
   }
 

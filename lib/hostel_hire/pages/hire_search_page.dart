@@ -172,14 +172,14 @@ class _HireSearchPageState extends State<HireSearchPage> {
         child: Text('Worker $query Not Found!'),
       ),
       shrinkWrap: true,
-      query: Firestore.instance
+      query: FirebaseFirestore.instance
           .collection('hire')
-          .document('workers')
+          .doc('workers')
           .collection('allWorkers')
           .orderBy('dateJoined', descending: true)
           .where('searchKeys', arrayContains: query),
-      itemBuilder: (context, DocumentSnapshot documentSnapshot) {
-        Map data = documentSnapshot.data;
+      itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
+        Map data = documentSnapshot.data();
         HireWorkerModel currentWorkerModel = HireWorkerModel.fromMap(data);
 
         return Container(
@@ -255,7 +255,7 @@ class _HireSearchPageState extends State<HireSearchPage> {
             ),
           ),
         );
-      },
+      }, itemBuilderType: dynamic,
     );
   }
 }

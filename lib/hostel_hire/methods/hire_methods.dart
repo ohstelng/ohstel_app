@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class HireMethods {
-  CollectionReference hireCollection = Firestore.instance.collection('hire');
+  CollectionReference hireCollection = FirebaseFirestore.instance.collection('hire');
 
   Future<List<HireWorkerModel>> getWorkerByKeyword(
       {@required String keyword}) async {
@@ -13,19 +13,19 @@ class HireMethods {
 
     print('oooooooooooooooooooo');
     QuerySnapshot querySnapshot = await hireCollection
-        .document('workers')
+        .doc('workers')
         .collection('allWorkers')
         .orderBy('dateJoined', descending: true)
         .where('searchKeys', arrayContains: keyword)
         .limit(5)
-        .getDocuments();
+        .get();
 
     print('oooooooooooooooooooo2222');
-    for (var i = 0; i < querySnapshot.documents.length; i++) {
-      print(querySnapshot.documents[i].data);
+    for (var i = 0; i < querySnapshot.docs.length; i++) {
+      print(querySnapshot.docs[i].data());
       print(i);
       hireWorkersList
-          .add(HireWorkerModel.fromMap(querySnapshot.documents[i].data));
+          .add(HireWorkerModel.fromMap(querySnapshot.docs[i].data()));
     }
 
     print(hireWorkersList.length);
@@ -40,17 +40,17 @@ class HireMethods {
     List<HireWorkerModel> hireWorkersList = List<HireWorkerModel>();
 
     QuerySnapshot querySnapshot = await hireCollection
-        .document('workers')
+        .doc('workers')
         .collection('allWorkers')
         .orderBy('dateJoined', descending: true)
         .where('searchKeys', arrayContains: keyword)
         .startAfter([lastWorkerModel.dateJoined])
         .limit(3)
-        .getDocuments();
+        .get();
 
-    for (var i = 0; i < querySnapshot.documents.length; i++) {
+    for (var i = 0; i < querySnapshot.docs.length; i++) {
       hireWorkersList
-          .add(HireWorkerModel.fromMap(querySnapshot.documents[i].data));
+          .add(HireWorkerModel.fromMap(querySnapshot.docs[i].data()));
     }
 
     return hireWorkersList;

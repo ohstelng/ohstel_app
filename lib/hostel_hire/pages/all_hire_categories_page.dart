@@ -35,13 +35,13 @@ class _HireAllCategoriesPageState extends State<HireAllCategoriesPage> {
         child: CircularProgressIndicator(),
       ),
       shrinkWrap: true,
-      query: Firestore.instance
+      query: FirebaseFirestore.instance
           .collection('hire')
-          .document('categories')
+          .doc('categories')
           .collection('allCategories')
           .orderBy('searchKey'),
-      itemBuilder: (context, DocumentSnapshot documentSnapshot) {
-        Map data = documentSnapshot.data;
+      itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
+        Map data = documentSnapshot.data();
 
         return Container(
           margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
@@ -93,6 +93,7 @@ class _HireAllCategoriesPageState extends State<HireAllCategoriesPage> {
           ),
         );
       },
+      itemBuilderType: dynamic,
     );
   }
 }

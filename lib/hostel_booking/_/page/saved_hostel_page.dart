@@ -64,14 +64,14 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
       emptyDisplay: Center(
         child: Text('No Hostel Has Been Saved!!'),
       ),
-      query: Firestore.instance
+      query: FirebaseFirestore.instance
           .collection('savedHostel')
-          .document(userDetails['uid'])
+          .doc(userDetails['uid'])
           .collection('all')
           .orderBy('timestamp', descending: true),
-      itemBuilder: (context, DocumentSnapshot documentSnapshot) {
+      itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
         SavedHostelModel savedHostelModel =
-            SavedHostelModel.fromMap(documentSnapshot.data);
+            SavedHostelModel.fromMap(documentSnapshot.data());
 
         return Card(
           elevation: 2.5,
@@ -162,9 +162,10 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
             ),
           ),
         );
-      },
+      }, itemBuilderType: dynamic,
     );
   }
+
 
   Widget displayMultiPic({@required List imageList}) {
     return Container(

@@ -4,10 +4,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class FastFoodMethods {
   final CollectionReference foodCollectionRef =
-      Firestore.instance.collection('food');
+  FirebaseFirestore.instance.collection('food');
 
   final CollectionReference orderedFoodCollectionRef =
-      Firestore.instance.collection('orderedFood');
+  FirebaseFirestore.instance.collection('orderedFood');
 
   Future<List<Map>> getFoodsFromDb({@required String uniName}) async {
     List<Map> fastFoodList = List<Map>();
@@ -16,10 +16,10 @@ class FastFoodMethods {
       QuerySnapshot querySnapshot = await foodCollectionRef
           .orderBy('fastFood')
           .where('uniName', isEqualTo: uniName)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        fastFoodList.add(querySnapshot.documents[i].data);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        fastFoodList.add(querySnapshot.docs[i].data());
       }
     } catch (e) {
       print(e);

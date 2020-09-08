@@ -68,14 +68,14 @@ class _SelectedHireCategoryPageState extends State<SelectedHireCategoryPage> {
         child: Text('No ${widget.searchKey} Found!'),
       ),
       shrinkWrap: true,
-      query: Firestore.instance
+      query: FirebaseFirestore.instance
           .collection('hire')
-          .document('workers')
+          .doc('workers')
           .collection('allWorkers')
           .where('workType', isEqualTo: widget.searchKey.toLowerCase())
           .orderBy('dateJoined', descending: true),
-      itemBuilder: (context, DocumentSnapshot documentSnapshot) {
-        Map data = documentSnapshot.data;
+      itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
+        Map data = documentSnapshot.data();
         HireWorkerModel currentWorkerModel = HireWorkerModel.fromMap(data);
 
         return Container(
@@ -151,7 +151,7 @@ class _SelectedHireCategoryPageState extends State<SelectedHireCategoryPage> {
             ),
           ),
         );
-      },
+      }, itemBuilderType: dynamic,
     );
   }
 

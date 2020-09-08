@@ -30,13 +30,13 @@ class _AllCategoriesState extends State<AllCategories> {
               child: CircularProgressIndicator(),
             ),
             shrinkWrap: true,
-            query: Firestore.instance
+            query: FirebaseFirestore.instance
                 .collection('market')
-                .document('categories')
+                .doc('categories')
                 .collection('productsList')
                 .orderBy('searchKey', descending: false),
-            itemBuilder: (context, DocumentSnapshot documentSnapshot) {
-              Map data = documentSnapshot.data;
+            itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
+              Map data = documentSnapshot.data();
 
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
@@ -89,7 +89,7 @@ class _AllCategoriesState extends State<AllCategories> {
                   ),
                 ),
               );
-            },
+            }, itemBuilderType: dynamic,
           ),
         ),
       ),

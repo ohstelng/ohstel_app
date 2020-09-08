@@ -12,7 +12,7 @@ class AuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   // create login user object
-  LoginUserModel userFromFirebase(FirebaseUser user) {
+  LoginUserModel userFromFirebase(User user) {
     return user != null ? LoginUserModel(uid: user.uid) : null;
   }
 
@@ -22,18 +22,19 @@ class AuthService {
     /// log out so the UI can be notify and update as needed or emit a event when
     /// a user log in so the UI can also be updated
 
-    return auth.onAuthStateChanged.map(userFromFirebase);
+    return auth.authStateChanges().map(userFromFirebase);
+
   }
 
   // log in with email an pass
   Future loginWithEmailAndPassword(
       {@required String email, @required String password}) async {
     try {
-      AuthResult result = await auth.signInWithEmailAndPassword(
+      UserCredential result = await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      FirebaseUser user = result.user;
+      User user = result.user;
 
       await getUserDetails(uid: user.uid);
 
@@ -57,11 +58,11 @@ class AuthService {
     @required Map uniDetails,
   }) async {
     try {
-      AuthResult result = await auth.createUserWithEmailAndPassword(
+      UserCredential result = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      FirebaseUser user = result.user;
+      User user = result.user;
 
       // add user details to firestore database
       await AuthDatabaseMethods().createUserDataInFirestore(
@@ -122,14 +123,14 @@ class AuthService {
 
   Future<UserModel> getUserDetails({@required String uid}) async {
     final CollectionReference userDataCollectionRef =
-        Firestore.instance.collection('userData');
+        FirebaseFirestore.instance.collection('userData');
     print(uid.trim());
     try {
       DocumentSnapshot document =
-          await userDataCollectionRef.document(uid).get();
+          await userDataCollectionRef.doc(uid).get();
       print(document.data);
-      await saveUserDataToDb(userData: document.data);
-      return UserModel.fromMap(document.data.cast<String, dynamic>());
+      await saveUserDataToDb(userData: document.data());
+      return UserModel.fromMap(document.data().cast<String, dynamic>());
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '${e.message}');

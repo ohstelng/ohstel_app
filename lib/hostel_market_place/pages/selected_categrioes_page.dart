@@ -79,16 +79,16 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
             child: CircularProgressIndicator(),
           ),
           shrinkWrap: true,
-          query: Firestore.instance
+          query: FirebaseFirestore.instance
               .collection('market')
-              .document('products')
+              .doc('products')
               .collection('allProducts')
               .where('productCategory',
                   isEqualTo: widget.searchKey.toLowerCase())
               .orderBy('dateAdded', descending: true),
-          itemBuilder: (context, DocumentSnapshot documentSnapshot) {
+          itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
             ProductModel currentProductModel =
-                ProductModel.fromMap(documentSnapshot.data);
+                ProductModel.fromMap(documentSnapshot.data());
 
             return Container(
               margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
@@ -177,7 +177,7 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                 ),
               ),
             );
-          },
+          }, itemBuilderType: dynamic,
         ),
       ),
     );

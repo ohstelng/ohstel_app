@@ -10,23 +10,23 @@ import 'package:uuid/uuid.dart';
 class HostelBookingMethods {
   // collection ref
   final CollectionReference hostelCollection =
-      Firestore.instance.collection('hostelBookings');
+      FirebaseFirestore.instance.collection('hostelBookings');
 
   final CollectionReference bookingInspectionRef =
-      Firestore.instance.collection('bookingInspections');
+      FirebaseFirestore.instance.collection('bookingInspections');
 
-  final DocumentReference bookingInspectionInfoRef = Firestore.instance
+  final DocumentReference bookingInspectionInfoRef = FirebaseFirestore.instance
       .collection('bookingInspections')
-      .document('hostelInspectionInfo');
+      .doc('hostelInspectionInfo');
 
   final CollectionReference paidHostelRef =
-      Firestore.instance.collection('paidHostel');
+      FirebaseFirestore.instance.collection('paidHostel');
 
   final DocumentReference paidHostelInfoRef =
-      Firestore.instance.collection('paidHostel').document('paidHostelInfo');
+      FirebaseFirestore.instance.collection('paidHostel').doc('paidHostelInfo');
 
   final CollectionReference savedHostelRef =
-      Firestore.instance.collection('savedHostel');
+      FirebaseFirestore.instance.collection('savedHostel');
 
   Future<List<HostelModel>> fetchAllHostel({@required String uniName}) async {
     List<HostelModel> hostelList = List<HostelModel>();
@@ -36,11 +36,11 @@ class HostelBookingMethods {
           .where('uniName', isEqualTo: uniName)
           .orderBy('dateAdded', descending: true)
           .limit(6)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['price']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['price']);
       }
     } catch (e) {
       print(e);
@@ -63,11 +63,11 @@ class HostelBookingMethods {
           .orderBy('dateAdded', descending: true)
           .startAfter([lastHostel.dateAdded])
           .limit(3)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['id']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['id']);
       }
     } catch (e) {
       print(e);
@@ -90,11 +90,11 @@ class HostelBookingMethods {
           .orderBy('dateAdded', descending: true)
           .where('isSchoolHostel', isEqualTo: true)
           .limit(6)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['email']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['email']);
       }
     } catch (e) {
       print(e);
@@ -119,11 +119,11 @@ class HostelBookingMethods {
           .where('isSchoolHostel', isEqualTo: true)
           .startAfter([lastHostel.dateAdded])
           .limit(3)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['id']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['id']);
       }
     } catch (e) {
       print(e);
@@ -145,11 +145,11 @@ class HostelBookingMethods {
           .where('uniName', isEqualTo: uniName)
           .orderBy('price', descending: false)
           .limit(6)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['email']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['email']);
       }
     } catch (e) {
       print(e);
@@ -174,11 +174,11 @@ class HostelBookingMethods {
           .orderBy('price', descending: false)
           .startAfter([lastHostel.price])
           .limit(3)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['email']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['email']);
       }
     } catch (e) {
       print(e);
@@ -199,11 +199,11 @@ class HostelBookingMethods {
           .orderBy('distanceFromSchoolInKm', descending: false)
           .where('isSchoolHostel', isEqualTo: false)
           .limit(6)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['email']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['email']);
       }
     } catch (e) {
       print(e);
@@ -230,11 +230,11 @@ class HostelBookingMethods {
           .where('isSchoolHostel', isEqualTo: false)
           .startAfter([lastHostel.distanceFromSchoolInKm])
           .limit(3)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['email']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['email']);
       }
     } catch (e) {
       print(e);
@@ -255,11 +255,11 @@ class HostelBookingMethods {
           .orderBy('dateAdded', descending: true)
           .where('isRoomMateNeeded', isEqualTo: true)
           .limit(6)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['email']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['email']);
       }
     } catch (e) {
       print(e);
@@ -284,11 +284,11 @@ class HostelBookingMethods {
           .where('isRoomMateNeeded', isEqualTo: true)
           .startAfter([lastHostel.dateAdded])
           .limit(3)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < querySnapshot.documents.length; i++) {
-        hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-        print(querySnapshot.documents[i].data['email']);
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+        print(querySnapshot.docs[i].data()['email']);
       }
     } catch (e) {
       print(e);
@@ -308,10 +308,10 @@ class HostelBookingMethods {
         .orderBy('dateAdded', descending: true)
         .where('hostelLocation', isEqualTo: keyWord)
         .limit(6)
-        .getDocuments();
+        .get();
 
-    for (var i = 0; i < querySnapshot.documents.length; i++) {
-      hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
+    for (var i = 0; i < querySnapshot.docs.length; i++) {
+      hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
     }
 
     print(hostelList);
@@ -333,11 +333,11 @@ class HostelBookingMethods {
         .where('hostelLocation', isEqualTo: keyWord)
         .startAfter([lastHostel.dateAdded])
         .limit(3)
-        .getDocuments();
+        .get();
 
-    for (var i = 0; i < querySnapshot.documents.length; i++) {
-      hostelList.add(HostelModel.fromMap(querySnapshot.documents[i].data));
-      print(querySnapshot.documents[i].data['id']);
+    for (var i = 0; i < querySnapshot.docs.length; i++) {
+      hostelList.add(HostelModel.fromMap(querySnapshot.docs[i].data()));
+      print(querySnapshot.docs[i].data()['id']);
     }
 
     print(hostelList);
@@ -373,21 +373,21 @@ class HostelBookingMethods {
       print(bookingInspectionInfo.toMap());
       print(id);
 
-      Firestore db = Firestore.instance;
+      FirebaseFirestore db = FirebaseFirestore.instance;
 
       var batch = db.batch();
 
-      batch.setData(
-        bookingInspectionRef.document(id),
+      batch.set(
+        bookingInspectionRef.doc(id),
         bookingInspectionInfo.toMap(),
       );
 
-      batch.setData(
+      batch.set(
         bookingInspectionInfoRef
             .collection(year.toString())
-            .document(month.toString()),
+            .doc(month.toString()),
         {"count": FieldValue.increment(1)},
-        merge: true,
+//        merge: true,
       );
 
       await batch.commit();
@@ -430,21 +430,21 @@ class HostelBookingMethods {
       print(paidHostelInfo.toMap());
       print(id);
 
-      Firestore db = Firestore.instance;
+      FirebaseFirestore db = FirebaseFirestore.instance;
 
       var batch = db.batch();
 
-      batch.setData(
-        paidHostelRef.document(id),
+      batch.set(
+        paidHostelRef.doc(id),
         paidHostelInfo.toMap(),
       );
 
-      batch.setData(
+      batch.set(
         paidHostelInfoRef
             .collection(year.toString())
-            .document(month.toString()),
+            .doc(month.toString()),
         {"count": FieldValue.increment(1)},
-        merge: true,
+//        merge: true,
       );
 
       await batch.commit();
@@ -475,10 +475,10 @@ class HostelBookingMethods {
 
     try {
       await savedHostelRef
-          .document(userDetails['uid'].toString())
+          .doc(userDetails['uid'].toString())
           .collection('all')
-          .document()
-          .setData(savedHostelModel.toMap());
+          .doc()
+          .set(savedHostelModel.toMap());
 
       Fluttertoast.showToast(
         msg: 'Saved!!',
@@ -496,8 +496,8 @@ class HostelBookingMethods {
     HostelModel hostelModel;
 
     try {
-      DocumentSnapshot doc = await hostelCollection.document(id).get();
-      hostelModel = HostelModel.fromMap(doc.data);
+      DocumentSnapshot doc = await hostelCollection.doc(id).get();
+      hostelModel = HostelModel.fromMap(doc.data());
     } catch (e) {
       Fluttertoast.showToast(
         msg: '${e.message}',

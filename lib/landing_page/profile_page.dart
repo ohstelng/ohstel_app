@@ -501,11 +501,11 @@ class Items extends StatefulWidget {
 
 class _ItemsState extends State<Items> {
   void _navigate() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                widget.action != null ? widget.action : Homepage()));
+//    Navigator.push(
+//        context,
+//        MaterialPageRoute(
+//            builder: (context) =>
+//                widget.action != null ? widget.action : Homepage()));
   }
 
   @override

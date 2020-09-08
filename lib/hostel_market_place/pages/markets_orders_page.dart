@@ -62,13 +62,13 @@ class _MarketOrdersPageState extends State<MarketOrdersPage> {
           child: CircularProgressIndicator(),
         ),
         shrinkWrap: true,
-        query: Firestore.instance
+        query: FirebaseFirestore.instance
             .collection('marketOrders')
             .where('buyerID', isEqualTo: userData['uid'])
             .orderBy('timestamp', descending: true),
-        itemBuilder: (context, DocumentSnapshot documentSnapshot) {
+        itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
           PaidOrderModel currentProductModel =
-              PaidOrderModel.fromMap(documentSnapshot.data);
+              PaidOrderModel.fromMap(documentSnapshot.data());
 
           DateTime date =
               DateTime.parse(currentProductModel.timestamp.toDate().toString());
@@ -97,7 +97,7 @@ class _MarketOrdersPageState extends State<MarketOrdersPage> {
               ),
             ),
           );
-        },
+        }, itemBuilderType: dynamic,
       ),
     );
   }
