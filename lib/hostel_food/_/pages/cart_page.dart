@@ -248,8 +248,8 @@ class _CartPageState extends State<CartPage> {
                             ItemDetails currentItemDetails =
                                 ItemDetails.formMap(data['itemDetails']
                                     .cast<String, dynamic>());
-                            List<ExtraItemDetails> currentExtraItemDetails =
-                                getExtraFromMap(data: data['extraItems']);
+//                            List<ExtraItemDetails> currentExtraItemDetails =
+//                                getExtraFromMap(data: data['extraItems']);
 
                             return Column(
                               children: [

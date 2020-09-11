@@ -44,7 +44,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);
@@ -71,7 +71,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);
@@ -98,7 +98,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);
@@ -127,7 +127,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);
@@ -153,7 +153,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);
@@ -182,7 +182,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);
@@ -207,7 +207,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);
@@ -238,7 +238,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);
@@ -263,7 +263,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);
@@ -292,7 +292,7 @@ class HostelBookingMethods {
       }
     } catch (e) {
       print(e);
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     print(hostelList);

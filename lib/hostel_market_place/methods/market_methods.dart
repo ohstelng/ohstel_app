@@ -31,7 +31,7 @@ class MarketMethods {
         dataList.add(data);
       }
     } catch (e) {
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
 
     return dataList;
@@ -42,7 +42,7 @@ class MarketMethods {
       await marketOrderCollection.doc(data.id).set(data.toMap());
       Fluttertoast.showToast(msg: 'Order Complete!');
     } catch (e) {
-      Fluttertoast.showToast(msg: '${e}');
+      Fluttertoast.showToast(msg: '$e');
     }
   }
 

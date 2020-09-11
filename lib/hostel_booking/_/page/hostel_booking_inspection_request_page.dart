@@ -372,25 +372,25 @@ class _HostelBookingInspectionRequestPageState
     );
   }
 
-  Widget _appbar() {
-    return AppBar(
-      elevation: 0.0,
-      centerTitle: true,
-      title: Text(
-        'Review your Booking',
-        style: TextStyle(
-          color: Colors.black,
-        ),
-      ),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        icon: Icon(
-          Icons.arrow_back,
-          color: Colors.black,
-        ),
-      ),
-    );
-  }
+//  Widget _appbar() {
+//    return AppBar(
+//      elevation: 0.0,
+//      centerTitle: true,
+//      title: Text(
+//        'Review your Booking',
+//        style: TextStyle(
+//          color: Colors.black,
+//        ),
+//      ),
+//      leading: IconButton(
+//        onPressed: () {
+//          Navigator.of(context).pop();
+//        },
+//        icon: Icon(
+//          Icons.arrow_back,
+//          color: Colors.black,
+//        ),
+//      ),
+//    );
+//  }
 }

@@ -122,6 +122,7 @@ class AuthService {
 //  Future getUserDetails({@required String uid}) async {
 
   Future<UserModel> getUserDetails({@required String uid}) async {
+    UserModel userDetails;
     final CollectionReference userDataCollectionRef =
         FirebaseFirestore.instance.collection('userData');
     print(uid.trim());
@@ -130,11 +131,13 @@ class AuthService {
           await userDataCollectionRef.doc(uid).get();
       print(document.data);
       await saveUserDataToDb(userData: document.data());
-      return UserModel.fromMap(document.data().cast<String, dynamic>());
+      userDetails = UserModel.fromMap(document.data().cast<String, dynamic>());
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '${e.message}');
     }
+
+    return userDetails;
   }
 
   Future<void> saveUserDataToDb({@required Map userData}) async {

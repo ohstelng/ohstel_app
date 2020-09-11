@@ -1,5 +1,4 @@
 import 'package:Ohstel_app/hostel_booking/_/model/coin_history.dart';
-import 'package:Ohstel_app/wallet/method.dart';
 import 'package:flutter/material.dart';
 
 class CoinHistory extends StatefulWidget {
@@ -13,12 +12,12 @@ class _CoinHistoryState extends State<CoinHistory> {
   List<CoinHistoryModel> historys;
   @override
   void initState() {
-    WalletMethods methods = WalletMethods(widget.uid);
-    methods.fetchCoinHistory().then((data) {
-      setState(() {
-        historys = data;
-      });
-    });
+//    WalletMethods methods = WalletMethods();
+//    methods.fetchCoinHistory().then((data) {
+//      setState(() {
+//        historys = data;
+//      });
+//    });
     super.initState();
   }
 

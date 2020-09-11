@@ -550,6 +550,13 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   }
 
   @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     TextStyle tabStyle = TextStyle(
         color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal);

@@ -17,7 +17,7 @@ class MarketCheckOutPage extends StatefulWidget {
 
 class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
   TextStyle _mainText = TextStyle(fontSize: 16, color: Color(0xff000000));
-  TextStyle _subText = TextStyle(fontSize: 16, color: Color(0xffc4c4c4));
+//  TextStyle _subText = TextStyle(fontSize: 16, color: Color(0xffc4c4c4));
   StreamController<String> numberSteam = StreamController<String>.broadcast();
   Box<Map> cartBox;
   Box<Map> userDataBox;

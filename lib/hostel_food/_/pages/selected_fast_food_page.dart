@@ -166,9 +166,9 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
     @required List<ItemDetails> fastFoodList,
   }) {
     var symbol = String.fromCharCodes(input);
-    var size = MediaQuery.of(context).size;
+//    var size = MediaQuery.of(context).size;
 //    final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
-    final double itemWidth = size.width / 2;
+//    final double itemWidth = size.width / 2;
 
     print(fastFoodList.length);
     if (fastFoodList.isEmpty) {
@@ -322,7 +322,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
       }
     }
 
-    var width = MediaQuery.of(context).size.width;
+//    var width = MediaQuery.of(context).size.width;
     //var width = MediaQuery.of(context).size.width;
     return SizedBox(
       height: 60,

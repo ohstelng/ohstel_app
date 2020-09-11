@@ -110,7 +110,7 @@ class _WalletHomeState extends State<WalletHome> {
     );
     if (response.status == true) {
       await _verifyOnServer(response.reference);
-      WalletMethods(userData['uid']).fundWallet(amount: price.toDouble());
+      WalletMethods().fundWallet(amount: price.toDouble());
     } else {
       print('error');
     }
@@ -207,14 +207,7 @@ class _WalletHomeState extends State<WalletHome> {
                           child: Text("Fund Wallet"),
                         ),
                         RaisedButton(
-                          onPressed: () async {
-//                            methods
-//                                .createCoinHistory(10,
-//                                    desc: "Wallet funded from Advert Video")
-//                                .then((v) {
-//                              getUserDetails();
-//                            });
-                          },
+                          onPressed: () async {},
                           child: Text("Watch Ads"),
                         ),
                         RaisedButton(
@@ -301,7 +294,7 @@ class _WalletHomeState extends State<WalletHome> {
                 height: 20,
               ),
               StreamBuilder(
-                  stream: WalletMethods(userData['uid'])
+                  stream: WalletMethods()
                       .userDataCollectionRef
                       .doc(userData['uid'])
                       .snapshots(),
@@ -354,7 +347,7 @@ class _WalletHomeState extends State<WalletHome> {
                 height: 20,
               ),
               StreamBuilder(
-                  stream: WalletMethods(userData['uid'])
+                  stream: WalletMethods()
                       .userDataCollectionRef
                       .doc(userData['uid'])
                       .snapshots(),

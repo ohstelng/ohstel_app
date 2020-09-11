@@ -5,7 +5,6 @@ import 'package:Ohstel_app/auth/methods/auth_database_methods.dart';
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'package:Ohstel_app/landing_page/homepage.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

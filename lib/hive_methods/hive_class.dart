@@ -63,6 +63,13 @@ class HiveMethods {
     return address;
   }
 
+  Future<String> getUid() async {
+    Box<Map> userDataBox = await getOpenBox('userDataBox');
+
+    String uid = userDataBox.get(0)['uid'];
+    return uid;
+  }
+
   Future<Map> getUserData() async {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
 

@@ -70,7 +70,7 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
   String _areaName = 'Selected Area Name';
 
   Future<Map> getAreaNamesFromApi() async {
-    String uniName = await HiveMethods().getUniName();
+//    String uniName = await HiveMethods().getUniName();
     String url = 'https://quiz-demo-de79d.appspot.com/food_api/unilorin';
     var response = await http.get(url);
     Map data = json.decode(response.body);

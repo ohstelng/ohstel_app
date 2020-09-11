@@ -80,7 +80,7 @@ class _FoodDialogState extends State<FoodDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+//    var size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
