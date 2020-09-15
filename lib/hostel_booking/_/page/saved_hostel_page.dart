@@ -162,10 +162,10 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
             ),
           ),
         );
-      }, itemBuilderType: dynamic,
+      },
+      itemBuilderType: PaginateBuilderType.listView,
     );
   }
-
 
   Widget displayMultiPic({@required List imageList}) {
     return Container(

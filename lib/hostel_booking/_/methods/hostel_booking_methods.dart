@@ -387,7 +387,7 @@ class HostelBookingMethods {
             .collection(year.toString())
             .doc(month.toString()),
         {"count": FieldValue.increment(1)},
-//        merge: true,
+        SetOptions(merge: true),
       );
 
       await batch.commit();
@@ -440,16 +440,14 @@ class HostelBookingMethods {
       );
 
       batch.set(
-        paidHostelInfoRef
-            .collection(year.toString())
-            .doc(month.toString()),
+        paidHostelInfoRef.collection(year.toString()).doc(month.toString()),
         {"count": FieldValue.increment(1)},
-//        merge: true,
+        SetOptions(merge: true),
       );
 
       await batch.commit();
 
-      print('save inspection details');
+      print('save payment details');
 
       return 0;
     } catch (e) {

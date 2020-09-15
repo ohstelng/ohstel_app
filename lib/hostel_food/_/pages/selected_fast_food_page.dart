@@ -4,7 +4,7 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
 import 'package:Ohstel_app/hostel_food/_/models/fast_food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
-import 'package:Ohstel_app/hostel_food/_/pages/cart_page.dart';
+import 'package:Ohstel_app/hostel_food/_/pages/food_cart_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_drinks_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_food_dialog.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_fries_page.dart';

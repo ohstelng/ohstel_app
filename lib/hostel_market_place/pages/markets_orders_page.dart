@@ -97,7 +97,8 @@ class _MarketOrdersPageState extends State<MarketOrdersPage> {
               ),
             ),
           );
-        }, itemBuilderType: dynamic,
+        },
+        itemBuilderType: PaginateBuilderType.listView,
       ),
     );
   }

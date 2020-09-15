@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/wallet/method.dart';
+import 'package:Ohstel_app/wallet/pages/coin_history.dart';
+import 'package:Ohstel_app/wallet/pages/wallet_history.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
@@ -116,7 +118,7 @@ class _WalletHomeState extends State<WalletHome> {
     }
   }
 
-  void showPopUp() {
+  void showFundPopUp() {
     String amount;
     showDialog(
       barrierDismissible: false,
@@ -158,6 +160,18 @@ class _WalletHomeState extends State<WalletHome> {
     );
   }
 
+  void showTransferPopUp() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: TransferFundPopUp(),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     getUserData();
@@ -177,70 +191,106 @@ class _WalletHomeState extends State<WalletHome> {
 
   @override
   Widget build(BuildContext context) {
-    //userModel = widget.userModel;
-//    WalletMethods methods = WalletMethods(userData['uid']);
-    return Scaffold(
-      body: userModel == null
-          ? Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: EdgeInsets.symmetric(vertical: 50, horizontal: 10),
-              child: Container(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        walletBalanceWidget(),
-                        coinBalanceWidget(),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RaisedButton(
-                          onPressed: () async {
-                            showPopUp();
-                          },
-                          child: Text("Fund Wallet"),
-                        ),
-                        RaisedButton(
-                          onPressed: () async {},
-                          child: Text("Watch Ads"),
-                        ),
-                        RaisedButton(
-                          onPressed: () async {
-//                            methods.convertCoin(10).then((v) {
-//                              getUserDetails();
-//                            });
-                          },
-                          child: Text("Convert Coin"),
-                        )
-                      ],
-                    ),
-                    Expanded(
-                      //height: 1000,
-                      child: ListView(
-                        shrinkWrap: true,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        body: userModel == null
+            ? Center(child: CircularProgressIndicator())
+            : Padding(
+                padding: EdgeInsets.symmetric(vertical: 50, horizontal: 10),
+                child: Container(
+                  child: ListView(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          item(
-                            "Wallet History",
-//                              action: () => Get.to(WalletHistory(widget.uid)),
-                          ),
-                          item(
-                            "Coin History",
-//                              action: () => Get.to(CoinHistory(widget.uid)),
-                          ),
-                          Divider(),
+                          walletBalanceWidget(),
+                          coinBalanceWidget(),
                         ],
                       ),
-                    )
-                  ],
+                      SizedBox(height: 20),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RaisedButton(
+                            onPressed: () async {
+                              showFundPopUp();
+                            },
+                            child: Text("Fund Wallet"),
+                          ),
+                          RaisedButton(
+                            onPressed: () async {},
+                            child: Text("Watch Ads"),
+                          ),
+                          RaisedButton(
+                            onPressed: () async {},
+                            child: Text("Convert Coin"),
+                          ),
+                          RaisedButton(
+                            onPressed: () async {
+                              Map data = await HiveMethods().getUserData();
+//                              print(data);
+                              showTransferPopUp();
+                            },
+                            child: Text("Transfer Fund"),
+                          )
+                        ],
+                      ),
+                      tabBar(),
+                      Container(
+                        child: SizedBox(
+                          height: 400,
+                          child: TabBarView(
+                            children: [
+                              WalletHistoryPage(),
+                              CoinHistoryPage(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+      ),
+    );
+  }
+
+  Widget tabBarView() {
+    return Flexible(
+      child: TabBarView(
+        children: [
+          WalletHistoryPage(),
+          CoinHistoryPage(),
+        ],
+      ),
+    );
+  }
+
+  Widget tabBar() {
+    return Container(
+      height: 40,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: TabBar(
+        indicatorColor: Colors.orange,
+        tabs: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Wallet History",
+              style: TextStyle(
+                color: Colors.black,
+              ),
             ),
+          ),
+          Text(
+            "Coin History",
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -373,5 +423,236 @@ class _WalletHomeState extends State<WalletHome> {
             ],
           ),
         ));
+  }
+}
+
+class TransferFundPopUp extends StatefulWidget {
+  @override
+  _TransferFundPopUpState createState() => _TransferFundPopUpState();
+}
+
+class _TransferFundPopUpState extends State<TransferFundPopUp> {
+  bool _loading = false;
+  int stage = 0;
+  int amount;
+  UserModel receiver;
+  String uid;
+  String message = 'Loading....';
+  final formKey = GlobalKey<FormState>();
+
+  void nextStep() {
+    if (!mounted) return;
+
+    if (stage <= 5) {
+      setState(() {
+        stage++;
+      });
+    }
+  }
+
+  Future<void> makeTransfer() async {
+    if (!mounted) return;
+
+    setState(() {
+      _loading = true;
+      stage = 2;
+    });
+
+    int result = await WalletMethods().transferFund(
+      amount: amount.toDouble(),
+      receiver: receiver,
+    );
+
+    if (result == 0) {
+      message = 'Transfer SucessFull!. $amount Has Been Sent To'
+          ' ${receiver.fullName}. \n ID: ${receiver.uid}';
+    } else if (result == 1) {
+      message = 'Error Occured';
+    }
+
+    setState(() {
+      _loading = false;
+      stage = 3;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: toDisplay(),
+    );
+  }
+
+  Widget inputReceiver() {
+    return Form(
+      key: formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Account ID',
+              hintText: 'Input Receiver Account ID',
+            ),
+            keyboardType: TextInputType.text,
+            validator: (value) {
+              if (value.trim().isEmpty) {
+                return 'Account ID Can\'t Be Empty';
+              } else if (value.trim().length < 28) {
+                return 'Account ID Must Be More Than 28 Characters';
+              } else {
+                return null;
+              }
+            },
+            textInputAction: TextInputAction.done,
+            onChanged: (val) {
+              uid = val.trim();
+            },
+          ),
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Amount',
+              hintText: 'Input Amount',
+            ),
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            onChanged: (val) {
+              amount = int.parse(val.trim());
+            },
+            validator: (value) {
+              if (value.trim().isEmpty) {
+                return 'Amount Can\'t Be Empty';
+              } else {
+                return null;
+              }
+            },
+          ),
+          SizedBox(height: 20.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              FlatButton(
+                onPressed: () {
+                  if (formKey.currentState.validate()) {
+                    nextStep();
+                  }
+                },
+                child: Text('Proceed'),
+                color: Colors.green,
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+                color: Colors.grey,
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget getUserDetails() {
+    return FutureBuilder(
+      future: AuthService().getUserDetailsByUid(uid: uid),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return SizedBox(
+            height: 100,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          receiver = snapshot.data;
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'You are About To Transfer $amount To The User Below!',
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20.0),
+              Text('Full Name: ${receiver.fullName}'),
+              SizedBox(height: 10.0),
+              Text('Email: ${receiver.email}'),
+              SizedBox(height: 10.0),
+              Text('Phone Number: ${receiver.phoneNumber}'),
+              SizedBox(height: 10.0),
+              Text('ID: ${receiver.uid}'),
+              SizedBox(height: 35.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FlatButton(
+                    onPressed: () {
+                      makeTransfer();
+//                        nextStep();
+                    },
+                    child: Text('Proceed'),
+                    color: Colors.green,
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Cancel'),
+                    color: Colors.grey,
+                  )
+                ],
+              )
+            ],
+          );
+        }
+      },
+    );
+  }
+
+  Widget loading() {
+    return Container(
+      margin: EdgeInsets.all(15.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Center(child: CircularProgressIndicator()),
+          Text('Loading....')
+        ],
+      ),
+    );
+  }
+
+  Widget messageWidget() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('$message'),
+        SizedBox(height: 30.0),
+        FlatButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Ok'),
+          color: Colors.grey,
+        )
+      ],
+    );
+  }
+
+  Widget toDisplay() {
+    Widget toDisplay;
+    if (stage == 0) {
+      toDisplay = inputReceiver();
+    } else if (stage == 1) {
+      toDisplay = getUserDetails();
+    } else if (stage == 2) {
+      toDisplay = loading();
+    } else if (stage == 3) {
+      toDisplay = messageWidget();
+    }
+
+    return toDisplay;
   }
 }

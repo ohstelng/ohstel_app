@@ -5,7 +5,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'cart_page.dart';
+import 'food_cart_page.dart';
 
 class SnackDialog extends StatefulWidget {
   final ItemDetails itemDetails;

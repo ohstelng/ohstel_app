@@ -1,3 +1,4 @@
+import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
 import 'package:Ohstel_app/hostel_booking/_/model/hostel_model.dart';
@@ -21,30 +22,8 @@ class HostelBookingInFoPage extends StatefulWidget {
 
 class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   Map userData;
-
   int _current = 0;
-
-  Future<void> savePaidDataToServer() async {
-    int result = await HostelBookingMethods().savePaidHostelDetailsDetails(
-      fullName: userData['fullName'],
-      phoneNumber: userData['phoneNumber'],
-      email: userData['email'],
-      price: widget.hostelModel.price,
-      hostelDetails: widget.hostelModel,
-    );
-
-    if (result == 0) {
-      Fluttertoast.showToast(
-        msg: 'Sent Sucessfully!!',
-        gravity: ToastGravity.CENTER,
-      );
-    } else {
-      Fluttertoast.showToast(
-        msg: 'An Error Occur :(',
-        gravity: ToastGravity.CENTER,
-      );
-    }
-  }
+  bool loading = false;
 
   Future<void> archivePost() async {
     await HostelBookingMethods().archiveHostel(
@@ -69,46 +48,63 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
 
   void paymentPopUp() {
     showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Container(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  Text(
-                      'The Sum Of NGN ${widget.hostelModel.price} Will Be Deducted From Your Wallet Balance!'),
-                  Row(
-                    children: [
-                      FlatButton(
-                        onPressed: () {
-                          pay();
-                        },
-                        child: Text('Proceed'),
-                      ),
-                      FlatButton(
-                        onPressed: () {},
-                        child: Text('Cancel'),
-                      ),
-                    ],
-                  ),
-                ],
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Payment Alert'),
+          content: Container(
+              child: PaymentPopUp(
+            hostelModel: widget.hostelModel,
+            userData: userData,
+          )
+//              child: Column(
+//                mainAxisSize: MainAxisSize.min,
+//                children: [
+//                  Text(
+//                    'The Sum Of NGN ${widget.hostelModel.price} '
+//                    'Will Be Deducted From Your Wallet Balance!',
+//                    textAlign: TextAlign.center,
+//                  ),
+//                  SizedBox(height: 20),
+//                  TextField(
+//                    decoration: InputDecoration(
+//                      labelText: 'Password',
+//                      hintText: 'Enter Your Password',
+//                    ),
+//                    obscureText: true,
+//                    keyboardType: TextInputType.text,
+//                    textInputAction: TextInputAction.done,
+//                    onChanged: (val) {
+//                      password = val;
+//                    },
+//                  ),
+//                  SizedBox(height: 20),
+//                  Row(
+//                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                    children: [
+//                      FlatButton(
+//                        onPressed: () async {
+//                          await validateUser(password: password);
+//                        },
+//                        child: Text('Proceed'),
+//                        color: Colors.green,
+//                      ),
+//                      FlatButton(
+//                        onPressed: () {
+//                          Navigator.pop(context);
+//                        },
+//                        child: Text('Cancel'),
+//                        color: Colors.grey,
+//                      ),
+//                    ],
+//                  ),
+//                ],
+//              ),
               ),
-            ),
-          );
-        });
-  }
-
-  Future<void> pay() async {
-    int result = await WalletMethods().deductWallet(
-      amount: widget.hostelModel.price.toDouble(),
-      payingFor: 'hostel',
-      itemId: widget.hostelModel.id,
+        );
+      },
     );
-    if (result == 0) {
-      savePaidDataToServer();
-    }
   }
 
   @override
@@ -411,6 +407,134 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 );
               }).toList())
         ],
+      ),
+    );
+  }
+}
+
+class PaymentPopUp extends StatefulWidget {
+  final HostelModel hostelModel;
+  final Map userData;
+
+  PaymentPopUp({
+    @required this.hostelModel,
+    @required this.userData,
+  });
+
+  @override
+  _PaymentPopUpState createState() => _PaymentPopUpState();
+}
+
+class _PaymentPopUpState extends State<PaymentPopUp> {
+  bool loading = false;
+
+  Future<void> savePaidDataToServer() async {
+    int result = await HostelBookingMethods().savePaidHostelDetailsDetails(
+      fullName: widget.userData['fullName'],
+      phoneNumber: widget.userData['phoneNumber'],
+      email: widget.userData['email'],
+      price: widget.hostelModel.price,
+      hostelDetails: widget.hostelModel,
+    );
+
+    if (result == 0) {
+      Fluttertoast.showToast(
+        msg: 'Sent Sucessfully!!',
+        gravity: ToastGravity.CENTER,
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: 'An Error Occur :(',
+        gravity: ToastGravity.CENTER,
+      );
+    }
+  }
+
+  Future<void> validateUser({@required String password}) async {
+    Map userDate = await HiveMethods().getUserData();
+
+    await AuthService()
+        .loginWithEmailAndPassword(
+      email: userDate['email'],
+      password: password,
+    )
+        .then((value) async {
+      print(value);
+      print('vvvvvvvvvvvvvvvvv');
+      if (value != null) {
+        await pay();
+      }
+    });
+  }
+
+  Future<void> pay() async {
+    int result = await WalletMethods().deductWallet(
+      amount: widget.hostelModel.price.toDouble(),
+      payingFor: 'hostel',
+      itemId: widget.hostelModel.id,
+    );
+    print(result);
+    print(';;;;;;;;;;;;;;;;;;;;;;;;;;');
+    if (result == 0) {
+      savePaidDataToServer();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String password;
+    return Container(
+      child: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'The Sum Of NGN ${widget.hostelModel.price} '
+              'Will Be Deducted From Your Wallet Balance!',
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Password',
+                hintText: 'Enter Your Password',
+              ),
+              obscureText: true,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.done,
+              onChanged: (val) {
+                password = val;
+              },
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FlatButton(
+                  onPressed: () async {
+                    setState(() {
+                      loading = true;
+                    });
+                    await validateUser(password: password);
+                    setState(() {
+                      loading = false;
+                    });
+                  },
+                  child:
+                      loading ? CircularProgressIndicator() : Text('Proceed'),
+                  color: Colors.green,
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel'),
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

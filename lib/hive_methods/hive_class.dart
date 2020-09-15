@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
@@ -73,6 +74,11 @@ class HiveMethods {
   Future<Map> getUserData() async {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
 
+    if (userDataBox.isEmpty) {
+      AuthService().signOut();
+    }
+    print(userDataBox.toMap());
+    print('ooooooooooooooooooooooooooooooooooooo');
     Map userData = userDataBox.getAt(0);
     print(userDataBox.isEmpty);
     return userData;

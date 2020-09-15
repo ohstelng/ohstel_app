@@ -2,8 +2,6 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_checkout_page.dart';
 import 'package:Ohstel_app/hostel_market_place/models/market_cart_model.dart';
 import 'package:flutter/cupertino.dart';
-//import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
-//import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';

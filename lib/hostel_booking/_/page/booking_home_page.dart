@@ -555,7 +555,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     TextStyle tabStyle = TextStyle(
@@ -625,51 +624,52 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Widget sortByDistance() {
     return PaginateFirestore(
-        itemsPerPage: 3,
-        initialLoader: Container(
-          height: 50,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
+      itemsPerPage: 3,
+      initialLoader: Container(
+        height: 50,
+        child: Center(
+          child: CircularProgressIndicator(),
         ),
-        bottomLoader: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(child: CircularProgressIndicator()),
-        ),
-        query: FirebaseFirestore.instance
-            .collection('hostelBookings')
-            .where('uniName', isEqualTo: uniName)
-            .orderBy('distanceFromSchoolInKm', descending: false)
-            .where('isSchoolHostel', isEqualTo: false),
-        itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
-          HostelModel currentHostelModel =
-              HostelModel.fromMap(documentSnapshot.data());
+      ),
+      bottomLoader: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      query: FirebaseFirestore.instance
+          .collection('hostelBookings')
+          .where('uniName', isEqualTo: uniName)
+          .orderBy('distanceFromSchoolInKm', descending: false)
+          .where('isSchoolHostel', isEqualTo: false),
+      itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
+        HostelModel currentHostelModel =
+            HostelModel.fromMap(documentSnapshot.data());
 
-          return Card(
-            elevation: 2.5,
-            child: InkWell(
-              onTap: () {
+        return Card(
+          elevation: 2.5,
+          child: InkWell(
+            onTap: () {
 //              print(currentHostelModel.id);
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => HostelBookingInFoPage(
-                        hostelModel: currentHostelModel)));
-              },
-              child: Container(
-                margin: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    displayMultiPic(imageList: currentHostelModel.imageUrl),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    hostelDetails(hostel: currentHostelModel),
-                  ],
-                ),
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      HostelBookingInFoPage(hostelModel: currentHostelModel)));
+            },
+            child: Container(
+              margin: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  displayMultiPic(imageList: currentHostelModel.imageUrl),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  hostelDetails(hostel: currentHostelModel),
+                ],
               ),
             ),
-          );
-        }, itemBuilderType: dynamic,
+          ),
+        );
+      },
+      itemBuilderType: PaginateBuilderType.listView,
     );
   }
 

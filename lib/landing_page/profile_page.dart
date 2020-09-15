@@ -8,6 +8,7 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -222,6 +223,13 @@ class _ProfilePageState extends State<ProfilePage> {
     return result;
   }
 
+  void copyUid() {
+    Clipboard.setData(new ClipboardData(text: userData['uid']));
+//    ClipboardManager.copyToClipBoard(userData['uid']).then((result) {
+    Fluttertoast.showToast(msg: 'Copied to Clipboard');
+//    });
+  }
+
   @override
   void initState() {
     getUserData();
@@ -231,6 +239,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: GlobalKey(),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
@@ -319,9 +328,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      width: 20,
-                    ),
+                    SizedBox(width: 20),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,11 +426,6 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(
               height: 40,
             ),
-//            Items(
-//              Icons.attach_money,
-//              "Wallet",
-//              action: WalletHome(),
-//            ),
             Divider(),
             ExpansionTile(
               childrenPadding: EdgeInsets.symmetric(horizontal: 16),
@@ -455,6 +457,27 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                   ),
+                ),
+              ],
+            ),
+            Divider(),
+            ExpansionTile(
+              childrenPadding: EdgeInsets.symmetric(horizontal: 16),
+              trailing: Icon(Icons.arrow_forward_ios),
+              key: GlobalKey(),
+              title: Text('User ID'),
+              leading: CircleAvatar(
+                  backgroundColor: Color(0xffebf1ef),
+                  radius: 37,
+                  child: Icon(Icons.description)),
+              children: <Widget>[
+                ListTile(
+                  title: Text('${userModel.uid}'),
+                  leading: Icon(Icons.content_copy),
+                  subtitle: Text('Click To Copy To ClipBoard'),
+                  onTap: () {
+                    copyUid();
+                  },
                 ),
               ],
             ),

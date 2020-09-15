@@ -330,21 +330,6 @@ class _CartPageState extends State<CartPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
-//
-//                                      getExtraWidget(
-//                                          extras: currentExtraItemDetails),
-//                                      Container(
-//                                        margin: EdgeInsets.only(top: 10.0),
-//                                        child: Row(
-//                                          mainAxisAlignment:
-//                                              MainAxisAlignment.spaceBetween,
-//                                          children: <Widget>[
-//                                            Text('Number Of Plates'),
-//                                            Text('${data['numberOfPlates']}'),
-//                                          ],
-//                                        ),
-//                                      ),
-
                                       Container(
                                         child: Row(
                                           crossAxisAlignment:
@@ -482,34 +467,34 @@ class _CartPageState extends State<CartPage> {
                                 style: TextStyle(fontSize: 20))
                           ],
                         ),
-                      )
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        width: double.infinity,
+                        child: FlatButton(
+                          padding: EdgeInsets.all(15),
+                          color: Color(0xFF202530),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => FoodPaymentPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'PROCEED TO PAYMENT',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
+                      ),
                     ],
                   );
                 },
               ),
             ),
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
-        width: double.infinity,
-        child: FlatButton(
-          padding: EdgeInsets.all(15),
-          color: Color(0xFF202530),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => FoodPaymentPage(),
-              ),
-            );
-          },
-          child: Text(
-            'PROCEED TO PAYMENT',
-            style: TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        ),
-      ),
     );
   }
 

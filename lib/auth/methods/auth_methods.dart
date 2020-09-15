@@ -23,7 +23,6 @@ class AuthService {
     /// a user log in so the UI can also be updated
 
     return auth.authStateChanges().map(userFromFirebase);
-
   }
 
   // log in with email an pass
@@ -127,10 +126,26 @@ class AuthService {
         FirebaseFirestore.instance.collection('userData');
     print(uid.trim());
     try {
-      DocumentSnapshot document =
-          await userDataCollectionRef.doc(uid).get();
-      print(document.data);
+      DocumentSnapshot document = await userDataCollectionRef.doc(uid).get();
+      print(document.data());
       await saveUserDataToDb(userData: document.data());
+      userDetails = UserModel.fromMap(document.data().cast<String, dynamic>());
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '${e.message}');
+    }
+
+    return userDetails;
+  }
+
+  Future<UserModel> getUserDetailsByUid({@required String uid}) async {
+    UserModel userDetails;
+    final CollectionReference userDataCollectionRef =
+        FirebaseFirestore.instance.collection('userData');
+    print(uid.trim());
+    try {
+      DocumentSnapshot document = await userDataCollectionRef.doc(uid).get();
+      print(document.data());
       userDetails = UserModel.fromMap(document.data().cast<String, dynamic>());
     } catch (e) {
       print(e);
@@ -142,14 +157,13 @@ class AuthService {
 
   Future<void> saveUserDataToDb({@required Map userData}) async {
     print('saving..................');
-    Box<Map> userDataBox = Hive.box<Map>('userDataBox');
+    Box<Map> userDataBox = await HiveMethods().getOpenBox('userDataBox');
     final key = 0;
     final value = userData;
     print(userData);
 
     userData['dateJoined'] = userData["dateJoined"]?.toDate().toString();
     print(userData);
-
 
     await userDataBox.put(key, value);
     print('saved');

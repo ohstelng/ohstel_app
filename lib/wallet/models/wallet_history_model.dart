@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 
 class WalletHistoryModel {
   String amount;
-  String balance;
-  String previousAmount;
+  dynamic balance;
+  dynamic previousAmount;
   String desc;
   Timestamp date;
   String type;

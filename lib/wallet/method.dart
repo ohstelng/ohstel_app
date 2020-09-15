@@ -1,3 +1,4 @@
+import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/wallet/models/wallet_history_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,8 +34,7 @@ class WalletMethods {
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot docSnapshot = await transaction.get(userDoc);
-        double previousAmount =
-            (double.parse(docSnapshot.data()['walletBalance'].toString()) ?? 0);
+        int previousAmount = (docSnapshot.data()['walletBalance'] ?? 0.0);
         print('ppppppppppppppppppppppppppppppppppppppp');
         print(previousAmount);
         int updatedWalletBalance;
@@ -56,9 +56,9 @@ class WalletMethods {
         );
 
         WalletHistoryModel walletHistory = WalletHistoryModel(
-          amount: amount.toString(),
-          balance: updatedWalletBalance.toString(),
-          previousAmount: previousAmount.toString(),
+          amount: amount.toInt().toString(),
+          balance: updatedWalletBalance,
+          previousAmount: previousAmount,
           desc: desc,
           type: type,
           ref: ref,
@@ -121,8 +121,11 @@ class WalletMethods {
           {'walletBalance': updatedWalletBalance.toInt()},
         );
 
-        walletHistoryCollectionRef.add({
-          'amount': amount.toString(),
+        fundHistoryCollectionRef
+            .doc(userData['uid'])
+            .collection('walletHistory')
+            .add({
+          'amount': amount.toInt().toString(),
           'balance': updatedWalletBalance,
           'previousAmount': previousAmount,
           'desc': desc,
@@ -133,6 +136,111 @@ class WalletMethods {
         });
         status = 0;
 //        return updatedWalletBalance;
+      });
+    } catch (e) {
+      print(e);
+      status = 1;
+      Fluttertoast.showToast(msg: '$e');
+    }
+
+    return status;
+  }
+
+  Future<int> transferFund({
+    @required double amount,
+    @required UserModel receiver,
+  }) async {
+    int status;
+    Map userData = await HiveMethods().getUserData();
+    String type = 'debit';
+    String ref = 'userID: ${userData['uid']} , receiver: ${receiver.uid}';
+    String desc =
+        '${userData['fullName']} Transfer $amount To ${receiver.fullName}';
+
+    try {
+      final DocumentReference userDoc =
+          userDataCollectionRef.doc(userData['uid']);
+      final DocumentReference receiverDoc =
+          userDataCollectionRef.doc(receiver.uid);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot userDocSnapshot = await transaction.get(userDoc);
+        DocumentSnapshot receiverDocSnapshot =
+            await transaction.get(receiverDoc);
+
+        double userPreviousAmount =
+            (double.parse(userDocSnapshot.data()['walletBalance'].toString()) ??
+                0);
+        double receiverPreviousAmount = (double.parse(
+                receiverDocSnapshot.data()['walletBalance'].toString()) ??
+            0);
+
+        int userUpdateWalletBalance;
+        int receiverUpdateWalletBalance;
+        int userBalance = userDocSnapshot.data()['walletBalance'] ?? 0;
+        int receiverBalance = receiverDocSnapshot.data()['walletBalance'] ?? 0;
+
+        if (!userDocSnapshot.exists && !receiverDocSnapshot.exists) {
+          print('Document does not exist!');
+          throw Exception(
+              "Document does not exist!, Make Sure The Receiver Uid Is Correct");
+        }
+        print(1);
+
+        if (userBalance < amount) {
+          print('Insufficient Balance!');
+          throw Exception("Insufficient Balance!!");
+        }
+
+        print(2);
+        userUpdateWalletBalance = userBalance - amount.toInt();
+        receiverUpdateWalletBalance = receiverBalance + amount.toInt();
+
+        transaction.update(
+          userDoc,
+          {'walletBalance': userUpdateWalletBalance.toInt()},
+        );
+        print(3);
+
+        transaction.update(
+          receiverDoc,
+          {'walletBalance': receiverUpdateWalletBalance.toInt()},
+        );
+
+        print(4);
+        WalletHistoryModel userWalletHistory = WalletHistoryModel(
+          amount: amount.toInt().toString(),
+          balance: userUpdateWalletBalance,
+          previousAmount: userPreviousAmount,
+          desc: desc,
+          type: type,
+          ref: ref,
+          uid: userData['uid'],
+        );
+
+        WalletHistoryModel receiverWalletHistory = WalletHistoryModel(
+          amount: amount.toInt().toString(),
+          balance: receiverPreviousAmount,
+          previousAmount: receiverBalance,
+          type: type,
+          desc: desc,
+          ref: ref,
+          uid: receiver.uid,
+        );
+
+        print(5);
+        fundHistoryCollectionRef
+            .doc(userData['uid'])
+            .collection('walletHistory')
+            .add(userWalletHistory.toMap());
+
+        print(6);
+        fundHistoryCollectionRef
+            .doc(receiver.uid)
+            .collection('walletHistory')
+            .add(receiverWalletHistory.toMap());
+
+        status = 0;
       });
     } catch (e) {
       print(e);
