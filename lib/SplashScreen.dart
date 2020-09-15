@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:Ohstel_app/introduction_screen.dart';
 import 'package:flutter/material.dart';
 import 'auth/wrapper.dart';
 
@@ -14,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         Duration(seconds: 3),
         () => Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (BuildContext context) => Wrapper())));
+            MaterialPageRoute(builder: (BuildContext context) => Splash())));
   }
 
   @override
