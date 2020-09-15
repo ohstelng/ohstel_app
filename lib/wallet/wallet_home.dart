@@ -432,6 +432,7 @@ class TransferFundPopUp extends StatefulWidget {
 class _TransferFundPopUpState extends State<TransferFundPopUp> {
   bool _loading = false;
   int stage = 0;
+
   int amount;
   UserModel receiver;
   String uid;
