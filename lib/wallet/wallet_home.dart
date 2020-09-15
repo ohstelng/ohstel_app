@@ -228,8 +228,6 @@ class _WalletHomeState extends State<WalletHome> {
                           ),
                           RaisedButton(
                             onPressed: () async {
-                              Map data = await HiveMethods().getUserData();
-//                              print(data);
                               showTransferPopUp();
                             },
                             child: Text("Transfer Fund"),
@@ -432,7 +430,6 @@ class TransferFundPopUp extends StatefulWidget {
 }
 
 class _TransferFundPopUpState extends State<TransferFundPopUp> {
-  bool _loading = false;
   int stage = 0;
   int amount;
   UserModel receiver;
