@@ -359,7 +359,7 @@ class _WalletHomeState extends State<WalletHome> {
                             CircleAvatar(
                               backgroundColor: Colors.white.withOpacity(0.4),
                               child: Text(
-                                'C',
+                                'O',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 24,

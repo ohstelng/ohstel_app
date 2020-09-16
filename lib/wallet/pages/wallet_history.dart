@@ -1,6 +1,7 @@
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/wallet/method.dart';
 import 'package:Ohstel_app/wallet/models/wallet_history_model.dart';
+import 'package:Ohstel_app/wallet/pages/wallet_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +41,8 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: loading
+    return Container(
+      child: loading
           ? Center(child: CircularProgressIndicator())
           : SafeArea(
               child: Center(
@@ -55,23 +56,39 @@ class _WalletHistoryPageState extends State<WalletHistoryPage> {
                     String _dateTime = DateFormat.yMMMd().add_jm().format(date);
 
                     return Card(
-                      elevation: 2.5,
+                      elevation: 1.5,
                       child: Container(
-                        padding: EdgeInsets.all(5.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: Text('${walletHistory.desc}'),
-                                ),
-                                Divider(),
-                                Container(
-                                  child: Text('$_dateTime'),
-                                ),
-                              ],
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      '${walletHistory.desc}',
+                                      style: TextStyle(
+                                        color: textBlack,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                    endIndent: 40,
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      '$_dateTime',
+                                      style: TextStyle(
+                                        color: textBlack,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Text(
                               '${walletHistory.type == 'credit' ? '+' : '-'}${walletHistory.amount}',
