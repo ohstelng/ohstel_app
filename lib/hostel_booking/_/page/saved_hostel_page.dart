@@ -90,7 +90,9 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  displayMultiPic(imageList: savedHostelModel.hostelImageUrls),
+                  Expanded(
+                      child: displayMultiPic(
+                          imageList: savedHostelModel.hostelImageUrls)),
                   SizedBox(
                     width: 8,
                   ),

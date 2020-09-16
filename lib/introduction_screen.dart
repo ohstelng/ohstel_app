@@ -40,8 +40,6 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
     }
   }
 
-
-
   @override
   void afterFirstLayout(BuildContext context) => checkFirstSeen();
 
@@ -55,7 +53,6 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
   }
 }
 
-
 class IntroScreen extends StatelessWidget {
   PageController _controller = PageController(
     initialPage: 0,
@@ -64,7 +61,7 @@ class IntroScreen extends StatelessWidget {
   @override
   void dispose() {
     _controller.dispose();
-      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +93,8 @@ class IntroScreen extends StatelessWidget {
                     height: 30,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:32,vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                     child: Text(
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus vel id neque egestas. adipiscing elit. Cursus vel id neque egestas."),
                   ),
@@ -136,7 +134,7 @@ class IntroScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 8,
                   ),
                   InkWell(
                     onTap: () {
@@ -149,7 +147,11 @@ class IntroScreen extends StatelessWidget {
                       }
                     },
                     child: Container(
-                      child: Center(child: Text("Skip",style: TextStyle(fontSize: 17,color: Colors.white),)),
+                      child: Center(
+                          child: Text(
+                        "Skip",
+                        style: TextStyle(fontSize: 17, color: Colors.white),
+                      )),
                       height: 37,
                       width: 132,
                       decoration: BoxDecoration(
@@ -181,7 +183,8 @@ class IntroScreen extends StatelessWidget {
                     height: 30,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal:32,vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                     child: Text(
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus vel id neque egestas. adipiscing elit. Cursus vel id neque egestas."),
                   ),
@@ -221,7 +224,7 @@ class IntroScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 8,
                   ),
                   InkWell(
                     onTap: () {
@@ -234,7 +237,11 @@ class IntroScreen extends StatelessWidget {
                       }
                     },
                     child: Container(
-                      child: Center(child: Text("Skip",style: TextStyle(fontSize: 17,color: Colors.white),)),
+                      child: Center(
+                          child: Text(
+                        "Skip",
+                        style: TextStyle(fontSize: 17, color: Colors.white),
+                      )),
                       height: 37,
                       width: 132,
                       decoration: BoxDecoration(
@@ -266,7 +273,7 @@ class IntroScreen extends StatelessWidget {
                     height: 30,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal:32,vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                     child: Text(
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus vel id neque egestas. adipiscing elit. Cursus vel id neque egestas."),
                   ),
@@ -305,13 +312,22 @@ class IntroScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 40,),
+                  SizedBox(
+                    height: 8,
+                  ),
                   InkWell(
-                    onTap: (){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>WelcomePage()));
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WelcomePage()));
                     },
                     child: Container(
-                      child: Center(child: Text("Get Started",style: TextStyle(fontSize: 17,color: Colors.white),)),
+                      child: Center(
+                          child: Text(
+                        "Get Started",
+                        style: TextStyle(fontSize: 17, color: Colors.white),
+                      )),
                       height: 37,
                       width: 132,
                       decoration: BoxDecoration(
