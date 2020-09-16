@@ -8,7 +8,7 @@ const midnightExpress = Color(0xFF1F2430);
 const wineColor = Color(0xFF770000);
 const textBlack = Color(0xFF12121F);
 
-class WalletHomeNew extends StatelessWidget {
+class WalletHome extends StatelessWidget {
   Widget tabBar() {
     return Container(
       height: 40,
