@@ -3,6 +3,7 @@ import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/food_home_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_home_page.dart';
 import 'package:Ohstel_app/landing_page/homepage.dart';
+import 'package:Ohstel_app/wallet/pages/wallet_home_new.dart';
 import 'package:Ohstel_app/wallet/wallet_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,8 @@ class _MainHomePageState extends State<MainHomePage> {
           FoodHomePage(),
           Homepage(callback: navigatorCallBack),
           MarketHomePage(),
-          WalletHome(),
+          // WalletHome(),
+          WalletHomeNew(),
 //          HireHomePage(),
         ],
         controller: pageController,
