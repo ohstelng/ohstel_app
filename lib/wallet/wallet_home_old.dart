@@ -14,11 +14,11 @@ import 'package:http/http.dart' as http;
 
 import '../auth/models/userModel.dart';
 
-class WalletHome extends StatefulWidget {
-  _WalletHomeState createState() => _WalletHomeState();
+class WalletHomeOld extends StatefulWidget {
+  _WalletHomeOldState createState() => _WalletHomeOldState();
 }
 
-class _WalletHomeState extends State<WalletHome> {
+class _WalletHomeOldState extends State<WalletHomeOld> {
   UserModel userModel;
   Map userData;
   bool isLoading = true;

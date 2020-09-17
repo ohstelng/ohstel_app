@@ -188,7 +188,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
             child: Container(
               padding: EdgeInsets.all(20),
               child: GridView.count(
-                childAspectRatio: 0.85,
+                childAspectRatio: 0.78,
                 physics: BouncingScrollPhysics(),
                 crossAxisCount: 2,
                 children: List.generate(
@@ -238,31 +238,34 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                         shape: BoxShape.rectangle,
                                       ),
                                     ),
-                              Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      '${fastFoodList[index].itemName}',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.grey[600],
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        '${fastFoodList[index].itemName}',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.grey[600],
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      '$symbol ${formatCurrency.format(fastFoodList[index].price)}',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        '$symbol ${formatCurrency.format(fastFoodList[index].price)}',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               )
                             ],
