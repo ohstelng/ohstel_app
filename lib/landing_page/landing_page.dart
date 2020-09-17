@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../hive_methods/hive_class.dart';
 import '../hostel_booking/_/page/booking_home_page.dart';
@@ -38,7 +39,7 @@ class _MainHomePageState extends State<MainHomePage> {
 
   @override
   void initState() {
-    pageController = PageController(initialPage: 2, keepPage: true);
+    pageController = PageController(initialPage: getPageIndex, keepPage: true);
     //TODO: implement connectivity checker
     //TODO: implement connectivity checker
     //TODO: implement connectivity checker
@@ -71,6 +72,30 @@ class _MainHomePageState extends State<MainHomePage> {
       bottomNavigationBar: CustomNavBar(
         onChanged: onTapChangePage,
         currentPage: getPageIndex,
+        homeButtonObject: Image.asset(
+          "asset/OHstel.png",
+          height: 60,
+          width: 60,
+          fit: BoxFit.contain,
+        ),
+        navBarObjects: [
+          NavBarObject(
+            icon: SvgPicture.asset("asset/hostel.svg"),
+            label: 'Hostel',
+          ),
+             NavBarObject(
+            icon: SvgPicture.asset("asset/food.svg"),
+            label: 'Food',
+          ),
+             NavBarObject(
+            icon: SvgPicture.asset("asset/market.svg"),
+            label: 'Market',
+          ),
+             NavBarObject(
+            icon: SvgPicture.asset("asset/wallet.svg"),
+            label: 'Wallet',
+          ),
+        ],
       ),
     );
   }

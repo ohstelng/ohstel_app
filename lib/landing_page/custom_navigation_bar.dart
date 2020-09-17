@@ -1,15 +1,23 @@
-import 'package:Ohstel_app/wallet/pages/wallet_home.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import '../app_style.dart';
 
 class CustomNavBar extends StatelessWidget {
   const CustomNavBar({
     Key key,
     @required this.onChanged,
-    this.currentPage = 0,
+    this.currentPage = -1,
+    @required this.navBarObjects,
+    this.homeButtonObject,
   }) : super(key: key);
   final Function(int) onChanged;
   final int currentPage;
+  final List<NavBarObject> navBarObjects;
+  final Widget homeButtonObject;
+
+  int homeButtonWasBuilt(int i) {
+    return homeButtonObject != null && i > navBarObjects.length / 2 ? i - 1 : i;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,55 +35,36 @@ class CustomNavBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Flexible(
-              child: NavButton(
-                icon: SvgPicture.asset("asset/hostel.svg"),
-                onTap: () => onChanged(0),
-                label: 'Hostel',
-                isCurrentPage: currentPage == 0,
-              ),
-            ),
-            Flexible(
-              child: NavButton(
-                icon: SvgPicture.asset("asset/food.svg"),
-                onTap: () => onChanged(1),
-                label: 'Food',
-                isCurrentPage: currentPage == 1,
-              ),
-            ),
-            Transform.translate(
-              offset: Offset(0, -16),
-              child: InkWell(
-                child: Image.asset(
-                  "asset/OHstel.png",
-                  height: 60,
-                  width: 60,
-                  fit: BoxFit.contain,
-                ),
-                onTap: () => onChanged(2),
-              ),
-            ),
-            Flexible(
-              child: NavButton(
-                icon: SvgPicture.asset("asset/market.svg"),
-                onTap: () => onChanged(3),
-                label: 'Market',
-                isCurrentPage: currentPage == 3,
-              ),
-            ),
-            Flexible(
-              child: NavButton(
-                icon: SvgPicture.asset("asset/wallet.svg"),
-                onTap: () => onChanged(4),
-                label: 'Wallet',
-                isCurrentPage: currentPage == 4,
-              ),
-            ),
+            for (int i = 0; i < navBarObjects.length + 1; i++)
+              (i == navBarObjects.length / 2 && homeButtonObject != null)
+                  //Build Home button
+                  ? Transform.translate(
+                      offset: Offset(0, -16),
+                      child: InkWell(
+                        child: homeButtonObject,
+                        onTap: () => onChanged(i),
+                      ),
+                    )
+                  //Else build normal Nav Button
+                  : Flexible(
+                      child: NavButton(
+                        buttonData: navBarObjects[homeButtonWasBuilt(i)],
+                        onTap: () => onChanged(i),
+                        isCurrentPage: currentPage == i,
+                      ),
+                    ),
           ],
         ),
       ),
     );
   }
+}
+
+class NavBarObject {
+  final Widget icon;
+  final String label;
+
+  const NavBarObject({@required this.icon, @required this.label});
 }
 
 /// Buttons on the Nav bar
@@ -85,13 +74,11 @@ class NavButton extends StatelessWidget {
   const NavButton({
     Key key,
     @required this.onTap,
-    @required this.icon,
-    this.label,
+    @required this.buttonData,
     @required this.isCurrentPage,
   }) : super(key: key);
   final Function onTap;
-  final Widget icon;
-  final String label;
+  final NavBarObject buttonData;
   final bool isCurrentPage;
   @override
   Widget build(BuildContext context) {
@@ -105,14 +92,14 @@ class NavButton extends StatelessWidget {
           children: [
             SizedBox(
               height: 40,
-              child: icon ??
+              child: buttonData.icon ??
                   Placeholder(
                     fallbackWidth: 40,
                   ),
             ),
-            if (label != null)
+            if (buttonData.label != null)
               Text(
-                '$label',
+                '${buttonData.label}',
                 style: TextStyle(
                   color: isCurrentPage ? childeanFire : textBlack,
                   fontSize: 10,
@@ -165,18 +152,6 @@ class NavPainter extends CustomPainter {
     path.close();
 
     canvas.drawPath(path, background);
-
-    // Path cut = Path();
-    // cut.moveTo(sw / 2 - 20, 0);
-    // cut.relativeArcToPoint(
-    //   Offset(40, 0),
-    //   radius: Radius.circular(35),
-    //   clockwise: false,
-    //   largeArc: true,
-    // );
-
-    // canvas.drawPath(cut, paint);
-    // canvas.drawCircle(Offset(sw / 2, sh / 2 - 8), 35, paint);
   }
 
   @override

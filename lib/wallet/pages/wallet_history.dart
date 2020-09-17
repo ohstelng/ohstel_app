@@ -1,12 +1,13 @@
-import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'package:Ohstel_app/wallet/method.dart';
-import 'package:Ohstel_app/wallet/models/wallet_history_model.dart';
-import 'package:Ohstel_app/wallet/pages/wallet_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
+
+import '../../app_style.dart';
+import '../../hive_methods/hive_class.dart';
+import '../method.dart';
+import '../models/wallet_history_model.dart';
 
 class WalletHistoryPage extends StatefulWidget {
   @override
