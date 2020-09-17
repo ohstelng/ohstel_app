@@ -1,4 +1,5 @@
 import 'package:Ohstel_app/hostel_hire/model/laundry_booking_model.dart';
+import 'package:Ohstel_app/hostel_hire/pages/laundry_option_pop_up.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,21 @@ class SelectLaundryPage extends StatefulWidget {
 }
 
 class _SelectLaundryPageState extends State<SelectLaundryPage> {
+  void selectOption({@required LaundryBookingModel laundry}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            child: LaundryOptionPopUp(
+              laundryDetails: laundry,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +51,7 @@ class _SelectLaundryPageState extends State<SelectLaundryPage> {
             LaundryBookingModel.fromMap(widget.laundryList[index]);
 
         return Container(
-          margin: EdgeInsets.all(15.0),
+//          margin: EdgeInsets.all(5.0),
           child: Card(
             child: Container(
               margin: EdgeInsets.all(5.0),
@@ -70,42 +86,34 @@ class _SelectLaundryPageState extends State<SelectLaundryPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('${currentLaundry.clothTypes}'),
-                      modeDropDown(),
-                      Text('${currentLaundry.price}'),
+                      SizedBox(height: 20),
+                      Text(
+                          '${currentLaundry.laundryModeAndPrice['Wash Only']}'),
                     ],
                   ),
+                  Spacer(),
+                  InkWell(
+                    onTap: () {
+//                      setPrice();
+                      selectOption(
+                        laundry: currentLaundry,
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.add_shopping_cart),
+//                      child: Text('Add To Basket'),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: Colors.green,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
           ),
         );
-      },
-    );
-  }
-
-  Widget modeDropDown() {
-    String _value = 'Select Mode';
-
-    return DropdownButton(
-      hint: Text('$_value'),
-      items: [
-        DropdownMenuItem(
-          child: Text("Wash Only"),
-          value: 'Wash Only',
-        ),
-        DropdownMenuItem(
-          child: Text("Wash & Iron"),
-          value: 'Wash & Iron',
-        ),
-        DropdownMenuItem(
-          child: Text("Dry Clean"),
-          value: 'Dry Clean',
-        ),
-      ],
-      onChanged: (value) {
-        setState(() {
-          _value = value;
-        });
       },
     );
   }
@@ -123,41 +131,6 @@ class _SelectLaundryPageState extends State<SelectLaundryPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ],
-    );
-  }
-}
-
-class ModeDropDown extends StatefulWidget {
-  @override
-  _ModeDropDownState createState() => _ModeDropDownState();
-}
-
-class _ModeDropDownState extends State<ModeDropDown> {
-  @override
-  Widget build(BuildContext context) {
-    String _value = 'Select Mode';
-
-    return DropdownButton(
-      hint: Text('$_value'),
-      items: [
-        DropdownMenuItem(
-          child: Text("Wash Only"),
-          value: 'Wash Only',
-        ),
-        DropdownMenuItem(
-          child: Text("Wash & Iron"),
-          value: 'Wash & Iron',
-        ),
-        DropdownMenuItem(
-          child: Text("Dry Clean"),
-          value: 'Dry Clean',
-        ),
-      ],
-      onChanged: (value) {
-        setState(() {
-          _value = value;
-        });
-      },
     );
   }
 }

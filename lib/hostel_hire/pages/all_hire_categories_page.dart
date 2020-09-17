@@ -93,7 +93,7 @@ class _HireAllCategoriesPageState extends State<HireAllCategoriesPage> {
           ),
         );
       },
-      itemBuilderType: dynamic,
+      itemBuilderType: PaginateBuilderType.listView,
     );
   }
 }

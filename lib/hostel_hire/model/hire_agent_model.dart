@@ -43,6 +43,7 @@ class HireWorkerModel {
     Map<String, dynamic> data = Map<String, dynamic>();
     List<String> _searchKeys = [];
     _searchKeys.add(this.userName.toLowerCase());
+
     workerName.trim().split(' ').forEach((element) {
       _searchKeys.add(element.toLowerCase());
     });
@@ -57,6 +58,7 @@ class HireWorkerModel {
     data['dateJoined'] = Timestamp.now();
     data['profileImageUrl'] = this.profileImageUrl;
     data['searchKeys'] = _searchKeys;
+    data['laundryList'] = laundryList;
 
     return data;
   }

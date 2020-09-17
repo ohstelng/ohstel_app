@@ -120,7 +120,7 @@ class _SelectedHireWorkerPageState extends State<SelectedHireWorkerPage> {
 //                  makeCall();
                 },
                 color: Colors.green,
-                child: Text('Place A Call'),
+                child: Text('Place A Booking'),
               )
             ],
           ),
