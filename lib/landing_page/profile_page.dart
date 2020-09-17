@@ -223,11 +223,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return result;
   }
 
-  void copyUid() {
+  void copyUidToClipBoard() {
     Clipboard.setData(new ClipboardData(text: userData['uid']));
-//    ClipboardManager.copyToClipBoard(userData['uid']).then((result) {
     Fluttertoast.showToast(msg: 'Copied to Clipboard');
-//    });
   }
 
   @override
@@ -476,7 +474,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   leading: Icon(Icons.content_copy),
                   subtitle: Text('Click To Copy To ClipBoard'),
                   onTap: () {
-                    copyUid();
+                    copyUidToClipBoard();
                   },
                 ),
               ],

@@ -151,7 +151,8 @@ class _SelectedHireCategoryPageState extends State<SelectedHireCategoryPage> {
             ),
           ),
         );
-      }, itemBuilderType: dynamic,
+      },
+      itemBuilderType: PaginateBuilderType.listView,
     );
   }
 
