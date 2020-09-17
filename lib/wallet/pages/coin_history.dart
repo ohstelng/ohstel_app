@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
+import 'wallet_home.dart';
+
 class CoinHistoryPage extends StatefulWidget {
   @override
   _CoinHistoryPageState createState() => _CoinHistoryPageState();
@@ -60,17 +62,31 @@ class _CoinHistoryPageState extends State<CoinHistoryPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  child: Text('${walletHistory.desc}'),
-                                ),
-                                Divider(),
-                                Container(
-                                  child: Text('$_dateTime'),
-                                ),
-                              ],
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      '${walletHistory.desc}',
+                                      style: TextStyle(
+                                        color: textBlack,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(),
+                                  Container(
+                                    child: Text(
+                                      '$_dateTime',
+                                      style: TextStyle(
+                                        color: textBlack,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Text(
                               '${walletHistory.amount}',
