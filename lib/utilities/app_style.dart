@@ -42,9 +42,8 @@ const body1 = TextStyle(
 
 const body2 = TextStyle(
   fontFamily: 'Lato',
-  color: Colors.white,
+  color: textAnteBlack,
   fontSize: 13,
-  fontStyle: FontStyle.italic,
   fontWeight: FontWeight.w400,
 );
 

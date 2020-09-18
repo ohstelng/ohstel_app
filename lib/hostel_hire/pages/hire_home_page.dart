@@ -160,7 +160,7 @@ class ServiceCategoryListTile extends StatelessWidget {
               cache: false,
               enableMemoryCache: true,
               height: 100,
-              width: 108,
+              width: 100,
             ),
             SizedBox(width: 8),
             Expanded(
@@ -175,7 +175,7 @@ class ServiceCategoryListTile extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  '${openPeriod ?? 'NA'}',
+                  '${openPeriod ?? 'NA'}', //TODO: BE add open period to service category and use here
                   softWrap: true,
                   style: TextStyle(
                     fontFamily: 'Lato',
