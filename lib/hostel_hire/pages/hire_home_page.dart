@@ -12,11 +12,11 @@ class HireHomePage extends StatelessWidget {
   final ValueNotifier _advertCurrentPageListenable = ValueNotifier(0);
   final List<Map> categoriesList = HireMethods().catList;
 
-  onPageChanged(int index) {
+  _onAdvertPageChanged(int index) {
     _advertCurrentPageListenable.value = index;
   }
 
-  List<Widget> builder() {
+  List<Widget> _advertBuilder() {
     return List.generate(
       4,
       (index) => Placeholder(),
@@ -29,7 +29,7 @@ class HireHomePage extends StatelessWidget {
       backgroundColor: Color(0xFFFDFDFD),
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: scaffoldBackground,
+        backgroundColor: Color(0xFFFDFDFD),
         elevation: 0,
         iconTheme: IconThemeData(
           color: midnightExpress,
@@ -51,8 +51,8 @@ class HireHomePage extends StatelessWidget {
 
           //Advert slideshow
           AdvertSlides(
-            onPageChanged: onPageChanged,
-            builder: builder,
+            onPageChanged: _onAdvertPageChanged,
+            builder: _advertBuilder,
           ),
 
           SizedBox(height: 8),
