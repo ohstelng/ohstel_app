@@ -35,7 +35,7 @@ const pageTitle = TextStyle(
 
 const body1 = TextStyle(
   fontFamily: 'Lato',
-  color: midnightExpress,
+  color: textAnteBlack,
   fontSize: 15,
   fontWeight: FontWeight.w400,
 );
