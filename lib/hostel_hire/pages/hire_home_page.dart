@@ -1,9 +1,9 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../app_style.dart';
+import '../../utilities/app_style.dart';
+import '../../utilities/shared_widgets.dart';
 import '../methods/hire_methods.dart';
 import 'hire_search_page.dart';
 import 'selected_categories_page.dart';
@@ -11,6 +11,17 @@ import 'selected_categories_page.dart';
 class HireHomePage extends StatelessWidget {
   final ValueNotifier _advertCurrentPageListenable = ValueNotifier(0);
   final List<Map> categoriesList = HireMethods().catList;
+
+  onPageChanged(int index) {
+    _advertCurrentPageListenable.value = index;
+  }
+
+  List<Widget> builder() {
+    return List.generate(
+      4,
+      (index) => Placeholder(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,73 +50,17 @@ class HireHomePage extends StatelessWidget {
           ),
 
           //Advert slideshow
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-            height:
-                (MediaQuery.of(context).size.width * 0.3).clamp(150.0, 300.0),
-            width: double.infinity,
-            child: Center(
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  onPageChanged: (index, reason) {
-                    _advertCurrentPageListenable.value = index;
-                  },
-                  height: (MediaQuery.of(context).size.width * 0.3)
-                      .clamp(150.0, 300.0),
-                  aspectRatio: 2.0,
-                  initialPage: 0,
-                  viewportFraction: 0.85,
-                  autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 3),
-                  pauseAutoPlayOnTouch: true,
-                  enableInfiniteScroll: false,
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enlargeCenterPage: true,
-                  scrollDirection: Axis.horizontal,
-                ),
-                items: List.generate(
-                  4,
-                  (index) => Placeholder(),
-                ),
-              ),
-            ),
+          AdvertSlides(
+            onPageChanged: onPageChanged,
+            builder: builder,
           ),
 
-          //Advert Slideshow Page Indicator
           SizedBox(height: 8),
-          Align(
-            alignment: Alignment.center,
-            child: ValueListenableBuilder(
-              valueListenable: _advertCurrentPageListenable,
-              builder: (context, page, child) {
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: List.generate(
-                    4,
-                    (index) => index == page
-                        ? Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 2),
-                            height: 4,
-                            width: 16,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              color: childeanFire,
-                            ),
-                          )
-                        : Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 2),
-                            height: 4,
-                            width: 8,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              color: Colors.grey,
-                            ),
-                          ),
-                  ),
-                );
-              },
-            ),
+
+          //Advert Slideshow Page Indicator
+          AdvertSlidesPageIndicator(
+            limit: 4,
+            currentPageListenable: _advertCurrentPageListenable,
           ),
 
           //List of HIRE categories
@@ -113,6 +68,7 @@ class HireHomePage extends StatelessWidget {
             child: NotificationListener(
               onNotification: (OverscrollIndicatorNotification notification) {
                 notification.disallowGlow();
+                return true;
               },
               child: ListView(
                   children: List.generate(
@@ -133,7 +89,6 @@ class HireHomePage extends StatelessWidget {
                 ),
               )
                   // [
-
                   //   ServiceCategoryListTile(
                   //     imageUrl:
                   //         'https://media.istockphoto.com/photos/laundry-room-with-a-washing-machine-picture-id1134696879?k=6&m=1134696879&s=612x612&w=0&h=XicuQ4eM3v7Z-MHWeU8NLsucvvfM9VoHVt_qsNxwdmg=',
@@ -231,70 +186,6 @@ class ServiceCategoryListTile extends StatelessWidget {
               ],
             ))
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class OhstelSearchBar extends StatelessWidget {
-  const OhstelSearchBar({
-    Key key,
-    this.onTap,
-  }) : super(key: key);
-  final Function onTap;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      child: Container(
-        height: 48,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Color(0xFFFAFAFA),
-          borderRadius: BorderRadius.circular(2),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.24),
-              offset: Offset(0, 2),
-              blurRadius: 2,
-              spreadRadius: 0,
-            ),
-            BoxShadow(
-              color: Colors.black.withOpacity(0.12),
-              offset: Offset(0, 0),
-              blurRadius: 2,
-              spreadRadius: 0,
-            ),
-          ],
-        ),
-        child: IconTheme(
-          data: IconThemeData(
-            color: Colors.black,
-            opacity: 0.60,
-            size: 20,
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.search),
-              Expanded(
-                child: InkWell(
-                  onTap: onTap,
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 24),
-                    child: Text(
-                      'Search ',
-                      style: heading2.copyWith(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black26,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Icon(Icons.mic)
-            ],
-          ),
         ),
       ),
     );
