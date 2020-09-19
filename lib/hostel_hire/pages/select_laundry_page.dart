@@ -1,3 +1,4 @@
+import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
 import 'package:Ohstel_app/hostel_hire/model/laundry_booking_model.dart';
 import 'package:Ohstel_app/hostel_hire/pages/laundry_option_pop_up.dart';
 import 'package:extended_image/extended_image.dart';
@@ -6,8 +7,12 @@ import 'package:flutter/material.dart';
 
 class SelectLaundryPage extends StatefulWidget {
   final List laundryList;
+  final HireWorkerModel laundryWork;
 
-  SelectLaundryPage({@required this.laundryList});
+  SelectLaundryPage({
+    @required this.laundryList,
+    @required this.laundryWork,
+  });
 
   @override
   _SelectLaundryPageState createState() => _SelectLaundryPageState();
@@ -22,6 +27,7 @@ class _SelectLaundryPageState extends State<SelectLaundryPage> {
           content: Container(
             child: LaundryOptionPopUp(
               laundryDetails: laundry,
+              hireWorkerDetails: widget.laundryWork,
             ),
           ),
         );

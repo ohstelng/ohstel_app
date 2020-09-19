@@ -1,9 +1,14 @@
 import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HireMethods {
-  CollectionReference hireCollection = FirebaseFirestore.instance.collection('hire');
+  CollectionReference hireCollection =
+      FirebaseFirestore.instance.collection('hire');
+
+  CollectionReference laundryOrderCollection =
+      FirebaseFirestore.instance.collection('laundryOrder');
 
   Future<List<HireWorkerModel>> getWorkerByKeyword(
       {@required String keyword}) async {
@@ -54,6 +59,16 @@ class HireMethods {
     }
 
     return hireWorkersList;
+  }
+
+  Future<void> saveLaundryToServer({@required Map data}) async {
+    try {
+      await laundryOrderCollection.add(data);
+      Fluttertoast.showToast(msg: 'Saved To DataBase');
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
   }
 
   ///

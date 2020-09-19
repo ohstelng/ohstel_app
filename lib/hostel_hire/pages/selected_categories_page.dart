@@ -10,6 +10,7 @@ import '../../utilities/app_style.dart';
 import '../../utilities/shared_widgets.dart';
 import '../model/hire_agent_model.dart';
 import 'hire_search_page.dart';
+import 'laundry_basket_page.dart';
 import 'selected_hire_worker_page.dart';
 
 class SelectedHireCategoryPage extends StatelessWidget {
@@ -28,6 +29,26 @@ class SelectedHireCategoryPage extends StatelessWidget {
           color: midnightExpress,
           size: 20,
         ),
+        actionsIconTheme: IconThemeData(
+          color: midnightExpress,
+          size: 20,
+        ),
+        title: Text(
+          "$searchKey",
+          style: pageTitle,
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_basket),
+            color: Colors.black,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => LaundryBasketPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: DefaultTabController(
         length: 2,

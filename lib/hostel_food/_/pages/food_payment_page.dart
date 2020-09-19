@@ -25,7 +25,6 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   Box<Map> userDataBox;
   Box<Map> addressDetailsBox;
   Map addressDetails;
-  bool onCampus = false;
   Map userData;
   bool isLoading = true;
   int deliveryFee = 100;
@@ -75,7 +74,6 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
               child: PaymentPopUp(
                 cartBox: cartBox,
                 userData: userData,
-                onCampus: onCampus,
               ),
             ),
           );
@@ -249,7 +247,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
         onPressed: () async {
           Map addressDetails = await HiveMethods().getFoodLocationDetails();
 
-          if (userData != null && addressDetails != null && onCampus != null) {
+          if (userData != null && addressDetails != null) {
             paymentPopUp();
           } else {
             Fluttertoast.showToast(
@@ -436,12 +434,10 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
 class PaymentPopUp extends StatefulWidget {
   final Box cartBox;
   final Map userData;
-  final bool onCampus;
 
   PaymentPopUp({
     @required this.cartBox,
     @required this.userData,
-    @required this.onCampus,
   });
 
   @override
@@ -537,7 +533,6 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       fastFoodNames: fastFoodList,
       orders: ordersList,
       uniName: widget.userData['uniName'],
-      onCampus: widget.onCampus,
       addressDetails: addressDetails,
     );
 

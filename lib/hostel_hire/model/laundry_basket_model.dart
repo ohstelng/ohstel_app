@@ -1,35 +1,51 @@
 import 'package:flutter/cupertino.dart';
 
-class LaundryBookingModel {
+class LaundryBookingBasketModel {
   String clothTypes; // either shirt trouser etc
+  String laundryPersonName;
+  String laundryPersonEmail;
+  String laundryPersonUniName;
+  String laundryPersonPhoneNumber;
+  String imageUrl;
   int units;
   int price;
-
-  /// LaundryModeAndPrice is a Map is key laundryMode (e.g wash only  or wash and Iron) corresponding to a value Price(i.e the price for that particular laundryMode)
-  /// Example: {wash only = 500, wash and Iron = 600}
-  /// this is how the clothes will be washed which are 1. wash only 2. wash and Iron 3. dry clean
   String laundryMode;
 
-  LaundryBookingModel({
+  LaundryBookingBasketModel({
     @required this.clothTypes,
+    @required this.imageUrl,
     @required this.units,
     @required this.laundryMode,
     @required this.price,
+    @required this.laundryPersonName,
+    @required this.laundryPersonEmail,
+    @required this.laundryPersonUniName,
+    @required this.laundryPersonPhoneNumber,
   });
 
-  LaundryBookingModel.fromMap(Map<String, dynamic> mapData) {
+  LaundryBookingBasketModel.fromMap(Map<String, dynamic> mapData) {
     this.clothTypes = mapData['clothTypes'];
+    this.imageUrl = mapData['imageUrl'];
     this.units = mapData['units'];
     this.laundryMode = mapData['laundryMode'];
     this.price = mapData['price'];
+    this.laundryPersonName = mapData['laundryPersonName'];
+    this.laundryPersonEmail = mapData['laundryPersonEmail'];
+    this.laundryPersonUniName = mapData['laundryPersonUniName'];
+    this.laundryPersonPhoneNumber = mapData['laundryPersonPhoneNumber'];
   }
 
   Map toMap() {
     Map<String, dynamic> data = Map<String, dynamic>();
     data['clothTypes'] = this.clothTypes;
     data['units'] = this.units;
+    data['imageUrl'] = this.imageUrl;
     data['laundryMode'] = this.laundryMode;
     data['price'] = this.price;
+    data['laundryPersonName'] = this.laundryPersonName;
+    data['laundryPersonEmail'] = this.laundryPersonEmail;
+    data['laundryPersonUniName'] = this.laundryPersonUniName;
+    data['laundryPersonPhoneNumber'] = this.laundryPersonPhoneNumber;
 
     return data;
   }
