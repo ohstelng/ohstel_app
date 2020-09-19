@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../app_style.dart';
+import '../utilities/app_style.dart';
 
 class CustomNavBar extends StatelessWidget {
   const CustomNavBar({

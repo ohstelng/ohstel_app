@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
-import '../../app_style.dart';
+import '../../utilities/app_style.dart';
 import '../../hive_methods/hive_class.dart';
 import '../method.dart';
 import '../models/coin_history_model.dart';

@@ -7,7 +7,7 @@ import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-import '../../app_style.dart';
+import '../../utilities/app_style.dart';
 import '../../auth/methods/auth_methods.dart';
 import '../../auth/models/userModel.dart';
 import '../../hive_methods/hive_class.dart';
