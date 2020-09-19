@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'package:Ohstel_app/hostel_food/_/pages/laundry_payment_page.dart';
+import 'file:///C:/Users/olamilekan/flutter_projects/work_space/Ohstel_app/lib/hostel_hire/pages/laundry_payment_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/select_location_page.dart';
 import 'package:Ohstel_app/hostel_hire/model/laundry_address_details_model.dart';
 import 'package:flutter/material.dart';

@@ -102,7 +102,7 @@ class _CoinHistoryPageState extends State<CoinHistoryPage> {
                     );
                   },
                   query: WalletMethods()
-                      .coinHistoryCollectionRef
+                      .fundHistoryCollectionRef
                       .doc(userData['uid'])
                       .collection('coinHistory')
                       .orderBy('date', descending: true),
