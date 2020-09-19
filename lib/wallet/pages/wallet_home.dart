@@ -7,6 +7,7 @@ import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+import '../../app_style.dart';
 import '../../auth/methods/auth_methods.dart';
 import '../../auth/models/userModel.dart';
 import '../../hive_methods/hive_class.dart';
@@ -14,10 +15,7 @@ import '../method.dart';
 import 'coin_history.dart';
 import 'wallet_history.dart';
 
-const childeanFire = Color(0xFFF27507);
-const midnightExpress = Color(0xFF1F2430);
-const wineColor = Color(0xFF770000);
-const textBlack = Color(0xFF12121F);
+
 
 class WalletHome extends StatefulWidget {
   @override
