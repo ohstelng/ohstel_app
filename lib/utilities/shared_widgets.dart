@@ -160,3 +160,40 @@ class AdvertSlidesPageIndicator extends StatelessWidget {
     );
   }
 }
+
+//CUSTOM BUTTON - LONG
+enum ButtonType { filledOrange, borderOrange, filledBlue, borderBlue }
+
+class CustomLongButton extends StatelessWidget {
+  const CustomLongButton({
+    Key key,
+    @required this.label,
+    @required this.onTap,
+    this.type = ButtonType.filledOrange,
+  }) : super(key: key);
+  final String label;
+  final Function onTap;
+  final ButtonType type;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      child: MaterialButton(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6),
+        ),
+        color: type == ButtonType.borderBlue || type == ButtonType.borderOrange
+            ? Colors.transparent
+            : type == ButtonType.filledOrange ? childeanFire : midnightExpress,
+        height: 48,
+        child: Text(
+          '$label',
+          style: buttonStyle,
+        ),
+        onPressed: onTap,
+      ),
+    );
+  }
+}

@@ -50,6 +50,6 @@ const body2 = TextStyle(
 const buttonStyle = TextStyle(
   fontFamily: 'Lato',
   color: Colors.white,
-  fontSize: 24,
-  fontWeight: FontWeight.w700,
+  fontSize: 20,
+  fontWeight: FontWeight.w500,
 );

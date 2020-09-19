@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:Ohstel_app/utilities/shared_widgets.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -111,7 +112,7 @@ class SelectedHireWorkerPage extends StatelessWidget {
                     children: [
                       //Worker Data
                       Container(
-                          margin: const EdgeInsets.fromLTRB(24, 40, 24, 24),
+                          margin: const EdgeInsets.fromLTRB(16, 40, 16, 24),
                           child: Column(
                             children: [
                               Row(
@@ -207,7 +208,7 @@ class SelectedHireWorkerPage extends StatelessWidget {
                           ListView(
                             primary: true,
                             padding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 16),
+                                horizontal: 16, vertical: 16),
                             children: [
                               Text(
                                 'About',
@@ -229,67 +230,31 @@ class SelectedHireWorkerPage extends StatelessWidget {
                                   style: body1.copyWith(fontSize: 17),
                                 ),
                               ),
-                              Wrap(
-                                children: List.generate(
-                                  hireWorker?.laundryList?.length ?? 0,
-                                  (index) => Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 16),
-                                    height: 40,
-                                    width: 40,
-                                    color: Colors.blueGrey,
-                                  ),
-                                ),
-                              ),
+                              Wrap(spacing: 16, runSpacing: 16, children: [
+                                //TODO: BE This section should contain icons for the type of services offered by the laundry
+                                //But does not exist in the model.
+                                //Laundry list used as a place holder.
+                                for (int i = 0;
+                                    i < hireWorker?.laundryList?.length ?? 0;
+                                    i++)
+                                  if (hireWorker.laundryList[i]['imageUrl'] !=
+                                      null)
+                                    Container(
+                                      height: 40,
+                                      width: 40,
+                                      color: Color(0xFFE7E7E7),
+                                      child: Image.network(hireWorker
+                                          .laundryList[i]['imageUrl']),
+                                    ),
+                              ]),
                             ],
                           ),
 
                           //Reviews Tab
                           ListView.builder(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 16),
+                            padding: EdgeInsets.fromLTRB(16, 16, 16, 40),
                             itemBuilder: (context, index) {
-                              return Container(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: textAnteBlack,
-                                      radius: 20,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  'Khalid Karem',
-                                                ),
-                                              ),
-                                              Text('12/07/2020')
-                                            ],
-                                          ),
-                                          SmoothStarRating(
-                                            isReadOnly: true,
-                                            starCount: 5,
-                                            rating: 3.5,
-                                            borderColor: midnightExpress,
-                                            color: midnightExpress,
-                                            size: 14,
-                                          ),
-                                          Text(
-                                              'Lorem ipsum dolor sit amet. consecteture adipicing elit.'),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
+                              return ReviewDisplayListTile(); //TODO: BE Make a review model and pass object of it into this ...
                             },
                           )
                         ]),
@@ -303,16 +268,91 @@ class SelectedHireWorkerPage extends StatelessWidget {
         ],
       ),
       extendBody: true,
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        child: Container(
-          color: childeanFire,
-          height: 48,
-          width: double.infinity,
-        ),
+      bottomNavigationBar: CustomLongButton(
+        label: 'Book',
+        onTap: () {
+          book(context);
+        },
       ),
     );
   }
+}
+
+class ReviewDisplayListTile extends StatelessWidget {
+  const ReviewDisplayListTile({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 56,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.grey,
+            child: ExtendedImage.network(
+              'url',
+              fit: BoxFit.fill,
+              handleLoadingProgress: true,
+              shape: BoxShape.circle,
+              cache: false,
+              enableMemoryCache: true,
+            ),
+            radius: 25,
+          ),
+          SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Khalid Karem',
+                        style: body2.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    Text(
+                      '12/07/2020',
+                      style: body2.copyWith(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 4),
+                SmoothStarRating(
+                  isReadOnly: true,
+                  starCount: 5,
+                  rating: 3.5,
+                  borderColor: midnightExpress,
+                  color: midnightExpress,
+                  size: 14,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 48.0),
+                  child: Text(
+                    'Lorem ipsum dolor sit amet. consecteture adipi cing elit.',
+                    style: body2.copyWith(
+                      fontWeight: FontWeight.w300,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
 
 //   Widget body() {
 //     return Container(
@@ -396,4 +436,3 @@ class SelectedHireWorkerPage extends StatelessWidget {
 //       ),
 //     );
 //   }
-}
