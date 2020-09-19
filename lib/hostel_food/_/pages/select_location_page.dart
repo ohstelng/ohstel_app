@@ -6,6 +6,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class SelectDeliveryLocationPage extends StatefulWidget {
+  final String type;
+
+  SelectDeliveryLocationPage({this.type});
+
   @override
   _SelectDeliveryLocationPageState createState() =>
       _SelectDeliveryLocationPageState();
@@ -47,10 +51,10 @@ class _SelectDeliveryLocationPageState
         body: TabBarView(
           children: [
             Container(
-              child: OnCampusLocation(),
+              child: OnCampusLocation(type: widget.type),
             ),
             Container(
-              child: OffCampusLocation(),
+              child: OffCampusLocation(type: widget.type),
             ),
           ],
         ),
@@ -60,6 +64,10 @@ class _SelectDeliveryLocationPageState
 }
 
 class OffCampusLocation extends StatefulWidget {
+  final String type;
+
+  OffCampusLocation({this.type});
+
   @override
   _OffCampusLocationState createState() => _OffCampusLocationState();
 }
@@ -70,8 +78,8 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
   String _areaName = 'Selected Area Name';
 
   Future<Map> getAreaNamesFromApi() async {
-//    String uniName = await HiveMethods().getUniName();
-    String url = 'https://quiz-demo-de79d.appspot.com/food_api/unilorin';
+    String uniName = await HiveMethods().getUniName();
+    String url = 'https://quiz-demo-de79d.appspot.com/food_api/$uniName';
     var response = await http.get(url);
     Map data = json.decode(response.body);
 
@@ -168,8 +176,18 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
                     'onCampus': false,
                   };
                   print(addressDetails);
-                  HiveMethods()
-                      .saveFoodLocationDetailsToDb(map: addressDetails);
+
+                  if (widget.type == null) {
+                    HiveMethods()
+                        .saveFoodLocationDetailsToDb(map: addressDetails);
+                  } else {
+                    if (widget.type == 'pickUp') {
+                      HiveMethods()
+                          .saveToLaundryPickUpBox(data: addressDetails);
+                    } else if (widget.type == 'dropOff') {
+                      HiveMethods().saveToLaundryDropBox(data: addressDetails);
+                    }
+                  }
                   Navigator.pop(context);
                 } else {
                   Fluttertoast.showToast(msg: 'Please Fill All Input!');
@@ -188,6 +206,10 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
 }
 
 class OnCampusLocation extends StatefulWidget {
+  final String type;
+
+  OnCampusLocation({this.type});
+
   @override
   _OnCampusLocationState createState() => _OnCampusLocationState();
 }
@@ -229,8 +251,18 @@ class _OnCampusLocationState extends State<OnCampusLocation> {
                       'onCampus': true,
                     };
                     print(addressDetails);
-                    HiveMethods()
-                        .saveFoodLocationDetailsToDb(map: addressDetails);
+                    if (widget.type == null) {
+                      HiveMethods()
+                          .saveFoodLocationDetailsToDb(map: addressDetails);
+                    } else {
+                      if (widget.type == 'pickUp') {
+                        HiveMethods()
+                            .saveToLaundryPickUpBox(data: addressDetails);
+                      } else if (widget.type == 'dropOff') {
+                        HiveMethods()
+                            .saveToLaundryDropBox(data: addressDetails);
+                      }
+                    }
                     Navigator.pop(context);
                   }
                 },

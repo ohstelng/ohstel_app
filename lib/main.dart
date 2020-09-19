@@ -17,6 +17,8 @@ Future<void> main() async {
   await InitHive().startMarketCartHiveDb();
   await InitHive().startLocationHive();
   await InitHive().startFoodAddressDetailHive();
+  await InitHive().startLaundryBasketHive();
+  await InitHive().startLaundryAddressDetailHive();
 
   // run app
   runApp(MyApp());

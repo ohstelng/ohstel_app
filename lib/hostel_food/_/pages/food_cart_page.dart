@@ -134,7 +134,6 @@ class _CartPageState extends State<CartPage> {
       fastFoodNames: fastFoodList,
       orders: ordersList,
       uniName: userData['uniName'],
-      onCampus: onCampus,
       addressDetails: addressDetails,
     );
 

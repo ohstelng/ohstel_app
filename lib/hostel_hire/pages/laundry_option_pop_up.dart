@@ -1,11 +1,16 @@
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
+import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
+import 'package:Ohstel_app/hostel_hire/model/laundry_basket_model.dart';
 import 'package:Ohstel_app/hostel_hire/model/laundry_booking_model.dart';
 import 'package:flutter/material.dart';
 
 class LaundryOptionPopUp extends StatefulWidget {
   final LaundryBookingModel laundryDetails;
+  final HireWorkerModel hireWorkerDetails;
 
   LaundryOptionPopUp({
     @required this.laundryDetails,
+    @required this.hireWorkerDetails,
   });
 
   @override
@@ -15,6 +20,30 @@ class LaundryOptionPopUp extends StatefulWidget {
 class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
   String dropdownValue = 'Wash Only';
   int unitValue = 1;
+
+  Future<void> saveToBasket() async {
+    LaundryBookingBasketModel laundry = LaundryBookingBasketModel(
+      clothTypes: widget.laundryDetails.clothTypes,
+      imageUrl: widget.laundryDetails.imageUrl,
+      units: unitValue,
+      laundryMode: dropdownValue,
+      price: price(),
+      laundryPersonName: widget.hireWorkerDetails.workerName,
+      laundryPersonEmail: widget.hireWorkerDetails.workerEmail,
+      laundryPersonUniName: widget.hireWorkerDetails.uniName,
+      laundryPersonPhoneNumber: widget.hireWorkerDetails.workerPhoneNumber,
+    );
+    print(laundry.toMap());
+
+    await HiveMethods().saveLaundryToBasketCart(data: laundry.toMap());
+  }
+
+  int price() {
+    Map laundryModeAndPrice = widget.laundryDetails.laundryModeAndPrice;
+    int currentSelectedPrice = (laundryModeAndPrice[dropdownValue] * unitValue);
+
+    return currentSelectedPrice;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +69,18 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
   Widget addToCartButton() {
     return FlatButton(
       color: Colors.green,
-      onPressed: () {},
+      onPressed: () {
+        saveToBasket();
+      },
       child: Text('Add To Basket'),
     );
   }
 
   Widget priceWidget() {
-    Map laundryModeAndPrice = widget.laundryDetails.laundryModeAndPrice;
-    int currentSelectedPrice = (laundryModeAndPrice[dropdownValue] * unitValue);
-
     return Container(
       margin: EdgeInsets.all(15.0),
       child: Text(
-        'Price: NGN $currentSelectedPrice',
+        'Price: NGN ${price()}',
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
       ),
     );

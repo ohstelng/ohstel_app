@@ -1,5 +1,6 @@
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
+import 'package:Ohstel_app/hostel_hire/pages/laundry_basket_page.dart';
 import 'package:Ohstel_app/hostel_hire/pages/selected_hire_worker_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
@@ -43,6 +44,33 @@ class _SelectedHireCategoryPageState extends State<SelectedHireCategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+            color: Colors.black,
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop()),
+        title: Text(
+          "${widget.searchKey}",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 17,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_basket),
+            color: Colors.black,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => LaundryBasketPage()),
+              );
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Container(
           child: body(),

@@ -27,6 +27,18 @@ class InitHive {
     await Hive.openBox<Map>('addressBox');
   }
 
+  Future startLaundryBasketHive() async {
+    Directory documentDir = await getApplicationSupportDirectory();
+    Hive.init(documentDir.path);
+    await Hive.openBox<Map>('laundryBox');
+  }
+
+  Future startLaundryAddressDetailHive() async {
+    Directory documentDir = await getApplicationSupportDirectory();
+    Hive.init(documentDir.path);
+    await Hive.openBox<Map>('laundryAddressBox');
+  }
+
   Future startCartHiveDb() async {
     Directory documentDir = await getApplicationSupportDirectory();
     Hive.init(documentDir.path);
@@ -184,6 +196,46 @@ class HiveMethods {
     Box<Map> addressDetailsDataBox = await getOpenBox('addressBox');
 
     Map addressDetails = addressDetailsDataBox.get(0);
+    return addressDetails;
+  }
+
+  Future<void> saveLaundryToBasketCart({@required Map data}) async {
+    Box<Map> laundryBasket = await getOpenBox('laundryBox');
+
+    laundryBasket.add(data);
+    print('saved');
+    Fluttertoast.showToast(msg: 'Added To Basket');
+  }
+
+  Future<void> saveToLaundryPickUpBox({@required Map data}) async {
+    Box<Map> laundryBasket = await getOpenBox('laundryAddressBox');
+    String key = 'pickUp';
+
+    laundryBasket.put(key, data);
+    print('saved');
+    Fluttertoast.showToast(msg: 'Added To pickUp');
+  }
+
+  Future<void> saveToLaundryDropBox({@required Map data}) async {
+    Box<Map> laundryBasket = await getOpenBox('laundryAddressBox');
+    String key = 'dropOff';
+
+    laundryBasket.put(key, data);
+    print('saved');
+    Fluttertoast.showToast(msg: 'Added To dropOff');
+  }
+
+  Future<Map> getLaundryPickUpDetails() async {
+    Box<Map> addressDetailsDataBox = await getOpenBox('laundryAddressBox');
+
+    Map addressDetails = addressDetailsDataBox.get('pickUp');
+    return addressDetails;
+  }
+
+  Future<Map> getLaundryDropOffDetails() async {
+    Box<Map> addressDetailsDataBox = await getOpenBox('laundryAddressBox');
+
+    Map addressDetails = addressDetailsDataBox.get('dropOff');
     return addressDetails;
   }
 }

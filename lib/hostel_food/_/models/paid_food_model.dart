@@ -10,7 +10,6 @@ class PaidFood {
   List<String> fastFoodNames;
   List<Map> orders;
   String uniName;
-  bool onCampus;
 
   // this will be a map of area name and address
   Map addressDetails;
@@ -22,7 +21,6 @@ class PaidFood {
     @required this.fastFoodNames,
     @required this.orders,
     @required this.uniName,
-    @required this.onCampus,
     @required this.addressDetails,
   });
 
@@ -34,7 +32,6 @@ class PaidFood {
     this.address = mapData['address'];
     this.orders = mapData['orders'];
     this.uniName = mapData['uniName'];
-    this.onCampus = mapData['onCampus'];
     this.addressDetails = mapData['addressDetails'];
   }
 
@@ -47,7 +44,6 @@ class PaidFood {
     data['email'] = this.email;
     data['orders'] = this.orders;
     data['uniName'] = this.uniName;
-    data['onCampus'] = this.onCampus;
     data['addressDetails'] = this.addressDetails;
 
     return data;
