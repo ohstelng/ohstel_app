@@ -1,3 +1,4 @@
+import 'package:Ohstel_app/explore/widgets/location.dart';
 import 'package:flutter/material.dart';
 
 import '../../landing_page/custom_navigation_bar.dart';
@@ -79,33 +80,9 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
       child: PageView(
         controller: _pageController,
         children: [
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.orange,
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-            ),
-          ),
+          ExploreLocation(),
+          ExploreLocation(),
+          ExploreLocation(),
         ],
       ),
     );
