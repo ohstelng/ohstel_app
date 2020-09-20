@@ -247,7 +247,7 @@ class _OnCampusLocationState extends State<OnCampusLocation> {
                   if (address != null && address.length > 3) {
                     Map addressDetails = {
                       'address': address,
-                      'areaName': 'inside campus',
+                      'areaName': 'onCampus',
                       'onCampus': true,
                     };
                     print(addressDetails);

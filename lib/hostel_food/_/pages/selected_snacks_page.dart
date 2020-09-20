@@ -1,4 +1,5 @@
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
+import 'package:Ohstel_app/hostel_food/_/models/fast_food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_cart_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:extended_image/extended_image.dart';
@@ -9,9 +10,11 @@ import 'food_cart_page.dart';
 
 class SnackDialog extends StatefulWidget {
   final ItemDetails itemDetails;
+  final FastFoodModel fastFoodDetails;
 
   SnackDialog({
     @required this.itemDetails,
+    @required this.fastFoodDetails,
   });
 
   @override
@@ -64,7 +67,6 @@ class _SnackDialogState extends State<SnackDialog> {
       body: Container(
         child: ListView(
           children: <Widget>[
-
             Container(
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: Text(
@@ -74,26 +76,26 @@ class _SnackDialogState extends State<SnackDialog> {
 
             widget.itemDetails.imageUrl != null
                 ? Container(
-              // margin: EdgeInsets.all(10.0),
-              height: 200,
-              width: double.infinity,
-              child: ExtendedImage.network(
-                widget.itemDetails.imageUrl,
-                fit: BoxFit.fitWidth,
-                handleLoadingProgress: true,
-                shape: BoxShape.rectangle,
-                cache: false,
-                enableMemoryCache: true,
-              ),
-            )
+                    // margin: EdgeInsets.all(10.0),
+                    height: 200,
+                    width: double.infinity,
+                    child: ExtendedImage.network(
+                      widget.itemDetails.imageUrl,
+                      fit: BoxFit.fitWidth,
+                      handleLoadingProgress: true,
+                      shape: BoxShape.rectangle,
+                      cache: false,
+                      enableMemoryCache: true,
+                    ),
+                  )
                 : Container(
-              height: 120,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                shape: BoxShape.rectangle,
-              ),
-            ),
+                    height: 120,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      shape: BoxShape.rectangle,
+                    ),
+                  ),
             Container(
               padding: const EdgeInsets.all(20),
               child: Row(
@@ -238,7 +240,6 @@ class _SnackDialogState extends State<SnackDialog> {
             Container(
               padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
               width: double.infinity,
-
               child: RaisedButton.icon(
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -250,6 +251,8 @@ class _SnackDialogState extends State<SnackDialog> {
                       itemDetails: widget.itemDetails,
                       totalPrice: getTotal(),
                       numberOfPlates: number,
+                      extraItems: [],
+                      itemFastFoodLocation: widget.fastFoodDetails.locationName,
                     ).toMap();
                     HiveMethods().saveFoodCartToDb(map: map);
 //              Navigator.maybePop(context);
