@@ -14,6 +14,8 @@ class ExploreDashboard extends StatefulWidget {
 
 class _ExploreDashboardState extends State<ExploreDashboard> {
   PageController _pageController;
+  String _category;
+
   final exploreRef = FirebaseFirestore.instance.collection('explore');
   final exploreCategoriesRef = FirebaseFirestore.instance
       .collection('explore')
@@ -43,16 +45,28 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
         future: exploreCategoriesRef.orderBy('name').get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return CircularProgressIndicator();
+            return Center(
+                child: Padding(
+              padding: EdgeInsets.all(30.0),
+              child: CircularProgressIndicator(),
+            ));
           }
 
-          List<ExploreCategoryWidget> _categories = [];
+          List<Widget> _categories = [];
 
           snapshot.data.docs.forEach((doc) {
             _categories.add(
-              ExploreCategoryWidget(
-                ExploreCategory.fromDocs(
-                  doc.data(),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _category = doc.data()['name'];
+                    print('set cat successfully');
+                  });
+                },
+                child: ExploreCategoryWidget(
+                  ExploreCategory.fromDocs(
+                    doc.data(),
+                  ),
                 ),
               ),
             );
@@ -69,30 +83,30 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
         });
   }
 
-  // buildLocations() async {
-  //   final _fetchedLocations =
-  //       await exploreLocationsRef.orderBy('dateAdded').get();
-  //   List<ExploreLocationWidget> _locations = [];
-  //   _fetchedLocations.docs.forEach((doc) {
-  //     _locations
-  //         .add(ExploreLocationWidget(ExploreLocation.fromDoc(doc.data())));
-  //   });
-
-  //   return Container(
-  //     height: 500.0,
-  //     child: PageView(
-  //       controller: _pageController,
-  //       children: _locations,
-  //     ),
-  //   );
-  // }
-
-  buildLocations() {
+  buildLocations(String category) {
     return FutureBuilder(
-        future: exploreLocationsRef.orderBy('dateAdded').get(),
+        future: category == null || category == ''
+            ? exploreLocationsRef.orderBy('dateAdded').get()
+            : exploreLocationsRef
+                .where('category', isEqualTo: category)
+                .orderBy('dateAdded')
+                .get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return CircularProgressIndicator();
+            return Center(
+                child: Padding(
+              padding: EdgeInsets.all(30.0),
+              child: CircularProgressIndicator(),
+            ));
+          }
+
+          if (snapshot.hasError) {
+            return Column(
+              children: [
+                Icon(Icons.error),
+                Text('Error Loading Locations'),
+              ],
+            );
           }
 
           List<ExploreLocationWidget> _locations = [];
@@ -107,14 +121,34 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
             );
           });
 
-          return Container(
-            // initially 500.0
-            height: MediaQuery.of(context).size.height * 0.65,
-            child: PageView(
-              controller: _pageController,
-              children: _locations,
-            ),
-          );
+          return _locations.length > 0
+              ? Container(
+                  // initially 500.0
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  child: PageView(
+                    controller: _pageController,
+                    children: _locations,
+                  ),
+                )
+              : Center(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset('asset/OHstel.png'),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        Text(
+                          'No location at this moment',
+                          style: heading1,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
         });
   }
 
@@ -169,7 +203,7 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
                 SizedBox(
                   height: 20.0,
                 ),
-                buildLocations(),
+                buildLocations(_category),
               ],
             ),
           ],
