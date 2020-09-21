@@ -386,7 +386,7 @@ class ReviewDisplayListTile extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: Colors.grey,
+            backgroundColor: Color(0xFFE7E7E7),
             child: ExtendedImage.network(
               'url',
               fit: BoxFit.fill,
