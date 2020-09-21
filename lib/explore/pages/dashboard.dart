@@ -1,7 +1,10 @@
+import 'package:Ohstel_app/explore/models/category.dart';
+import 'package:Ohstel_app/explore/models/location.dart';
+import 'package:Ohstel_app/explore/widgets/category.dart';
 import 'package:Ohstel_app/explore/widgets/location.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../landing_page/custom_navigation_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../utilities/app_style.dart';
 
 class ExploreDashboard extends StatefulWidget {
@@ -11,6 +14,15 @@ class ExploreDashboard extends StatefulWidget {
 
 class _ExploreDashboardState extends State<ExploreDashboard> {
   PageController _pageController;
+  final exploreRef = FirebaseFirestore.instance.collection('explore');
+  final exploreCategoriesRef = FirebaseFirestore.instance
+      .collection('explore')
+      .doc('categories')
+      .collection('allCategories');
+  final exploreLocationsRef = FirebaseFirestore.instance
+      .collection('explore')
+      .doc('locations')
+      .collection('allLocations');
 
   @override
   void initState() {
@@ -20,69 +32,52 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
   buildCategories() {
-    return ConstrainedBox(
-      constraints: BoxConstraints.expand(height: 100.0),
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.only(left: 10.0),
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: CircleAvatar(
-              radius: 35.0,
-              backgroundColor: Colors.orange,
+    return FutureBuilder(
+        future: exploreCategoriesRef.orderBy('name').get(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+
+          List<ExploreCategoryWidget> _categories = [];
+
+          snapshot.data.docs.forEach((doc) {
+            _categories.add(
+              ExploreCategoryWidget(
+                ExploreCategory.fromDocs(
+                  doc.data(),
+                ),
+              ),
+            );
+          });
+
+          return ConstrainedBox(
+            constraints: BoxConstraints.expand(height: 100.0),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.only(left: 10.0),
+              children: _categories,
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: CircleAvatar(
-              radius: 35.0,
-              backgroundColor: Colors.orange,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: CircleAvatar(
-              radius: 35.0,
-              backgroundColor: Colors.orange,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: CircleAvatar(
-              radius: 35.0,
-              backgroundColor: Colors.orange,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: CircleAvatar(
-              radius: 35.0,
-              backgroundColor: Colors.orange,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: CircleAvatar(
-              radius: 35.0,
-              backgroundColor: Colors.orange,
-            ),
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 
   Widget buildLocations() {
     return Container(
-      height: 450.0,
+      height: 500.0,
       child: PageView(
         controller: _pageController,
         children: [
-          ExploreLocation(),
-          ExploreLocation(),
-          ExploreLocation(),
+          ExploreLocationWidget(),
+          ExploreLocationWidget(),
+          ExploreLocationWidget(),
         ],
       ),
     );
@@ -120,6 +115,9 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           buildCategories(),
+          SizedBox(
+            height: 20.0,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -1,13 +1,12 @@
+import 'package:Ohstel_app/utilities/app_style.dart';
 import 'package:flutter/material.dart';
 
-import '../../utilities/app_style.dart';
-import '../../utilities/app_style.dart';
+class ExploreLocationWidget extends StatefulWidget {
+  @override
+  _ExploreLocationWidgetState createState() => _ExploreLocationWidgetState();
+}
 
-class ExploreLocation extends StatelessWidget {
-  const ExploreLocation({
-    Key key,
-  }) : super(key: key);
-
+class _ExploreLocationWidgetState extends State<ExploreLocationWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -18,15 +17,25 @@ class ExploreLocation extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(15.0),
+              image: DecorationImage(
+                image: NetworkImage(
+                    'https://images.unsplash.com/photo-1562214682-28767fbefa33?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Positioned(
-            top: -12.0,
-            right: 10.0,
-            child: Icon(
-              Icons.bookmark,
-              color: Colors.white,
-              size: 60.0,
+            top: -20.0,
+            right: 30.0,
+            child: IconButton(
+              icon: Icon(
+                Icons.bookmark,
+                color: Colors.white,
+                size: 60.0,
+              ),
+              onPressed: () {
+                print('pressed');
+              },
             ),
           ),
           Positioned(
@@ -77,7 +86,7 @@ class ExploreLocation extends StatelessWidget {
                         height: 30.0,
                         width: 70.0,
                         decoration: BoxDecoration(
-                            color: Colors.orange,
+                            color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(20.0)),
                         child: Center(
                           child: Text(
