@@ -1,7 +1,8 @@
 import 'package:Ohstel_app/explore/models/location.dart';
+import 'package:Ohstel_app/explore/widgets/user_details_bottomsheet.dart';
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
 class ExploreDetails extends StatefulWidget {
@@ -17,12 +18,25 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   String formattedDate;
   String formattedTime;
   int numberOfTickets = 1;
+  Map userDetails;
+  int finalAmount;
 
   @override
   void initState() {
     formattedDate = DateFormat('E, MMM d, y').format(_selectedDate);
     formattedTime = DateFormat.jm().format(_selectedTime);
+    finalAmount = widget.location.price * numberOfTickets;
+    getUserData();
     super.initState();
+  }
+
+  getUserData() async {
+    try {
+      userDetails = await HiveMethods().getUserData();
+      print(userDetails);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   _selectDate(context) async {
@@ -57,8 +71,12 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text(widget.location.name),
+        title: Text(
+          widget.location.name,
+          style: TextStyle(fontFamily: 'Lato'),
+        ),
         centerTitle: true,
       ),
       body: ListView(
@@ -157,6 +175,8 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                         onTap: numberOfTickets > 1
                             ? () => setState(() {
                                   numberOfTickets--;
+                                  finalAmount =
+                                      widget.location.price * numberOfTickets;
                                 })
                             : null,
                         child: Container(
@@ -191,6 +211,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                       GestureDetector(
                         onTap: () => setState(() {
                           numberOfTickets++;
+                          finalAmount = widget.location.price * numberOfTickets;
                         }),
                         child: Container(
                           width: 35.0,
@@ -224,17 +245,23 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                             style: body1,
                           ),
                           Text(
-                            'NGN${widget.location.price * numberOfTickets}',
+                            'NGN$finalAmount',
                             style: heading2,
                           ),
                         ],
                       ),
                       FlatButton(
                         color: Theme.of(context).primaryColor,
-                        onPressed: () => print('hi'),
+                        onPressed: () => showUserDetailsBottomSheet(
+                          context,
+                          userDetails: userDetails,
+                          finalAmount: finalAmount,
+                        ),
                         child: Text(
                           'Next',
-                          style: body1.copyWith(color: Colors.white),
+                          style: body1.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],

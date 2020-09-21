@@ -140,6 +140,7 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
           'Explore',
           style: TextStyle(
             color: Colors.black,
+            fontFamily: 'Lato',
           ),
         ),
         centerTitle: true,
