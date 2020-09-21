@@ -229,15 +229,18 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                 },
               ),
       ),
-      bottomNavigationBar: CustomLongButton(
-        label: 'Wash Now',
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => LaundryAddressDetailsPage(),
-            ),
-          );
-        },
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: CustomLongButton(
+          label: 'Wash Now',
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => LaundryAddressDetailsPage(),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
