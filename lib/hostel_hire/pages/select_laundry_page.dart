@@ -273,13 +273,10 @@ class _LaundryItemListTileState extends State<LaundryItemListTile>
               children: [
                 Text(
                   '${widget.currentLaundry.clothTypes}',
-                  style: heading2,
+                  style: heading2.copyWith(fontSize: 20),
                 ),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minHeight: 24,
-                    maxHeight: 25,
-                  ),
+                SizedBox(
+                  height: 24,
                   child: DropdownButton(
                       isDense: false,
                       value: _selectedService,
