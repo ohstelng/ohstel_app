@@ -8,23 +8,28 @@ class ExploreCategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      width: 86.0,
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 35.0,
-            backgroundColor: Theme.of(context).primaryColor,
-            backgroundImage: NetworkImage(this.category.imageUrl),
-          ),
-          SizedBox(height: 10.0),
-          Text(
-            this.category.name,
-            style: body1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        print(this.category.name);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        width: 86.0,
+        child: Column(
+          children: [
+            CircleAvatar(
+              radius: 35.0,
+              backgroundColor: Theme.of(context).primaryColor,
+              backgroundImage: NetworkImage(this.category.imageUrl),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              this.category.name,
+              style: body1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }

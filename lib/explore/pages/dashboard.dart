@@ -69,18 +69,53 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
         });
   }
 
-  Widget buildLocations() {
-    return Container(
-      height: 500.0,
-      child: PageView(
-        controller: _pageController,
-        children: [
-          ExploreLocationWidget(),
-          ExploreLocationWidget(),
-          ExploreLocationWidget(),
-        ],
-      ),
-    );
+  // buildLocations() async {
+  //   final _fetchedLocations =
+  //       await exploreLocationsRef.orderBy('dateAdded').get();
+  //   List<ExploreLocationWidget> _locations = [];
+  //   _fetchedLocations.docs.forEach((doc) {
+  //     _locations
+  //         .add(ExploreLocationWidget(ExploreLocation.fromDoc(doc.data())));
+  //   });
+
+  //   return Container(
+  //     height: 500.0,
+  //     child: PageView(
+  //       controller: _pageController,
+  //       children: _locations,
+  //     ),
+  //   );
+  // }
+
+  buildLocations() {
+    return FutureBuilder(
+        future: exploreLocationsRef.orderBy('dateAdded').get(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+
+          List<ExploreLocationWidget> _locations = [];
+
+          snapshot.data.docs.forEach((doc) {
+            _locations.add(
+              ExploreLocationWidget(
+                ExploreLocation.fromDoc(
+                  doc.data(),
+                ),
+              ),
+            );
+          });
+
+          return Container(
+            // initially 500.0
+            height: MediaQuery.of(context).size.height * 0.65,
+            child: PageView(
+              controller: _pageController,
+              children: _locations,
+            ),
+          );
+        });
   }
 
   @override
@@ -111,31 +146,33 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
         backgroundColor: Color(0xFFF4F4F4),
         elevation: 0,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildCategories(),
-          SizedBox(
-            height: 20.0,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  'My locations',
-                  textAlign: TextAlign.start,
-                  style: heading2,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildCategories(),
+            SizedBox(
+              height: 20.0,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Text(
+                    'My locations',
+                    textAlign: TextAlign.start,
+                    style: heading2,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              buildLocations(),
-            ],
-          ),
-        ],
+                SizedBox(
+                  height: 20.0,
+                ),
+                buildLocations(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
