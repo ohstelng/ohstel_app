@@ -58,6 +58,10 @@ dependencies:
   # For displaying and getting star rating
   smooth_star_rating: ^1.1.1
 
+  # For generating and printing explore ticket
+  flutter_ticket_widget: ^0.0.1
+  printing: ^3.6.1
+
 
 
 

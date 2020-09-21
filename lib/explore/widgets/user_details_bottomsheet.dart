@@ -1,3 +1,4 @@
+import 'package:Ohstel_app/explore/pages/ticket.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
 import 'package:flutter/material.dart';
 
@@ -158,7 +159,8 @@ showUserDetailsBottomSheet(
                     width: double.infinity,
                     height: 50.0,
                     child: FlatButton(
-                      onPressed: () => validateAndProceed(finalAmount),
+                      onPressed: () =>
+                          validateAndProceed(context, finalAmount: finalAmount),
                       color: Theme.of(context).primaryColor,
                       child: Text(
                         'Pay Now',
@@ -177,11 +179,13 @@ showUserDetailsBottomSheet(
       });
 }
 
-validateAndProceed(int finalAmount) {
+validateAndProceed(context, {int finalAmount}) {
   final form = formKey.currentState;
   if (form.validate()) {
     form.save();
     // TODO: TAKE USER TO PAYMENT SCREEN TO PAY FINAL AMOUNT
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => TicketScreen()));
     print(finalAmount);
   }
 }

@@ -155,7 +155,7 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF4F4F4),
+      backgroundColor: scaffoldBackground,
       appBar: AppBar(
         leading: Icon(
           Icons.search,
