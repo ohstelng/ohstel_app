@@ -57,6 +57,8 @@ dependencies:
 
   # For displaying and getting star rating
   smooth_star_rating: ^1.1.1
+  # For formatting date display for users
+  date_format: ^1.0.9
 
 
 

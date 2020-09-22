@@ -1,25 +1,28 @@
 import 'dart:async';
 
-import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'package:Ohstel_app/hostel_food/_/pages/laundry_payment_page.dart';
-import 'package:Ohstel_app/hostel_food/_/pages/select_location_page.dart';
-import 'package:Ohstel_app/hostel_hire/model/laundry_address_details_model.dart';
-import 'package:Ohstel_app/utilities/app_style.dart';
-import 'package:Ohstel_app/utilities/shared_widgets.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../hive_methods/hive_class.dart';
+import '../../hostel_food/_/pages/laundry_payment_page.dart';
+import '../../hostel_food/_/pages/select_location_page.dart';
+import '../../utilities/app_style.dart';
+import '../../utilities/shared_widgets.dart';
+import '../model/laundry_address_details_model.dart';
+
 class LaundryAddressDetailsPage extends StatefulWidget {
   @override
-  _LaundryAddressDetailsPageState createState() => _LaundryAddressDetailsPageState();
+  _LaundryAddressDetailsPageState createState() =>
+      _LaundryAddressDetailsPageState();
 }
 
 class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
-  StreamController<String> pickUpNumberSteam =
+  StreamController<String> pickUpNumberStream =
       StreamController<String>.broadcast();
-  StreamController<String> dropOffNumberSteam =
+  StreamController<String> dropOffNumberStream =
       StreamController<String>.broadcast();
   Box<Map> laundryAddressBox;
   int pickUpNumber;
@@ -27,8 +30,25 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
   Map userData;
   bool loading;
   Map addressDetails;
-  DateTime pickedDate;
-  TimeOfDay time;
+  DateTime pickUpDate;
+  TimeOfDay pickUpTime;
+
+  @override
+  void initState() {
+    super.initState();
+    getBox();
+  }
+
+// Function to initialise boxes and data
+  Future<void> getBox() async {
+    laundryAddressBox = await HiveMethods().getOpenBox('laundryAddressBox');
+    userData = await HiveMethods().getUserData();
+
+    if (mounted)
+      setState(() {
+        loading = false;
+      });
+  }
 
   ///Function to select pick up date
   void pickDate() async {
@@ -41,11 +61,11 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
     );
     if (date != null)
       setState(() {
-        pickedDate = date;
+        pickUpDate = date;
       });
   }
 
-///Function to select pick up time
+  ///Function to select pickUpTime
   void pickTime() async {
     TimeOfDay t = await showTimePicker(
       context: context,
@@ -53,8 +73,30 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
     );
     if (t != null)
       setState(() {
-        time = t;
+        pickUpTime = t;
       });
+  }
+
+  void selectAnAddress({@required AddressType type}) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(5.0),
+          content: Builder(builder: (context) {
+            var height = MediaQuery.of(context).size.height;
+            var width = MediaQuery.of(context).size.width;
+
+            return Container(
+              height: height * .70,
+              width: width,
+              child: SelectDeliveryLocationPage(type: type),
+            );
+          }),
+        );
+      },
+    );
   }
 
   @override
@@ -87,7 +129,7 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Pick Up Address',
+                'Pick Up Details',
                 style: pageTitle,
               ),
               SizedBox(height: 8),
@@ -95,18 +137,76 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 12.0),
-                      child: Placeholder(
-                        fallbackHeight: 40,
+                    child: InkWell(
+                      onTap: pickDate,
+                      child: Container(
+                        height: 40,
+                        padding: const EdgeInsets.only(left: 16),
+                        margin: const EdgeInsets.only(right: 12.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: textAnteBlack,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: pickUpDate == null
+                                  ? Text(
+                                      'Date: Not Set',
+                                    )
+                                  : Text(
+                                      "${formatDate(pickUpDate, [
+                                        d,
+                                        ', ',
+                                        MM,
+                                        ' ',
+                                        yyyy
+                                      ])}",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: textAnteBlack,
+                              size: 24,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12.0),
-                      child: Placeholder(
-                        fallbackHeight: 40,
+                    child: InkWell(
+                      onTap: pickTime,
+                      child: Container(
+                        height: 40,
+                        padding: const EdgeInsets.only(left: 16),
+                        margin: const EdgeInsets.only(right: 12.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: textAnteBlack,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: pickUpTime == null
+                                  ? Text('Time: Not Set')
+                                  : Text(
+                                      "${pickUpTime.hourOfPeriod}:${pickUpTime.minute} ${pickUpTime.period == DayPeriod.am ? 'AM' : 'PM'}",
+                                    ),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: textAnteBlack,
+                              size: 24,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -120,66 +220,83 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
                 ),
                 margin: const EdgeInsets.only(bottom: 56, top: 16),
                 padding: const EdgeInsets.all(8),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      right: 32,
-                      left: 0,
-                      bottom: 0,
-                      top: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                child: ValueListenableBuilder(
+                    valueListenable: laundryAddressBox.listenable(),
+                    builder: (context, Box box, _) {
+                      return Stack(
                         children: [
-                          Text(
-                            'Home Address',
-                            style: pageTitle,
-                          ),
-                          SizedBox(height: 16),
-                          Flexible(
-                            child: NotificationListener(
-                              onNotification:
-                                  (OverscrollIndicatorNotification notif) {
-                                notif.disallowGlow();
-                                return true;
-                              },
-                              child: SingleChildScrollView(
-                                child: Text(
-                                  'Room 005, Block C, Prestige Hostel. Ajanaku North, Tanke, Ilorin.',
-                                  style: body1.copyWith(
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ),
+                          Positioned(
+                            right: 32,
+                            left: 0,
+                            bottom: 0,
+                            top: 0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: (box.values.isEmpty ||
+                                      !box.containsKey('pickUp'))
+                                  ? [Text('No Address Found')]
+                                  : [
+                                      Text(
+                                        'Home Address',
+                                        style: pageTitle,
+                                      ),
+                                      SizedBox(height: 16),
+                                      Flexible(
+                                        child: NotificationListener(
+                                          onNotification:
+                                              (OverscrollIndicatorNotification
+                                                  notif) {
+                                            notif.disallowGlow();
+                                            return true;
+                                          },
+                                          child: SingleChildScrollView(
+                                            child: Text(
+                                              '${box.get('pickUp')['address']}, ${box.get('pickUp')['areaName']}',
+                                              style: body1.copyWith(
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                             ),
                           ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: (box.values.isEmpty ||
+                                    !box.containsKey('pickUp'))
+                                ? Icon(
+                                    Icons.cancel,
+                                    color: midnightExpress,
+                                    size: 24,
+                                  )
+                                : Icon(
+                                    Icons.check_circle,
+                                    color: childeanFire,
+                                    size: 24,
+                                  ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: IconButton(
+                              onPressed: () {
+                                selectAnAddress(type: AddressType.pickUp);
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                size: 20,
+                                color: Color(0xFF62666E),
+                              ),
+                              constraints: BoxConstraints.tight(Size(24, 24)),
+                              padding: const EdgeInsets.all(0),
+                            ),
+                          )
                         ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Icon(
-                        Icons.check_circle,
-                        color: childeanFire,
-                        size: 24,
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.edit,
-                          size: 20,
-                          color: Color(0xFF62666E),
-                        ),
-                        constraints: BoxConstraints.tight(Size(24, 24)),
-                        padding: const EdgeInsets.all(0),
-                      ),
-                    )
-                  ],
-                ),
+                      );
+                    }),
               ),
               Text(
                 'Drop Off Details',
@@ -190,18 +307,46 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 12.0),
-                      child: Placeholder(
-                        fallbackHeight: 40,
+                    child: Container(
+                      height: 40,
+                      margin: const EdgeInsets.only(right: 12.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: textAnteBlack,
+                        ),
+                      ),
+                      child: InkWell(
+                        onTap: () {},
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Placeholder(),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: textAnteBlack,
+                              size: 24,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 12.0),
-                      child: Placeholder(
-                        fallbackHeight: 40,
+                    child: Container(
+                      height: 40,
+                      margin: const EdgeInsets.only(right: 12.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: textAnteBlack,
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: () {},
+                        child: Text('Tomorrow (+ N550)'),
                       ),
                     ),
                   ),
@@ -215,66 +360,83 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
                 ),
                 margin: const EdgeInsets.symmetric(vertical: 16),
                 padding: const EdgeInsets.all(8),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      right: 32,
-                      left: 0,
-                      bottom: 0,
-                      top: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                child: ValueListenableBuilder(
+                    valueListenable: laundryAddressBox.listenable(),
+                    builder: (context, Box box, _) {
+                      return Stack(
                         children: [
-                          Text(
-                            'Home Address',
-                            style: pageTitle,
-                          ),
-                          SizedBox(height: 16),
-                          Flexible(
-                            child: NotificationListener(
-                              onNotification:
-                                  (OverscrollIndicatorNotification notif) {
-                                notif.disallowGlow();
-                                return true;
-                              },
-                              child: SingleChildScrollView(
-                                child: Text(
-                                  'Room 005, Block C, Prestige Hostel. Ajanaku North, Tanke, Ilorin.',
-                                  style: body1.copyWith(
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ),
+                          Positioned(
+                            right: 32,
+                            left: 0,
+                            bottom: 0,
+                            top: 0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: (box.values.isEmpty ||
+                                      !box.containsKey('dropOff'))
+                                  ? [Text('No Address Found')]
+                                  : [
+                                      Text(
+                                        'Home Address',
+                                        style: pageTitle,
+                                      ),
+                                      SizedBox(height: 16),
+                                      Flexible(
+                                        child: NotificationListener(
+                                          onNotification:
+                                              (OverscrollIndicatorNotification
+                                                  notif) {
+                                            notif.disallowGlow();
+                                            return true;
+                                          },
+                                          child: SingleChildScrollView(
+                                            child: Text(
+                                              '${box.get('dropOff')['address']}, ${box.get('dropOff')['areaName']}',
+                                              style: body1.copyWith(
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                             ),
                           ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: (box.values.isEmpty ||
+                                    !box.containsKey('dropOff'))
+                                ? Icon(
+                                    Icons.cancel,
+                                    color: midnightExpress,
+                                    size: 24,
+                                  )
+                                : Icon(
+                                    Icons.check_circle,
+                                    color: childeanFire,
+                                    size: 24,
+                                  ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: IconButton(
+                              onPressed: () {
+                                selectAnAddress(type: AddressType.dropOff);
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                size: 20,
+                                color: Color(0xFF62666E),
+                              ),
+                              constraints: BoxConstraints.tight(Size(24, 24)),
+                              padding: const EdgeInsets.all(0),
+                            ),
+                          )
                         ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Icon(
-                        Icons.check_circle,
-                        color: childeanFire,
-                        size: 24,
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.edit,
-                          size: 20,
-                          color: Color(0xFF62666E),
-                        ),
-                        constraints: BoxConstraints.tight(Size(24, 24)),
-                        padding: const EdgeInsets.all(0),
-                      ),
-                    )
-                  ],
-                ),
+                      );
+                    }),
               ),
             ],
           ),
@@ -284,7 +446,46 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
         padding: const EdgeInsets.only(bottom: 16.0),
         child: CustomLongButton(
           label: 'Place Order',
-          onTap: () {},
+          onTap: () {
+            Map pickUpData = laundryAddressBox.get('pickUp');
+            Map dropOffData = laundryAddressBox.get('dropOff');
+
+            if (pickUpData.isNotEmpty &&
+                dropOffData.isNotEmpty &&
+                pickUpNumber != null &&
+                dropOffNumber != null &&
+                pickUpDate != null &&
+                pickUpTime != null) {
+              if (pickUpDate.month <= DateTime.now().month &&
+                  pickUpDate.day <= DateTime.now().day) {
+                Fluttertoast.showToast(
+                    msg: 'Choose A Date One Day From Today!!');
+                return;
+              }
+
+              LaundryAddressDetailsModel laundryAddressDetails =
+                  LaundryAddressDetailsModel(
+                pickUpDate: pickUpDate.toString(),
+                pickUpTime: pickUpTime.format(context).toString(),
+                pickUpAddress: pickUpData,
+                dropOffAddress: dropOffData,
+                dropOffNumber: dropOffNumber.toString(),
+                pickUpNumber: pickUpNumber.toString(),
+              );
+
+              print(laundryAddressDetails.toMap());
+              print(pickUpDate.month);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => LaundryPaymentPage(
+                    laundryAddressDetails: laundryAddressDetails,
+                  ),
+                ),
+              );
+            } else {
+              Fluttertoast.showToast(msg: 'Please Provide All Info!');
+            }
+          },
         ),
       ),
     );
@@ -308,8 +509,8 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
 //   Map userData;
 //   bool loading;
 //   Map addressDetails;
-//   DateTime pickedDate;
-//   TimeOfDay time;
+//   DateTime pickUpDate;
+//   TimeOfDay pickUpTime;
 
 //   void selectDeliveryLocation({@required String type}) {
 //     showDialog(
@@ -414,7 +615,7 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
 //     );
 //     if (date != null)
 //       setState(() {
-//         pickedDate = date;
+//         pickUpDate = date;
 //       });
 //   }
 
@@ -425,15 +626,15 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
 //     );
 //     if (t != null)
 //       setState(() {
-//         time = t;
+//         pickUpTime = t;
 //       });
 //   }
 
 //   @override
 //   void initState() {
 //     getBox();
-// //    pickedDate = DateTime.now();
-// //    time = TimeOfDay.now();
+// //    pickUpDate = DateTime.now();
+// //    pickUpTime = TimeOfDay.now();
 //     super.initState();
 //   }
 
@@ -478,18 +679,18 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
 //             dropOffData.isNotEmpty &&
 //             pickUpNumber != null &&
 //             dropOffNumber != null &&
-//             pickedDate != null &&
-//             time != null) {
-//           if (pickedDate.month <= DateTime.now().month &&
-//               pickedDate.day <= DateTime.now().day) {
+//             pickUpDate != null &&
+//             pickUpTime != null) {
+//           if (pickUpDate.month <= DateTime.now().month &&
+//               pickUpDate.day <= DateTime.now().day) {
 //             Fluttertoast.showToast(msg: 'Choose A Date One Day From Today!!');
 //             return;
 //           }
 
 //           LaundryAddressDetailsModel laundryAddressDetails =
 //               LaundryAddressDetailsModel(
-//             pickUpDate: pickedDate.toString(),
-//             pickUpTime: time.format(context).toString(),
+//             pickUpDate: pickUpDate.toString(),
+//             pickUpTime: pickUpTime.format(context).toString(),
 //             pickUpAddress: pickUpData,
 //             dropOffAddress: dropOffData,
 //             dropOffNumber: dropOffNumber.toString(),
@@ -497,7 +698,7 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
 //           );
 
 //           print(laundryAddressDetails.toMap());
-//           print(pickedDate.month);
+//           print(pickUpDate.month);
 //           Navigator.of(context).push(
 //             MaterialPageRoute(
 //               builder: (context) => LaundryPaymentPage(
@@ -533,10 +734,10 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
 //               border: Border.all(color: Colors.black),
 //             ),
 //             child: ListTile(
-//               title: pickedDate == null
+//               title: pickUpDate == null
 //                   ? Text('Date: Not Set')
 //                   : Text(
-//                       "Date: ${pickedDate.year}, ${pickedDate.month}, ${pickedDate.day}"),
+//                       "Date: ${pickUpDate.year}, ${pickUpDate.month}, ${pickUpDate.day}"),
 //               trailing: Icon(Icons.keyboard_arrow_down),
 //               onTap: pickDate,
 //             ),
@@ -549,9 +750,9 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
 //               border: Border.all(color: Colors.black),
 //             ),
 //             child: ListTile(
-//               title: time == null
+//               title: pickUpTime == null
 //                   ? Text('Time: Not Set')
-//                   : Text("Time: ${time.hour}:${time.minute}"),
+//                   : Text("Time: ${pickUpTime.hour}:${pickUpTime.minute}"),
 //               trailing: Icon(Icons.keyboard_arrow_down),
 //               onTap: pickTime,
 //             ),
