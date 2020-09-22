@@ -1,11 +1,12 @@
 import 'package:Ohstel_app/SplashScreen.dart';
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/auth/models/login_user_model.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
+import 'ad_manager.dart';
 import 'hive_methods/hive_class.dart';
 
 Future<void> main() async {
@@ -19,6 +20,7 @@ Future<void> main() async {
   await InitHive().startFoodAddressDetailHive();
   await InitHive().startLaundryBasketHive();
   await InitHive().startLaundryAddressDetailHive();
+  Admob.initialize(AdManager.appId);
 
   // run app
   runApp(MyApp());

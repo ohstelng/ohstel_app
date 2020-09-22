@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:Ohstel_app/ad_manager.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
 import '../../utilities/app_style.dart';
 import '../../auth/methods/auth_methods.dart';
 import '../../auth/models/userModel.dart';
@@ -15,14 +15,13 @@ import '../method.dart';
 import 'coin_history.dart';
 import 'wallet_history.dart';
 
-
-
 class WalletHome extends StatefulWidget {
   @override
   _WalletHomeState createState() => _WalletHomeState();
 }
 
 class _WalletHomeState extends State<WalletHome> {
+  AdmobReward reward;
   // Screen Functionality
   UserModel userModel;
   Map userData;
@@ -213,6 +212,14 @@ class _WalletHomeState extends State<WalletHome> {
       publicKey: 'pk_test_d0490fa7b5ae91bf5317ebdbd761760c8f14fd8f',
     );
     super.initState();
+    reward = AdmobReward(adUnitId: AdManager.RewardId,
+    listener: (event, args){
+      if(event == AdmobAdEvent.rewarded){
+        // The backend for the reward goes here, Mr Ola.
+        print('User Rewarded');
+      }
+    });
+    reward.load();
   }
 
 //-- Screen Functionality
@@ -433,12 +440,19 @@ class _WalletHomeState extends State<WalletHome> {
                               color: childeanFire,
                             ),
                             ActionButton(
-                              onTap: () {},
-                              label: 'Get Coin',
+                              onTap: () async {
+                                if(await reward.isLoaded) {
+                                  reward.show();
+                                } else {
+                                  print('Error');
+                                }
+                              },
+                              label: 'Get  Coin',
                               color: childeanFire,
                             ),
                             ActionButton(
-                              onTap: () {},
+                              onTap: () {
+                              },
                               label: 'Coin to Naira',
                               color: childeanFire,
                             ),
