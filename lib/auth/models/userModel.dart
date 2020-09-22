@@ -24,7 +24,8 @@ class UserModel {
     @required this.uniDetails,
   });
 
-  UserModel.fromMap(Map<String, dynamic> mapData) {
+  // TODO: i had to remove type Map<String, dynamic> from here, hope i didnt break something
+  UserModel.fromMap(mapData) {
     this.uid = mapData['uid'];
     this.email = mapData['email'];
     this.fullName = mapData['fullName'];

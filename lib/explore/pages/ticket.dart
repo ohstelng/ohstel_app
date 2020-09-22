@@ -1,11 +1,17 @@
+import 'package:Ohstel_app/explore/models/ticket.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ticket_widget/flutter_ticket_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 class TicketScreen extends StatefulWidget {
+  final Ticket ticket;
+
+  TicketScreen(this.ticket);
+
   @override
   _TicketScreenState createState() => _TicketScreenState();
 }
@@ -71,30 +77,24 @@ class _TicketScreenState extends State<TicketScreen> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    'Business Class',
+                                    'Paid',
                                     style: TextStyle(color: Colors.green),
                                   ),
                                 ),
                               ),
                               Row(
                                 children: <Widget>[
-                                  Text(
-                                    'SLM',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
-                                    child: Icon(
-                                      Icons.flight_takeoff,
-                                      color: Colors.pink,
+                                    child: Image.asset(
+                                      'asset/OHstel.png',
+                                      width: 25.0,
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: Text(
-                                      'BTL',
+                                      'OHstel',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold),
@@ -107,7 +107,7 @@ class _TicketScreenState extends State<TicketScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: Text(
-                              'Flight Ticket',
+                              '${widget.ticket.location.name} Ticket',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20.0,
@@ -118,19 +118,27 @@ class _TicketScreenState extends State<TicketScreen> {
                             padding: const EdgeInsets.only(top: 25.0),
                             child: Column(
                               children: <Widget>[
-                                ticketDetailsWidget('Passengers', 'Ilona',
-                                    'Date', '24-12-2018'),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 12.0, right: 40.0),
-                                  child: ticketDetailsWidget(
-                                      'Flight', '76836A45', 'Gate', '66B'),
+                                ticketDetailsWidget(
+                                  'Name',
+                                  '${widget.ticket.user.fullName}',
+                                  'Issued Date & Time',
+                                  DateFormat('d-M-y')
+                                      .add_jm()
+                                      .format(widget.ticket.date),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 12.0, right: 40.0),
-                                  child: ticketDetailsWidget(
-                                      'Class', 'Business', 'Seat', '21B'),
+                                ticketDetailsWidget(
+                                  'Scheduled Date',
+                                  DateFormat('d-M-y')
+                                      .format(widget.ticket.plannedDate),
+                                  'Scheduled Time',
+                                  DateFormat.jm()
+                                      .format(widget.ticket.plannedTime),
+                                ),
+                                ticketDetailsWidget(
+                                  'Duration',
+                                  '${widget.ticket.location.duration} hrs',
+                                  'Amount',
+                                  'NGN ${widget.ticket.finalAmount}',
                                 ),
                               ],
                             ),
@@ -142,14 +150,18 @@ class _TicketScreenState extends State<TicketScreen> {
                               width: 250.0,
                               height: 60.0,
                               decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage('asset/barcode.png'),
-                                      fit: BoxFit.cover)),
+                                image: DecorationImage(
+                                    image: AssetImage('asset/barcode.png'),
+                                    fit: BoxFit.cover),
+                              ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                top: 10.0, left: 75.0, right: 75.0),
+                              top: 10.0,
+                              left: 75.0,
+                              right: 75.0,
+                            ),
                             child: Text(
                               '9824 0972 1742 1298',
                               style: TextStyle(
@@ -181,12 +193,12 @@ class _TicketScreenState extends State<TicketScreen> {
 
   Widget ticketDetailsWidget(String firstTitle, String firstDesc,
       String secondTitle, String secondDesc) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 12.0),
-          child: Column(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
@@ -195,22 +207,16 @@ class _TicketScreenState extends State<TicketScreen> {
                   color: Colors.grey,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  firstDesc,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+              Text(
+                firstDesc,
+                style: TextStyle(
+                  color: Colors.black,
                 ),
               )
             ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
                 secondTitle,
@@ -218,19 +224,16 @@ class _TicketScreenState extends State<TicketScreen> {
                   color: Colors.grey,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  secondDesc,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+              Text(
+                secondDesc,
+                style: TextStyle(
+                  color: Colors.black,
                 ),
               )
             ],
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

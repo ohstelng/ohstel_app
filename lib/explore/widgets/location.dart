@@ -1,6 +1,7 @@
 import 'package:Ohstel_app/explore/models/location.dart';
 import 'package:Ohstel_app/explore/pages/details.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ExploreLocationWidget extends StatefulWidget {
@@ -13,6 +14,8 @@ class ExploreLocationWidget extends StatefulWidget {
 }
 
 class _ExploreLocationWidgetState extends State<ExploreLocationWidget> {
+  bool bookmarked = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -31,7 +34,7 @@ class _ExploreLocationWidgetState extends State<ExploreLocationWidget> {
                 color: Colors.grey,
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
-                  image: NetworkImage(widget.location.imageUrl),
+                  image: CachedNetworkImageProvider(widget.location.imageUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -42,11 +45,15 @@ class _ExploreLocationWidgetState extends State<ExploreLocationWidget> {
               child: IconButton(
                 icon: Icon(
                   Icons.bookmark,
-                  color: Colors.white,
+                  color: bookmarked
+                      ? Theme.of(context).primaryColor
+                      : Colors.white,
                   size: 60.0,
                 ),
                 onPressed: () {
-                  print('pressed');
+                  setState(() {
+                    bookmarked = !bookmarked;
+                  });
                 },
               ),
             ),

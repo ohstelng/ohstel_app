@@ -4,7 +4,6 @@ import 'package:Ohstel_app/explore/widgets/category.dart';
 import 'package:Ohstel_app/explore/widgets/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../../utilities/app_style.dart';
 
 class ExploreDashboard extends StatefulWidget {
@@ -162,12 +161,19 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
           color: Colors.grey,
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Icon(
-              Icons.notifications,
-              color: Colors.black,
-            ),
+          Icon(
+            Icons.bookmark,
+            color: Theme.of(context).primaryColor,
+          ),
+          SizedBox(
+            width: 10.0,
+          ),
+          Icon(
+            Icons.notifications,
+            color: Theme.of(context).primaryColor,
+          ),
+          SizedBox(
+            width: 20.0,
           ),
         ],
         title: Text(

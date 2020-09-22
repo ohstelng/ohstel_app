@@ -1,5 +1,6 @@
 import 'package:Ohstel_app/explore/models/category.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ExploreCategoryWidget extends StatelessWidget {
@@ -16,7 +17,7 @@ class ExploreCategoryWidget extends StatelessWidget {
           CircleAvatar(
             radius: 35.0,
             backgroundColor: Theme.of(context).primaryColor,
-            backgroundImage: NetworkImage(this.category.imageUrl),
+            backgroundImage: CachedNetworkImageProvider(this.category.imageUrl),
           ),
           SizedBox(height: 10.0),
           Text(

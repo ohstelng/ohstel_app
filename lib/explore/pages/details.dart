@@ -1,3 +1,4 @@
+import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/explore/models/location.dart';
 import 'package:Ohstel_app/explore/widgets/user_details_bottomsheet.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
@@ -18,7 +19,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   String formattedDate;
   String formattedTime;
   int numberOfTickets = 1;
-  Map userDetails;
+  UserModel user;
   int finalAmount;
 
   @override
@@ -32,8 +33,8 @@ class _ExploreDetailsState extends State<ExploreDetails> {
 
   getUserData() async {
     try {
-      userDetails = await HiveMethods().getUserData();
-      print(userDetails);
+      var userDetails = await HiveMethods().getUserData();
+      user = UserModel.fromMap(userDetails);
     } catch (e) {
       print(e.toString());
     }
@@ -254,8 +255,13 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                         color: Theme.of(context).primaryColor,
                         onPressed: () => showUserDetailsBottomSheet(
                           context,
-                          userDetails: userDetails,
+                          user: user,
                           finalAmount: finalAmount,
+                          // REMOVE LOCATION FROM HERE
+                          location: widget.location,
+                          plannedDate: _selectedDate,
+                          plannedTime: _selectedTime,
+                          numberOfTickets: numberOfTickets,
                         ),
                         child: Text(
                           'Next',
