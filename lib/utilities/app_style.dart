@@ -22,7 +22,7 @@ const heading1 = TextStyle(
 const heading2 = TextStyle(
   fontFamily: 'Lato',
   color: midnightExpress,
-  fontSize: 20,
+  fontSize: 24,
   fontWeight: FontWeight.w700,
 );
 
