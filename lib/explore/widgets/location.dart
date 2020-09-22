@@ -39,24 +39,24 @@ class _ExploreLocationWidgetState extends State<ExploreLocationWidget> {
                 ),
               ),
             ),
-            Positioned(
-              top: -20.0,
-              right: 30.0,
-              child: IconButton(
-                icon: Icon(
-                  Icons.bookmark,
-                  color: bookmarked
-                      ? Theme.of(context).primaryColor
-                      : Colors.white,
-                  size: 60.0,
-                ),
-                onPressed: () {
-                  setState(() {
-                    bookmarked = !bookmarked;
-                  });
-                },
-              ),
-            ),
+            // Positioned(
+            //   top: -20.0,
+            //   right: 30.0,
+            //   child: IconButton(
+            //     icon: Icon(
+            //       Icons.bookmark,
+            //       color: bookmarked
+            //           ? Theme.of(context).primaryColor
+            //           : Colors.white,
+            //       size: 60.0,
+            //     ),
+            //     onPressed: () {
+            //       setState(() {
+            //         bookmarked = !bookmarked;
+            //       });
+            //     },
+            //   ),
+            // ),
             Positioned(
               bottom: 0.0,
               child: Container(

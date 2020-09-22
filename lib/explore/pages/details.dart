@@ -4,6 +4,7 @@ import 'package:Ohstel_app/explore/widgets/user_details_bottomsheet.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class ExploreDetails extends StatefulWidget {
@@ -21,6 +22,15 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   int numberOfTickets = 1;
   UserModel user;
   int finalAmount;
+
+  var formKey = GlobalKey<FormState>();
+  String email;
+  String name;
+  String phone;
+  String university;
+  String department = "";
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -47,11 +57,17 @@ class _ExploreDetailsState extends State<ExploreDetails> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != _selectedDate)
-      setState(() {
-        _selectedDate = picked;
-        formattedDate = DateFormat('E, MMM d, y').format(_selectedDate);
-      });
+    if (picked != null && picked != _selectedDate) {
+      DateTime _today = DateTime.now();
+      if (picked.difference(_today).inDays < 0) {
+        Fluttertoast.showToast(msg: 'You can\'t select past dates');
+      } else {
+        setState(() {
+          _selectedDate = picked;
+          formattedDate = DateFormat('E, MMM d, y').format(_selectedDate);
+        });
+      }
+    }
   }
 
   _selectTime(context) async {
@@ -255,13 +271,12 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                         color: Theme.of(context).primaryColor,
                         onPressed: () => showUserDetailsBottomSheet(
                           context,
-                          user: user,
+                          scheduledDate: _selectedDate,
+                          scheduledTime: _selectedTime,
                           finalAmount: finalAmount,
-                          // REMOVE LOCATION FROM HERE
                           location: widget.location,
-                          plannedDate: _selectedDate,
-                          plannedTime: _selectedTime,
                           numberOfTickets: numberOfTickets,
+                          user: user,
                         ),
                         child: Text(
                           'Next',

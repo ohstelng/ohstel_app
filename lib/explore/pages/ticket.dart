@@ -96,8 +96,9 @@ class _TicketScreenState extends State<TicketScreen> {
                                     child: Text(
                                       'OHstel',
                                       style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   )
                                 ],
@@ -107,7 +108,7 @@ class _TicketScreenState extends State<TicketScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 20.0),
                             child: Text(
-                              '${widget.ticket.location.name} Ticket',
+                              '${widget.ticket.locationName} Ticket',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20.0,
@@ -120,23 +121,27 @@ class _TicketScreenState extends State<TicketScreen> {
                               children: <Widget>[
                                 ticketDetailsWidget(
                                   'Name',
-                                  '${widget.ticket.user.fullName}',
+                                  widget.ticket.name,
+                                  'Email',
+                                  widget.ticket.email,
+                                ),
+                                ticketDetailsWidget(
+                                  'Phone No.',
+                                  widget.ticket.phone,
                                   'Issued Date & Time',
-                                  DateFormat('d-M-y')
+                                  DateFormat('d/M/y')
                                       .add_jm()
                                       .format(widget.ticket.date),
                                 ),
                                 ticketDetailsWidget(
-                                  'Scheduled Date',
-                                  DateFormat('d-M-y')
-                                      .format(widget.ticket.plannedDate),
-                                  'Scheduled Time',
-                                  DateFormat.jm()
-                                      .format(widget.ticket.plannedTime),
+                                  'Scheduled Date & Time',
+                                  "${DateFormat('d/M/y').format(widget.ticket.scheduledDate)} ${DateFormat.jm().format(widget.ticket.scheduledTime)}",
+                                  'Duration',
+                                  '${widget.ticket.locationDuration} hrs',
                                 ),
                                 ticketDetailsWidget(
-                                  'Duration',
-                                  '${widget.ticket.location.duration} hrs',
+                                  'No. Of Tickets',
+                                  widget.ticket.numberOfTickets.toString(),
                                   'Amount',
                                   'NGN ${widget.ticket.finalAmount}',
                                 ),
@@ -156,16 +161,17 @@ class _TicketScreenState extends State<TicketScreen> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              top: 10.0,
-                              left: 75.0,
-                              right: 75.0,
-                            ),
-                            child: Text(
-                              '9824 0972 1742 1298',
-                              style: TextStyle(
-                                color: Colors.black,
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                top: 10.0,
+                              ),
+                              child: Text(
+                                widget.ticket.id,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           )

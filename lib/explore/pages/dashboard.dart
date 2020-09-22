@@ -1,5 +1,6 @@
 import 'package:Ohstel_app/explore/models/category.dart';
 import 'package:Ohstel_app/explore/models/location.dart';
+import 'package:Ohstel_app/explore/pages/user_tickets.dart';
 import 'package:Ohstel_app/explore/widgets/category.dart';
 import 'package:Ohstel_app/explore/widgets/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,6 +15,8 @@ class ExploreDashboard extends StatefulWidget {
 class _ExploreDashboardState extends State<ExploreDashboard> {
   PageController _pageController;
   String _category;
+  String _searchText = "";
+  bool _isSearch = false;
 
   final exploreRef = FirebaseFirestore.instance.collection('explore');
   final exploreCategoriesRef = FirebaseFirestore.instance
@@ -38,6 +41,7 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
     super.dispose();
     _pageController.dispose();
   }
+  // TODO: CONFIGURE LOCATIONS TO SHOW FOR ONLY USER INSTITUTTIONS
 
   buildCategories() {
     return FutureBuilder(
@@ -58,8 +62,8 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
               GestureDetector(
                 onTap: () {
                   setState(() {
+                    _isSearch = false;
                     _category = doc.data()['name'];
-                    print('set cat successfully');
                   });
                 },
                 child: ExploreCategoryWidget(
@@ -82,21 +86,27 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
         });
   }
 
-  buildLocations(String category) {
+  buildLocations({String category, bool isSearch, String searchText}) {
     return FutureBuilder(
-        future: category == null || category == ''
-            ? exploreLocationsRef.orderBy('dateAdded').get()
-            : exploreLocationsRef
-                .where('category', isEqualTo: category)
-                .orderBy('dateAdded')
-                .get(),
+        future: isSearch
+            ? exploreLocationsRef
+                .where('name', isGreaterThanOrEqualTo: searchText)
+                .where('name', isLessThan: searchText + 'z')
+                .get()
+            : category == null || category == ''
+                ? exploreLocationsRef.orderBy('dateAdded').get()
+                : exploreLocationsRef
+                    .where('category', isEqualTo: category)
+                    .orderBy('dateAdded')
+                    .get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
-                child: Padding(
-              padding: EdgeInsets.all(30.0),
-              child: CircularProgressIndicator(),
-            ));
+              child: Padding(
+                padding: EdgeInsets.all(30.0),
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
 
           if (snapshot.hasError) {
@@ -107,6 +117,10 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
               ],
             );
           }
+
+          print(snapshot.data.docs);
+          print(_isSearch);
+          print(_searchText);
 
           List<ExploreLocationWidget> _locations = [];
 
@@ -156,24 +170,25 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
     return Scaffold(
       backgroundColor: scaffoldBackground,
       appBar: AppBar(
-        leading: Icon(
-          Icons.search,
-          color: Colors.grey,
+        leading: IconButton(
+          icon: Icon(Icons.search, color: Colors.grey),
+          onPressed: () => showSearchButtomSheet(context),
         ),
         actions: [
-          Icon(
-            Icons.bookmark,
-            color: Theme.of(context).primaryColor,
-          ),
-          SizedBox(
-            width: 10.0,
-          ),
-          Icon(
-            Icons.notifications,
-            color: Theme.of(context).primaryColor,
-          ),
-          SizedBox(
-            width: 20.0,
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UserTickets())),
+              child: CircleAvatar(
+                radius: 18.0,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: ImageIcon(
+                  AssetImage('asset/ticket.png'),
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
         ],
         title: Text(
@@ -209,12 +224,84 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
                 SizedBox(
                   height: 20.0,
                 ),
-                buildLocations(_category),
+                buildLocations(
+                  category: _category,
+                  isSearch: _isSearch,
+                  searchText: _searchText,
+                ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  showSearchButtomSheet(context) {
+    return showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                left: 20.0,
+                right: 20.0,
+                top: 20.0,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                    ),
+                    color: Colors.green[50],
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: "Search For a Location",
+                        suffixIcon: Icon(Icons.location_city),
+                        border: InputBorder.none,
+                      ),
+                      autofocus: true,
+                      onChanged: (String value) {
+                        _searchText = value;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  Container(
+                    width: double.infinity,
+                    height: 50.0,
+                    child: FlatButton(
+                      onPressed: () {
+                        print(_searchText);
+                        setState(() {
+                          _isSearch = true;
+                        });
+                        Navigator.pop(context);
+                      },
+                      color: Theme.of(context).primaryColor,
+                      child: Text(
+                        'Search',
+                        style: body1.copyWith(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
