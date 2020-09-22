@@ -52,10 +52,30 @@ class _UserTicketsState extends State<UserTickets> {
           _userTickets.add(UserTicket(Ticket.fromDoc(doc.data())));
         });
 
-        return ListView(
-          padding: EdgeInsets.all(20.0),
-          children: _userTickets,
-        );
+        return _userTickets.length > 0
+            ? ListView(
+                padding: EdgeInsets.all(20.0),
+                children: _userTickets,
+              )
+            : Center(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset('asset/OHstel.png'),
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      Text(
+                        'You don\'t have any ticket',
+                        style: heading1,
+                      ),
+                    ],
+                  ),
+                ),
+              );
       },
     );
   }
