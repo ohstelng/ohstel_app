@@ -270,6 +270,9 @@ createTicket(
 
     await addTicketToFirestore(ticket);
 
+    // Pop buttomsheet
+    Navigator.pop(context);
+
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => TicketScreen(ticket)));
   }
