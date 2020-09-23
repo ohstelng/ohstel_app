@@ -6,14 +6,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../auth/methods/auth_methods.dart';
-import '../../../hive_methods/hive_class.dart';
-import '../../../hostel_hire/methods/hire_methods.dart';
-import '../../../hostel_hire/model/laundry_address_details_model.dart';
-import '../../../hostel_hire/model/paid_laundry_model.dart';
-import '../../../utilities/app_style.dart';
-import '../../../utilities/shared_widgets.dart';
-import '../../../wallet/method.dart';
+import '../../auth/methods/auth_methods.dart';
+import '../../hive_methods/hive_class.dart';
+import '../../utilities/app_style.dart';
+import '../../utilities/shared_widgets.dart';
+import '../../wallet/method.dart';
+import '../methods/hire_methods.dart';
+import '../model/laundry_address_details_model.dart';
+import '../model/paid_laundry_model.dart';
 
 class LaundryPaymentPage extends StatefulWidget {
   final LaundryAddressDetailsModel laundryAddressDetails;
@@ -214,8 +214,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                         style: nairaSignStyle,
                         children: [
                           TextSpan(
-                            text:
-                                '${deliveryFee ?? 0}', 
+                            text: '${deliveryFee ?? 0}',
                             style: tableDataTextStyle,
                           ),
                         ],
