@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:Ohstel_app/auth/methods/auth_methods.dart';
-import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'package:Ohstel_app/hostel_hire/methods/hire_methods.dart';
-import 'package:Ohstel_app/hostel_hire/model/laundry_address_details_model.dart';
-import 'package:Ohstel_app/hostel_hire/model/paid_laundry_model.dart';
-import 'package:Ohstel_app/utilities/app_style.dart';
-import 'package:Ohstel_app/utilities/shared_widgets.dart';
-import 'package:Ohstel_app/wallet/method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+
+import '../../../auth/methods/auth_methods.dart';
+import '../../../hive_methods/hive_class.dart';
+import '../../../hostel_hire/methods/hire_methods.dart';
+import '../../../hostel_hire/model/laundry_address_details_model.dart';
+import '../../../hostel_hire/model/paid_laundry_model.dart';
+import '../../../utilities/app_style.dart';
+import '../../../utilities/shared_widgets.dart';
+import '../../../wallet/method.dart';
 
 class LaundryPaymentPage extends StatefulWidget {
   final LaundryAddressDetailsModel laundryAddressDetails;
@@ -214,7 +215,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                         children: [
                           TextSpan(
                             text:
-                                '${deliveryFee ?? 0}', //TODO BE Fix delivery fee
+                                '${deliveryFee ?? 0}', 
                             style: tableDataTextStyle,
                           ),
                         ],

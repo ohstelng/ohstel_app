@@ -9,6 +9,7 @@ import '../../utilities/shared_widgets.dart';
 import '../model/hire_agent_model.dart';
 import '../model/laundry_basket_model.dart';
 import '../model/laundry_booking_model.dart';
+import 'laundry_address_details_page.dart';
 
 class SelectLaundryPage extends StatelessWidget {
   final List laundryList;
@@ -172,7 +173,8 @@ class SelectLaundryPage extends StatelessWidget {
                       .saveLaundryToBasketCart(data: order.toMap());
                 });
                 //Navigate to checkout
-                //TODO: UI
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => LaundryAddressDetailsPage()));
               },
             ),
           ],
