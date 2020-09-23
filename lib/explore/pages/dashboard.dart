@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:Ohstel_app/explore/models/category.dart';
 import 'package:Ohstel_app/explore/models/location.dart';
 import 'package:Ohstel_app/explore/pages/user_tickets.dart';
 import 'package:Ohstel_app/explore/widgets/category.dart';
+import 'package:Ohstel_app/explore/widgets/circular_progress.dart';
 import 'package:Ohstel_app/explore/widgets/location.dart';
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../utilities/app_style.dart';
@@ -17,16 +21,14 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
   String _category;
   String _searchText = "";
   bool _isSearch = false;
+  String userUni;
 
   final exploreRef = FirebaseFirestore.instance.collection('explore');
   final exploreCategoriesRef = FirebaseFirestore.instance
       .collection('explore')
       .doc('categories')
       .collection('allCategories');
-  final exploreLocationsRef = FirebaseFirestore.instance
-      .collection('explore')
-      .doc('locations')
-      .collection('allLocations');
+  var exploreLocationsRef;
 
   @override
   void initState() {
@@ -41,18 +43,13 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
     super.dispose();
     _pageController.dispose();
   }
-  // TODO: CONFIGURE LOCATIONS TO SHOW FOR ONLY USER INSTITUTTIONS
 
   buildCategories() {
     return FutureBuilder(
         future: exploreCategoriesRef.orderBy('name').get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
-                child: Padding(
-              padding: EdgeInsets.all(30.0),
-              child: CircularProgressIndicator(),
-            ));
+            return CustomCircularProgress();
           }
 
           List<Widget> _categories = [];
@@ -101,12 +98,7 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
                     .get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
-              child: Padding(
-                padding: EdgeInsets.all(30.0),
-                child: CircularProgressIndicator(),
-              ),
-            );
+            return CustomCircularProgress();
           }
 
           if (snapshot.hasError) {
@@ -117,10 +109,6 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
               ],
             );
           }
-
-          print(snapshot.data.docs);
-          print(_isSearch);
-          print(_searchText);
 
           List<ExploreLocationWidget> _locations = [];
 
@@ -168,73 +156,88 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: scaffoldBackground,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.search, color: Colors.grey),
-          onPressed: () => showSearchButtomSheet(context),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => UserTickets())),
-              child: CircleAvatar(
-                radius: 18.0,
-                backgroundColor: Theme.of(context).primaryColor,
-                child: ImageIcon(
-                  AssetImage('asset/ticket.png'),
-                  color: Colors.white,
+        backgroundColor: scaffoldBackground,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.search, color: Colors.grey),
+            onPressed: () => showSearchButtomSheet(context),
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserTickets())),
+                child: CircleAvatar(
+                  radius: 18.0,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: ImageIcon(
+                    AssetImage('asset/ticket.png'),
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-        title: Text(
-          'Explore',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Lato',
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Color(0xFFF4F4F4),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildCategories(),
-            SizedBox(
-              height: 20.0,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'My locations',
-                    textAlign: TextAlign.start,
-                    style: heading2,
-                  ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                buildLocations(
-                  category: _category,
-                  isSearch: _isSearch,
-                  searchText: _searchText,
-                ),
-              ],
-            ),
           ],
+          title: Text(
+            'Explore',
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Lato',
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: scaffoldBackground,
+          elevation: 0,
         ),
-      ),
-    );
+        body: FutureBuilder(
+            future: HiveMethods().getUserData(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CustomCircularProgress();
+              }
+
+              userUni = snapshot.data['uniDetails']['abbr'];
+
+              exploreLocationsRef = FirebaseFirestore.instance
+                  .collection('explore')
+                  .doc('locations')
+                  .collection('allLocations')
+                  .where('uniName', isEqualTo: userUni);
+
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildCategories(),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Text(
+                            'My locations',
+                            textAlign: TextAlign.start,
+                            style: heading2,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        buildLocations(
+                          category: _category,
+                          isSearch: _isSearch,
+                          searchText: _searchText,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }));
   }
 
   showSearchButtomSheet(context) {
@@ -284,7 +287,6 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
                     height: 50.0,
                     child: FlatButton(
                       onPressed: () {
-                        print(_searchText);
                         setState(() {
                           _isSearch = true;
                         });

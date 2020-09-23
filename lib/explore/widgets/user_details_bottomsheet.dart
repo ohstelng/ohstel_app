@@ -180,11 +180,11 @@ showUserDetailsBottomSheet(
                       child: isLoading
                           ? Center(child: CircularProgressIndicator())
                           : FlatButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 setModalState(() {
                                   isLoading = true;
                                 });
-                                createTicket(context,
+                                await createTicket(context,
                                     userId: user.uid,
                                     scheduledDate: scheduledDate,
                                     scheduledTime: scheduledTime,

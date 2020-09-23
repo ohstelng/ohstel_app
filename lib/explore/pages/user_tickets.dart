@@ -1,4 +1,5 @@
 import 'package:Ohstel_app/explore/models/ticket.dart';
+import 'package:Ohstel_app/explore/widgets/circular_progress.dart';
 import 'package:Ohstel_app/explore/widgets/user_ticket.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
@@ -19,12 +20,7 @@ class _UserTicketsState extends State<UserTickets> {
       future: userTicketsRef.get(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
-            child: Padding(
-              padding: EdgeInsets.all(30.0),
-              child: CircularProgressIndicator(),
-            ),
-          );
+          return CustomCircularProgress();
         }
 
         if (snapshot.hasError) {
