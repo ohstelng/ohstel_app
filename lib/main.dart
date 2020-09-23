@@ -19,6 +19,7 @@ Future<void> main() async {
   await InitHive().startFoodAddressDetailHive();
   await InitHive().startLaundryBasketHive();
   await InitHive().startLaundryAddressDetailHive();
+//  Admob.initialize(AdManager.appId);
 
   // run app
   runApp(MyApp());
