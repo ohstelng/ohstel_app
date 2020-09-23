@@ -20,7 +20,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
   String formattedDate;
   String formattedTime;
   int numberOfTickets = 1;
-  UserModel user;
+  Map userDetails;
   int finalAmount;
 
   var formKey = GlobalKey<FormState>();
@@ -43,8 +43,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
 
   getUserData() async {
     try {
-      var userDetails = await HiveMethods().getUserData();
-      user = UserModel.fromMap(userDetails);
+      userDetails = await HiveMethods().getUserData();
     } catch (e) {
       print(e.toString());
     }
@@ -276,7 +275,7 @@ class _ExploreDetailsState extends State<ExploreDetails> {
                           finalAmount: finalAmount,
                           location: widget.location,
                           numberOfTickets: numberOfTickets,
-                          user: user,
+                          userDetails: userDetails,
                         ),
                         child: Text(
                           'Next',

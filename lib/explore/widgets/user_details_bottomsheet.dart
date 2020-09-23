@@ -1,9 +1,7 @@
-import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/explore/models/location.dart';
 import 'package:Ohstel_app/explore/models/ticket.dart';
-import 'package:Ohstel_app/explore/pages/ticket.dart';
+import 'package:Ohstel_app/explore/widgets/payment_pop_up.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,7 +16,7 @@ bool isLoading = false;
 
 showUserDetailsBottomSheet(
   BuildContext context, {
-  @required UserModel user,
+  @required Map userDetails,
   @required int finalAmount,
   @required ExploreLocation location,
   @required DateTime scheduledDate,
@@ -66,7 +64,7 @@ showUserDetailsBottomSheet(
                       ),
                       color: Colors.green[50],
                       child: TextFormField(
-                        initialValue: user.fullName,
+                        initialValue: userDetails['fullName'],
                         validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Name Can\'t Be Empty';
@@ -90,7 +88,7 @@ showUserDetailsBottomSheet(
                       ),
                       color: Colors.green[50],
                       child: TextFormField(
-                        initialValue: user.email,
+                        initialValue: userDetails['email'],
                         validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Email Can\'t Be Empty';
@@ -115,7 +113,7 @@ showUserDetailsBottomSheet(
                       ),
                       color: Colors.green[50],
                       child: TextFormField(
-                        initialValue: user.phoneNumber,
+                        initialValue: userDetails['phoneNumber'],
                         validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'Phone No. Can\'t Be Empty';
@@ -139,7 +137,7 @@ showUserDetailsBottomSheet(
                       ),
                       color: Colors.green[50],
                       child: TextFormField(
-                        initialValue: user.uniDetails['name'],
+                        initialValue: userDetails['uniDetails']['name'],
                         validator: (value) {
                           if (value.trim().isEmpty) {
                             return 'University Can\'t Be Empty';
@@ -185,7 +183,7 @@ showUserDetailsBottomSheet(
                                   isLoading = true;
                                 });
                                 await createTicket(context,
-                                    userId: user.uid,
+                                    userDetails: userDetails,
                                     scheduledDate: scheduledDate,
                                     scheduledTime: scheduledTime,
                                     numberOfTickets: numberOfTickets,
@@ -214,28 +212,22 @@ showUserDetailsBottomSheet(
       });
 }
 
-addTicketToFirestore(Ticket ticket) async {
-  CollectionReference userTicketsRef = FirebaseFirestore.instance
-      .collection('explore')
-      .doc('userTickets')
-      .collection('allTickets');
-
-  await userTicketsRef.add({
-    'id': ticket.id,
-    'date': ticket.date.millisecondsSinceEpoch,
-    'name': ticket.name,
-    'email': ticket.email,
-    'phone': ticket.phone,
-    'university': ticket.university,
-    'department': ticket.department ?? '',
-    'locationName': ticket.locationName,
-    'locationDuration': ticket.locationDuration,
-    'scheduledDate': ticket.scheduledDate.millisecondsSinceEpoch,
-    'scheduledTime': ticket.scheduledTime.millisecondsSinceEpoch,
-    'numberOfTickets': ticket.numberOfTickets,
-    'finalAmount': ticket.finalAmount,
-    'userId': ticket.userId,
-  });
+void paymentPopUp(BuildContext context,
+    {@required ticket, @required Map userData}) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Payment Alert'),
+        content: Container(
+            child: ExplorePaymentPopUp(
+          ticket: ticket,
+          userData: userData,
+        )),
+      );
+    },
+  );
 }
 
 createTicket(
@@ -245,12 +237,11 @@ createTicket(
   @required DateTime scheduledTime,
   @required int numberOfTickets,
   @required int finalAmount,
-  @required String userId,
+  @required Map userDetails,
 }) async {
   final form = formKey.currentState;
   if (form.validate()) {
     form.save();
-    // TODO: TAKE USER TO PAYMENT SCREEN TO PAY FINAL AMOUNT
     Ticket ticket = Ticket(
       id: Uuid().v4(),
       date: DateTime.now(),
@@ -265,15 +256,12 @@ createTicket(
       scheduledTime: scheduledTime,
       numberOfTickets: numberOfTickets,
       finalAmount: finalAmount,
-      userId: userId,
+      userId: userDetails['uid'],
     );
-
-    await addTicketToFirestore(ticket);
 
     // Pop buttomsheet
     Navigator.pop(context);
 
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => TicketScreen(ticket)));
+    paymentPopUp(context, ticket: ticket, userData: userDetails);
   }
 }

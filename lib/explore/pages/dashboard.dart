@@ -21,7 +21,7 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
   String _category;
   String _searchText = "";
   bool _isSearch = false;
-  String userUni;
+  Map userDetails;
 
   final exploreRef = FirebaseFirestore.instance.collection('explore');
   final exploreCategoriesRef = FirebaseFirestore.instance
@@ -166,8 +166,10 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
             Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserTickets())),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UserTickets(userDetails))),
                 child: CircleAvatar(
                   radius: 18.0,
                   backgroundColor: Theme.of(context).primaryColor,
@@ -197,15 +199,17 @@ class _ExploreDashboardState extends State<ExploreDashboard> {
                 return CustomCircularProgress();
               }
 
-              userUni = snapshot.data['uniDetails']['abbr'];
+              userDetails = snapshot.data;
 
               exploreLocationsRef = FirebaseFirestore.instance
                   .collection('explore')
                   .doc('locations')
                   .collection('allLocations')
-                  .where('uniName', isEqualTo: userUni);
+                  .where('uniName',
+                      isEqualTo: userDetails['uniDetails']['abbr']);
 
               return SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

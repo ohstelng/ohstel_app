@@ -1,19 +1,29 @@
 import 'package:Ohstel_app/explore/models/ticket.dart';
 import 'package:Ohstel_app/explore/widgets/circular_progress.dart';
 import 'package:Ohstel_app/explore/widgets/user_ticket.dart';
-import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class UserTickets extends StatefulWidget {
+  final Map userDetails;
+  UserTickets(this.userDetails);
   @override
   _UserTicketsState createState() => _UserTicketsState();
 }
 
 class _UserTicketsState extends State<UserTickets> {
-  String userId;
   var userTicketsRef;
+
+  @override
+  void initState() {
+    super.initState();
+    userTicketsRef = FirebaseFirestore.instance
+        .collection('explore')
+        .doc('userTickets')
+        .collection(widget.userDetails['uid'])
+        .orderBy('date', descending: true);
+  }
 
   _buildTicketsListView() {
     return FutureBuilder(
@@ -74,23 +84,6 @@ class _UserTicketsState extends State<UserTickets> {
               );
       },
     );
-  }
-
-  @override
-  void initState() {
-    getUserId();
-    super.initState();
-    userTicketsRef = FirebaseFirestore.instance
-        .collection('explore')
-        .doc('userTickets')
-        .collection('allTickets')
-        .where('userId', isEqualTo: userId)
-        .orderBy('date', descending: true);
-  }
-
-  getUserId() async {
-    var userDetails = await HiveMethods().getUserData();
-    userId = userDetails['uid'];
   }
 
   @override
