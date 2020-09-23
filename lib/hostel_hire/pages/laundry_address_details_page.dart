@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'file:///C:/Users/olamilekan/flutter_projects/work_space/Ohstel_app/lib/hostel_hire/pages/laundry_payment_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/select_location_page.dart';
 import 'package:Ohstel_app/hostel_hire/model/laundry_address_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import 'file:///C:/Users/olamilekan/flutter_projects/work_space/Ohstel_app/lib/hostel_hire/pages/laundry_payment_page.dart';
 
 class LaundryAddressDetailsPage extends StatefulWidget {
   @override
@@ -192,8 +193,8 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
         Map pickUpData = laundryAddressBox.get('pickUp');
         Map dropOffData = laundryAddressBox.get('dropOff');
 
-        if (pickUpData.isNotEmpty &&
-            dropOffData.isNotEmpty &&
+        if (pickUpData != null &&
+            dropOffData != null &&
             pickUpNumber != null &&
             dropOffNumber != null &&
             pickedDate != null &&

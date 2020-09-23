@@ -62,6 +62,9 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     int onCampus = 0;
     int totalDeliveryFee;
 
+    if (addressDetails == null) {
+      return null;
+    }
     cartBox.toMap().forEach((key, value) {
       FoodCartModel foodCart = FoodCartModel.fromMap(value);
       if (foodCart.itemFastFoodLocation.toLowerCase() == 'onCampus' &&
@@ -148,8 +151,8 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     }
   }
 
-  void selectDeliveryLocation() {
-    showDialog(
+  Future<void> selectDeliveryLocation() async {
+    await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -338,7 +341,8 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
                 color: Colors.grey[300],
                 onPressed: () async {
                   addressDetails = await HiveMethods().getFoodLocationDetails();
-                  selectDeliveryLocation();
+                  await selectDeliveryLocation();
+                  setState(() {});
                 },
                 child: Text('Edit'),
               ),
@@ -453,7 +457,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text('Delivery Fee'),
-                Text('$symbol ${formatCurrency.format(getDeliveryFee())}')
+                Text('$symbol ${formatCurrency.format(getDeliveryFee() ?? 0)}')
               ]),
           Divider(
             thickness: .5,
@@ -467,7 +471,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '$symbol ${formatCurrency.format(getGrandTotal() + getDeliveryFee())}',
+                  '$symbol ${formatCurrency.format(getGrandTotal() + (getDeliveryFee() ?? 0))}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 )
               ]),

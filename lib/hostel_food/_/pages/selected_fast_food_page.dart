@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
+import 'package:Ohstel_app/hostel_food/_/methods/fast_food_methods.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
 import 'package:Ohstel_app/hostel_food/_/models/fast_food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
@@ -37,6 +38,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
   Box cartBox;
   bool isLoading = true;
   StreamController<String> toDisplayController = StreamController();
+  FastFoodModel drinkList;
 
   Runes input = Runes('\u20a6');
 
@@ -52,6 +54,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
       isLoading = true;
     });
     cartBox = await HiveMethods().getOpenBox('cart');
+    drinkList = await FastFoodMethods().getDrinksFromDb();
     setState(() {
       isLoading = false;
     });
@@ -89,6 +92,8 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
   }
 
   Widget body({BuildContext context}) {
+    List<ItemDetails> _drinkList = [];
+
     List<ItemDetails> cookedItemsList = widget.currentItemDetails
         .where((element) =>
             element.itemCategory == 'cookedFood' ||
@@ -99,9 +104,14 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
         .where((element) => element.itemCategory == 'snacks')
         .toList();
 
-    List<ItemDetails> drinksItemsList = widget.currentItemDetails
-        .where((element) => element.itemCategory == 'drinks')
+    List drinksItemsList = drinkList.itemDetails
+        .where((element) => element['itemCategory'] == 'drinks')
         .toList();
+
+    drinksItemsList.forEach((element) {
+      ItemDetails item = ItemDetails.formMap(element);
+      _drinkList.add(item);
+    });
 
     List<ItemDetails> friesItemsList = widget.currentItemDetails
         .where((element) => element.itemCategory == 'fries')
@@ -116,7 +126,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
         } else if (snapshot.data == 'Snacks') {
           listToPass = snacksItemsList;
         } else if (snapshot.data == 'Drinks') {
-          listToPass = drinksItemsList;
+          listToPass = _drinkList;
         } else if (snapshot.data == 'Fries') {
           listToPass = friesItemsList;
         }
@@ -154,11 +164,20 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
         ),
       );
     } else if (selectedFoodBar == 'Drinks') {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DrinksDialog(itemDetails: itemDetails)));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DrinksDialog(
+            itemDetails: itemDetails,
+            fastFoodDetails: widget.currentFastFood,
+          ),
+        ),
+      );
     } else if (selectedFoodBar == 'Fries') {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FriesDialog(itemDetails: itemDetails)));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => FriesDialog(itemDetails: itemDetails),
+        ),
+      );
     }
     return null;
   }
@@ -197,6 +216,14 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                   fastFoodList.length,
                   (index) {
                     return InkWell(
+//                      onTap: () {
+//                        List drinksItemsList = drinkList.itemDetails
+//                            .where((element) =>
+//                                element['itemCategory'] == 'drinks')
+//                            .toList();
+//                        print(drinksItemsList);
+////                        print(drinkList.itemDetails);
+//                      },
                       onTap: () => showFoodDialog(
                         itemDetails: fastFoodList[index],
                         extraItemDetails: widget.currentExtraItemDetails,

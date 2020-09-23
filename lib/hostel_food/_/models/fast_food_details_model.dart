@@ -33,7 +33,7 @@ class FastFoodModel {
     this.address = mapData['address'];
     this.openTime = mapData['openTime'];
     this.logoImageUrl = mapData['logoImageUrl'];
-    this.itemDetails = mapData['itemsDetails'];
+    this.itemDetails = mapData['itemDetails'];
     this.extraItems = mapData['extraItems'];
     this.itemCategoriesList = mapData['itemCategoriesList'];
     this.haveExtras = mapData['haveExtras'];

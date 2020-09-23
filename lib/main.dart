@@ -1,6 +1,6 @@
-import 'package:Ohstel_app/SplashScreen.dart';
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/auth/models/login_user_model.dart';
+import 'package:Ohstel_app/auth/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,7 +40,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.deepOrange,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: SplashScreen(),
+//        home: SplashScreen(),
+        home: Wrapper(),
       ),
     );
   }
