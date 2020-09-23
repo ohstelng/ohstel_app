@@ -1,36 +1,17 @@
+import 'dart:convert';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:http/http.dart' as http;
 
 import '../../hive_methods/hive_class.dart';
 import '../../utilities/app_style.dart';
 import '../../utilities/shared_widgets.dart';
 import '../model/laundry_basket_model.dart';
 import 'laundry_address_details_page.dart';
-
-const tableLabelTextStyle = TextStyle(
-  fontFamily: 'Lato',
-  fontSize: 17,
-  color: textBlack,
-);
-
-const nairaSignStyle = TextStyle(
-  fontFamily: 'Lato',
-  fontSize: 10,
-  color: Colors.black,
-  fontWeight: FontWeight.w600,
-  letterSpacing: 8,
-);
-
-const tableDataTextStyle = TextStyle(
-  fontFamily: 'Lato',
-  fontSize: 13,
-  color: Color(0xFF7C7C7F),
-  fontWeight: FontWeight.w300,
-  letterSpacing: 0,
-);
 
 class LaundryBasketPage extends StatefulWidget {
   @override
@@ -40,13 +21,26 @@ class LaundryBasketPage extends StatefulWidget {
 class _LaundryBasketPageState extends State<LaundryBasketPage> {
   Box<Map> laundryBox;
   bool loading = true;
+  int deliveryFee = 0;
 
   Future<void> getBox() async {
     laundryBox = await HiveMethods().getOpenBox('laundryBox');
+    try {
+      // getDeliveryFeeFromApi();
+    } catch (e) {}
     if (mounted)
       setState(() {
         loading = false;
       });
+  }
+
+  Future<void> getDeliveryFeeFromApi() async {
+    String uniName = await HiveMethods().getUniName();
+    Box<Map> laundry = await HiveMethods().getOpenBox('laundryBox');
+    String url = 'https://quiz-demo-de79d.appspot.com/hire_api/$uniName';
+    var response = await http.get(url);
+    Map data = json.decode(response.body);
+    deliveryFee = (data['$uniName'] * laundry.length);
   }
 
   int computeBasketPriceTotal() {
@@ -99,7 +93,10 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                 builder: (context, box, widget) {
                   if (box.values.isEmpty) {
                     return Center(
-                      child: Text("Basket list is empty"),
+                      child: Text(
+                        "Basket is empty",
+                        style: heading1,
+                      ),
                     );
                   }
 
@@ -184,7 +181,7 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                               style: nairaSignStyle,
                               children: [
                                 TextSpan(
-                                  text: '1000', //TODO BE Fix delivery fee
+                                  text: '$deliveryFee',
                                   style: tableDataTextStyle,
                                 ),
                               ],
@@ -212,7 +209,7 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                               children: [
                                 TextSpan(
                                   text:
-                                      '${computeBasketPriceTotal() + 1000}', //TODO: BE change 1000 to delivery fee
+                                      '${computeBasketPriceTotal() + deliveryFee}',
                                   style: tableDataTextStyle.copyWith(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
@@ -229,16 +226,28 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                 },
               ),
       ),
-      bottomNavigationBar: CustomLongButton(
-        label: 'Wash Now',
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => LaundryAddressDetailsPage(),
-            ),
-          );
-        },
-      ),
+      bottomNavigationBar: loading
+          ? Container()
+          : ValueListenableBuilder(
+              valueListenable: laundryBox.listenable(),
+              builder: (context, box, _) {
+                return box.values.isEmpty
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.only(bottom: 16.0),
+                        child: CustomLongButton(
+                          label: 'Wash Now',
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    LaundryAddressDetailsPage(),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+              }),
     );
   }
 }
