@@ -53,3 +53,28 @@ const buttonStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.w500,
 );
+
+
+//LAUNDRY TEXT STYLES
+
+const tableLabelTextStyle = TextStyle(
+  fontFamily: 'Lato',
+  fontSize: 17,
+  color: textBlack,
+);
+
+const nairaSignStyle = TextStyle(
+  fontFamily: 'Lato',
+  fontSize: 10,
+  color: Colors.black,
+  fontWeight: FontWeight.w600,
+  letterSpacing: 8,
+);
+
+const tableDataTextStyle = TextStyle(
+  fontFamily: 'Lato',
+  fontSize: 13,
+  color: Color(0xFF7C7C7F),
+  fontWeight: FontWeight.w300,
+  letterSpacing: 0,
+);

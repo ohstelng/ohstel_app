@@ -28,7 +28,7 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
   int pickUpNumber;
   int dropOffNumber;
   Map userData;
-  bool loading;
+  bool loading = true;
   Map addressDetails;
   DateTime pickUpDate;
   TimeOfDay pickUpTime;
@@ -122,326 +122,338 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
             ),
             preferredSize: Size.fromHeight(32)),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Pick Up Details',
-                style: pageTitle,
-              ),
-              SizedBox(height: 8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: pickDate,
-                      child: Container(
-                        height: 40,
-                        padding: const EdgeInsets.only(left: 16),
-                        margin: const EdgeInsets.only(right: 12.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: textAnteBlack,
+      body: loading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Pick Up Details',
+                      style: pageTitle,
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: pickDate,
+                            child: Container(
+                              height: 40,
+                              padding: const EdgeInsets.only(left: 16),
+                              margin: const EdgeInsets.only(right: 12.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: textAnteBlack,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: pickUpDate == null
+                                        ? Text(
+                                            'Date: Not Set',
+                                          )
+                                        : Text(
+                                            "${formatDate(pickUpDate, [
+                                              d,
+                                              ', ',
+                                              MM,
+                                              ' ',
+                                              yyyy
+                                            ])}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: textAnteBlack,
+                                    size: 24,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: pickUpDate == null
-                                  ? Text(
-                                      'Date: Not Set',
-                                    )
-                                  : Text(
-                                      "${formatDate(pickUpDate, [
-                                        d,
-                                        ', ',
-                                        MM,
-                                        ' ',
-                                        yyyy
-                                      ])}",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: pickTime,
+                            child: Container(
+                              height: 40,
+                              padding: const EdgeInsets.only(left: 16),
+                              margin: const EdgeInsets.only(right: 12.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: textAnteBlack,
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: pickUpTime == null
+                                        ? Text('Time: Not Set')
+                                        : Text(
+                                            "${pickUpTime.hourOfPeriod}:${pickUpTime.minute} ${pickUpTime.period == DayPeriod.am ? 'AM' : 'PM'}",
+                                          ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: textAnteBlack,
+                                    size: 24,
+                                  ),
+                                ],
+                              ),
                             ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: textAnteBlack,
-                              size: 24,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: pickTime,
-                      child: Container(
-                        height: 40,
-                        padding: const EdgeInsets.only(left: 16),
-                        margin: const EdgeInsets.only(right: 12.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: textAnteBlack,
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: pickUpTime == null
-                                  ? Text('Time: Not Set')
-                                  : Text(
-                                      "${pickUpTime.hourOfPeriod}:${pickUpTime.minute} ${pickUpTime.period == DayPeriod.am ? 'AM' : 'PM'}",
-                                    ),
-                            ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: textAnteBlack,
-                              size: 24,
-                            ),
-                          ],
-                        ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Container(
-                constraints: BoxConstraints(maxHeight: 100, minHeight: 50),
-                decoration: BoxDecoration(
-                  color: Color(0xFFEBF1EF),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                margin: const EdgeInsets.only(bottom: 56, top: 16),
-                padding: const EdgeInsets.all(8),
-                child: ValueListenableBuilder(
-                    valueListenable: laundryAddressBox.listenable(),
-                    builder: (context, Box box, _) {
-                      return Stack(
-                        children: [
-                          Positioned(
-                            right: 32,
-                            left: 0,
-                            bottom: 0,
-                            top: 0,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: (box.values.isEmpty ||
-                                      !box.containsKey('pickUp'))
-                                  ? [Text('No Address Found')]
-                                  : [
-                                      Text(
-                                        'Home Address',
-                                        style: pageTitle,
-                                      ),
-                                      SizedBox(height: 16),
-                                      Flexible(
-                                        child: NotificationListener(
-                                          onNotification:
-                                              (OverscrollIndicatorNotification
-                                                  notif) {
-                                            notif.disallowGlow();
-                                            return true;
-                                          },
-                                          child: SingleChildScrollView(
-                                            child: Text(
-                                              '${box.get('pickUp')['address']}, ${box.get('pickUp')['areaName']}',
-                                              style: body1.copyWith(
-                                                fontWeight: FontWeight.w300,
+                    Container(
+                      constraints:
+                          BoxConstraints(maxHeight: 100, minHeight: 50),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFEBF1EF),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      margin: const EdgeInsets.only(bottom: 56, top: 16),
+                      padding: const EdgeInsets.all(8),
+                      child: ValueListenableBuilder(
+                          valueListenable: laundryAddressBox.listenable(),
+                          builder: (context, Box box, _) {
+                            return Stack(
+                              children: [
+                                Positioned(
+                                  right: 32,
+                                  left: 0,
+                                  bottom: 0,
+                                  top: 0,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: (box.values.isEmpty ||
+                                            !box.containsKey('pickUp'))
+                                        ? [Text('No Address Found')]
+                                        : [
+                                            Text(
+                                              'Home Address',
+                                              style: pageTitle,
+                                            ),
+                                            SizedBox(height: 16),
+                                            Flexible(
+                                              child: NotificationListener(
+                                                onNotification:
+                                                    (OverscrollIndicatorNotification
+                                                        notif) {
+                                                  notif.disallowGlow();
+                                                  return true;
+                                                },
+                                                child: SingleChildScrollView(
+                                                  child: Text(
+                                                    '${box.get('pickUp')['address']}, ${box.get('pickUp')['areaName']}',
+                                                    style: body1.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: (box.values.isEmpty ||
+                                          !box.containsKey('pickUp'))
+                                      ? Icon(
+                                          Icons.cancel,
+                                          color: midnightExpress,
+                                          size: 24,
+                                        )
+                                      : Icon(
+                                          Icons.check_circle,
+                                          color: childeanFire,
+                                          size: 24,
+                                        ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      selectAnAddress(type: AddressType.pickUp);
+                                    },
+                                    icon: Icon(
+                                      Icons.edit,
+                                      size: 20,
+                                      color: Color(0xFF62666E),
+                                    ),
+                                    constraints:
+                                        BoxConstraints.tight(Size(24, 24)),
+                                    padding: const EdgeInsets.all(0),
+                                  ),
+                                )
+                              ],
+                            );
+                          }),
+                    ),
+                    Text(
+                      'Drop Off Details',
+                      style: pageTitle,
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 40,
+                            margin: const EdgeInsets.only(right: 12.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: textAnteBlack,
+                              ),
+                            ),
+                            child: InkWell(
+                              onTap: () {},
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Placeholder(),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    color: textAnteBlack,
+                                    size: 24,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 40,
+                            margin: const EdgeInsets.only(right: 12.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: textAnteBlack,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: InkWell(
+                              onTap: () {},
+                              child: Text('Tomorrow (+ N550)'),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      constraints:
+                          BoxConstraints(maxHeight: 100, minHeight: 50),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFEBF1EF),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.all(8),
+                      child: ValueListenableBuilder(
+                        valueListenable: laundryAddressBox.listenable(),
+                        builder: (context, Box box, _) {
+                          return Stack(
+                            children: [
+                              Positioned(
+                                right: 32,
+                                left: 0,
+                                bottom: 0,
+                                top: 0,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: (box.values.isEmpty ||
+                                          !box.containsKey('dropOff'))
+                                      ? [Text('No Address Found')]
+                                      : [
+                                          Text(
+                                            'Home Address',
+                                            style: pageTitle,
+                                          ),
+                                          SizedBox(height: 16),
+                                          Flexible(
+                                            child: NotificationListener(
+                                              onNotification:
+                                                  (OverscrollIndicatorNotification
+                                                      notif) {
+                                                notif.disallowGlow();
+                                                return true;
+                                              },
+                                              child: SingleChildScrollView(
+                                                child: Text(
+                                                  '${box.get('dropOff')['address']}, ${box.get('dropOff')['areaName']}',
+                                                  style: body1.copyWith(
+                                                    fontWeight: FontWeight.w300,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: (box.values.isEmpty ||
-                                    !box.containsKey('pickUp'))
-                                ? Icon(
-                                    Icons.cancel,
-                                    color: midnightExpress,
-                                    size: 24,
-                                  )
-                                : Icon(
-                                    Icons.check_circle,
-                                    color: childeanFire,
-                                    size: 24,
-                                  ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: IconButton(
-                              onPressed: () {
-                                selectAnAddress(type: AddressType.pickUp);
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: Color(0xFF62666E),
+                                        ],
+                                ),
                               ),
-                              constraints: BoxConstraints.tight(Size(24, 24)),
-                              padding: const EdgeInsets.all(0),
-                            ),
-                          )
-                        ],
-                      );
-                    }),
-              ),
-              Text(
-                'Drop Off Details',
-                style: pageTitle,
-              ),
-              SizedBox(height: 8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 40,
-                      margin: const EdgeInsets.only(right: 12.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: textAnteBlack,
-                        ),
-                      ),
-                      child: InkWell(
-                        onTap: () {},
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Placeholder(),
-                            ),
-                            Icon(
-                              Icons.arrow_drop_down,
-                              color: textAnteBlack,
-                              size: 24,
-                            ),
-                          ],
-                        ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: (box.values.isEmpty ||
+                                        !box.containsKey('dropOff'))
+                                    ? Icon(
+                                        Icons.cancel,
+                                        color: midnightExpress,
+                                        size: 24,
+                                      )
+                                    : Icon(
+                                        Icons.check_circle,
+                                        color: childeanFire,
+                                        size: 24,
+                                      ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: IconButton(
+                                  onPressed: () {
+                                    selectAnAddress(type: AddressType.dropOff);
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    size: 20,
+                                    color: Color(0xFF62666E),
+                                  ),
+                                  constraints:
+                                      BoxConstraints.tight(Size(24, 24)),
+                                  padding: const EdgeInsets.all(0),
+                                ),
+                              )
+                            ],
+                          );
+                        },
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      height: 40,
-                      margin: const EdgeInsets.only(right: 12.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: textAnteBlack,
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: InkWell(
-                        onTap: () {},
-                        child: Text('Tomorrow (+ N550)'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                constraints: BoxConstraints(maxHeight: 100, minHeight: 50),
-                decoration: BoxDecoration(
-                  color: Color(0xFFEBF1EF),
-                  borderRadius: BorderRadius.circular(6),
+                  ],
                 ),
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                padding: const EdgeInsets.all(8),
-                child: ValueListenableBuilder(
-                    valueListenable: laundryAddressBox.listenable(),
-                    builder: (context, Box box, _) {
-                      return Stack(
-                        children: [
-                          Positioned(
-                            right: 32,
-                            left: 0,
-                            bottom: 0,
-                            top: 0,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: (box.values.isEmpty ||
-                                      !box.containsKey('dropOff'))
-                                  ? [Text('No Address Found')]
-                                  : [
-                                      Text(
-                                        'Home Address',
-                                        style: pageTitle,
-                                      ),
-                                      SizedBox(height: 16),
-                                      Flexible(
-                                        child: NotificationListener(
-                                          onNotification:
-                                              (OverscrollIndicatorNotification
-                                                  notif) {
-                                            notif.disallowGlow();
-                                            return true;
-                                          },
-                                          child: SingleChildScrollView(
-                                            child: Text(
-                                              '${box.get('dropOff')['address']}, ${box.get('dropOff')['areaName']}',
-                                              style: body1.copyWith(
-                                                fontWeight: FontWeight.w300,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: (box.values.isEmpty ||
-                                    !box.containsKey('dropOff'))
-                                ? Icon(
-                                    Icons.cancel,
-                                    color: midnightExpress,
-                                    size: 24,
-                                  )
-                                : Icon(
-                                    Icons.check_circle,
-                                    color: childeanFire,
-                                    size: 24,
-                                  ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: IconButton(
-                              onPressed: () {
-                                selectAnAddress(type: AddressType.dropOff);
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: Color(0xFF62666E),
-                              ),
-                              constraints: BoxConstraints.tight(Size(24, 24)),
-                              padding: const EdgeInsets.all(0),
-                            ),
-                          )
-                        ],
-                      );
-                    }),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 16.0),
         child: CustomLongButton(
@@ -450,10 +462,10 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
             Map pickUpData = laundryAddressBox.get('pickUp');
             Map dropOffData = laundryAddressBox.get('dropOff');
 
-            if (pickUpData.isNotEmpty &&
-                dropOffData.isNotEmpty &&
-                pickUpNumber != null &&
-                dropOffNumber != null &&
+            if ((pickUpData?.isNotEmpty ?? false) &&
+                (dropOffData?.isNotEmpty ?? false) &&
+                // pickUpNumber != null &&
+                // dropOffNumber != null &&
                 pickUpDate != null &&
                 pickUpTime != null) {
               if (pickUpDate.month <= DateTime.now().month &&
@@ -483,7 +495,8 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
                 ),
               );
             } else {
-              Fluttertoast.showToast(msg: 'Please Provide All Info!');
+              Fluttertoast.showToast(
+                  msg: 'Empty fields! Please fill all inputs');
             }
           },
         ),

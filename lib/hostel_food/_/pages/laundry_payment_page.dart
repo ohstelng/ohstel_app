@@ -6,6 +6,8 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_hire/methods/hire_methods.dart';
 import 'package:Ohstel_app/hostel_hire/model/laundry_address_details_model.dart';
 import 'package:Ohstel_app/hostel_hire/model/paid_laundry_model.dart';
+import 'package:Ohstel_app/utilities/app_style.dart';
+import 'package:Ohstel_app/utilities/shared_widgets.dart';
 import 'package:Ohstel_app/wallet/method.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,6 +32,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
   Map addressDetails;
   bool loading = true;
   int deliveryFee;
+  bool payByCash = false;
 
   Future<void> getDeliveryFeeFromApi() async {
     String uniName = await HiveMethods().getUniName();
@@ -57,7 +60,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
       loading = true;
     });
 
-    await getDeliveryFeeFromApi();
+    // await getDeliveryFeeFromApi();
     laundryBox = await HiveMethods().getOpenBox('laundryBox');
     userDataBox = await HiveMethods().getOpenBox('userDataBox');
     addressDetailsBox = await HiveMethods().getOpenBox('addressBox');
@@ -78,7 +81,10 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Payment Alert'),
+            title: Text(
+              'Confirm Payment',
+              style: heading2,
+            ),
             content: Container(
               child: PaymentPopUp(
                 laundryAddressDetails: widget.laundryAddressDetails,
@@ -106,102 +112,229 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return loading
-        ? Container(
-            color: Colors.white,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
-        : Scaffold(
-            body: SafeArea(
-              child: Column(
-                children: <Widget>[
-                  loading == false
-                      ? body()
-                      : Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                ],
+    return Scaffold(
+      backgroundColor: Color(0xFFFDFDFD),
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        iconTheme: IconThemeData(
+          color: midnightExpress,
+          size: 24,
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        bottom: PreferredSize(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Review your Order',
+                style: heading2,
               ),
             ),
-          );
+            preferredSize: Size.fromHeight(32)),
+      ),
+      body: loading
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : SingleChildScrollView(child: body()),
+    );
   }
 
   Widget body() {
     return Container(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          //Order Summary
           Container(
-            margin: EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Review Your Payment',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Color(0xFFF4F5F6),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 16),
+                // Number of items
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Number of items',
+                      style: tableLabelTextStyle,
+                    ),
+                    Text(
+                      '${laundryBox.length}',
+                      style: tableDataTextStyle,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+
+                // Sub Total
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Sub Total',
+                      style: tableLabelTextStyle,
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'N',
+                        style: nairaSignStyle,
+                        children: [
+                          TextSpan(
+                            text: '${getGrandTotal()}',
+                            style: tableDataTextStyle,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 16),
+
+                // Delivery Fee
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Delivery Fee',
+                      style: tableLabelTextStyle,
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'N',
+                        style: nairaSignStyle,
+                        children: [
+                          TextSpan(
+                            text:
+                                '${deliveryFee ?? 0}', //TODO BE Fix delivery fee
+                            style: tableDataTextStyle,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+
+                // Total
+                Divider(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total',
+                      style: tableLabelTextStyle.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: 'N',
+                        style: nairaSignStyle,
+                        children: [
+                          TextSpan(
+                            text: '${getGrandTotal() + (deliveryFee ?? 0)}',
+                            style: tableDataTextStyle.copyWith(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
-          ordersContainer(),
-          address(),
-          payButton(),
+          //---Order summary
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 40, 0, 16),
+            child: CustomLongButton(
+              label: 'Make Payment',
+              onTap: () async {
+                Map addressDetails =
+                    await HiveMethods().getFoodLocationDetails();
+                if (userData != null && addressDetails != null) {
+                  paymentPopUp();
+                } else {
+                  Fluttertoast.showToast(
+                    msg: 'Plase Provide a delivery Location!',
+                    gravity: ToastGravity.CENTER,
+                    toastLength: Toast.LENGTH_LONG,
+                  );
+                }
+              },
+            ),
+          )
         ],
       ),
     );
   }
 
-  Widget payButton() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xffF27509),
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      width: double.infinity,
-      margin: EdgeInsets.all(15.0),
-      child: FlatButton(
-        onPressed: () async {
-          Map addressDetails = await HiveMethods().getFoodLocationDetails();
+  // Widget payButton() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //       color: Color(0xffF27509),
+  //       borderRadius: BorderRadius.circular(15.0),
+  //     ),
+  //     width: double.infinity,
+  //     margin: EdgeInsets.all(15.0),
+  //     child: FlatButton(
+  //       onPressed: () async {
+  //         Map addressDetails = await HiveMethods().getFoodLocationDetails();
 
-          if (userData != null && addressDetails != null) {
-            paymentPopUp();
-          } else {
-            Fluttertoast.showToast(
-              msg: 'Plase Provide a delivery Location!',
-              gravity: ToastGravity.CENTER,
-              toastLength: Toast.LENGTH_LONG,
-            );
-          }
-        },
-        child: Text(
-          'Make Payment',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
+  //         if (userData != null && addressDetails != null) {
+  //           paymentPopUp();
+  //         } else {
+  //           Fluttertoast.showToast(
+  //             msg: 'Plase Provide a delivery Location!',
+  //             gravity: ToastGravity.CENTER,
+  //             toastLength: Toast.LENGTH_LONG,
+  //           );
+  //         }
+  //       },
+  //       child: Text(
+  //         'Make Payment',
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget address() {
-    return Center(
-      child: Card(
-        child: Container(
-          margin: EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                  'Pick Up Adress: ${widget.laundryAddressDetails.pickUpAddress['address']}, ${widget.laundryAddressDetails.pickUpAddress['areaName']}'),
-              Text(
-                  'Pick Up PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
-              Text('Pick Up Date: ${widget.laundryAddressDetails.pickUpDate}'),
-              Text('Pick Up Time: ${widget.laundryAddressDetails.pickUpTime}'),
-              Text(
-                  'drop Off Adress: ${widget.laundryAddressDetails.dropOffAddress['address']}, ${widget.laundryAddressDetails.dropOffAddress['areaName']}'),
-              Text(
-                  'Drop Off PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget address() {
+  //   return Center(
+  //     child: Card(
+  //       child: Container(
+  //         margin: EdgeInsets.all(10.0),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //                 'Pick Up Adress: ${widget.laundryAddressDetails.pickUpAddress['address']}, ${widget.laundryAddressDetails.pickUpAddress['areaName']}'),
+  //             Text(
+  //                 'Pick Up PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
+  //             Text('Pick Up Date: ${widget.laundryAddressDetails.pickUpDate}'),
+  //             Text('Pick Up Time: ${widget.laundryAddressDetails.pickUpTime}'),
+  //             Text(
+  //                 'drop Off Adress: ${widget.laundryAddressDetails.dropOffAddress['address']}, ${widget.laundryAddressDetails.dropOffAddress['areaName']}'),
+  //             Text(
+  //                 'Drop Off PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget ordersContainer() {
     return Container(
@@ -283,7 +416,7 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
     }
 
     print(_price);
-    return _price + widget.deliveryFee;
+    return _price + (widget.deliveryFee ?? 0);
   }
 
   void clearCart() {
@@ -336,20 +469,29 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
   Widget build(BuildContext context) {
     String password;
     return Container(
-      child: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'The Sum Of NGN ${getGrandTotal()} '
-              'Will Be Deducted From Your Wallet Balance!',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20),
-            TextField(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'The sum of NGN ${getGrandTotal()} '
+            'will be deducted from your Wallet Balance!',
+            textAlign: TextAlign.start,
+            style: body1.copyWith(height: 1.3),
+          ),
+          SizedBox(height: 16),
+          SizedBox(
+            height: 48,
+            child: TextField(
+              style: body1,
               decoration: InputDecoration(
                 labelText: 'Password',
                 hintText: 'Enter Your Password',
+                labelStyle: body1.copyWith(color: Color(0xFFC4C4C4)),
+                hintStyle: body2.copyWith(color: Color(0xFFC4C4C4)),
+                border: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(6)),
+                  borderSide: BorderSide(color: childeanFire, width: 2),
+                ),
               ),
               obscureText: true,
               keyboardType: TextInputType.text,
@@ -358,12 +500,14 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
                 password = val;
               },
             ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                FlatButton(
-                  onPressed: () async {
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: CustomShortButton(
+                  onTap: () async {
                     if (password == null) return;
                     setState(() {
                       loading = true;
@@ -373,21 +517,26 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
                       loading = false;
                     });
                   },
-                  child:
-                      loading ? CircularProgressIndicator() : Text('Proceed'),
-                  color: Colors.green,
+                  label: 'Proceed',
+                  type: ButtonType.filledBlue,
+                  // child:
+                  //     loading ? CircularProgressIndicator() : Text('Proceed'),
                 ),
-                FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Cancel'),
-                  color: Colors.grey,
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              Expanded(
+                child: CustomShortButton(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    label: 'Cancel',
+                    type: ButtonType.borderBlue
+                    // child: Text('Cancel'),
+
+                    ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
