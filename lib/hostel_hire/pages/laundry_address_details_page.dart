@@ -7,11 +7,14 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../hive_methods/hive_class.dart';
-import '../../hostel_food/_/pages/laundry_payment_page.dart';
 import '../../hostel_food/_/pages/select_location_page.dart';
 import '../../utilities/app_style.dart';
 import '../../utilities/shared_widgets.dart';
 import '../model/laundry_address_details_model.dart';
+import 'laundry_payment_page.dart';
+
+// import 'file:///C:/Users/olamilekan/flutter_projects/work_space/Ohstel_app/lib/hostel_hire/pages/laundry_payment_page.dart';
+// import '../../hostel_food/_/pages/laundry_payment_page.dart';
 
 class LaundryAddressDetailsPage extends StatefulWidget {
   @override

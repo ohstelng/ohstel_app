@@ -12,17 +12,14 @@ class WalletMethods {
 
   final CollectionReference userDataCollectionRef =
       FirebaseFirestore.instance.collection('userData');
-  final CollectionReference walletHistoryCollectionRef =
-      FirebaseFirestore.instance.collection('walletHistory');
-  final CollectionReference coinHistoryCollectionRef =
-      FirebaseFirestore.instance.collection('coinHistory');
-
+  final CollectionReference userWalletCollectionRef =
+      FirebaseFirestore.instance.collection('wallet');
   final CollectionReference fundHistoryCollectionRef =
       FirebaseFirestore.instance.collection('fundHistory');
 
   ///
 
-  Future<void> fundWallet({@required double amount}) async {
+  Future<void> fundWallet({@required int amount}) async {
     Map userData = await HiveMethods().getUserData();
     String type = 'credit';
     String ref = 'funded wallet. userID: ${userData['uid']}';
@@ -30,11 +27,11 @@ class WalletMethods {
         'Funded Wallet With $amount From Paystack By ${userData['fullName']}';
     try {
       final DocumentReference userDoc =
-          userDataCollectionRef.doc(userData['uid']);
+          userWalletCollectionRef.doc(userData['uid']);
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot docSnapshot = await transaction.get(userDoc);
-        int previousAmount = (docSnapshot.data()['walletBalance'] ?? 0.0);
+        int previousAmount = (docSnapshot.data()['walletBalance'] ?? 0);
         print('ppppppppppppppppppppppppppppppppppppppp');
         print(previousAmount);
         int updatedWalletBalance;
@@ -90,7 +87,7 @@ class WalletMethods {
 
     try {
       final DocumentReference userDoc =
-          userDataCollectionRef.doc(userData['uid']);
+          userWalletCollectionRef.doc(userData['uid']);
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot docSnapshot = await transaction.get(userDoc);
@@ -159,9 +156,9 @@ class WalletMethods {
 
     try {
       final DocumentReference userDoc =
-          userDataCollectionRef.doc(userData['uid']);
+          userWalletCollectionRef.doc(userData['uid']);
       final DocumentReference receiverDoc =
-          userDataCollectionRef.doc(receiver.uid);
+          userWalletCollectionRef.doc(receiver.uid);
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot userDocSnapshot = await transaction.get(userDoc);

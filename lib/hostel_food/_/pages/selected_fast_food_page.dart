@@ -140,6 +140,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
           builder: (context) => FoodDialog(
             currentExtraItemDetails: extraItemDetails,
             itemDetails: itemDetails,
+            foodModel: widget.currentFastFood,
           ),
         ),
       );
@@ -147,6 +148,7 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => SnackDialog(
+            fastFoodDetails: widget.currentFastFood,
             itemDetails: itemDetails,
           ),
         ),
