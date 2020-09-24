@@ -1,4 +1,3 @@
-import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/explore/models/location.dart';
 import 'package:Ohstel_app/explore/widgets/user_details_bottomsheet.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:Ohstel_app/explore/models/category.dart';
 import 'package:Ohstel_app/explore/models/location.dart';
 import 'package:Ohstel_app/explore/pages/user_tickets.dart';
@@ -7,9 +5,9 @@ import 'package:Ohstel_app/explore/widgets/category.dart';
 import 'package:Ohstel_app/explore/widgets/circular_progress.dart';
 import 'package:Ohstel_app/explore/widgets/location.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
+import 'package:Ohstel_app/utilities/app_style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../utilities/app_style.dart';
 
 class ExploreDashboard extends StatefulWidget {
   @override
