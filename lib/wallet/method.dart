@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:Ohstel_app/auth/models/userModel.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/wallet/models/wallet_history_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 
 class WalletMethods {
 //  final String uid;
@@ -13,6 +16,8 @@ class WalletMethods {
   final CollectionReference userDataCollectionRef =
       FirebaseFirestore.instance.collection('userData');
   final CollectionReference userWalletCollectionRef =
+      FirebaseFirestore.instance.collection('wallet');
+  final CollectionReference userCoinCollectionRef =
       FirebaseFirestore.instance.collection('wallet');
   final CollectionReference fundHistoryCollectionRef =
       FirebaseFirestore.instance.collection('fundHistory');
@@ -246,6 +251,103 @@ class WalletMethods {
     }
 
     return status;
+  }
+
+  Future<void> fundCoin(
+      {@required int amount, @required BuildContext context}) async {
+    Map userData = await HiveMethods().getUserData();
+    String type = 'credit';
+    String ref = 'funded wallet. userID: ${userData['uid']}';
+    String desc =
+        'Funded Coin With $amount From Video Ads By ${userData['fullName']}';
+    try {
+      final DocumentReference userDoc =
+          userWalletCollectionRef.doc(userData['uid']);
+
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot docSnapshot = await transaction.get(userDoc);
+        int previousAmount = (docSnapshot.data()['coinBalance'] ?? 0);
+        print('ppppppppppppppppppppppppppppppppppppppp');
+        print(previousAmount);
+        int updatedCoinBalance;
+        int balance = docSnapshot.data()['coinBalance'];
+        print(balance);
+
+        if (!docSnapshot.exists) {
+          print('Document does not exist!');
+          throw Exception("Document does not exist!");
+        }
+
+        updatedCoinBalance = (balance == null ? 0 : balance) + amount.toInt();
+
+        print("balance = $updatedCoinBalance");
+
+        transaction.update(
+          userDoc,
+          {'coinBalance': updatedCoinBalance.toInt()},
+        );
+
+        WalletHistoryModel walletHistory = WalletHistoryModel(
+          amount: amount.toInt().toString(),
+          balance: updatedCoinBalance,
+          previousAmount: previousAmount,
+          desc: desc,
+          type: type,
+          ref: ref,
+          uid: userData['uid'],
+        );
+
+        fundHistoryCollectionRef
+            .doc(userData['uid'])
+            .collection('coinHistory')
+            .add(walletHistory.toMap());
+
+        showSuccessMessage(context: context, price: amount);
+//        return updatedCoinBalance;
+      });
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(msg: '$e');
+    }
+  }
+
+  Future<void> getCoin({@required BuildContext context}) async {
+    int fee;
+
+    String url = "https://quiz-demo-de79d.appspot.com/coinFee";
+    var response = await http.get(url);
+    var result = json.decode(response.body);
+    print(result);
+
+    if (result != null) {
+      fee = result['coinFee'];
+
+      fundCoin(amount: fee, context: context);
+    }
+  }
+
+  void showSuccessMessage(
+      {@required BuildContext context, @required int price}) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      // false = user must tap button, true = tap outside dialog
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text('Congratulations'),
+          content: Text(
+              'You Have Just Recived $price. It Will Be Added To Your Coin Balance.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   ///

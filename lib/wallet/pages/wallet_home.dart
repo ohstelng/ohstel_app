@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:Ohstel_app/ad_manager.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -214,18 +213,19 @@ class _WalletHomeState extends State<WalletHome> {
       publicKey: 'pk_test_d0490fa7b5ae91bf5317ebdbd761760c8f14fd8f',
     );
     super.initState();
-    reward = AdmobReward(
-        adUnitId: AdManager.RewardId,
-        listener: (event, args) {
-          if (event == AdmobAdEvent.rewarded) {
-            //TODO: implement get coin
-            //TODO: implement get coin
-            //TODO: implement get coin
-            // The backend for the reward goes here, Mr Ola.
-            print('User Rewarded');
-          }
-        });
-    reward.load();
+//    reward = AdmobReward(
+//        adUnitId: AdManager.RewardId,
+//        listener: (event, args) {
+//          if (event == AdmobAdEvent.rewarded) {
+//            //TODO: implement get coin
+//            //TODO: implement get coin
+//            //TODO: implement get coin
+//            // The backend for the reward goes here, Mr Ola.
+//            WalletMethods().getCoin(context: context);
+//            print('User Rewarded');
+//          }
+//        });
+//    reward.load();
   }
 
 //-- Screen Functionality

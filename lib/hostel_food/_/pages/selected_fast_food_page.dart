@@ -42,11 +42,6 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
 
   Runes input = Runes('\u20a6');
 
-  //TODO: implement drinks backend!!!!
-  //TODO: implement drinks backend!!!!
-  //TODO: implement drinks backend!!!!
-  //TODO: implement drinks backend!!!!
-
   void getCart() async {
     if (!mounted) return;
 

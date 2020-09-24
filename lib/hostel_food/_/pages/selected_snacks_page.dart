@@ -35,7 +35,6 @@ class _SnackDialogState extends State<SnackDialog> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     symbol = String.fromCharCodes(input);
   }
