@@ -35,7 +35,6 @@ class _MainHomePageState extends State<MainHomePage> {
     onTapChangePage(i);
   }
 
-  TextStyle _bottomStyle = TextStyle(fontSize: 9, color: Colors.blueGrey);
 
   @override
   void initState() {

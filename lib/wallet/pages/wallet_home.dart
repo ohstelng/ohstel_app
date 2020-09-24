@@ -15,8 +15,6 @@ import '../method.dart';
 import 'coin_history.dart';
 import 'wallet_history.dart';
 
-
-
 class WalletHome extends StatefulWidget {
   @override
   _WalletHomeState createState() => _WalletHomeState();
@@ -125,7 +123,7 @@ class _WalletHomeState extends State<WalletHome> {
     );
     if (response.status == true) {
       await _verifyOnServer(response.reference);
-      WalletMethods().fundWallet(amount: price.toDouble());
+      WalletMethods().fundWallet(amount: price);
     } else {
       print('error');
     }
@@ -309,7 +307,7 @@ class _WalletHomeState extends State<WalletHome> {
                                     SizedBox(height: 8),
                                     StreamBuilder(
                                         stream: WalletMethods()
-                                            .userDataCollectionRef
+                                            .userWalletCollectionRef
                                             .doc(userData['uid'])
                                             .snapshots(),
                                         builder:
@@ -379,7 +377,7 @@ class _WalletHomeState extends State<WalletHome> {
                                 SizedBox(height: 8),
                                 StreamBuilder(
                                     stream: WalletMethods()
-                                        .userDataCollectionRef
+                                        .userWalletCollectionRef
                                         .doc(userData['uid'])
                                         .snapshots(),
                                     builder: (context, AsyncSnapshot snapshot) {

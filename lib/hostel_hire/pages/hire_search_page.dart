@@ -1,10 +1,11 @@
-import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
-import 'package:Ohstel_app/hostel_hire/pages/selected_hire_worker_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
+
+import '../../hive_methods/hive_class.dart';
+import '../model/hire_agent_model.dart';
+import 'selected_hire_worker_page.dart';
 
 class HireSearchPage extends StatefulWidget {
   @override

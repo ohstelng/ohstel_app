@@ -87,8 +87,8 @@ class AuthService {
       );
 
       // save user info to local database using hive
-      saveUserDataToDb(userData: userData.toMap());
-//      getUserDetails(uid: user.uid);
+      await saveUserDataToDb(userData: userData.toMap());
+      setUserWalletDetails(uid: userData.uid);
 
       return userFromFirebase(user);
     } catch (e) {
@@ -101,7 +101,7 @@ class AuthService {
   // signing out method
   Future signOut() async {
     try {
-      await deleteAllUserDataToDb();
+//      await deleteAllUserDataToDb();
       return await auth.signOut();
     } catch (e) {
       print(e);
@@ -184,5 +184,9 @@ class AuthService {
     userDataBox.delete(key);
     marketDataBox.clear();
     foodDataBox.clear();
+  }
+
+  Future<void> setUserWalletDetails({@required String uid}) async {
+    await FirebaseFirestore.instance.collection('wallet').doc(uid).set({});
   }
 }

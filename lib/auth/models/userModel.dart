@@ -9,8 +9,6 @@ class UserModel {
   String phoneNumber;
   String uniName;
   String profilePicUrl;
-  double walletBalance;
-  double coinBalance;
   Map uniDetails;
 
   UserModel({
@@ -34,12 +32,6 @@ class UserModel {
     this.uniName = mapData['uniName'];
     this.uniDetails = mapData['uniDetails'];
     this.profilePicUrl = mapData['profilePicUrl'];
-    this.walletBalance = mapData['walletBalance'] != null
-        ? double.parse(mapData['walletBalance'].toString())
-        : 0.0;
-    this.coinBalance = mapData['coinBalance'] != null
-        ? double.parse(mapData['coinBalance'].toString())
-        : 0.0;
   }
 
   Map toMap() {
@@ -53,8 +45,6 @@ class UserModel {
     data['uniName'] = this.uniName;
     data['uniDetails'] = this.uniDetails;
     data['profilePicUrl'] = this.profilePicUrl;
-    data['coinBalance'] = this.coinBalance;
-    data['walletBalance'] = this.walletBalance;
 
     return data;
   }

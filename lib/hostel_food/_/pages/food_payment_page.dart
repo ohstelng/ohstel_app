@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_food/_/methods/fast_food_methods.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
+import 'package:Ohstel_app/hostel_food/_/models/food_cart_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/paid_food_model.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/select_location_page.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class FoodPaymentPage extends StatefulWidget {
@@ -27,7 +30,9 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   Map addressDetails;
   Map userData;
   bool isLoading = true;
-  int deliveryFee = 100;
+  Map deliveryInfo;
+  String uniName;
+
   Runes input = Runes('\u20a6');
   final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
   var symbol;
@@ -41,12 +46,64 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     return _extraList;
   }
 
+  Future<void> getDeliveryFeeFromApi() async {
+    String uniName = await HiveMethods().getUniName();
+
+    String url =
+        'https://quiz-demo-de79d.appspot.com/food_api/food_delivery_info';
+    var response = await http.get(url);
+    Map data = await json.decode(response.body)['$uniName'];
+    deliveryInfo = data;
+  }
+
+  int getDeliveryFee() {
+    int sameLocationCount = 0;
+    int differentLocationCount = 0;
+    int onCampus = 0;
+    int totalDeliveryFee;
+
+    cartBox.toMap().forEach((key, value) {
+      FoodCartModel foodCart = FoodCartModel.fromMap(value);
+      if (foodCart.itemFastFoodLocation.toLowerCase() == 'onCampus' &&
+          addressDetails['areaName'].toString().toLowerCase() == 'onCampus') {
+        onCampus++;
+      } else {
+        if (foodCart.itemFastFoodLocation.toLowerCase() ==
+            addressDetails['areaName'].toString().toLowerCase()) {
+          sameLocationCount++;
+        } else {
+          differentLocationCount++;
+        }
+        print('${foodCart.itemFastFoodLocation}');
+      }
+    });
+    print(addressDetails);
+    print(sameLocationCount);
+    print(differentLocationCount);
+
+    Map onCampusData = deliveryInfo['onCampus'];
+    Map sameLocationData = deliveryInfo['sameLocation'];
+    Map differentLocationData = deliveryInfo['differentLocation'];
+
+    int onCampusPrice = onCampusData['$onCampus'] ?? 0;
+    int sameLocationPrice = sameLocationData['$sameLocationCount'] ?? 0;
+    int differentLocationPrice =
+        differentLocationData['$differentLocationCount'] ?? 0;
+
+    totalDeliveryFee =
+        (onCampusPrice + sameLocationPrice + differentLocationPrice);
+
+    return totalDeliveryFee;
+  }
+
   Future<void> getUserData() async {
     if (mounted) {
       setState(() {
         isLoading = true;
       });
     }
+    addressDetails = await HiveMethods().getFoodLocationDetails();
+    uniName = await HiveMethods().getUniName();
     cartBox = await HiveMethods().getOpenBox('cart');
     userDataBox = await HiveMethods().getOpenBox('userDataBox');
     addressDetailsBox = await HiveMethods().getOpenBox('addressBox');
@@ -55,6 +112,9 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     userData = data;
 //    _phoneNumber = data['phoneNumber'];
     numberSteam.add(data['phoneNumber']);
+
+    await getDeliveryFeeFromApi();
+
     if (mounted) {
       setState(() {
         isLoading = false;
@@ -72,6 +132,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
             title: Text('Payment Alert'),
             content: Container(
               child: PaymentPopUp(
+                deliveryFee: getDeliveryFee(),
                 cartBox: cartBox,
                 userData: userData,
               ),
@@ -245,8 +306,6 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       margin: EdgeInsets.all(15.0),
       child: FlatButton(
         onPressed: () async {
-          Map addressDetails = await HiveMethods().getFoodLocationDetails();
-
           if (userData != null && addressDetails != null) {
             paymentPopUp();
           } else {
@@ -394,7 +453,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text('Delivery Fee'),
-                Text('$symbol ${formatCurrency.format(deliveryFee)}')
+                Text('$symbol ${formatCurrency.format(getDeliveryFee())}')
               ]),
           Divider(
             thickness: .5,
@@ -408,7 +467,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '$symbol ${formatCurrency.format(getGrandTotal() + deliveryFee)}',
+                  '$symbol ${formatCurrency.format(getGrandTotal() + getDeliveryFee())}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                 )
               ]),
@@ -434,10 +493,12 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
 class PaymentPopUp extends StatefulWidget {
   final Box cartBox;
   final Map userData;
+  final int deliveryFee;
 
   PaymentPopUp({
     @required this.cartBox,
     @required this.userData,
+    @required this.deliveryFee,
   });
 
   @override
@@ -475,7 +536,7 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
     }
 
     print(_total);
-    return _total;
+    return _total + widget.deliveryFee;
   }
 
   void clearCart() {
