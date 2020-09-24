@@ -112,7 +112,7 @@ class _WalletHomeOldState extends State<WalletHomeOld> {
     );
     if (response.status == true) {
       await _verifyOnServer(response.reference);
-      WalletMethods().fundWallet(amount: price.toDouble());
+      WalletMethods().fundWallet(amount: price);
     } else {
       print('error');
     }

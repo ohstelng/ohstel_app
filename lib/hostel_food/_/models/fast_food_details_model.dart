@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class FastFoodModel {
@@ -10,6 +13,7 @@ class FastFoodModel {
   List itemCategoriesList;
   bool haveExtras;
   String uniName;
+  String locationName;
 
   FastFoodModel({
     @required this.fastFoodName,
@@ -21,6 +25,7 @@ class FastFoodModel {
     @required this.itemCategoriesList,
     @required this.haveExtras,
     @required this.uniName,
+    @required this.locationName,
   });
 
   FastFoodModel.fromMap(Map<String, dynamic> mapData) {
@@ -33,6 +38,7 @@ class FastFoodModel {
     this.itemCategoriesList = mapData['itemCategoriesList'];
     this.haveExtras = mapData['haveExtras'];
     this.uniName = mapData['uniName'];
+    this.locationName = mapData['locationName'];
   }
 
   Map toMap() {
@@ -46,7 +52,22 @@ class FastFoodModel {
     data['itemCategoriesList'] = this.itemCategoriesList;
     data['haveExtras'] = this.haveExtras;
     data['uniName'] = this.uniName;
+    data['locationName'] = this.locationName;
 
     return data;
   }
+}
+
+void setIt() async {
+  await FirebaseFirestore.instance.collection('food').get().then((value) {
+    value.docs.forEach((element) async {
+      print(element.id);
+      await FirebaseFirestore.instance
+          .collection('food')
+          .doc(element.id)
+          .update({
+        'locationName': ['tanke', 'oke ode', 'mark'][Random().nextInt(3)],
+      });
+    });
+  });
 }

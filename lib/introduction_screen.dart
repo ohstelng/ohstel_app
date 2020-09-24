@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:Ohstel_app/auth/wrapper.dart';
-import 'package:Ohstel_app/welcome_page.dart';
 import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'auth/wrapper.dart';
+import 'welcome_page.dart';
 
 void main() => runApp(new MyApp());
 
@@ -54,14 +55,14 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
 }
 
 class IntroScreen extends StatelessWidget {
-  PageController _controller = PageController(
+  final PageController _controller = PageController(
     initialPage: 0,
   );
 
-  @override
-  void dispose() {
-    _controller.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _controller.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

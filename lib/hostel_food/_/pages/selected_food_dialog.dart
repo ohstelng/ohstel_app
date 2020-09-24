@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
+import 'package:Ohstel_app/hostel_food/_/models/fast_food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_cart_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:extended_image/extended_image.dart';
@@ -16,10 +17,12 @@ import 'food_cart_page.dart';
 class FoodDialog extends StatefulWidget {
   final List<ExtraItemDetails> currentExtraItemDetails;
   final ItemDetails itemDetails;
+  final FastFoodModel foodModel;
 
   FoodDialog({
     @required this.itemDetails,
     @required this.currentExtraItemDetails,
+    @required this.foodModel,
   });
 
   @override
@@ -324,6 +327,7 @@ class _FoodDialogState extends State<FoodDialog> {
                             totalPrice: getTotal(),
                             numberOfPlates: numberOfPlates,
                             extraItems: extraList,
+                            itemFastFoodLocation: widget.foodModel.locationName,
                           ).toMap();
                           HiveMethods().saveFoodCartToDb(map: map);
                         },

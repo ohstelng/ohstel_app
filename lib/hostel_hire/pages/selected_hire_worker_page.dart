@@ -321,33 +321,33 @@ class _SelectedHireWorkerPageState extends State<SelectedHireWorkerPage> {
                                   style: body1.copyWith(fontSize: 17),
                                 ),
                               ),
-                              if (widget.hireWorker.laundryList !=null)
-                              Wrap(spacing: 16, runSpacing: 16, children: [
-                                //TODO: BE This section should contain icons for the type of services offered by the laundry
-                                //But does not exist in the model.
-                                //Laundry list used as a place holder.
-                                for (int i = 0;
-                                    i <
-                                            widget.hireWorker?.laundryList
-                                                ?.length; 
-                                    i++)
-                                  if (widget.hireWorker.laundryList[i]
-                                          ['imageUrl'] !=
-                                      null)
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      color: Color(0xFFE7E7E7),
-                                      child: Image.network(widget.hireWorker
-                                          .laundryList[i]['imageUrl']),
-                                    ),
-                              ]),
+                              if (widget.hireWorker.laundryList != null)
+                                Wrap(spacing: 16, runSpacing: 16, children: [
+                                  //TODO: BE This section should contain icons for the type of services offered by the laundry
+                                  //But does not exist in the model.
+                                  //Laundry list used as a place holder.
+                                  for (int i = 0;
+                                      i <
+                                          widget
+                                              .hireWorker?.laundryList?.length;
+                                      i++)
+                                    if (widget.hireWorker.laundryList[i]
+                                            ['imageUrl'] !=
+                                        null)
+                                      Container(
+                                        height: 40,
+                                        width: 40,
+                                        color: Color(0xFFE7E7E7),
+                                        child: Image.network(widget.hireWorker
+                                            .laundryList[i]['imageUrl']),
+                                      ),
+                                ]),
                             ],
                           ),
 
                           //Reviews Tab
                           ListView.builder(
-                            padding: EdgeInsets.fromLTRB(16, 16, 16, 40),
+                            padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
                             itemBuilder: (context, index) {
                               return ReviewDisplayListTile(); //TODO: BE Make a review model and pass object of it into this ...
                             },
@@ -359,15 +359,19 @@ class _SelectedHireWorkerPageState extends State<SelectedHireWorkerPage> {
                 ),
               ),
             ),
-          )
+          ), //Compensation for transform offset
+          SizedBox(height: 20)
         ],
       ),
       extendBody: true,
-      bottomNavigationBar: CustomLongButton(
-        label: 'Book',
-        onTap: () {
-          book(context);
-        },
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: CustomLongButton(
+          label: 'Book',
+          onTap: () {
+            book(context);
+          },
+        ),
       ),
     );
   }
@@ -386,7 +390,7 @@ class ReviewDisplayListTile extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: Colors.grey,
+            backgroundColor: Color(0xFFE7E7E7),
             child: ExtendedImage.network(
               'url',
               fit: BoxFit.fill,
