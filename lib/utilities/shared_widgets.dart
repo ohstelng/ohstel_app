@@ -178,19 +178,87 @@ class CustomLongButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      padding: const EdgeInsets.fromLTRB(16, 2, 16, 14),
       child: MaterialButton(
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
+            borderRadius: BorderRadius.circular(6),
+            side: BorderSide(
+              width: 1,
+              color: type == ButtonType.filledBlue ||
+                      type == ButtonType.filledOrange
+                  ? Colors.transparent
+                  : type == ButtonType.borderOrange
+                      ? childeanFire
+                      : midnightExpress,
+            )),
         color: type == ButtonType.borderBlue || type == ButtonType.borderOrange
             ? Colors.transparent
             : type == ButtonType.filledOrange ? childeanFire : midnightExpress,
         height: 48,
+        minWidth: double.infinity,
         child: Text(
           '$label',
-          style: buttonStyle,
+          style: buttonStyle.copyWith(
+            color:
+                type == ButtonType.filledBlue || type == ButtonType.filledOrange
+                    ? Colors.white
+                    : type == ButtonType.borderOrange
+                        ? childeanFire
+                        : midnightExpress,
+          ),
+        ),
+        onPressed: onTap,
+      ),
+    );
+  }
+}
+
+//CUSTOM BUTTON - SHORT
+
+class CustomShortButton extends StatelessWidget {
+  const CustomShortButton({
+    Key key,
+    @required this.label,
+    @required this.onTap,
+    this.type = ButtonType.filledOrange,
+  }) : super(key: key);
+  final String label;
+  final Function onTap;
+  final ButtonType type;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
+      child: MaterialButton(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6),
+            side: BorderSide(
+              width: 1,
+              color: type == ButtonType.filledBlue ||
+                      type == ButtonType.filledOrange
+                  ? Colors.transparent
+                  : type == ButtonType.borderOrange
+                      ? childeanFire
+                      : midnightExpress,
+            )),
+        color: type == ButtonType.borderBlue || type == ButtonType.borderOrange
+            ? Colors.transparent
+            : type == ButtonType.filledOrange ? childeanFire : midnightExpress,
+        height: 40,
+        minWidth: double.infinity,
+        child: Text(
+          '$label',
+          style: body1.copyWith(
+            color:
+                type == ButtonType.filledBlue || type == ButtonType.filledOrange
+                    ? Colors.white
+                    : type == ButtonType.borderOrange
+                        ? childeanFire
+                        : midnightExpress,
+          ),
         ),
         onPressed: onTap,
       ),

@@ -23,8 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
-  
+
   firebase_auth: ^0.18.0+1
   provider: ^4.3.1
   firebase_core: ^0.5.0
@@ -42,9 +41,9 @@ dependencies:
   flutter_paystack: ^1.0.3+1
   flutter_spinkit: ^4.1.2+1
   carousel_slider: ^2.2.1
-#  clipboard_manager: ^0.0.1
+  #  clipboard_manager: ^0.0.1
   flutter_svg: ^0.18.0
-  font_awesome_flutter:
+  font_awesome_flutter: null
   image_picker: ^0.6.7+7
   firebase_storage: ^4.0.0
   get: ^3.5.1
@@ -58,8 +57,14 @@ dependencies:
 
   # For displaying and getting star rating
   smooth_star_rating: ^1.1.1
+  # For formatting date display for users
+  date_format: ^1.0.9
 
-
+  # For generating and printing explore ticket
+  flutter_ticket_widget: ^0.0.1
+  printing: ^3.6.1
+  # For caching network images
+  cached_network_image: ^2.3.2+1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -69,12 +74,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  hive_generator:
-  build_runner:
+  hive_generator: null
+  build_runner: null
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
 
@@ -87,13 +91,10 @@ flutter:
   assets:
     - asset/
   #   - images/a_dot_ham.jpeg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
@@ -115,3 +116,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+

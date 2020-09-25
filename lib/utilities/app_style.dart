@@ -22,7 +22,7 @@ const heading1 = TextStyle(
 const heading2 = TextStyle(
   fontFamily: 'Lato',
   color: midnightExpress,
-  fontSize: 20,
+  fontSize: 24,
   fontWeight: FontWeight.w700,
 );
 
@@ -52,4 +52,29 @@ const buttonStyle = TextStyle(
   color: Colors.white,
   fontSize: 20,
   fontWeight: FontWeight.w500,
+);
+
+
+//LAUNDRY TEXT STYLES
+
+const tableLabelTextStyle = TextStyle(
+  fontFamily: 'Lato',
+  fontSize: 17,
+  color: textBlack,
+);
+
+const nairaSignStyle = TextStyle(
+  fontFamily: 'Lato',
+  fontSize: 10,
+  color: Colors.black,
+  fontWeight: FontWeight.w600,
+  letterSpacing: 8,
+);
+
+const tableDataTextStyle = TextStyle(
+  fontFamily: 'Lato',
+  fontSize: 13,
+  color: Color(0xFF7C7C7F),
+  fontWeight: FontWeight.w300,
+  letterSpacing: 0,
 );

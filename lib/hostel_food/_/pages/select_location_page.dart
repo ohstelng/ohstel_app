@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+enum AddressType { pickUp, dropOff }
+
 class SelectDeliveryLocationPage extends StatefulWidget {
-  final String type;
+  final AddressType type;
 
   SelectDeliveryLocationPage({this.type});
 
@@ -64,7 +66,7 @@ class _SelectDeliveryLocationPageState
 }
 
 class OffCampusLocation extends StatefulWidget {
-  final String type;
+  final AddressType type;
 
   OffCampusLocation({this.type});
 
@@ -181,10 +183,10 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
                     HiveMethods()
                         .saveFoodLocationDetailsToDb(map: addressDetails);
                   } else {
-                    if (widget.type == 'pickUp') {
+                    if (widget.type == AddressType.pickUp) {
                       HiveMethods()
                           .saveToLaundryPickUpBox(data: addressDetails);
-                    } else if (widget.type == 'dropOff') {
+                    } else if (widget.type == AddressType.dropOff) {
                       HiveMethods().saveToLaundryDropBox(data: addressDetails);
                     }
                   }
@@ -206,7 +208,7 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
 }
 
 class OnCampusLocation extends StatefulWidget {
-  final String type;
+  final AddressType type;
 
   OnCampusLocation({this.type});
 
@@ -255,10 +257,10 @@ class _OnCampusLocationState extends State<OnCampusLocation> {
                       HiveMethods()
                           .saveFoodLocationDetailsToDb(map: addressDetails);
                     } else {
-                      if (widget.type == 'pickUp') {
+                      if (widget.type == AddressType.pickUp) {
                         HiveMethods()
                             .saveToLaundryPickUpBox(data: addressDetails);
-                      } else if (widget.type == 'dropOff') {
+                      } else if (widget.type == AddressType.dropOff) {
                         HiveMethods()
                             .saveToLaundryDropBox(data: addressDetails);
                       }

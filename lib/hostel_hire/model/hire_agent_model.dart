@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:uuid/uuid.dart';
 
 class HireWorkerModel {
   String workerName;
@@ -9,6 +10,8 @@ class HireWorkerModel {
   String workerPhoneNumber;
   String workerEmail;
   String uniName;
+  String about;
+  String openTime;
   Timestamp dateJoined;
   String profileImageUrl;
   List searchKeys;
@@ -23,6 +26,8 @@ class HireWorkerModel {
     @required this.workerEmail,
     @required this.uniName,
     @required this.profileImageUrl,
+    @required this.about,
+    @required this.openTime,
   });
 
   HireWorkerModel.fromMap(Map<String, dynamic> mapData) {
@@ -37,6 +42,8 @@ class HireWorkerModel {
     this.profileImageUrl = mapData['profileImageUrl'];
     this.searchKeys = mapData['searchKeys'];
     this.laundryList = mapData['laundryList'];
+    this.about = mapData['about'];
+    this.openTime = mapData['openTime'];
   }
 
   Map toMap() {
@@ -59,6 +66,9 @@ class HireWorkerModel {
     data['profileImageUrl'] = this.profileImageUrl;
     data['searchKeys'] = _searchKeys;
     data['laundryList'] = laundryList;
+    data['openTime'] = this.openTime;
+    data['about'] = this.about;
+    data['id'] = Uuid().v1().toString();
 
     return data;
   }
