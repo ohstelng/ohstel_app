@@ -1,3 +1,5 @@
+import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -526,14 +528,18 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                               LaundryBookingBasketModel.fromMap(data.cast());
 
                           return Card(
-                            elevation: 2.5,
-                            child: Row(
-                              children: [
-                                imageWidget(url: currentLaundry.imageUrl),
-                                laundryInfo(laundry: currentLaundry),
-                                Spacer(),
-                                removeButton(index: index),
-                              ],
+                            elevation: 1,
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                              color: Color(0xffEBF1EF),
+                              child: Row(
+                                children: [
+                                  imageWidget(url: currentLaundry.imageUrl),
+                                  laundryInfo(laundry: currentLaundry),
+                                  Spacer(),
+                                  removeButton(index: index),
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -560,7 +566,7 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                   "Number Of Items:",
                   style: TextStyle(fontSize: 20),
                 ),
-                Text("${laundryBox.length}", style: TextStyle(fontSize: 20))
+                Text("${laundryBox.length}", style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold))
               ],
             ),
           ),
@@ -573,18 +579,19 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                   "Total Amount:",
                   style: TextStyle(fontSize: 20),
                 ),
-                Text("${getPrice()}", style: TextStyle(fontSize: 20))
+                Text('₦  ${formatCurrency.format(getPrice())}', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold))
               ],
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+            margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
             width: double.infinity,
             child: FlatButton(
+              disabledColor: Color(0xffD6D9DF),
               padding: EdgeInsets.all(15),
-              color: Color(0xFF202530),
+              color: Color(0xFFF27507),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
+                borderRadius: BorderRadius.circular(5),
               ),
               onPressed: () {
                 getPrice();

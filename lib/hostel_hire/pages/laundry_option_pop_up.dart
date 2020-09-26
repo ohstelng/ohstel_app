@@ -12,6 +12,9 @@ import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
 import 'package:Ohstel_app/hostel_hire/model/laundry_basket_model.dart';
 import 'package:Ohstel_app/hostel_hire/model/laundry_booking_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
 
 class LaundryOptionPopUp extends StatefulWidget {
   final LaundryBookingModel laundryDetails;
@@ -79,11 +82,12 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
 
   Widget addToCartButton() {
     return FlatButton(
-      color: Colors.green,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      color: Theme.of(context).primaryColor,
       onPressed: () {
         saveToBasket();
       },
-      child: Text('Add To Basket'),
+      child: Text('Add To Basket',style: TextStyle(color: Colors.white),),
     );
   }
 
@@ -92,7 +96,7 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
       margin: EdgeInsets.all(15.0),
       child: Text(
         'Price: NGN ${price()}',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
     );
   }
@@ -146,11 +150,10 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
       margin: EdgeInsets.all(10.0),
       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: Colors.green,
-        border: Border.all(),
+      border: Border.all(),
       ),
       child: DropdownButton(
+          underline: SizedBox(),
           value: dropdownValue,
           items: [
             DropdownMenuItem(

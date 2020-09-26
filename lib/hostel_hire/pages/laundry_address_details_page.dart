@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../hive_methods/hive_class.dart';
 import '../model/laundry_address_details_model.dart';
 import 'laundry_payment_page.dart';
+
 //
 //class LaundryAddressDetailsPage extends StatefulWidget {
 //  @override
@@ -580,6 +581,8 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
                   },
                 ),
                 FlatButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
                   onPressed: () {
                     print(number.length);
                     if (number.length > 10) {
@@ -594,8 +597,11 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
                       Fluttertoast.showToast(msg: 'Input Invaild Number!');
                     }
                   },
-                  color: Colors.green,
-                  child: Text('Submit'),
+                  color: Theme.of(context).primaryColor,
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 )
               ],
             ),
@@ -650,6 +656,8 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
       });
   }
 
+  bool buttonState = false;
+
   @override
   void initState() {
     getBox();
@@ -661,18 +669,35 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: loading
           ? Center(child: CircularProgressIndicator())
           : SafeArea(
-              child: ListView(
-                children: [
-                  Center(child: Text('Address Details')),
-                  pickUpDetailsWidget(),
-                  SizedBox(height: 50),
-                  dropOffDetailsWidget(),
-                  SizedBox(height: 20),
-                  button()
-                ],
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: ListView(
+                  children: [
+                    Text(
+                      'Delivery Details',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                    ),
+                    pickUpDetailsWidget(),
+                    dropOffDetailsWidget(),
+                    SizedBox(height: 20),
+                    button()
+                  ],
+                ),
               ),
             ),
     );
@@ -688,48 +713,57 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
   }
 
   Widget button() {
-    return FlatButton(
-      child: Text('Proceed'),
-      color: Colors.orange,
-      onPressed: () {
-        Map pickUpData = laundryAddressBox.get('pickUp');
-        Map dropOffData = laundryAddressBox.get('dropOff');
+    return Container(
+      height: 70,
+     padding: EdgeInsets.all(8),
+      child: FlatButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Text(
+          'Proceed',
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        color: buttonState ? Color(0xffEBF1EF) : Theme.of(context).primaryColor,
+        onPressed: () {
+          Map pickUpData = laundryAddressBox.get('pickUp');
+          Map dropOffData = laundryAddressBox.get('dropOff');
 
-        if (pickUpData.isNotEmpty &&
-            dropOffData.isNotEmpty &&
-            pickUpNumber != null &&
-            dropOffNumber != null &&
-            pickUpDate != null &&
-            pickUpTime != null) {
-          if (pickUpDate.month <= DateTime.now().month &&
-              pickUpDate.day <= DateTime.now().day) {
-            Fluttertoast.showToast(msg: 'Choose A Date One Day From Today!!');
-            return;
-          }
+          if (pickUpData.isNotEmpty &&
+              dropOffData.isNotEmpty &&
+              pickUpNumber != null &&
+              dropOffNumber != null &&
+              pickUpDate != null &&
+              pickUpTime != null) {
+            if (pickUpDate.month <= DateTime.now().month &&
+                pickUpDate.day <= DateTime.now().day) {
+              Fluttertoast.showToast(msg: 'Choose A Date One Day From Today!!');
 
-          LaundryAddressDetailsModel laundryAddressDetails =
-              LaundryAddressDetailsModel(
-            pickUpDate: pickUpDate.toString(),
-            pickUpTime: pickUpTime.format(context).toString(),
-            pickUpAddress: pickUpData,
-            dropOffAddress: dropOffData,
-            dropOffNumber: dropOffNumber.toString(),
-            pickUpNumber: pickUpNumber.toString(),
-          );
+              return;
+            }
 
-          print(laundryAddressDetails.toMap());
-          print(pickUpDate.month);
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => LaundryPaymentPage(
-                laundryAddressDetails: laundryAddressDetails,
+            LaundryAddressDetailsModel laundryAddressDetails =
+                LaundryAddressDetailsModel(
+              pickUpDate: pickUpDate.toString(),
+              pickUpTime: pickUpTime.format(context).toString(),
+              pickUpAddress: pickUpData,
+              dropOffAddress: dropOffData,
+              dropOffNumber: dropOffNumber.toString(),
+              pickUpNumber: pickUpNumber.toString(),
+            );
+
+            print(laundryAddressDetails.toMap());
+            print(pickUpDate.month);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => LaundryPaymentPage(
+                  laundryAddressDetails: laundryAddressDetails,
+                ),
               ),
-            ),
-          );
-        } else {
-          Fluttertoast.showToast(msg: 'Please Provide All Info!');
-        }
-      },
+            );
+          } else {
+            Fluttertoast.showToast(msg: 'Please Provide All Info!');
+          }
+        },
+      ),
     );
   }
 
@@ -738,7 +772,7 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         pickUpAddress(),
-        datePicker(),
+
       ],
     );
   }
@@ -751,6 +785,7 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
           child: Container(
             margin: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
               border: Border.all(color: Colors.black),
             ),
             child: ListTile(
@@ -767,6 +802,7 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
           child: Container(
             margin: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
               border: Border.all(color: Colors.black),
             ),
             child: ListTile(
@@ -784,24 +820,12 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
 
   Widget pickUpAddress() {
     return Container(
-      margin: EdgeInsets.all(10.0),
+      margin: EdgeInsets.only(top: 16),
       child: ListView(
         shrinkWrap: true,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('Pick-Up Adress Details'),
-              FlatButton(
-                color: Colors.grey[300],
-                onPressed: () async {
-                  //                  addressDetails = await HiveMethods().getFoodLocationDetails();
-                  selectDeliveryLocation(type: AddressType.pickUp);
-                },
-                child: Text('Edit'),
-              ),
-            ],
-          ),
+          Text('Pick Up Details'),
+          datePicker(),
           getPickUpAddress(),
         ],
       ),
@@ -815,7 +839,6 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
         if (box.values.isEmpty || !box.containsKey('pickUp')) {
           return Card(
             child: Container(
-              margin: EdgeInsets.all(15.0),
               child: Center(
                 child: Text('No Pick Up Adress Found!!'),
               ),
@@ -824,68 +847,81 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
         } else {
           Map data = box.get('pickUp');
           //          Map data = box.get('dropOff');
-          return Card(
-            elevation: 2.5,
-            child: Container(
-              padding: EdgeInsets.all(15.0),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('${userData['fullName']}'),
-                  Container(
-                    margin: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '${data['address']}',
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '${data['areaName']}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Divider(),
-                  Container(
-                    margin: EdgeInsets.only(top: 15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        StreamBuilder<String>(
-                            stream: pickUpNumberSteam.stream,
-                            builder: (context, snapshot) {
-                              if (snapshot.data == null) {
-                                return Text('No Number Found');
-                              }
-                              pickUpNumber = int.parse(snapshot.data);
-                              return Text(
-                                '${snapshot.data}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              );
-                            }),
+          return Container(
+            color: Color(0xffEBF1EF),
+            margin: EdgeInsets.only(top: 8),
+            padding: EdgeInsets.fromLTRB(8, 16, 16, 16),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("Home Address",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                SizedBox(height: 8,),
+                Text('${userData['fullName']}'),
+                Row(
+                  children: [
+                    Column(
+                      children: [
                         Container(
-                          padding: EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              editPhoneNumber(type: 'pickUp');
-                            },
-                            child: Text('Edit'),
+                          margin: EdgeInsets.only(top: 5.0),
+                          child: Text(
+                            '${data['address']}',
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        Container(
+                          margin: EdgeInsets.only(top: 5.0),
+                          child: Text(
+                            '${data['areaName']}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
                       ],
                     ),
+                    Spacer(),
+                    InkWell(
+                      onTap: () async {
+                        //                  addressDetails = await HiveMethods().getFoodLocationDetails();
+                        selectDeliveryLocation(type: AddressType.pickUp);
+                      },
+                      child: Icon(Icons.edit, size: 20),
+                    )
+                  ],
+                ),
+                Divider(),
+                Container(
+                  margin: EdgeInsets.only(top: 15.0, left: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      StreamBuilder<String>(
+                          stream: pickUpNumberSteam.stream,
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null) {
+                              return Text('No Number Found');
+                            }
+                            pickUpNumber = int.parse(snapshot.data);
+                            return Text(
+                              '${snapshot.data}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            );
+                          }),
+                      InkWell(
+                        onTap: () {
+                          editPhoneNumber(type: 'pickUp');
+                        },
+                        child: Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         }
@@ -895,22 +931,15 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
 
   Widget dropOffAddress() {
     return Container(
-      margin: EdgeInsets.all(10.0),
+      margin: EdgeInsets.only(top: 8),
       child: ListView(
         shrinkWrap: true,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Drop-Off Adress Details'),
-              FlatButton(
-                color: Colors.grey[300],
-                onPressed: () async {
-                  //                  addressDetails = await HiveMethods().getFoodLocationDetails();
-                  selectDeliveryLocation(type: AddressType.dropOff);
-                },
-                child: Text('Edit'),
-              ),
+              Text('Drop Off Details'),
+
             ],
           ),
           getDropOffAddress(),
@@ -928,75 +957,86 @@ class _LaundryAddressDetailsPageState extends State<LaundryAddressDetailsPage> {
             child: Container(
               margin: EdgeInsets.all(15.0),
               child: Center(
-                child: Text('No Drop Off Adress Found!!'),
+                child: Text('No Drop Off Address Found!!'),
               ),
             ),
           );
         } else {
           //          Map data = box.get('pickUp');
           Map data = box.get('dropOff');
-          return Card(
-            elevation: 2.5,
-            child: Container(
-              padding: EdgeInsets.all(15.0),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('${userData['fullName']}'),
-                  Container(
-                    margin: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '${data['address']}',
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '${data['areaName']}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Divider(),
-                  Container(
-                    margin: EdgeInsets.only(top: 15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        StreamBuilder<String>(
-                            stream: dropOffNumberSteam.stream,
-                            builder: (context, snapshot) {
-                              if (snapshot.data == null) {
-                                return Text('No Number Found');
-                              }
-                              dropOffNumber = int.parse(snapshot.data);
-                              return Text(
-                                '${snapshot.data}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              );
-                            }),
+          return Container(
+            margin: EdgeInsets.only(top: 8),
+            color: Color(0xffEBF1EF),
+            padding: EdgeInsets.only(top:15.0,left: 8,right: 16),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("Home Address",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                SizedBox(height: 8,),
+                Text('${userData['fullName']}'),
+                Row(
+                  children: [
+                    Column(
+                      children: [
                         Container(
-                          padding: EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4),
+                          margin: EdgeInsets.only(top: 5.0),
+                          child: Text(
+                            '${data['address']}',
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          child: InkWell(
-                            onTap: () {
-                              editPhoneNumber(type: 'dropOff');
-                            },
-                            child: Text('Edit'),
+                        ),
+
+                        Container(
+                          margin: EdgeInsets.only(top: 5.0),
+                          child: Text(
+                            '${data['areaName']}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
                     ),
+                    Spacer(),
+                    InkWell(
+                      onTap: () async {
+                        //                  addressDetails = await HiveMethods().getFoodLocationDetails();
+                        selectDeliveryLocation(type: AddressType.dropOff);
+                      },
+                      child: Icon(Icons.edit, size: 20,),
+                    ),
+                  ],
+                ),
+                Divider(),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      StreamBuilder<String>(
+                          stream: dropOffNumberSteam.stream,
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null) {
+                              return Text('No Number Found');
+                            }
+                            dropOffNumber = int.parse(snapshot.data);
+                            return Text(
+                              '${snapshot.data}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            );
+                          }),
+                      InkWell(
+                        onTap: () {
+                          editPhoneNumber(type: 'dropOff');
+                        },
+                        child: Icon(Icons.edit, size: 20,),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         }
