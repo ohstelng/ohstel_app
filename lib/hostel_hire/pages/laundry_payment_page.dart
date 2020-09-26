@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_hire/methods/hire_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -160,6 +161,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
             child: Column(
               children: [
                 SizedBox(height: 16),
+                address(),
                 // Number of items
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -170,6 +172,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                     ),
                     Text(
                       '${laundryBox.length}',
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),
 //                      style: tableDataTextStyle,
                     ),
                   ],
@@ -186,11 +189,11 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                     ),
                     RichText(
                       text: TextSpan(
-                        text: 'N',
+                        text: '₦',style: TextStyle(color: Colors.black),
 //                        style: nairaSignStyle,
                         children: [
                           TextSpan(
-                            text: '${getGrandTotal()}',
+                            text: '${formatCurrency.format(getGrandTotal())}',
 //                            style: tableDataTextStyle,
                           ),
                         ],
@@ -210,11 +213,12 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                     ),
                     RichText(
                       text: TextSpan(
-                        text: 'N',
+                        text: '₦',
+                        style: TextStyle(color: Colors.black),
 //                        style: nairaSignStyle,
                         children: [
                           TextSpan(
-                            text: '${deliveryFee ?? 0}',
+                            text: '${formatCurrency.format(deliveryFee ?? 0)}',
 //                            style: tableDataTextStyle,
                           ),
                         ],
@@ -237,11 +241,12 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                     ),
                     RichText(
                       text: TextSpan(
-                        text: 'N',
+                        text: '₦',
+                          style: TextStyle(color: Colors.black),
 //                        style: nairaSignStyle,
                         children: [
                           TextSpan(
-                            text: '${getGrandTotal() + (deliveryFee ?? 0)}',
+                            text: '${formatCurrency.format(getGrandTotal() + (deliveryFee ?? 0))}',
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -258,7 +263,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
           //---Order summary
 
           // address
-          address(),
+
 
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 40, 0, 16),
@@ -315,26 +320,69 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
   // }
 
   Widget address() {
-    return Center(
-      child: Card(
-        child: Container(
-          margin: EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
               Text(
-                  'Pick Up Adress: ${widget.laundryAddressDetails.pickUpAddress['address']}, ${widget.laundryAddressDetails.pickUpAddress['areaName']}'),
+                  'Pick Up Address:'),
+              Spacer(),
               Text(
-                  'Pick Up PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
-              Text('Pick Up Date: ${widget.laundryAddressDetails.pickUpDate}'),
-              Text('Pick Up Time: ${widget.laundryAddressDetails.pickUpTime}'),
-              Text(
-                  'drop Off Adress: ${widget.laundryAddressDetails.dropOffAddress['address']}, ${widget.laundryAddressDetails.dropOffAddress['areaName']}'),
-              Text(
-                  'Drop Off PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
+                  '${widget.laundryAddressDetails.pickUpAddress['address']}, ${widget.laundryAddressDetails.pickUpAddress['areaName']}')
             ],
           ),
-        ),
+          SizedBox(height: 16,),
+          Row(
+            children: [
+              Text(
+                  'Pick Up PhoneNumber: '),
+              Spacer(),
+              Text(
+                  '${widget.laundryAddressDetails.pickUpNumber}')
+            ],
+          ),
+          SizedBox(height: 16,),
+          Row(
+            children: [
+              Text('Pick Up Date: '),
+              Spacer(),
+              Text('${widget.laundryAddressDetails.pickUpDate}')
+            ],
+          ),
+          SizedBox(height: 16,),
+          Row(
+            children: [
+              Text('Pick Up Time: '),
+              Spacer(),
+              Text('${widget.laundryAddressDetails.pickUpTime}')
+            ],
+          ),
+          SizedBox(height: 16,),
+          Row(
+            children: [
+              Text(
+                  'Drop Off Address: '),
+              Spacer(),
+              Text(
+                  '${widget.laundryAddressDetails.dropOffAddress['address']}, ${widget.laundryAddressDetails.dropOffAddress['areaName']}')
+            ],
+          ),
+          SizedBox(height: 16,),
+          Row(
+            children: [
+              Text(
+                  'Drop Off Phone Number:'),
+              Spacer(),
+              Text(
+                  '${widget.laundryAddressDetails.pickUpNumber}')
+            ],
+          ),
+          SizedBox(height: 16,),
+          Divider()
+        ],
       ),
     );
   }
