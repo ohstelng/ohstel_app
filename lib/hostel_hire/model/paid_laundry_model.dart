@@ -1,3 +1,4 @@
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
@@ -8,6 +9,7 @@ class PaidLaundryBookingModel {
   String clothesOwnerPhoneNumber;
   Map clothesOwnerAddressDetails;
   List listOfLaundry;
+  List listOfLaundryShopsOrderedFrom;
   bool doneWith;
   String status;
   Timestamp timestamp;
@@ -18,6 +20,7 @@ class PaidLaundryBookingModel {
     @required this.clothesOwnerAddressDetails,
     @required this.clothesOwnerPhoneNumber,
     @required this.listOfLaundry,
+    @required this.listOfLaundryShopsOrderedFrom,
   });
 
   PaidLaundryBookingModel.fromMap(Map<String, dynamic> mapData) {
@@ -29,20 +32,24 @@ class PaidLaundryBookingModel {
     this.doneWith = mapData['doneWith'];
     this.status = mapData['status'];
     this.timestamp = mapData['timestamp'];
+    this.listOfLaundryShopsOrderedFrom =
+        mapData['listOfLaundryShopsOrderedFrom'];
   }
 
-  Map toMap() {
+  Future<Map> toMap() async {
+    String uni = await HiveMethods().getUniName();
     Map<String, dynamic> data = Map<String, dynamic>();
     data['clothesOwnerName'] = this.clothesOwnerName;
     data['clothesOwnerAddressDetails'] = this.clothesOwnerAddressDetails;
     data['clothesOwnerEmail'] = this.clothesOwnerEmail;
     data['clothesOwnerPhoneNumber'] = this.clothesOwnerPhoneNumber;
     data['listOfLaundry'] = this.listOfLaundry;
+    data['listOfLaundryShopsOrderedFrom'] = this.listOfLaundryShopsOrderedFrom;
     data['timestamp'] = Timestamp.now();
 //    data['listOfLaundryShop'] = this.listOfLaundry;
     data['doneWith'] = false;
-    data['status'] = 'Awaitng PickUp...';
     data['id'] = Uuid().v1().toString();
+    data['uniName'] = uni.toString();
 
     return data;
   }

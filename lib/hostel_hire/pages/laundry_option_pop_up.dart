@@ -49,7 +49,8 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
 
   int price() {
     Map laundryModeAndPrice = widget.laundryDetails.laundryModeAndPrice;
-    int currentSelectedPrice = (laundryModeAndPrice[dropdownValue] * unitValue);
+    int currentSelectedPrice =
+        (laundryModeAndPrice[dropdownValue] ?? 0 * unitValue);
 
     return currentSelectedPrice;
   }
@@ -163,6 +164,10 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
             DropdownMenuItem(
               child: Text("Dry Clean"),
               value: 'Dry Clean',
+            ),
+            DropdownMenuItem(
+              child: Text("Iron Only"),
+              value: 'Iron Only',
             ),
           ],
           onChanged: (value) {

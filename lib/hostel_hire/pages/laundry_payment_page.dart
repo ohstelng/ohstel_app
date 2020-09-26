@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:Ohstel_app/hostel_hire/methods/hire_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
@@ -11,7 +12,6 @@ import '../../hive_methods/hive_class.dart';
 import '../../utilities/app_style.dart';
 import '../../utilities/shared_widgets.dart';
 import '../../wallet/method.dart';
-import '../methods/hire_methods.dart';
 import '../model/laundry_address_details_model.dart';
 import '../model/paid_laundry_model.dart';
 
@@ -428,6 +428,17 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
 
   Future<void> saveFoodInfoToDb() async {
     Map currentUserData = await HiveMethods().getUserData();
+    List shopNamesList = [];
+
+    widget.laundryBox.values.forEach((element) {
+      String currentShopName = element['laundryPersonName'];
+
+      if (!shopNamesList.contains(currentShopName)) {
+        shopNamesList.add(currentShopName);
+      }
+    });
+
+    print(shopNamesList);
 
     PaidLaundryBookingModel paidLaundry = PaidLaundryBookingModel(
       clothesOwnerName: currentUserData['fullName'],
@@ -435,10 +446,14 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       clothesOwnerAddressDetails: widget.laundryAddressDetails.toMap(),
       clothesOwnerPhoneNumber: currentUserData['phoneNumber'],
       listOfLaundry: widget.laundryBox.values.toList(),
+      listOfLaundryShopsOrderedFrom: shopNamesList,
     );
 
+    Map data = await paidLaundry.toMap();
+    String id = data['id'];
+
     print(paidLaundry.toMap());
-    await HireMethods().saveLaundryToServer(data: paidLaundry.toMap());
+    await HireMethods().saveLaundryToServer(data: data, id: id);
   }
 
   Future<void> validateUser({@required String password}) async {
@@ -511,18 +526,23 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
               Expanded(
 //                child: CustomShortButton(
 //                  onTap: () async {
-//                    if (password == null) return;
-//                    setState(() {
-//                      loading = true;
-//                    });
-//                    await validateUser(password: password);
-//                    setState(() {
-//                      loading = false;
-//                    });
-//                  },
 //                  label: 'Proceed',
 //                  type: ButtonType.filledBlue,
-                child: loading ? CircularProgressIndicator() : Text('Proceed'),
+                child: loading
+                    ? Center(child: CircularProgressIndicator())
+                    : FlatButton(
+                        onPressed: () async {
+                          if (password == null) return;
+                          setState(() {
+                            loading = true;
+                          });
+                          await validateUser(password: password);
+                          setState(() {
+                            loading = false;
+                          });
+                        },
+                        child: Text('Proceed'),
+                      ),
               ),
               Expanded(
 //                child: CustomShortButton(

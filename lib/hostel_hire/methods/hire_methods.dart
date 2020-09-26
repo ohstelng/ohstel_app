@@ -61,9 +61,10 @@ class HireMethods {
     return hireWorkersList;
   }
 
-  Future<void> saveLaundryToServer({@required Map data}) async {
+  Future<void> saveLaundryToServer(
+      {@required Map data, @required String id}) async {
     try {
-//      await laundryOrderCollection.add(data);
+      await laundryOrderCollection.doc(id).set(data);
       Fluttertoast.showToast(msg: 'Saved To DataBase');
     } catch (e) {
       print(e);
