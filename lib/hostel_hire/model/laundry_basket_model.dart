@@ -46,7 +46,7 @@ class LaundryBookingBasketModel {
     data['laundryPersonEmail'] = this.laundryPersonEmail;
     data['laundryPersonUniName'] = this.laundryPersonUniName;
     data['laundryPersonPhoneNumber'] = this.laundryPersonPhoneNumber;
-    data['status'] = 'Awaitng PickUp...';
+    data['status'] = 'Awaiting PickUp...';
 
     return data;
   }

@@ -37,7 +37,7 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
       units: unitValue,
       laundryMode: dropdownValue,
       price: price(),
-      laundryPersonName: widget.hireWorkerDetails.workerName,
+      laundryPersonName: widget.hireWorkerDetails.userName,
       laundryPersonEmail: widget.hireWorkerDetails.workerEmail,
       laundryPersonUniName: widget.hireWorkerDetails.uniName,
       laundryPersonPhoneNumber: widget.hireWorkerDetails.workerPhoneNumber,
