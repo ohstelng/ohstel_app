@@ -484,7 +484,7 @@ class _SelectLaundryPageState extends State<SelectLaundryPage> {
                       //                      child: Text('Add To Basket'),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.green,
+                        color: Color(0xffF9BA83),
                       ),
                     ),
                   )
