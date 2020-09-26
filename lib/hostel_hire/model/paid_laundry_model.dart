@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:uuid/uuid.dart';
 
 class PaidLaundryBookingModel {
   String clothesOwnerName;
@@ -6,6 +8,9 @@ class PaidLaundryBookingModel {
   String clothesOwnerPhoneNumber;
   Map clothesOwnerAddressDetails;
   List listOfLaundry;
+  bool doneWith;
+  String status;
+  Timestamp timestamp;
 
   PaidLaundryBookingModel({
     @required this.clothesOwnerName,
@@ -21,6 +26,9 @@ class PaidLaundryBookingModel {
     this.clothesOwnerAddressDetails = mapData['clothesOwnerAddressDetails'];
     this.clothesOwnerPhoneNumber = mapData['clothesOwnerPhoneNumber'];
     this.listOfLaundry = mapData['listOfLaundry'];
+    this.doneWith = mapData['doneWith'];
+    this.status = mapData['status'];
+    this.timestamp = mapData['timestamp'];
   }
 
   Map toMap() {
@@ -30,6 +38,11 @@ class PaidLaundryBookingModel {
     data['clothesOwnerEmail'] = this.clothesOwnerEmail;
     data['clothesOwnerPhoneNumber'] = this.clothesOwnerPhoneNumber;
     data['listOfLaundry'] = this.listOfLaundry;
+    data['timestamp'] = Timestamp.now();
+//    data['listOfLaundryShop'] = this.listOfLaundry;
+    data['doneWith'] = false;
+    data['status'] = 'Awaitng PickUp...';
+    data['id'] = Uuid().v1().toString();
 
     return data;
   }

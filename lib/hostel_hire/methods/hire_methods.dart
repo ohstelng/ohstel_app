@@ -63,7 +63,7 @@ class HireMethods {
 
   Future<void> saveLaundryToServer({@required Map data}) async {
     try {
-      await laundryOrderCollection.add(data);
+//      await laundryOrderCollection.add(data);
       Fluttertoast.showToast(msg: 'Saved To DataBase');
     } catch (e) {
       print(e);

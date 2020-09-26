@@ -1,166 +1,175 @@
 /// ```
 /// NOTE
-/// 
-/// This file is now obsolete. 
+///
+/// This file is now obsolete.
 /// All functionality represented here has been ported to [select_laundry_page.dart]
 /// and implemented there.
 /// - Emmanuel Aliyu
 /// ```
 
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
+import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
+import 'package:Ohstel_app/hostel_hire/model/laundry_basket_model.dart';
+import 'package:Ohstel_app/hostel_hire/model/laundry_booking_model.dart';
+import 'package:flutter/material.dart';
 
+class LaundryOptionPopUp extends StatefulWidget {
+  final LaundryBookingModel laundryDetails;
+  final HireWorkerModel hireWorkerDetails;
 
-// import 'package:Ohstel_app/hive_methods/hive_class.dart';
-// import 'package:Ohstel_app/hostel_hire/model/hire_agent_model.dart';
-// import 'package:Ohstel_app/hostel_hire/model/laundry_basket_model.dart';
-// import 'package:Ohstel_app/hostel_hire/model/laundry_booking_model.dart';
-// import 'package:flutter/material.dart';
+  LaundryOptionPopUp({
+    @required this.laundryDetails,
+    @required this.hireWorkerDetails,
+  });
 
-// class LaundryOptionPopUp extends StatefulWidget {
-//   final LaundryBookingModel laundryDetails;
-//   final HireWorkerModel hireWorkerDetails;
+  @override
+  _LaundryOptionPopUpState createState() => _LaundryOptionPopUpState();
+}
 
-//   LaundryOptionPopUp({
-//     @required this.laundryDetails,
-//     @required this.hireWorkerDetails,
-//   });
+class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
+  String dropdownValue = 'Wash Only';
+  int unitValue = 1;
 
-//   @override
-//   _LaundryOptionPopUpState createState() => _LaundryOptionPopUpState();
-// }
+  Future<void> saveToBasket() async {
+    LaundryBookingBasketModel laundry = LaundryBookingBasketModel(
+      clothTypes: widget.laundryDetails.clothTypes,
+      imageUrl: widget.laundryDetails.imageUrl,
+      units: unitValue,
+      laundryMode: dropdownValue,
+      price: price(),
+      laundryPersonName: widget.hireWorkerDetails.workerName,
+      laundryPersonEmail: widget.hireWorkerDetails.workerEmail,
+      laundryPersonUniName: widget.hireWorkerDetails.uniName,
+      laundryPersonPhoneNumber: widget.hireWorkerDetails.workerPhoneNumber,
+    );
+    print(laundry.toMap());
 
-// class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
-//   String dropdownValue = 'Wash Only';
-//   int unitValue = 1;
+    await HiveMethods().saveLaundryToBasketCart(data: laundry.toMap());
+  }
 
-//   Future<void> saveToBasket() async {
-//     LaundryBookingBasketModel laundry = LaundryBookingBasketModel(
-//       clothTypes: widget.laundryDetails.clothTypes,
-//       imageUrl: widget.laundryDetails.imageUrl,
-//       units: unitValue,
-//       laundryMode: dropdownValue,
-//       price: price(),
-//       laundryPersonName: widget.hireWorkerDetails.workerName,
-//       laundryPersonEmail: widget.hireWorkerDetails.workerEmail,
-//       laundryPersonUniName: widget.hireWorkerDetails.uniName,
-//       laundryPersonPhoneNumber: widget.hireWorkerDetails.workerPhoneNumber,
-//     );
-//     print(laundry.toMap());
+  int price() {
+    Map laundryModeAndPrice = widget.laundryDetails.laundryModeAndPrice;
+    int currentSelectedPrice = (laundryModeAndPrice[dropdownValue] * unitValue);
 
-//     await HiveMethods().saveLaundryToBasketCart(data: laundry.toMap());
-//   }
+    return currentSelectedPrice;
+  }
 
-//   int price() {
-//     Map laundryModeAndPrice = widget.laundryDetails.laundryModeAndPrice;
-//     int currentSelectedPrice = (laundryModeAndPrice[dropdownValue] * unitValue);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '${widget.laundryDetails.clothTypes.toUpperCase()}',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          Divider(thickness: 1.0, color: Colors.black),
+          dropDown(),
+          unitController(),
+          priceWidget(),
+          addToCartButton(),
+        ],
+      ),
+    );
+  }
 
-//     return currentSelectedPrice;
-//   }
+  Widget addToCartButton() {
+    return FlatButton(
+      color: Colors.green,
+      onPressed: () {
+        saveToBasket();
+      },
+      child: Text('Add To Basket'),
+    );
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Text(
-//             '${widget.laundryDetails.clothTypes.toUpperCase()}',
-//             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//           ),
-//           dropDown(),
-//           unitController(),
-//           priceWidget(),
-//           addToCartButton(),
-//         ],
-//       ),
-//     );
-//   }
+  Widget priceWidget() {
+    return Container(
+      margin: EdgeInsets.all(15.0),
+      child: Text(
+        'Price: NGN ${price()}',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+      ),
+    );
+  }
 
-//   Widget addToCartButton() {
-//     return FlatButton(
-//       color: Colors.green,
-//       onPressed: () {
-//         saveToBasket();
-//       },
-//       child: Text('Add To Basket'),
-//     );
-//   }
+  Widget unitController() {
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+            ),
+            child: InkWell(
+              child: Icon(Icons.remove),
+              onTap: () {
+                if (unitValue > 1) {
+                  setState(() {
+                    unitValue--;
+                  });
+                }
+              },
+            ),
+          ),
+          SizedBox(width: 20),
+          Text('$unitValue'),
+          SizedBox(width: 20),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+            ),
+            child: InkWell(
+              child: Icon(Icons.add),
+              onTap: () {
+                if (unitValue < 99) {
+                  setState(() {
+                    unitValue++;
+                  });
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-//   Widget priceWidget() {
-//     return Container(
-//       margin: EdgeInsets.all(15.0),
-//       child: Text(
-//         'Price: NGN ${price()}',
-//         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-//       ),
-//     );
-//   }
-
-//   Widget unitController() {
-//     return Container(
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//         children: [
-//           Container(
-//             decoration: BoxDecoration(
-//               border: Border.all(color: Colors.black),
-//             ),
-//             child: InkWell(
-//               child: Icon(Icons.remove),
-//               onTap: () {
-//                 if (unitValue > 1) {
-//                   setState(() {
-//                     unitValue--;
-//                   });
-//                 }
-//               },
-//             ),
-//           ),
-//           Text('$unitValue'),
-//           Container(
-//             decoration: BoxDecoration(
-//               border: Border.all(color: Colors.black),
-//             ),
-//             child: InkWell(
-//               child: Icon(Icons.add),
-//               onTap: () {
-//                 if (unitValue < 99) {
-//                   setState(() {
-//                     unitValue++;
-//                   });
-//                 }
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget dropDown() {
-//     return Container(
-//       child: DropdownButton(
-//           value: dropdownValue,
-//           items: [
-//             DropdownMenuItem(
-//               child: Text("Wash Only"),
-//               value: 'Wash Only',
-//             ),
-//             DropdownMenuItem(
-//               child: Text("Wash And Iron"),
-//               value: 'Wash and Iron',
-//             ),
-//             DropdownMenuItem(
-//               child: Text("Dry Clean"),
-//               value: 'Dry Clean',
-//             ),
-//           ],
-//           onChanged: (value) {
-//             setState(() {
-//               dropdownValue = value;
-//             });
-//           }),
-//     );
-//   }
-// }
+  Widget dropDown() {
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: Colors.green,
+        border: Border.all(),
+      ),
+      child: DropdownButton(
+          value: dropdownValue,
+          items: [
+            DropdownMenuItem(
+              child: Text("Wash Only"),
+              value: 'Wash Only',
+            ),
+            DropdownMenuItem(
+              child: Text("Wash And Iron"),
+              value: 'Wash and Iron',
+            ),
+            DropdownMenuItem(
+              child: Text("Dry Clean"),
+              value: 'Dry Clean',
+            ),
+          ],
+          onChanged: (value) {
+            setState(() {
+              dropdownValue = value;
+            });
+          }),
+    );
+  }
+}

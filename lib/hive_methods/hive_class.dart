@@ -85,9 +85,10 @@ class HiveMethods {
   Future<Map> getUserData() async {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
 
-//    if (userDataBox.isEmpty) {
+    if (userDataBox.isEmpty) {
+      await Future.delayed(Duration(seconds: 1));
 //      AuthService().signOut();
-//    }
+    }
     print(userDataBox.toMap());
     print('ooooooooooooooooooooooooooooooooooooo');
     Map userData = userDataBox.getAt(0);

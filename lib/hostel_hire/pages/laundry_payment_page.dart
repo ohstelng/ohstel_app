@@ -61,7 +61,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
       loading = true;
     });
 
-    // await getDeliveryFeeFromApi();
+    await getDeliveryFeeFromApi();
     laundryBox = await HiveMethods().getOpenBox('laundryBox');
     userDataBox = await HiveMethods().getOpenBox('userDataBox');
     addressDetailsBox = await HiveMethods().getOpenBox('addressBox');
@@ -76,33 +76,33 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
   }
 
   void paymentPopUp() async {
-    try {
-      await showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              'Confirm Payment',
-              style: heading2,
+//    try {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Confirm Payment',
+            style: heading2,
+          ),
+          content: Container(
+            child: PaymentPopUp(
+              laundryAddressDetails: widget.laundryAddressDetails,
+              deliveryFee: deliveryFee,
+              laundryBox: laundryBox,
+              userData: userData,
             ),
-            content: Container(
-              child: PaymentPopUp(
-                laundryAddressDetails: widget.laundryAddressDetails,
-                deliveryFee: deliveryFee,
-                laundryBox: laundryBox,
-                userData: userData,
-              ),
-            ),
-          );
-        },
-      );
+          ),
+        );
+      },
+    );
 
 //      Navigator.pop(context);
-    } catch (e) {
-      print(e);
-      Fluttertoast.showToast(msg: '$e');
-    }
+//    } catch (e) {
+//      print(e);
+//      Fluttertoast.showToast(msg: '$e');
+//    }
   }
 
   @override
@@ -166,11 +166,11 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                   children: [
                     Text(
                       'Number of items',
-                      style: tableLabelTextStyle,
+//                      style: tableLabelTextStyle,
                     ),
                     Text(
                       '${laundryBox.length}',
-                      style: tableDataTextStyle,
+//                      style: tableDataTextStyle,
                     ),
                   ],
                 ),
@@ -182,16 +182,16 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                   children: [
                     Text(
                       'Sub Total',
-                      style: tableLabelTextStyle,
+//                      style: tableLabelTextStyle,
                     ),
                     RichText(
                       text: TextSpan(
                         text: 'N',
-                        style: nairaSignStyle,
+//                        style: nairaSignStyle,
                         children: [
                           TextSpan(
                             text: '${getGrandTotal()}',
-                            style: tableDataTextStyle,
+//                            style: tableDataTextStyle,
                           ),
                         ],
                       ),
@@ -206,16 +206,16 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                   children: [
                     Text(
                       'Delivery Fee',
-                      style: tableLabelTextStyle,
+//                      style: tableLabelTextStyle,
                     ),
                     RichText(
                       text: TextSpan(
                         text: 'N',
-                        style: nairaSignStyle,
+//                        style: nairaSignStyle,
                         children: [
                           TextSpan(
                             text: '${deliveryFee ?? 0}',
-                            style: tableDataTextStyle,
+//                            style: tableDataTextStyle,
                           ),
                         ],
                       ),
@@ -230,7 +230,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                   children: [
                     Text(
                       'Total',
-                      style: tableLabelTextStyle.copyWith(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                       ),
@@ -238,11 +238,11 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                     RichText(
                       text: TextSpan(
                         text: 'N',
-                        style: nairaSignStyle,
+//                        style: nairaSignStyle,
                         children: [
                           TextSpan(
                             text: '${getGrandTotal() + (deliveryFee ?? 0)}',
-                            style: tableDataTextStyle.copyWith(
+                            style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
                             ),
@@ -257,14 +257,17 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
           ),
           //---Order summary
 
+          // address
+          address(),
+
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 40, 0, 16),
             child: CustomLongButton(
               label: 'Make Payment',
               onTap: () async {
-                Map addressDetails =
-                    await HiveMethods().getFoodLocationDetails();
-                if (userData != null && addressDetails != null) {
+//                Map addressDetails =
+//                    await HiveMethods().getFoodLocationDetails();
+                if (userData != null && addressDetailsBox != null) {
                   paymentPopUp();
                 } else {
                   Fluttertoast.showToast(
@@ -311,30 +314,30 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
   //   );
   // }
 
-  // Widget address() {
-  //   return Center(
-  //     child: Card(
-  //       child: Container(
-  //         margin: EdgeInsets.all(10.0),
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //                 'Pick Up Adress: ${widget.laundryAddressDetails.pickUpAddress['address']}, ${widget.laundryAddressDetails.pickUpAddress['areaName']}'),
-  //             Text(
-  //                 'Pick Up PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
-  //             Text('Pick Up Date: ${widget.laundryAddressDetails.pickUpDate}'),
-  //             Text('Pick Up Time: ${widget.laundryAddressDetails.pickUpTime}'),
-  //             Text(
-  //                 'drop Off Adress: ${widget.laundryAddressDetails.dropOffAddress['address']}, ${widget.laundryAddressDetails.dropOffAddress['areaName']}'),
-  //             Text(
-  //                 'Drop Off PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget address() {
+    return Center(
+      child: Card(
+        child: Container(
+          margin: EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                  'Pick Up Adress: ${widget.laundryAddressDetails.pickUpAddress['address']}, ${widget.laundryAddressDetails.pickUpAddress['areaName']}'),
+              Text(
+                  'Pick Up PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
+              Text('Pick Up Date: ${widget.laundryAddressDetails.pickUpDate}'),
+              Text('Pick Up Time: ${widget.laundryAddressDetails.pickUpTime}'),
+              Text(
+                  'drop Off Adress: ${widget.laundryAddressDetails.dropOffAddress['address']}, ${widget.laundryAddressDetails.dropOffAddress['areaName']}'),
+              Text(
+                  'Drop Off PhoneNumber: ${widget.laundryAddressDetails.pickUpNumber}'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget ordersContainer() {
     return Container(
@@ -506,33 +509,31 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: CustomShortButton(
-                  onTap: () async {
-                    if (password == null) return;
-                    setState(() {
-                      loading = true;
-                    });
-                    await validateUser(password: password);
-                    setState(() {
-                      loading = false;
-                    });
-                  },
-                  label: 'Proceed',
-                  type: ButtonType.filledBlue,
-                  // child:
-                  //     loading ? CircularProgressIndicator() : Text('Proceed'),
-                ),
+//                child: CustomShortButton(
+//                  onTap: () async {
+//                    if (password == null) return;
+//                    setState(() {
+//                      loading = true;
+//                    });
+//                    await validateUser(password: password);
+//                    setState(() {
+//                      loading = false;
+//                    });
+//                  },
+//                  label: 'Proceed',
+//                  type: ButtonType.filledBlue,
+                child: loading ? CircularProgressIndicator() : Text('Proceed'),
               ),
               Expanded(
-                child: CustomShortButton(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    label: 'Cancel',
-                    type: ButtonType.borderBlue
-                    // child: Text('Cancel'),
-
-                    ),
+//                child: CustomShortButton(
+//                    label: 'Cancel',
+//                    type: ButtonType.borderBlue
+                child: FlatButton(
+                  child: Text('Cancel'), //
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
             ],
           ),
