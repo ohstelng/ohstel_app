@@ -17,7 +17,7 @@ class FoodCartModel {
     @required this.itemFastFoodLocation,
   });
 
-  FoodCartModel.fromMap(Map<String, dynamic> mapData) {
+  FoodCartModel.fromMap(mapData) {
     List<ExtraItemDetails> extralist = [];
     for (Map map in mapData['extraItems']) {
       extralist.add(ExtraItemDetails.fromMap(map));

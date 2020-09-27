@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 
 class ProductModel {
   String productName;
-  List<String> imageUrls;
+  List imageUrls;
   String productCategory;
   String productOriginLocation;
   String productSubCategory;
@@ -32,7 +32,10 @@ class ProductModel {
 
   ProductModel.fromMap(Map<String, dynamic> mapData) {
     this.productName = mapData['productName'];
-    this.imageUrls = mapData['imageUrls'].cast<String>();
+//    this.imageUrls = mapData['imageUrls'].cast<String>();
+    this.imageUrls = mapData['imageUrls'] == null
+        ? mapData['imageUrls']
+        : mapData['imageUrls'].cast<String>();
     this.productCategory = mapData['productCategory'];
     this.productOriginLocation = mapData['productOriginLocation'];
     this.productSubCategory = mapData['productSubCategory'];

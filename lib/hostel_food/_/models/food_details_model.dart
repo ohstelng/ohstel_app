@@ -17,7 +17,7 @@ class ItemDetails {
     @required this.itemFastFoodName,
   });
 
-  ItemDetails.formMap(Map<String, dynamic> mapData) {
+  ItemDetails.formMap(mapData) {
     this.itemName = mapData['itemName'];
     this.itemCategory = mapData['itemCategory'];
     this.price = mapData['price'];

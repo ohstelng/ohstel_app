@@ -13,7 +13,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
@@ -67,7 +66,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 1,
       child: Scaffold(
         body: isLoading
             ? Center(child: CircularProgressIndicator())
@@ -87,9 +86,9 @@ class _MarketHomePageState extends State<MarketHomePage> {
                       SizedBox(height: 8),
                       tabBarView(),
                       SizedBox(height: 8),
-                      topBrands(),
+//                      topBrands(),
                       SizedBox(height: 16),
-                      recommended4U(),
+//                      recommended4U(),
                     ],
                   ),
                 ),
@@ -257,21 +256,21 @@ class _MarketHomePageState extends State<MarketHomePage> {
                   style: _tabBarStyle,
                 ),
               ),
-              Tab(
-                  child: Text(
-                'Best Sell',
-                style: _tabBarStyle,
-              ))
+//              Tab(
+//                  child: Text(
+//                'Best Sell',
+//                style: _tabBarStyle,
+//              ))
             ],
           ),
           Spacer(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Text(
-              "See All",
-              style: _tabBarStyle,
-            ),
-          )
+//          Padding(
+//            padding: const EdgeInsets.symmetric(vertical: 16.0),
+//            child: Text(
+//              "See All",
+//              style: _tabBarStyle,
+//            ),
+//          )
         ],
       ),
     );
@@ -280,11 +279,11 @@ class _MarketHomePageState extends State<MarketHomePage> {
   Widget tabBarView() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8),
-      height: 160, //
+      height: 260, //
       child: TabBarView(
         children: <Widget>[
           latestProduct(),
-          latestProduct(),
+//          latestProduct(),
         ],
       ),
     );
@@ -337,19 +336,23 @@ class _MarketHomePageState extends State<MarketHomePage> {
                         children: [
                           Container(
                             decoration: BoxDecoration(color: Colors.black12),
-                            child: ExtendedImage.network(
-                              currentProductModel.imageUrls[0],
-                              fit: BoxFit.fill,
-                              handleLoadingProgress: true,
-                              shape: BoxShape.rectangle,
-                              cache: false,
-                              enableMemoryCache: true,
-                            ),
+                            child: currentProductModel.imageUrls != null
+                                ? Center(
+                                    child: ExtendedImage.network(
+                                      currentProductModel.imageUrls[0],
+                                      fit: BoxFit.fill,
+                                      handleLoadingProgress: true,
+                                      shape: BoxShape.rectangle,
+                                      cache: false,
+                                      enableMemoryCache: true,
+                                    ),
+                                  )
+                                : Center(child: Icon(Icons.image)),
                           ),
-                          Positioned(
-                              bottom: 7,
-                              right: 7,
-                              child: SvgPicture.asset("asset/Shape.svg"))
+//                          Positioned(
+//                              bottom: 7,
+//                              right: 7,
+//                              child: SvgPicture.asset("asset/Shape.svg"))
                         ],
                       ),
                     ),
@@ -381,7 +384,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
             ),
           ),
         );
-      }, itemBuilderType: dynamic,
+      },
+      itemBuilderType: PaginateBuilderType.gridView,
     );
   }
 

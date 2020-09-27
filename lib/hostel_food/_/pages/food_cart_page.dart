@@ -128,6 +128,7 @@ class _CartPageState extends State<CartPage> {
     }
 
     PaidFood orderedFood = PaidFood(
+      buyerFullName: currentUserData['fullName'],
       address: currentUserData['address'],
       phoneNumber: currentUserData['phoneNumber'],
       email: currentUserData['email'],
@@ -135,10 +136,11 @@ class _CartPageState extends State<CartPage> {
       orders: ordersList,
       uniName: userData['uniName'],
       addressDetails: addressDetails,
+      buyerID: userData['uid'],
     );
 
     try {
-      await FastFoodMethods().saveOrderToDb(data: orderedFood.toMap());
+      await FastFoodMethods().saveOrderToDb(paidFood: orderedFood);
 //      Navigator.maybePop(context);
     } catch (e) {
       print(e);
@@ -371,67 +373,14 @@ class _CartPageState extends State<CartPage> {
                                       Container(
                                         child: Row(
                                           children: [
-                                            IconButton(
-                                              icon: Icon(
-                                                Icons.favorite_border,
-                                                color: Colors.black87,
-                                              ),
-                                              onPressed: () {
-                                                setState(() {});
-                                              },
-                                            ),
                                             SizedBox(
                                               width: 8,
                                             ),
-                                            Container(
-//                        padding: EdgeInsets.symmetric(horizontal: 1.5),
-                                              margin:
-                                                  EdgeInsets.only(right: 10),
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: numberOfPlates == 1
-                                                      ? Colors.grey
-                                                      : Color(0xFFF27507),
-                                                ),
-                                              ),
-                                              child: InkWell(
-                                                child: Icon(
-                                                  Icons.remove,
-                                                  color: numberOfPlates == 1
-                                                      ? Colors.grey
-                                                      : Color(0xFFF27507),
-                                                ),
-                                                onTap: () {
-                                                  if (numberOfPlates > 1) {
-                                                    if (mounted) {
-                                                      setState(() {
-                                                        numberOfPlates--;
-                                                      });
-                                                    }
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                            Text('$numberOfPlates'),
-                                            Container(
-                                              margin: EdgeInsets.only(left: 10),
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Color(0xFFF27507),
-                                                ),
-                                              ),
-                                              child: InkWell(
-                                                child: Icon(
-                                                  Icons.add,
-                                                  color: Color(0xFFF27507),
-                                                ),
-                                                onTap: () {
-                                                  if (mounted) {
-                                                    setState(() {
-                                                      numberOfPlates++;
-                                                    });
-                                                  }
-                                                },
+                                            Text(
+                                              'Units: $numberOfPlates',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey,
                                               ),
                                             ),
                                           ],

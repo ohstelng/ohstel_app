@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
@@ -66,7 +67,13 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       return null;
     }
     cartBox.toMap().forEach((key, value) {
-      FoodCartModel foodCart = FoodCartModel.fromMap(value);
+      print(value);
+      print(value.runtimeType);
+      var currentValueData = HashMap.from(value);
+      print(currentValueData.runtimeType);
+      print('opopo');
+      FoodCartModel foodCart =
+          FoodCartModel.fromMap(Map<String, dynamic>.from(currentValueData));
       if (foodCart.itemFastFoodLocation.toLowerCase() == 'onCampus' &&
           addressDetails['areaName'].toString().toLowerCase() == 'onCampus') {
         onCampus++;
@@ -512,6 +519,34 @@ class PaymentPopUp extends StatefulWidget {
 class _PaymentPopUpState extends State<PaymentPopUp> {
   bool loading = false;
 
+  Future<void> showMessage() async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      // false = user must tap button, true = tap outside dialog
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text('Payment SucessFull'),
+          content: Text(
+            'Your Food Will Be Delivered To You In the next 10 - 15 Mins. '
+            '\n\n Please Ensure To Be With Your Phone, Our Dispatch Rider'
+            ' Will Call You With The Phone Number You Provided. \n\n\n\n Thank'
+            ' For Purchasing With Us',
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   int getGrandTotal() {
     int numbers = widget.cartBox.length;
     int _total = 0;
@@ -593,17 +628,20 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
 
     PaidFood orderedFood = PaidFood(
       address: currentUserData['address'],
+      buyerFullName: currentUserData['fullName'],
       phoneNumber: currentUserData['phoneNumber'],
       email: currentUserData['email'],
       fastFoodNames: fastFoodList,
       orders: ordersList,
       uniName: widget.userData['uniName'],
       addressDetails: addressDetails,
+      buyerID: currentUserData['uid'],
     );
 
     try {
-      await FastFoodMethods().saveOrderToDb(data: orderedFood.toMap());
+      await FastFoodMethods().saveOrderToDb(paidFood: orderedFood);
       clearCart();
+      await showMessage();
       Navigator.maybePop(context);
     } catch (e) {
       print(e);

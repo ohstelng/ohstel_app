@@ -109,19 +109,19 @@ class _LogInPageState extends State<LogInPage> {
                         Row(
                           children: <Widget>[
                             Text(
-                              'Welcome, ',
+                              'Welcome',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 24.0,
                                   fontWeight: FontWeight.normal),
                             ),
-                            Text(
-                              "$_user",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.bold),
-                            )
+//                            Text(
+//                              "$_user",
+//                              style: TextStyle(
+//                                  color: Colors.black,
+//                                  fontSize: 24.0,
+//                                  fontWeight: FontWeight.bold),
+//                            )
                           ],
                         ),
                         Row(

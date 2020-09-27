@@ -177,7 +177,8 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                 ),
               ),
             );
-          }, itemBuilderType: dynamic,
+          },
+          itemBuilderType: PaginateBuilderType.listView,
         ),
       ),
     );

@@ -17,6 +17,7 @@ class _AllCategoriesState extends State<AllCategories> {
         child: Container(
           margin: EdgeInsets.only(top: 20.0),
           child: PaginateFirestore(
+            itemBuilderType: PaginateBuilderType.listView,
             scrollDirection: Axis.vertical,
             itemsPerPage: 3,
             physics: BouncingScrollPhysics(),
@@ -89,7 +90,8 @@ class _AllCategoriesState extends State<AllCategories> {
                   ),
                 ),
               );
-            }, itemBuilderType: dynamic,
+            },
+//            itemBuilderType: PaginateBuilderType.listView,
           ),
         ),
       ),

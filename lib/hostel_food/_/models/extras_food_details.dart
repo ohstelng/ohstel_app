@@ -17,7 +17,7 @@ class ExtraItemDetails {
     @required this.extraCategory,
   });
 
-  ExtraItemDetails.fromMap(Map<String, dynamic> mapData) {
+  ExtraItemDetails.fromMap(mapData) {
     this.extraItemName = mapData['extraItemName'];
     this.shortDescription = mapData['shortDescription'];
     this.imageUrl = mapData['imageUrl'];
@@ -37,5 +37,3 @@ class ExtraItemDetails {
     return data;
   }
 }
-
-

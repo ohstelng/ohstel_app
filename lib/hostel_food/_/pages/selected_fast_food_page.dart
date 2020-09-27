@@ -6,6 +6,7 @@ import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
 import 'package:Ohstel_app/hostel_food/_/models/fast_food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/food_cart_page.dart';
+import 'package:Ohstel_app/hostel_food/_/pages/food_orders_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_drinks_page.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_food_dialog.dart';
 import 'package:Ohstel_app/hostel_food/_/pages/selected_fries_page.dart';
@@ -399,9 +400,66 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
             Navigator.of(context).pop();
           },
         ),
-        cartWidget(),
+        Row(
+          children: [
+            cartWidget(),
+            popMenu(),
+          ],
+        ),
       ],
     );
+  }
+
+  Widget popMenu() {
+    return PopupMenuButton(
+        onSelected: (value) {
+          if (value == 1) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CartPage(),
+              ),
+            );
+          } else if (value == 2) {
+//            print(userData['uid']);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => FoodOrderPage(),
+              ),
+            );
+          }
+//          Fluttertoast.showToast(
+//            msg: "You have selected " + value.toString(),
+//            toastLength: Toast.LENGTH_SHORT,
+//            gravity: ToastGravity.BOTTOM,
+//            backgroundColor: Colors.black,
+//            textColor: Colors.white,
+//            fontSize: 16.0,
+//          );
+        },
+        itemBuilder: (context) => [
+              PopupMenuItem(
+                  value: 1,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
+                        child: Icon(Icons.add_shopping_cart),
+                      ),
+                      Text('Cart')
+                    ],
+                  )),
+              PopupMenuItem(
+                  value: 2,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
+                        child: Icon(Icons.history),
+                      ),
+                      Text('Orders')
+                    ],
+                  )),
+            ]);
   }
 
   Widget cartWidget() {

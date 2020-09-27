@@ -86,7 +86,9 @@ class _FoodDialogState extends State<FoodDialog> {
   Widget build(BuildContext context) {
 //    var size = MediaQuery.of(context).size;
 
-    return Scaffold(
+    return isLoading
+        ? Container(color: Colors.white,child: Center(child: CircularProgressIndicator()))
+        : Scaffold(
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -99,9 +101,7 @@ class _FoodDialogState extends State<FoodDialog> {
         ],
       ),
       body: SafeArea(
-        child: isLoading
-            ? Center(child: CircularProgressIndicator())
-            : Container(
+        child: Container(
                 child: ListView(
                   children: <Widget>[
                     Container(

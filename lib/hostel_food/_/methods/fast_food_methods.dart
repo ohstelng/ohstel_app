@@ -1,5 +1,5 @@
 import 'package:Ohstel_app/hostel_food/_/models/fast_food_details_model.dart';
-import 'package:Ohstel_app/hostel_food/_/models/food_details_model.dart';
+import 'package:Ohstel_app/hostel_food/_/models/paid_food_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -32,9 +32,10 @@ class FastFoodMethods {
     return fastFoodList;
   }
 
-  Future<void> saveOrderToDb({@required Map data}) async {
+  Future<void> saveOrderToDb({@required PaidFood paidFood}) async {
     try {
-      await orderedFoodCollectionRef.add(data);
+      print('iiiiii');
+      await orderedFoodCollectionRef.doc(paidFood.id).set(paidFood.toMap());
       Fluttertoast.showToast(msg: 'Order Sucessfull!');
     } catch (e) {
       print(e);

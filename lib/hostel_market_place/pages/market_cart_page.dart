@@ -1,6 +1,6 @@
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
-import 'package:Ohstel_app/hostel_market_place/pages/market_checkout_page.dart';
 import 'package:Ohstel_app/hostel_market_place/models/market_cart_model.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/market_checkout_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -73,26 +73,22 @@ class _MarketCartPageState extends State<MarketCartPage> {
           )
         : Scaffold(
             appBar: AppBar(
-              centerTitle: true,actions: [
-                InkWell(child: SvgPicture.asset("asset/slider.svg")),
-                SizedBox(width: 16)
-            ],
-              backgroundColor: Colors.white,
-              leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
+                centerTitle: true,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              elevation: 0.0,
-              title: Text(
-                'Cart',
-                style: TextStyle(color: Colors.black),
-              )
-            ),
+                elevation: 0.0,
+                title: Text(
+                  'Market Cart',
+                  style: TextStyle(color: Colors.black),
+                )),
             body: Container(
               height: MediaQuery.of(context).size.height,
               padding: EdgeInsets.all(8),
@@ -128,56 +124,81 @@ class _MarketCartPageState extends State<MarketCartPage> {
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Container(
-                                      height: 80,width: 80,child: Image.asset("asset/image1.jpg",fit: BoxFit.contain,),),
+                                      height: 80,
+                                      width: 80,
+                                      child: Image.asset(
+                                        "asset/image1.jpg",
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
                                     SizedBox(width: 16),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           SizedBox(height: 10),
-                                          Text('${currentCartItem.productName}',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                          Text(
+                                            '${currentCartItem.productName}',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                           SizedBox(height: 8),
                                           Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
-                                              Text('Store',style: TextStyle(fontSize: 17,color: Color(0xffB9BBBE)),),
-                                              ],
+                                              Text(
+                                                'Store',
+                                                style: TextStyle(
+                                                    fontSize: 17,
+                                                    color: Color(0xffB9BBBE)),
+                                              ),
+                                            ],
                                           ),
                                           SizedBox(height: 8),
-                                          Text('₦${currentCartItem.productPrice}',style: TextStyle(fontSize: 17),),
-                                          ],
+                                          Text(
+                                            '₦${currentCartItem.productPrice}',
+                                            style: TextStyle(fontSize: 17),
+                                          ),
+                                        ],
                                       ),
                                     ),
-
                                   ],
                                 ),
                                 SizedBox(height: 16),
                                 Row(
-                                   children: <Widget>[
-                                     InkWell(
-                                       onTap: () {
-                                         cartBox.deleteAt(index);
-                                       },
-                                       child: Row(
-                                         children: [
-                                           SvgPicture.asset("asset/Vector.svg"),
-                                           SizedBox(width: 8),
-                                           Text('Remove',style: TextStyle(fontSize: 17,color: Color(0xffC4C4C4)),)
-                                         ],
-                                       ),
-                                     ),
-                                     Expanded(child: SizedBox(width: MediaQuery.of(context).size.width * 0.5)),
-                                     SvgPicture.asset("asset/heart.svg"),
-                                     SizedBox(width: 24),
-                                     SvgPicture.asset("asset/minus.svg"),
-                                     SizedBox(width: 16),
-                                     Text('${currentCartItem.units}'),
-                                     SizedBox(width: 16),
-                                     SvgPicture.asset("asset/plus.svg")
-
-                                   ],
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: () {
+                                        cartBox.deleteAt(index);
+                                        setState(() {});
+                                      },
+                                      child: Row(
+                                        children: [
+                                          SvgPicture.asset("asset/Vector.svg"),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            'Remove',
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                color: Color(0xffC4C4C4)),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Text(
+                                      'Units: ${currentCartItem.units}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 Divider(
                                   thickness: 1.5,
@@ -195,16 +216,20 @@ class _MarketCartPageState extends State<MarketCartPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text('Total',style: TextStyle(fontSize: 20),),
-                                Text('₦${getGrandTotal()}',style: TextStyle(fontSize: 20,color: Color(0xffC4C4C4)),),
+                                Text(
+                                  'Total',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Text(
+                                  '₦${getGrandTotal()}',
+                                  style: TextStyle(
+                                      fontSize: 20, color: Color(0xffC4C4C4)),
+                                ),
                               ],
                             ),
-
                           ],
                         ),
                       ),
-
-
                     ],
                   );
                 },
@@ -219,7 +244,8 @@ class _MarketCartPageState extends State<MarketCartPage> {
                   );
                 }
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical:8.0,horizontal:20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
                   child: InkWell(
                     onTap: () async {
                       Navigator.of(context).push(
@@ -230,17 +256,23 @@ class _MarketCartPageState extends State<MarketCartPage> {
 //                            pay();
                     },
                     child: Container(
-                      decoration: BoxDecoration(color: Color(0xff1f2430),borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(
+                          color: Color(0xff1f2430),
+                          borderRadius: BorderRadius.circular(10)),
                       height: 55,
                       child: Center(
-                        child:
-                        Text('PROCEED TO PAYMENT',
-                          style: TextStyle(color: Color(0xffFFFFFF),fontSize: 20, fontWeight: FontWeight.bold),),),
+                        child: Text(
+                          'PROCEED TO PAYMENT',
+                          style: TextStyle(
+                              color: Color(0xffFFFFFF),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                   ),
-                ) ;
+                );
               },
-            )
-          );
+            ));
   }
 }
