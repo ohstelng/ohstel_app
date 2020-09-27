@@ -1,7 +1,11 @@
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
+import 'package:Ohstel_app/hostel_hire/pages/laundry_basket_page.dart';
 import 'package:Ohstel_app/hostel_hire/pages/laundry_option_pop_up.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/hire_agent_model.dart';
 import '../model/laundry_booking_model.dart';
@@ -392,6 +396,17 @@ class SelectLaundryPage extends StatefulWidget {
 }
 
 class _SelectLaundryPageState extends State<SelectLaundryPage> {
+  Box<Map> laundryBox;
+  bool loadingBasket = true;
+
+  Future<void> getBox() async {
+    laundryBox = await HiveMethods().getOpenBox('laundryBox');
+    if(!mounted) return;
+    setState(() {
+      loadingBasket = false;
+    });
+  }
+
   void selectOption({@required LaundryBookingModel laundry}) {
     showDialog(
       context: context,
@@ -406,6 +421,12 @@ class _SelectLaundryPageState extends State<SelectLaundryPage> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    getBox();
+    super.initState();
   }
 
   @override
@@ -503,13 +524,90 @@ class _SelectLaundryPageState extends State<SelectLaundryPage> {
       children: [
         IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        IconButton(
-          icon: Icon(Icons.shopping_basket),
-          onPressed: () => Navigator.pop(context),
-        ),
+        basketWidget(),
       ],
     );
+  }
+
+  Widget basketWidget() {
+//    if (widget.hireWorker.workType.toLowerCase() == 'laundry') {
+//      if (loadingBasket) return CircularProgressIndicator();
+    return loadingBasket
+        ? Center(child: CircularProgressIndicator())
+        : Container(
+            margin: EdgeInsets.only(right: 5.0),
+            child: ValueListenableBuilder(
+              valueListenable: laundryBox.listenable(),
+              builder: (context, Box box, widget) {
+                if (box.values.isEmpty) {
+                  return Container(
+                    margin: EdgeInsets.only(right: 5.0),
+                    child: IconButton(
+                      color: Colors.grey,
+                      icon: Icon(
+                        Icons.shopping_basket,
+//                    color: childeanFire,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => LaundryBasketPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                } else {
+                  int count = box.length;
+
+                  return Stack(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 5.0),
+                        child: IconButton(
+                          color: Colors.grey,
+                          icon: Icon(
+                            Icons.shopping_basket,
+                            color: Theme.of(context).primaryColor,
+                            size: 43,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => LaundryBasketPage(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Positioned(
+                        top: 8.0,
+                        right: 0.0,
+                        child: Container(
+                          padding: EdgeInsets.all(4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            '$count',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
+          );
+//    } else {
+//      return Container();
+//    }
   }
 }

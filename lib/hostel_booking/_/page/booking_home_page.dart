@@ -63,6 +63,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             if (list.length < 6) {
               moreHostelAvailable = false;
             }
+            if (!mounted) return;
             setState(() {
               searchList = list;
               isStillLoadingData = false;

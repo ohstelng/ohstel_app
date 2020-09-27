@@ -48,13 +48,17 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
     print(laundry.toMap());
 
     await HiveMethods().saveLaundryToBasketCart(data: laundry.toMap());
+    Navigator.pop(context);
   }
 
   int price() {
-    Map laundryModeAndPrice = widget.laundryDetails.laundryModeAndPrice;
-    int currentSelectedPrice =
-        (laundryModeAndPrice[dropdownValue] ?? 0 * unitValue);
+    int laundryModeAndPrice =
+        widget.laundryDetails.laundryModeAndPrice[dropdownValue] ?? 0;
+    print(laundryModeAndPrice);
+    int currentSelectedPrice = laundryModeAndPrice * unitValue;
 
+    print('($laundryModeAndPrice * $unitValue)');
+    print(currentSelectedPrice);
     return currentSelectedPrice;
   }
 
@@ -87,7 +91,10 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
       onPressed: () {
         saveToBasket();
       },
-      child: Text('Add To Basket',style: TextStyle(color: Colors.white),),
+      child: Text(
+        'Add To Basket',
+        style: TextStyle(color: Colors.white),
+      ),
     );
   }
 
@@ -150,7 +157,7 @@ class _LaundryOptionPopUpState extends State<LaundryOptionPopUp> {
       margin: EdgeInsets.all(10.0),
       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       decoration: BoxDecoration(
-      border: Border.all(),
+        border: Border.all(),
       ),
       child: DropdownButton(
           underline: SizedBox(),
