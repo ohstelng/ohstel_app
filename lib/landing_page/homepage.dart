@@ -139,49 +139,49 @@ class _HomepageState extends State<Homepage> {
                       SizedBox(
                         height: 30,
                       ),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 30.0),
-                          child: Container(
-                            height: 147,
-                            width: MediaQuery.of(context).size.width * 0.78,
-                            child: CarouselSlider(
-                              options: CarouselOptions(
-                                height: 400.0,
-                                initialPage: 0,
-                                autoPlay: true,
-                                autoPlayInterval: Duration(seconds: 3),
-                                pauseAutoPlayOnTouch: true,
-                                autoPlayAnimationDuration:
-                                    Duration(milliseconds: 800),
-                                autoPlayCurve: Curves.fastOutSlowIn,
-                                enlargeCenterPage: true,
-                                scrollDirection: Axis.horizontal,
-                              ),
-                              items: [1, 2, 3, 4].map((i) {
-                                return Builder(
-                                  builder: (BuildContext context) {
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 5.0),
-                                      decoration:
-                                          BoxDecoration(color: Colors.grey),
-                                      child: Center(
-                                        child: Text(
-                                          'image $i',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      ),
+//                      Center(
+//                        child: Padding(
+//                          padding: const EdgeInsets.symmetric(
+//                              vertical: 8, horizontal: 30.0),
+//                          child: Container(
+//                            height: 147,
+//                            width: MediaQuery.of(context).size.width * 0.78,
+//                            child: CarouselSlider(
+//                              options: CarouselOptions(
+//                                height: 400.0,
+//                                initialPage: 0,
+//                                autoPlay: true,
+//                                autoPlayInterval: Duration(seconds: 3),
+//                                pauseAutoPlayOnTouch: true,
+//                                autoPlayAnimationDuration:
+//                                    Duration(milliseconds: 800),
+//                                autoPlayCurve: Curves.fastOutSlowIn,
+//                                enlargeCenterPage: true,
+//                                scrollDirection: Axis.horizontal,
+//                              ),
+//                              items: [1, 2, 3, 4].map((i) {
+//                                return Builder(
+//                                  builder: (BuildContext context) {
+//                                    return Container(
+//                                      width: MediaQuery.of(context).size.width,
+//                                      margin:
+//                                          EdgeInsets.symmetric(horizontal: 5.0),
+//                                      decoration:
+//                                          BoxDecoration(color: Colors.grey),
+//                                      child: Center(
+//                                        child: Text(
+//                                          'image $i',
+//                                          style: TextStyle(fontSize: 16.0),
+//                                        ),
+//                                      ),
+//                                    );
+//                                  },
+//                                );
+//                              }).toList(),
+//                            ),
+//                          ),
+//                        ),
+//                      ),
                       SizedBox(
                         height: 30,
                       ),

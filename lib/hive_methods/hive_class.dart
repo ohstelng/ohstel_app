@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
@@ -87,7 +88,8 @@ class HiveMethods {
 
     if (userDataBox.isEmpty) {
       await Future.delayed(Duration(seconds: 1));
-//      AuthService().signOut();
+      AuthService().signOut();
+      Fluttertoast.showToast(msg: 'There Seems To Be An Issue Please Log In Again');
     }
     print(userDataBox.toMap());
     print('ooooooooooooooooooooooooooooooooooooo');

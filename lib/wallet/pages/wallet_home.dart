@@ -89,7 +89,7 @@ class _WalletHomeState extends State<WalletHome> {
   }
 
   Future<void> _verifyOnServer(String reference) async {
-    String skTest = 'sk_test_5df98ac979ca2f2d10789cb1a158715096cde107';
+    String skTest = 'sk_live_73656eea07892e936a4e06f044b163d83ee3273d';
 
     try {
       Map<String, String> headers = {
@@ -210,7 +210,7 @@ class _WalletHomeState extends State<WalletHome> {
   void initState() {
     getUserData();
     PaystackPlugin.initialize(
-      publicKey: 'pk_test_d0490fa7b5ae91bf5317ebdbd761760c8f14fd8f',
+      publicKey: 'pk_live_8cba4348b014eeed03430439945b624f669a7039',
     );
     super.initState();
 //    reward = AdmobReward(
@@ -456,21 +456,21 @@ class _WalletHomeState extends State<WalletHome> {
                               label: 'Get  Coin',
                               color: childeanFire,
                             ),
-                            ActionButton(
-                              onTap: () {},
-                              label: 'Coin to Naira',
-                              color: childeanFire,
-                            ),
-                            ActionButton(
-                              onTap: () {},
-                              label: 'Get a student Loan',
-                            ),
-                            ActionButton(
-                              onTap: () {
-                                showTransferPopUp();
-                              },
-                              label: 'Transfer Fund',
-                            ),
+//                            ActionButton(
+//                              onTap: () {},
+//                              label: 'Coin to Naira',
+//                              color: childeanFire,
+//                            ),
+//                            ActionButton(
+//                              onTap: () {},
+//                              label: 'Get a student Loan',
+//                            ),
+//                            ActionButton(
+//                              onTap: () {
+//                                showTransferPopUp();
+//                              },
+//                              label: 'Transfer Fund',
+//                            ),
                           ],
                         ),
                       ),

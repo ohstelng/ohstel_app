@@ -79,7 +79,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
                       SizedBox(height: 2),
                       searchBar(),
                       SizedBox(height: 16),
-                      advertBanner(),
+//                      advertBanner(),
                       categories(),
                       SizedBox(height: 24),
                       tabBar(),

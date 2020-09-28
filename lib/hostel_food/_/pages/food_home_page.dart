@@ -51,7 +51,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
           child: ListView(
             children: <Widget>[
 //              searchBar(),
-              imageList(),
+//              imageList(),
               foodList(),
             ],
           ),

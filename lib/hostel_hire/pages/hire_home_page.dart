@@ -50,18 +50,18 @@ class HireHomePage extends StatelessWidget {
           ),
 
           //Advert slideshow
-          AdvertSlides(
-            onPageChanged: _onAdvertPageChanged,
-            builder: _advertBuilder,
-          ),
+//          AdvertSlides(
+//            onPageChanged: _onAdvertPageChanged,
+//            builder: _advertBuilder,
+//          ),
 
           SizedBox(height: 8),
 
           //Advert Slideshow Page Indicator
-          AdvertSlidesPageIndicator(
-            limit: 4,
-            currentPageListenable: _advertCurrentPageListenable,
-          ),
+//          AdvertSlidesPageIndicator(
+//            limit: 4,
+//            currentPageListenable: _advertCurrentPageListenable,
+//          ),
 
           //List of HIRE categories
           Expanded(
@@ -76,7 +76,7 @@ class HireHomePage extends StatelessWidget {
                 (index) => ServiceCategoryListTile(
                   serviceName: categoriesList[index]['searchKey'],
                   imageUrl: categoriesList[index]['imageUrl'],
-                  openPeriod: categoriesList[index]['openPeriod'],
+                  openPeriod: categoriesList[index]['openTime'],
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

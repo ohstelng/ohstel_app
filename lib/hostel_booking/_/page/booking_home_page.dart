@@ -67,7 +67,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             setState(() {
               searchList = list;
               isStillLoadingData = false;
-              lastHostel = searchList[searchList.length - 1];
+              if (!mounted && list != []) {
+                lastHostel = searchList[searchList.length - 1];
+              }
             });
           }
         },

@@ -87,8 +87,9 @@ class AuthService {
       );
 
       // save user info to local database using hive
+      await Future.delayed(Duration(seconds: 1));
       await saveUserDataToDb(userData: userData.toMap());
-      setUserWalletDetails(uid: userData.uid);
+      await setUserWalletDetails(uid: userData.uid);
 
       return userFromFirebase(user);
     } catch (e) {

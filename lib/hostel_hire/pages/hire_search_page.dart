@@ -83,7 +83,7 @@ class _HireSearchPageState extends State<HireSearchPage> {
               },
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(left: 25.0),
-                  hintText: 'Search by Product Name',
+                  hintText: 'Search by Hire Worker Name',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4.0))),
             ),
@@ -112,7 +112,7 @@ class _HireSearchPageState extends State<HireSearchPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.local_hotel,
+                  Icons.work,
                   color: Colors.grey,
                   size: 85.0,
                 ),
@@ -139,12 +139,12 @@ class _HireSearchPageState extends State<HireSearchPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Icon(
-              Icons.hotel,
+              Icons.work,
               color: Colors.grey,
               size: 85.0,
             ),
             Text(
-              'Search For Product By Name',
+              'Search by Hire Worker Name',
               style: TextStyle(
                 fontWeight: FontWeight.w300,
                 fontSize: 18.0,
