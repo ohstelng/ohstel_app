@@ -63,6 +63,7 @@ class EachPaidOrderModel {
   String deliveryStatus;
   String productShopName;
   String productShopOwnerEmail;
+  String size;
   int productShopOwnerPhoneNumber;
   int units;
 
@@ -75,6 +76,7 @@ class EachPaidOrderModel {
     @required this.productShopOwnerEmail,
     @required this.productShopOwnerPhoneNumber,
     @required this.units,
+    @required this.size,
   });
 
   EachPaidOrderModel.fromMap(Map<String, dynamic> mapData) {
@@ -88,6 +90,7 @@ class EachPaidOrderModel {
     this.units = mapData['units'];
     this.productShopOwnerPhoneNumber =
         int.parse(mapData['productShopOwnerPhoneNumber']);
+    this.size = mapData['size'];
   }
 
   Map toMap() {
@@ -100,6 +103,7 @@ class EachPaidOrderModel {
     data['productShopOwnerEmail'] = this.productShopOwnerEmail;
     data['deliveryStatus'] = 'Awaiting Dispatch';
     data['units'] = this.units;
+    data['size'] = this.size;
     data['productShopOwnerPhoneNumber'] =
         this.productShopOwnerPhoneNumber.toString();
     data['productPrice'] = this.productPrice;

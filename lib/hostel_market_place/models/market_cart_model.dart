@@ -9,6 +9,7 @@ class MarketCartModel {
   String productDescription;
   int productPrice;
   String productShopName;
+  String size;
   String productShopOwnerEmail;
   int productShopOwnerPhoneNumber;
   List<String> searchKeys;
@@ -26,6 +27,7 @@ class MarketCartModel {
     @required this.productShopOwnerEmail,
     @required this.productShopOwnerPhoneNumber,
     @required this.units,
+    @required this.size,
   });
 
   MarketCartModel.fromMap(Map<String, dynamic> mapData) {
@@ -39,6 +41,7 @@ class MarketCartModel {
     this.productShopName = mapData['productShopName'];
     this.productShopOwnerEmail = mapData['productShopOwnerEmail'];
     this.units = mapData['units'];
+    this.size = mapData['size'];
     this.productShopOwnerPhoneNumber =
         int.parse(mapData['productShopOwnerPhoneNumber']);
     this.searchKeys = mapData['searchKeys'].cast<String>();
@@ -70,6 +73,7 @@ class MarketCartModel {
     data['productShopOwnerPhoneNumber'] =
         this.productShopOwnerPhoneNumber.toString();
     data['productPrice'] = this.productPrice;
+    data['size'] = this.size;
     data['searchKeys'] = _searchKeys;
 
     return data;

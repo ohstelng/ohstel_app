@@ -146,6 +146,7 @@ class _MarketOrdersPageState extends State<MarketOrdersPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('productName: ${currentOrder.productName}'),
+          Text('product Size: ${currentOrder.size ?? 'None'}'),
           Text('ShopName: ${currentOrder.productShopName}'),
           Text('Shop Email: ${currentOrder.productShopOwnerEmail}'),
           Text('Shop Number: ${currentOrder.productShopOwnerPhoneNumber}'),

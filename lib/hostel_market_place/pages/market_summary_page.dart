@@ -635,6 +635,7 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
           MarketCartModel.fromMap(data.cast<String, dynamic>());
 
       eachPaidOrderModel = EachPaidOrderModel(
+        size: currentItemDetails.size,
         productName: currentItemDetails.productName,
         imageUrls: currentItemDetails.imageUrls,
         productCategory: currentItemDetails.productCategory,

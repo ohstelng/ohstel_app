@@ -14,7 +14,8 @@ class ProductModel {
   String productShopOwnerEmail;
   int productShopOwnerPhoneNumber;
   Timestamp dateAdded;
-  List<String> searchKeys;
+  List searchKeys;
+  List sizeInfo;
   String id = Uuid().v1().toString();
 
   ProductModel({
@@ -28,6 +29,7 @@ class ProductModel {
     @required this.productShopName,
     @required this.productShopOwnerEmail,
     @required this.productShopOwnerPhoneNumber,
+    this.sizeInfo,
   });
 
   ProductModel.fromMap(Map<String, dynamic> mapData) {
@@ -47,6 +49,7 @@ class ProductModel {
         int.parse(mapData['productShopOwnerPhoneNumber']);
     this.dateAdded = mapData['dateAdded'];
     this.id = mapData['id'];
+    this.sizeInfo = mapData['sizeInfo'];
     this.searchKeys = mapData['searchKeys'].cast<String>();
   }
 
@@ -80,6 +83,7 @@ class ProductModel {
     data['dateAdded'] = Timestamp.now();
     data['id'] = this.id;
     data['searchKeys'] = _searchKeys;
+    data['hasSize'] = this.sizeInfo;
 
     return data;
   }

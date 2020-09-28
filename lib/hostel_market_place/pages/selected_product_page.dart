@@ -9,6 +9,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -27,6 +28,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
   bool isLoading = true;
   Map userData;
   Box marketBox;
+  String selectedSize;
 
   Future<void> getUserData() async {
     if (!mounted) return;
@@ -68,6 +70,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
       productShopOwnerEmail: productModel.productShopOwnerEmail,
       productShopOwnerPhoneNumber: productModel.productShopOwnerPhoneNumber,
       units: units,
+      size: selectedSize ?? null
     ).toMap();
     HiveMethods().saveMarketCartToDb(map: data);
   }
@@ -165,10 +168,10 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
         children: <Widget>[
           displayMultiPic(imageList: widget.productModel.imageUrls),
           productDetails(),
-          SizedBox(
-            height: 16,
-          ),
+          SizedBox(height: 16),
           unitController(),
+          SizedBox(height: 16),
+          hasSizedWidget(),
           SizedBox(height: 24),
           addToCartButton(),
           SizedBox(height: 8),
@@ -257,21 +260,70 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
     );
   }
 
+  Widget hasSizedWidget() {
+    if (widget.productModel.sizeInfo == null ||
+        widget.productModel.sizeInfo.isEmpty) {
+      return Container();
+    } else {
+      return Container(
+//        width: MediaQuery.of(context).size.width * .75,
+        height: 60,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemCount: widget.productModel.sizeInfo.length,
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: () {
+                setState(() {
+                  selectedSize = widget.productModel.sizeInfo[index];
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: selectedSize == widget.productModel.sizeInfo[index]
+                      ? Colors.orange
+                      : Colors.transparent,
+                ),
+                padding: EdgeInsets.all(10.0),
+                margin: EdgeInsets.all(10.0),
+                child: Center(
+                  child: Text('${widget.productModel.sizeInfo[index]}'),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
+  }
+
   Widget addToCartButton() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16),
       child: InkWell(
         onTap: () {
-          saveInfoToCart();
+          if (widget.productModel.sizeInfo == null ||
+              widget.productModel.sizeInfo.isEmpty) {
+            saveInfoToCart();
+          } else {
+            if(selectedSize == null){
+              Fluttertoast.showToast(msg: 'Please Select Size!');
+
+            }else{
+              saveInfoToCart();
+            }
+          }
         },
         child: Container(
-            height: 55,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Theme.of(context).primaryColor),
-            child: Center(
-                child: Row(
+          height: 55,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Theme.of(context).primaryColor),
+          child: Center(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -287,7 +339,9 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
                   color: Colors.white,
                 )
               ],
-            ))),
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -54,20 +54,16 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
         itemBuilderType: PaginateBuilderType.listView,
         query: FastFoodMethods()
             .orderedFoodCollectionRef
-//            .where('doneWith', isEqualTo: false)
             .where('buyerID', isEqualTo: userData['uid'])
-//            .where('fastFoodName', arrayContains: widget.fastFoodName)
             .orderBy('timestamp', descending: true),
         itemBuilder: (_, context, snap) {
-//          print(snap.data())
           PaidFood paidOrder = PaidFood.fromMap(snap.data());
           return Container(
-//              margin: EdgeInsets.all(5.0),
             child: Card(
               elevation: 2.0,
               child: ExpansionTile(
                 title: Text('${paidOrder.id}'),
-//                subtitle: Text('${paidOrder.timestamp.toDate()}'),
+                subtitle: Text('${paidOrder.timestamp.toDate()}'),
                 children: [
                   Container(
                     width: double.infinity,
