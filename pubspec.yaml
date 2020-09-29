@@ -78,11 +78,23 @@ dev_dependencies:
     sdk: flutter
   hive_generator: null
   build_runner: null
+  flutter_launcher_icons: ^0.8.0
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "asset/OHstel.png"
+  image_path_android: "asset/OHstel.png"
+  adaptive_icon_background: "asset/launcher/background.png"
+  adaptive_icon_foreground: "asset/launcher/foreground.png"
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter.
 flutter:
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
