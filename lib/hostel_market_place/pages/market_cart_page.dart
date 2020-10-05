@@ -126,9 +126,9 @@ class _MarketCartPageState extends State<MarketCartPage> {
                                     Container(
                                       height: 80,
                                       width: 80,
-                                      child: Image.asset(
-                                        "asset/image1.jpg",
-                                        fit: BoxFit.contain,
+                                      child: Image.network(
+                                        currentCartItem.imageUrls[0],
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                     SizedBox(width: 16),

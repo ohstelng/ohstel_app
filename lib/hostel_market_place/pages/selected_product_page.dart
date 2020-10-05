@@ -59,19 +59,20 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
   void saveInfoToCart() {
     ProductModel productModel = widget.productModel;
     Map data = MarketCartModel(
-      productName: productModel.productName,
-      imageUrls: productModel.imageUrls,
-      productCategory: productModel.productCategory,
-      productDescription: productModel.productDescription,
-      productOriginLocation: productModel.productOriginLocation,
-      productSubCategory: productModel.productSubCategory,
-      productPrice: productModel.productPrice,
-      productShopName: productModel.productShopName,
-      productShopOwnerEmail: productModel.productShopOwnerEmail,
-      productShopOwnerPhoneNumber: productModel.productShopOwnerPhoneNumber,
-      units: units,
-      size: selectedSize ?? null
-    ).toMap();
+            productName: productModel.productName,
+            imageUrls: productModel.imageUrls,
+            productCategory: productModel.productCategory,
+            productDescription: productModel.productDescription,
+            productOriginLocation: productModel.productOriginLocation,
+            productSubCategory: productModel.productSubCategory,
+            productPrice: productModel.productPrice,
+            productShopName: productModel.productShopName,
+            productShopOwnerEmail: productModel.productShopOwnerEmail,
+            productShopOwnerPhoneNumber:
+                productModel.productShopOwnerPhoneNumber,
+            units: units,
+            size: selectedSize ?? null)
+        .toMap();
     HiveMethods().saveMarketCartToDb(map: data);
   }
 
@@ -209,22 +210,6 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
           ),
           ExpansionTile(
             childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            expandedAlignment: Alignment.centerLeft,
-            title: Text(
-              "Reviews",
-              style: TextStyle(fontSize: 20),
-            ),
-            children: [
-              Text(
-                '${widget.productModel.productDescription}',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              )
-            ],
-          ),
-          ExpansionTile(
-            childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             expandedAlignment: Alignment.centerLeft,
             title: Text(
@@ -308,10 +293,9 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
               widget.productModel.sizeInfo.isEmpty) {
             saveInfoToCart();
           } else {
-            if(selectedSize == null){
+            if (selectedSize == null) {
               Fluttertoast.showToast(msg: 'Please Select Size!');
-
-            }else{
+            } else {
               saveInfoToCart();
             }
           }
@@ -456,7 +440,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
             return Container(
               child: ExtendedImage.network(
                 images,
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 handleLoadingProgress: true,
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(10),
