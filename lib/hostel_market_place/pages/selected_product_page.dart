@@ -4,6 +4,7 @@ import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_market_place/models/market_cart_model.dart';
 import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_cart_page.dart';
+import 'package:Ohstel_app/utilities/shared_widgets.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +28,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
   int units = 1;
   bool isLoading = true;
   Map userData;
-  Box marketBox;
+  // Box marketBox;
   String selectedSize;
 
   Future<void> getUserData() async {
@@ -37,7 +38,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
       isLoading = true;
     });
     userData = await HiveMethods().getUserData();
-    marketBox = await HiveMethods().getOpenBox('marketCart');
+    // marketBox = await HiveMethods().getOpenBox('marketCart');
     setState(() {
       isLoading = false;
     });
@@ -91,77 +92,6 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
           );
   }
 
-  Widget cartWidget() {
-    return Container(
-      margin: EdgeInsets.only(right: 5.0),
-      child: ValueListenableBuilder(
-        valueListenable: marketBox.listenable(),
-        builder: (context, Box box, widget) {
-          if (box.values.isEmpty) {
-            return Container(
-              margin: EdgeInsets.only(right: 5.0),
-              child: IconButton(
-                color: Colors.grey,
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: Theme.of(context).primaryColor,
-                  size: 35,
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MarketCartPage(),
-                    ),
-                  );
-                },
-              ),
-            );
-          } else {
-            int count = box.length;
-
-            return Stack(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 5.0),
-                  child: IconButton(
-                    color: Colors.grey,
-                    icon: Icon(
-                      Icons.shopping_cart,
-                      color: Theme.of(context).primaryColor,
-                      size: 35,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => MarketCartPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Positioned(
-                  top: 5.0,
-                  right: 5.0,
-                  child: Container(
-                    padding: EdgeInsets.all(4.0),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '$count',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-        },
-      ),
-    );
-  }
-
   Widget body() {
     return Container(
       margin: EdgeInsets.all(10),
@@ -187,7 +117,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
               Text(
                 '${widget.productModel.productDescription}',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
               )
             ],
@@ -201,9 +131,9 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
             ),
             children: [
               Text(
-                '${widget.productModel.productDescription}',
+                'The delivery would be handled by OHstel or any Ologee partnered delivery service.',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
               )
             ],
@@ -220,22 +150,19 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
               Text(
                 '${widget.productModel.productShopName} Shop',
                 style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
               ),
               Text(
                 '${widget.productModel.productShopOwnerPhoneNumber}',
                 style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
               ),
               Text(
                 '${widget.productModel.productShopOwnerEmail} Shop',
                 style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
               )
             ],
@@ -416,7 +343,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
             height: 15,
           ),
           Text(
-            '₦${widget.productModel.productPrice}',
+            'N${widget.productModel.productPrice}',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20,

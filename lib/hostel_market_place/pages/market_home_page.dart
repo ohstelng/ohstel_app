@@ -1,13 +1,17 @@
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_market_place/methods/market_methods.dart';
 import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
+import 'package:Ohstel_app/hostel_market_place/models/shop_model.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/all_categories_page.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/all_shops_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_cart_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/market_search_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/markets_orders_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_categrioes_page.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_product_page.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/selected_shop_page.dart';
 import 'package:Ohstel_app/landing_page/profile_page.dart';
+import 'package:Ohstel_app/utilities/shared_widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
@@ -86,7 +90,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
                       SizedBox(height: 8),
                       tabBarView(),
                       SizedBox(height: 8),
-//                      topBrands(),
+                      // TODO: COMMENT OUT TOP BRANDS AFTER
+                      topBrands(),
                       SizedBox(height: 16),
 //                      recommended4U(),
                     ],
@@ -211,32 +216,82 @@ class _MarketHomePageState extends State<MarketHomePage> {
 
   Widget topBrands() {
     return Container(
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(color: Color(0xffC4C4C4)),
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 25.0),
+      decoration: BoxDecoration(color: Color(0xFFEBF1EF)),
       width: MediaQuery.of(context).size.width,
-      height: 214,
+      height: 270,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Top Brands",
-            style: TextStyle(fontSize: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Top Shops",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              GestureDetector(
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllShopsPage())),
+                child: Text(
+                  "See all",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 25),
-          Expanded(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CircleAvatar(
-                radius: 70,
-                backgroundColor: Colors.white,
-              ),
-              CircleAvatar(
-                radius: 70,
-                backgroundColor: Colors.white,
-              )
-            ],
-          ))
+          FutureBuilder(
+            future: MarketMethods().getTopShops(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              List<Widget> _children = [];
+              snapshot.data.forEach((ShopModel shop) {
+                _children.add(
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SelectedShopPage(shop),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(70.0),
+                          child: Container(
+                            height: 140.0,
+                            width: 140.0,
+                            child: cachedNetworkImage(shop.imageUrl),
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        Text(
+                          shop.shopName,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+              return Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: _children,
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

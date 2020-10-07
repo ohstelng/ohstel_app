@@ -1,5 +1,6 @@
 import 'package:Ohstel_app/hostel_market_place/models/paid_market_orders_model.dart';
 import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
+import 'package:Ohstel_app/hostel_market_place/models/shop_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -85,5 +86,76 @@ class MarketMethods {
     }
 
     return productList;
+  }
+
+  Future<List<ProductModel>> getShopItems(String shopName) async {
+    List<ProductModel> productList = List<ProductModel>();
+
+    QuerySnapshot querySnapshot = await marketCollection
+        .doc('products')
+        .collection('allProducts')
+        .orderBy('dateAdded', descending: true)
+        .where('productShopName', isEqualTo: shopName)
+        .get();
+
+    querySnapshot.docs.forEach((doc) {
+      productList.add(ProductModel.fromMap(doc.data()));
+    });
+
+    return productList;
+  }
+
+  Future<List<ShopModel>> getShops() async {
+    List<ShopModel> shopList = List<ShopModel>();
+
+    final CollectionReference shopCollection =
+        FirebaseFirestore.instance.collection('shopOwnersData');
+
+    QuerySnapshot querySnapshot =
+        await shopCollection.orderBy('shopName').get();
+
+    querySnapshot.docs.forEach((doc) {
+      shopList.add(ShopModel.fromMap(doc.data()));
+    });
+
+    return shopList;
+  }
+
+  Future<List<ShopModel>> getTopShops() async {
+    List<ShopModel> shopList = List<ShopModel>();
+
+    final CollectionReference shopCollection =
+        FirebaseFirestore.instance.collection('shopOwnersData');
+
+    QuerySnapshot querySnapshot = await shopCollection
+        .orderBy('numberOfProducts', descending: true)
+        .limit(2)
+        .get();
+
+    querySnapshot.docs.forEach((doc) {
+      shopList.add(ShopModel.fromMap(doc.data()));
+    });
+
+    return shopList;
+  }
+
+  Future<List<ShopModel>> searchShop(String query) async {
+    List<ShopModel> shopList = List<ShopModel>();
+
+    final CollectionReference shopCollection =
+        FirebaseFirestore.instance.collection('shopOwnersData');
+
+    QuerySnapshot querySnapshot = await shopCollection
+        .where('shopName', isGreaterThanOrEqualTo: query)
+        .where('shopName', isLessThan: query + 'z')
+        .orderBy('shopName')
+        .get();
+
+    querySnapshot.docs.forEach((doc) {
+      print(doc.data());
+      shopList.add(ShopModel.fromMap(doc.data()));
+    });
+
+    return shopList;
   }
 }
