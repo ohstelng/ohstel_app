@@ -2,6 +2,7 @@ import 'package:Ohstel_app/explore/models/ticket.dart';
 import 'package:Ohstel_app/explore/widgets/circular_progress.dart';
 import 'package:Ohstel_app/explore/widgets/user_ticket.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
+import 'package:Ohstel_app/utilities/shared_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -63,24 +64,9 @@ class _UserTicketsState extends State<UserTickets> {
                 padding: EdgeInsets.all(20.0),
                 children: _userTickets,
               )
-            : Center(
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset('asset/OHstel.png'),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      Text(
-                        'You don\'t have any ticket',
-                        style: heading1,
-                      ),
-                    ],
-                  ),
-                ),
+            : buildNoItem(
+                context,
+                text: 'You don\'t have any ticket',
               );
       },
     );

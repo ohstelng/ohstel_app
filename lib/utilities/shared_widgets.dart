@@ -371,3 +371,25 @@ Widget cachedNetworkImage(String mediaUrl) {
     errorWidget: (context, url, error) => Icon(Icons.error),
   );
 }
+
+Widget buildNoItem(BuildContext context, {String text}) {
+  return Center(
+    child: Container(
+      height: MediaQuery.of(context).size.height * 0.5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset('asset/OHstel.png'),
+          SizedBox(
+            height: 30.0,
+          ),
+          Text(
+            text,
+            style: heading1,
+          ),
+        ],
+      ),
+    ),
+  );
+}

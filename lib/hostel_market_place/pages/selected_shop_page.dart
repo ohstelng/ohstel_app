@@ -33,18 +33,20 @@ class _SelectedShopPageState extends State<SelectedShopPage>
             );
           }
 
-          return GridView.builder(
-            padding: EdgeInsets.only(top: 24.0),
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 0.65,
-              mainAxisSpacing: 21.0,
-            ),
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-              return Center(child: ShopItemWidget(snapshot.data[index]));
-            },
-          );
+          return snapshot.data.length > 0
+              ? GridView.builder(
+                  padding: EdgeInsets.only(top: 24.0),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 0.65,
+                    mainAxisSpacing: 21.0,
+                  ),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Center(child: ShopItemWidget(snapshot.data[index]));
+                  },
+                )
+              : buildNoItem(context, text: 'Shop has no item.');
         });
   }
 
@@ -59,18 +61,20 @@ class _SelectedShopPageState extends State<SelectedShopPage>
             );
           }
 
-          return GridView.builder(
-            padding: EdgeInsets.only(top: 24.0),
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 0.65,
-              mainAxisSpacing: 21.0,
-            ),
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-              return Center(child: ShopItemWidget(snapshot.data[index]));
-            },
-          );
+          return snapshot.data.length > 0
+              ? GridView.builder(
+                  padding: EdgeInsets.only(top: 24.0),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 0.65,
+                    mainAxisSpacing: 21.0,
+                  ),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Center(child: ShopItemWidget(snapshot.data[index]));
+                  },
+                )
+              : buildNoItem(context, text: 'Shop has no grocery item.');
         });
   }
 
@@ -85,18 +89,20 @@ class _SelectedShopPageState extends State<SelectedShopPage>
             );
           }
 
-          return GridView.builder(
-            padding: EdgeInsets.only(top: 24.0),
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 0.65,
-              mainAxisSpacing: 21.0,
-            ),
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-              return Center(child: ShopItemWidget(snapshot.data[index]));
-            },
-          );
+          return snapshot.data.length > 0
+              ? GridView.builder(
+                  padding: EdgeInsets.only(top: 24.0),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 0.65,
+                    mainAxisSpacing: 21.0,
+                  ),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Center(child: ShopItemWidget(snapshot.data[index]));
+                  },
+                )
+              : buildNoItem(context, text: 'Shop has no drink item.');
         });
   }
 
@@ -111,18 +117,20 @@ class _SelectedShopPageState extends State<SelectedShopPage>
             );
           }
 
-          return GridView.builder(
-            padding: EdgeInsets.only(top: 24.0),
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 0.65,
-              mainAxisSpacing: 21.0,
-            ),
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, index) {
-              return Center(child: ShopItemWidget(snapshot.data[index]));
-            },
-          );
+          return snapshot.data.length > 0
+              ? GridView.builder(
+                  padding: EdgeInsets.only(top: 24.0),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 0.65,
+                    mainAxisSpacing: 21.0,
+                  ),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Center(child: ShopItemWidget(snapshot.data[index]));
+                  },
+                )
+              : buildNoItem(context, text: 'Shop has no toiletry item.');
         });
   }
 
