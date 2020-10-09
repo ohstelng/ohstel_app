@@ -428,7 +428,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
                                   Text('${currentProductModel.productName}')),
                           Expanded(
                             child: Text(
-                              '\₦${currentProductModel.productPrice}',
+                              '\N${currentProductModel.productPrice}',
                               style: TextStyle(fontSize: 16),
                             ),
                           ),

@@ -293,7 +293,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
                             style: _normText,
                           ),
                           Text(
-                            '₦${currentCartItem.productPrice}',
+                            'N${currentCartItem.productPrice}',
                             style: _normText,
                           ),
                         ],
@@ -449,7 +449,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
                   style: _normText,
                 ),
                 Text(
-                  '₦${formatCurrency.format(getGrandTotal())}',
+                  'N${formatCurrency.format(getGrandTotal())}',
                   style: _normText,
                 )
               ]),
@@ -461,7 +461,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
                   style: _normText,
                 ),
                 Text(
-                  '₦${formatCurrency.format(deliveryFee())}',
+                  'N${formatCurrency.format(deliveryFee())}',
                   style: _normText,
                 )
               ]),
@@ -477,7 +477,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
                   style: _normText,
                 ),
                 Text(
-                  '₦ ${formatCurrency.format(getGrandTotal() + deliveryFee())}',
+                  'N ${formatCurrency.format(getGrandTotal() + deliveryFee())}',
                   style: _normText,
                 )
               ]),

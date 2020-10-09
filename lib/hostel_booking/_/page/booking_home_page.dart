@@ -793,7 +793,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           SizedBox(height: 2),
           Row(children: <Widget>[
             Text(
-              '₦  ${formatCurrency.format(hostel.price)}',
+              'N  ${formatCurrency.format(hostel.price)}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0,

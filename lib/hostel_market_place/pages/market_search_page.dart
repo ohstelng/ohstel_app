@@ -172,8 +172,12 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
                       children: <Widget>[
                         displayMultiPic(
                             imageList: currentProductModel.imageUrls),
-                        SizedBox(width: 8,),
-                        Expanded(child: productDetails(product: currentProductModel)),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                            child:
+                                productDetails(product: currentProductModel)),
                       ],
                     ),
                   ),
@@ -205,7 +209,9 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           isShippedFromDifferentState(origin: product.productOriginLocation),
           productNameAndPriceDetails(product: product),
         ],
@@ -219,7 +225,9 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Text(
             '${product.productName} ',
             style: TextStyle(
@@ -227,15 +235,19 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
               fontSize: 18,
             ),
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Text(
-            '₦${product.productPrice}',
+            'N${product.productPrice}',
             style: TextStyle(
               color: Color(0xffc4c4c4),
               fontSize: 18,
             ),
           ),
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Text(
             '${product.productDescription}',
             style: TextStyle(
@@ -251,11 +263,14 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
     if (uniName != null) {
       if (uniName != origin) {
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 4.0,vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4),
           decoration: BoxDecoration(
             color: Colors.deepOrangeAccent,
           ),
-          child: Text('Shipped From Other State',style: TextStyle(color: Colors.white),),
+          child: Text(
+            'Shipped From Other State',
+            style: TextStyle(color: Colors.white),
+          ),
         );
       } else {
         return Container();
@@ -320,8 +335,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(left: 25.0),
                   hintText: 'Search by Product Name',
-                  border: OutlineInputBorder(
-                      )),
+                  border: OutlineInputBorder()),
             ),
           ),
         ),
@@ -331,10 +345,16 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
               FocusScope.of(context).unfocus();
               startSearch();
             },
-            child: Center(child: Icon(Icons.search,size: 35,)),
+            child: Center(
+                child: Icon(
+              Icons.search,
+              size: 35,
+            )),
           ),
         ),
-        SizedBox(width: 8,)
+        SizedBox(
+          width: 8,
+        )
       ],
     );
   }

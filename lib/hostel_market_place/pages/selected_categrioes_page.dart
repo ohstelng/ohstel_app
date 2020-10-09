@@ -155,7 +155,7 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                               SizedBox(
                                 height: 8,
                               ),
-                              Text('\₦${currentProductModel.productPrice}',
+                              Text('\N${currentProductModel.productPrice}',
                                   maxLines: 1,
                                   style: TextStyle(
                                     color: Color(0xffc4c4c4),

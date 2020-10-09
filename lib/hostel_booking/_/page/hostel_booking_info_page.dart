@@ -276,7 +276,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                   ),
                   Spacer(),
                   Text(
-                    '₦${formatCurrency.format(widget.hostelModel.price)}',
+                    'N${formatCurrency.format(widget.hostelModel.price)}',
                     style: _titlestyle,
                   ),
                 ],
