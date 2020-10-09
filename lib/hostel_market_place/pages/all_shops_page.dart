@@ -3,12 +3,12 @@ import 'package:Ohstel_app/hostel_market_place/pages/selected_shop_page.dart';
 import 'package:Ohstel_app/utilities/shared_widgets.dart';
 import 'package:flutter/material.dart';
 
-class AllShopsPage extends StatefulWidget {
+class AllPartnerShopsPage extends StatefulWidget {
   @override
-  _AllShopsPageState createState() => _AllShopsPageState();
+  _AllPartnerShopsPageState createState() => _AllPartnerShopsPageState();
 }
 
-class _AllShopsPageState extends State<AllShopsPage> {
+class _AllPartnerShopsPageState extends State<AllPartnerShopsPage> {
   String searchQuery = "";
   bool isSearching = false;
 
@@ -65,8 +65,8 @@ class _AllShopsPageState extends State<AllShopsPage> {
             customSearchBar(),
             FutureBuilder(
               future: isSearching
-                  ? MarketMethods().searchShop(searchQuery)
-                  : MarketMethods().getShops(),
+                  ? MarketMethods().searchPartnerShop(searchQuery)
+                  : MarketMethods().getPartnerShops(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());

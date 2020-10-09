@@ -49,15 +49,81 @@ class _SelectedShopPageState extends State<SelectedShopPage>
   }
 
   buildGroceries() {
-    return Text('hi');
+    return FutureBuilder(
+        future: MarketMethods().getPartnerShopCategoryItems(
+            shopName: widget.shop.shopName, category: 'Groceries'),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return GridView.builder(
+            padding: EdgeInsets.only(top: 24.0),
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 0.65,
+              mainAxisSpacing: 21.0,
+            ),
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              return Center(child: ShopItemWidget(snapshot.data[index]));
+            },
+          );
+        });
   }
 
   buildDrinks() {
-    return Text('hi');
+    return FutureBuilder(
+        future: MarketMethods().getPartnerShopCategoryItems(
+            shopName: widget.shop.shopName, category: 'Toiletries'),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return GridView.builder(
+            padding: EdgeInsets.only(top: 24.0),
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 0.65,
+              mainAxisSpacing: 21.0,
+            ),
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              return Center(child: ShopItemWidget(snapshot.data[index]));
+            },
+          );
+        });
   }
 
   buildToiletries() {
-    return Text('hi');
+    return FutureBuilder(
+        future: MarketMethods().getPartnerShopCategoryItems(
+            shopName: widget.shop.shopName, category: 'Groceries'),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return GridView.builder(
+            padding: EdgeInsets.only(top: 24.0),
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 0.65,
+              mainAxisSpacing: 21.0,
+            ),
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              return Center(child: ShopItemWidget(snapshot.data[index]));
+            },
+          );
+        });
   }
 
   @override

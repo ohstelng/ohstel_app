@@ -11,6 +11,7 @@ class ShopModel {
   int numberOfProducts;
   Timestamp dateJoined;
   String imageUrl;
+  bool isPartner;
 
   ShopModel({
     @required this.shopName,
@@ -21,6 +22,7 @@ class ShopModel {
     @required this.uniName,
     this.numberOfProducts,
     this.imageUrl,
+    this.isPartner,
   });
 
   ShopModel.fromMap(Map<String, dynamic> mapData) {
@@ -33,6 +35,7 @@ class ShopModel {
     this.dateJoined = mapData['dateJoined'];
     this.numberOfProducts = mapData['numberOfProducts'];
     this.imageUrl = mapData['imageUrl'];
+    this.isPartner = mapData['isPartner'];
   }
 
   Map toMap() {
@@ -46,6 +49,7 @@ class ShopModel {
     data['numberOfProducts'] = this.numberOfProducts;
     data['imageUrl'] = this.imageUrl;
     data['dateJoined'] = Timestamp.now();
+    data['isPartner'] = this.isPartner;
 
     return data;
   }

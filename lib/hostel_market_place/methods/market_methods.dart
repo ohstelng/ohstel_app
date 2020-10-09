@@ -105,14 +105,35 @@ class MarketMethods {
     return productList;
   }
 
-  Future<List<ShopModel>> getShops() async {
+  Future<List<ProductModel>> getPartnerShopCategoryItems(
+      {String shopName, String category}) async {
+    List<ProductModel> productList = List<ProductModel>();
+
+    QuerySnapshot querySnapshot = await marketCollection
+        .doc('products')
+        .collection('allProducts')
+        .orderBy('dateAdded', descending: true)
+        .where('productShopName', isEqualTo: shopName)
+        .where('partnerProductCategory', isEqualTo: category)
+        .get();
+
+    querySnapshot.docs.forEach((doc) {
+      productList.add(ProductModel.fromMap(doc.data()));
+    });
+
+    return productList;
+  }
+
+  Future<List<ShopModel>> getPartnerShops() async {
     List<ShopModel> shopList = List<ShopModel>();
 
     final CollectionReference shopCollection =
         FirebaseFirestore.instance.collection('shopOwnersData');
 
-    QuerySnapshot querySnapshot =
-        await shopCollection.orderBy('shopName').get();
+    QuerySnapshot querySnapshot = await shopCollection
+        .where('isPartner', isEqualTo: true)
+        .orderBy('shopName')
+        .get();
 
     querySnapshot.docs.forEach((doc) {
       shopList.add(ShopModel.fromMap(doc.data()));
@@ -121,13 +142,14 @@ class MarketMethods {
     return shopList;
   }
 
-  Future<List<ShopModel>> getTopShops() async {
+  Future<List<ShopModel>> getTopPartnerShops() async {
     List<ShopModel> shopList = List<ShopModel>();
 
     final CollectionReference shopCollection =
         FirebaseFirestore.instance.collection('shopOwnersData');
 
     QuerySnapshot querySnapshot = await shopCollection
+        .where('isPartner', isEqualTo: true)
         .orderBy('numberOfProducts', descending: true)
         .limit(2)
         .get();
@@ -139,13 +161,14 @@ class MarketMethods {
     return shopList;
   }
 
-  Future<List<ShopModel>> searchShop(String query) async {
+  Future<List<ShopModel>> searchPartnerShop(String query) async {
     List<ShopModel> shopList = List<ShopModel>();
 
     final CollectionReference shopCollection =
         FirebaseFirestore.instance.collection('shopOwnersData');
 
     QuerySnapshot querySnapshot = await shopCollection
+        .where('isPartner', isEqualTo: true)
         .where('shopName', isGreaterThanOrEqualTo: query)
         .where('shopName', isLessThan: query + 'z')
         .orderBy('shopName')

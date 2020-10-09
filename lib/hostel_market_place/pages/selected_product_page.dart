@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_market_place/models/market_cart_model.dart';
 import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
-import 'package:Ohstel_app/hostel_market_place/pages/market_cart_page.dart';
 import 'package:Ohstel_app/utilities/shared_widgets.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:extended_image/extended_image.dart';
@@ -11,8 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class SelectedProductPage extends StatefulWidget {
   final ProductModel productModel;

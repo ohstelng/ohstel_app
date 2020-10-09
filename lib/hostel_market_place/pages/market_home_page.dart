@@ -234,8 +234,10 @@ class _MarketHomePageState extends State<MarketHomePage> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AllShopsPage())),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AllPartnerShopsPage())),
                 child: Text(
                   "See all",
                   style: TextStyle(fontSize: 16),
@@ -245,7 +247,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
           ),
           SizedBox(height: 25),
           FutureBuilder(
-            future: MarketMethods().getTopShops(),
+            future: MarketMethods().getTopPartnerShops(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
