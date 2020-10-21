@@ -364,7 +364,6 @@ class _MarketHomePageState extends State<MarketHomePage> {
           .collection('allProducts')
           .orderBy('dateAdded', descending: true),
       itemBuilder: (_, context, DocumentSnapshot documentSnapshot) {
-//          print(documentSnapshot.data);
         ProductModel currentProductModel =
             ProductModel.fromMap(documentSnapshot.data());
         return Card(
