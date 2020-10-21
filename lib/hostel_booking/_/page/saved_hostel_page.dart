@@ -126,7 +126,7 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
                           height: 8,
                         ),
                         Text(
-                          "₦ Price",
+                          "N Price",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,

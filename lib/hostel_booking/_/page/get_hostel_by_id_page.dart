@@ -160,12 +160,14 @@ class _GetHostelByIDPageState extends State<GetHostelByIDPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: isLoading == false ? Column(
-          children: <Widget>[
-            body(),
-            footer(),
-          ],
-        ) : Center(child: CircularProgressIndicator()),
+        child: isLoading == false
+            ? Column(
+                children: <Widget>[
+                  body(),
+                  footer(),
+                ],
+              )
+            : Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -271,7 +273,7 @@ class _GetHostelByIDPageState extends State<GetHostelByIDPage> {
 
   Widget hostelDetails() {
     TextStyle _titlestyle =
-    TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+        TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
     return DefaultTabController(
       length: 2,
       child: Container(
@@ -290,7 +292,7 @@ class _GetHostelByIDPageState extends State<GetHostelByIDPage> {
                 ),
                 Spacer(),
                 Text(
-                  '₦${formatCurrency.format(hostelModel.price)}',
+                  'N${formatCurrency.format(hostelModel.price)}',
                   style: _titlestyle,
                 ),
               ],
@@ -309,8 +311,7 @@ class _GetHostelByIDPageState extends State<GetHostelByIDPage> {
                 Icons.location_on,
                 size: 16,
               ),
-              Text(
-                  '${hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
+              Text('${hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
               Spacer(),
             ]),
             Container(
@@ -324,9 +325,9 @@ class _GetHostelByIDPageState extends State<GetHostelByIDPage> {
                   ),
                   Tab(
                       child: Text(
-                        'Reviews',
-                        style: TextStyle(color: Colors.black),
-                      ))
+                    'Reviews',
+                    style: TextStyle(color: Colors.black),
+                  ))
                 ],
               ),
             ),
@@ -364,7 +365,7 @@ class _GetHostelByIDPageState extends State<GetHostelByIDPage> {
             bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40)),
         child: Carousel(
           images: imageList.map(
-                (images) {
+            (images) {
               return Container(
                 child: ExtendedImage.network(
                   images,

@@ -17,6 +17,7 @@ class ProductModel {
   List searchKeys;
   List sizeInfo;
   String id = Uuid().v1().toString();
+  String partnerProductCategory;
 
   ProductModel({
     @required this.productName,
@@ -30,6 +31,7 @@ class ProductModel {
     @required this.productShopOwnerEmail,
     @required this.productShopOwnerPhoneNumber,
     this.sizeInfo,
+    this.partnerProductCategory,
   });
 
   ProductModel.fromMap(Map<String, dynamic> mapData) {
@@ -51,6 +53,7 @@ class ProductModel {
     this.id = mapData['id'];
     this.sizeInfo = mapData['sizeInfo'];
     this.searchKeys = mapData['searchKeys'].cast<String>();
+    this.partnerProductCategory = mapData['partnerProductCategory'];
   }
 
   Map toMap() {
@@ -84,6 +87,7 @@ class ProductModel {
     data['id'] = this.id;
     data['searchKeys'] = _searchKeys;
     data['hasSize'] = this.sizeInfo;
+    data['partnerProductCategory'] = this.partnerProductCategory;
 
     return data;
   }

@@ -214,19 +214,19 @@ class _WalletHomeState extends State<WalletHome> {
       publicKey: 'pk_test_d0490fa7b5ae91bf5317ebdbd761760c8f14fd8f',
     );
     super.initState();
-   reward = AdmobReward(
-       adUnitId: AdManager.RewardId,
-       listener: (event, args) {
-         if (event == AdmobAdEvent.rewarded) {
-           //TODO: implement get coin
-           //TODO: implement get coin
-           //TODO: implement get coin
-           // The backend for the reward goes here, Mr Ola.
-           WalletMethods().getCoin(context: context);
-           print('User Rewarded');
-         }
-       });
-   reward.load();
+    reward = AdmobReward(
+        adUnitId: AdManager.RewardId,
+        listener: (event, args) {
+          if (event == AdmobAdEvent.rewarded) {
+            //TODO: implement get coin
+            //TODO: implement get coin
+            //TODO: implement get coin
+            // The backend for the reward goes here, Mr Ola.
+            WalletMethods().getCoin(context: context);
+            print('User Rewarded');
+          }
+        });
+    reward.load();
   }
 
 //-- Screen Functionality
@@ -301,7 +301,7 @@ class _WalletHomeState extends State<WalletHome> {
                                   backgroundColor:
                                       Colors.white.withOpacity(0.4),
                                   child: Text(
-                                    '₦',
+                                    'N',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 24,

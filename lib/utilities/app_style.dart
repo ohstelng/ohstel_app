@@ -54,7 +54,6 @@ const buttonStyle = TextStyle(
   fontWeight: FontWeight.w500,
 );
 
-
 //LAUNDRY TEXT STYLES
 
 const tableLabelTextStyle = TextStyle(
@@ -77,4 +76,12 @@ const tableDataTextStyle = TextStyle(
   color: Color(0xFF7C7C7F),
   fontWeight: FontWeight.w300,
   letterSpacing: 0,
+);
+
+// MARKET TEXT STYLE
+const screenTitle = TextStyle(
+  fontFamily: 'Lato',
+  color: Color(0xFF3A3A3A),
+  fontSize: 24,
+  fontWeight: FontWeight.w400,
 );

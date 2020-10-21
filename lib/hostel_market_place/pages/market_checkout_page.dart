@@ -466,7 +466,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                 style: _mainText,
               ),
               Text(
-                '₦${getSubTotal()}',
+                'N${getSubTotal()}',
                 style: _mainText,
               ),
             ],
@@ -479,7 +479,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                 style: _mainText,
               ),
               Text(
-                '₦${deliveryFee()}',
+                'N${deliveryFee()}',
                 style: _mainText,
               ),
             ],
@@ -496,7 +496,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                 style: _mainText,
               ),
               Text(
-                '₦${getGrandTotal()}',
+                'N${getGrandTotal()}',
                 style: _mainText,
               ),
             ],
@@ -537,7 +537,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
               children: <Widget>[
                 Text('Shipped From ${currentCartItem.productOriginLocation}'),
                 Text(
-                    '₦${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['price']}'),
+                    'N${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['price']}'),
               ],
             ),
           ),
@@ -548,7 +548,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
               children: <Widget>[
                 Text('Delivery Time'),
                 Text(
-                    '₦${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['delivery_time']} Day'),
+                    'N${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['delivery_time']} Day'),
               ],
             ),
           ),
