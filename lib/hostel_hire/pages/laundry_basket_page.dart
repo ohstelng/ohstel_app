@@ -566,7 +566,8 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                   "Number Of Items:",
                   style: TextStyle(fontSize: 20),
                 ),
-                Text("${laundryBox.length}", style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold))
+                Text("${laundryBox.length}",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
               ],
             ),
           ),
@@ -579,7 +580,8 @@ class _LaundryBasketPageState extends State<LaundryBasketPage> {
                   "Total Amount:",
                   style: TextStyle(fontSize: 20),
                 ),
-                Text('₦  ${formatCurrency.format(getPrice())}', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold))
+                Text('N  ${formatCurrency.format(getPrice())}',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
               ],
             ),
           ),

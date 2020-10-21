@@ -126,9 +126,9 @@ class _MarketCartPageState extends State<MarketCartPage> {
                                     Container(
                                       height: 80,
                                       width: 80,
-                                      child: Image.asset(
-                                        "asset/image1.jpg",
-                                        fit: BoxFit.contain,
+                                      child: Image.network(
+                                        currentCartItem.imageUrls[0],
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                     SizedBox(width: 16),
@@ -161,7 +161,7 @@ class _MarketCartPageState extends State<MarketCartPage> {
                                           ),
                                           SizedBox(height: 8),
                                           Text(
-                                            '₦${currentCartItem.productPrice}',
+                                            'N${currentCartItem.productPrice}',
                                             style: TextStyle(fontSize: 17),
                                           ),
                                         ],
@@ -221,7 +221,7 @@ class _MarketCartPageState extends State<MarketCartPage> {
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
-                                  '₦${getGrandTotal()}',
+                                  'N${getGrandTotal()}',
                                   style: TextStyle(
                                       fontSize: 20, color: Color(0xffC4C4C4)),
                                 ),

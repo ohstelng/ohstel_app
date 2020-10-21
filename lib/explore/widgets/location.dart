@@ -108,7 +108,7 @@ class _ExploreLocationWidgetState extends State<ExploreLocationWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '₦',
+                                  'N',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

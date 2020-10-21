@@ -140,10 +140,10 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                     width: MediaQuery.of(context).size.width,
 //                    height: MediaQuery.of(context).size.height * 0.2,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
                           Colors.grey[900].withOpacity(0.9),
                           Colors.grey[800].withOpacity(0.9),
                           Colors.grey[800].withOpacity(0.9),
@@ -151,7 +151,9 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                           Colors.grey[800].withOpacity(0.6),
                           Colors.grey[800].withOpacity(0.2),
                           Colors.transparent
-                        ])),
+                        ],
+                      ),
+                    ),
                   )),
               Container(
                 padding: EdgeInsets.only(right: 10, top: 10, left: 4),
@@ -274,7 +276,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                   ),
                   Spacer(),
                   Text(
-                    '₦${formatCurrency.format(widget.hostelModel.price)}',
+                    'N${formatCurrency.format(widget.hostelModel.price)}',
                     style: _titlestyle,
                   ),
                 ],

@@ -1,5 +1,10 @@
+import 'package:Ohstel_app/hive_methods/hive_class.dart';
+import 'package:Ohstel_app/hostel_market_place/pages/market_cart_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'app_style.dart';
 
@@ -194,7 +199,9 @@ class CustomLongButton extends StatelessWidget {
             )),
         color: type == ButtonType.borderBlue || type == ButtonType.borderOrange
             ? Colors.transparent
-            : type == ButtonType.filledOrange ? childeanFire : midnightExpress,
+            : type == ButtonType.filledOrange
+                ? childeanFire
+                : midnightExpress,
         height: 48,
         minWidth: double.infinity,
         child: Text(
@@ -246,7 +253,9 @@ class CustomShortButton extends StatelessWidget {
             )),
         color: type == ButtonType.borderBlue || type == ButtonType.borderOrange
             ? Colors.transparent
-            : type == ButtonType.filledOrange ? childeanFire : midnightExpress,
+            : type == ButtonType.filledOrange
+                ? childeanFire
+                : midnightExpress,
         height: 40,
         minWidth: double.infinity,
         child: Text(
@@ -264,4 +273,123 @@ class CustomShortButton extends StatelessWidget {
       ),
     );
   }
+}
+
+// SHOPPING CART
+Widget cartWidget() {
+  return FutureBuilder(
+      future: HiveMethods().getOpenBox('marketCart'),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return SizedBox.shrink();
+        }
+
+        Box marketBox = snapshot.data;
+
+        return Container(
+          margin: EdgeInsets.only(right: 5.0),
+          child: ValueListenableBuilder(
+            valueListenable: marketBox.listenable(),
+            builder: (context, Box box, widget) {
+              if (box.values.isEmpty) {
+                return Container(
+                  margin: EdgeInsets.only(right: 5.0),
+                  child: IconButton(
+                    color: Colors.grey,
+                    icon: Icon(
+                      Icons.shopping_cart,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MarketCartPage(),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else {
+                int count = box.length;
+
+                return Stack(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 5.0),
+                      child: IconButton(
+                        color: Colors.grey,
+                        icon: Icon(
+                          Icons.shopping_cart,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => MarketCartPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      top: 5.0,
+                      right: 5.0,
+                      child: Container(
+                        padding: EdgeInsets.all(6.0),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$count',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
+        );
+      });
+}
+
+Widget cachedNetworkImage(String mediaUrl) {
+  return CachedNetworkImage(
+    imageUrl: mediaUrl,
+    fit: BoxFit.cover,
+    placeholder: (context, url) => Padding(
+      padding: EdgeInsets.all(20.0),
+      child: Center(child: CircularProgressIndicator()),
+    ),
+    errorWidget: (context, url, error) => Icon(Icons.error),
+  );
+}
+
+Widget buildNoItem(BuildContext context, {String text}) {
+  return Center(
+    child: Container(
+      height: MediaQuery.of(context).size.height * 0.5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset('asset/OHstel.png'),
+          SizedBox(
+            height: 30.0,
+          ),
+          Text(
+            text,
+            style: heading1,
+          ),
+        ],
+      ),
+    ),
+  );
 }

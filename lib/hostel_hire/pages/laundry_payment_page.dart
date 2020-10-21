@@ -172,7 +172,8 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                     ),
                     Text(
                       '${laundryBox.length}',
-                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
 //                      style: tableDataTextStyle,
                     ),
                   ],
@@ -189,7 +190,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                     ),
                     RichText(
                       text: TextSpan(
-                        text: '₦',style: TextStyle(color: Colors.black),
+                        text: 'N', style: TextStyle(color: Colors.black),
 //                        style: nairaSignStyle,
                         children: [
                           TextSpan(
@@ -213,7 +214,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                     ),
                     RichText(
                       text: TextSpan(
-                        text: '₦',
+                        text: 'N',
                         style: TextStyle(color: Colors.black),
 //                        style: nairaSignStyle,
                         children: [
@@ -241,12 +242,13 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
                     ),
                     RichText(
                       text: TextSpan(
-                        text: '₦',
-                          style: TextStyle(color: Colors.black),
+                        text: 'N',
+                        style: TextStyle(color: Colors.black),
 //                        style: nairaSignStyle,
                         children: [
                           TextSpan(
-                            text: '${formatCurrency.format(getGrandTotal() + (deliveryFee ?? 0))}',
+                            text:
+                                '${formatCurrency.format(getGrandTotal() + (deliveryFee ?? 0))}',
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
@@ -263,7 +265,6 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
           //---Order summary
 
           // address
-
 
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 40, 0, 16),
@@ -321,30 +322,30 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
 
   Widget address() {
     return Container(
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Text(
-                  'Pick Up Address:'),
+              Text('Pick Up Address:'),
               Spacer(),
               Text(
                   '${widget.laundryAddressDetails.pickUpAddress['address']}, ${widget.laundryAddressDetails.pickUpAddress['areaName']}')
             ],
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
-              Text(
-                  'Pick Up PhoneNumber: '),
+              Text('Pick Up PhoneNumber: '),
               Spacer(),
-              Text(
-                  '${widget.laundryAddressDetails.pickUpNumber}')
+              Text('${widget.laundryAddressDetails.pickUpNumber}')
             ],
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
               Text('Pick Up Date: '),
@@ -352,7 +353,9 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
               Text('${widget.laundryAddressDetails.pickUpDate}')
             ],
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
               Text('Pick Up Time: '),
@@ -360,27 +363,30 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
               Text('${widget.laundryAddressDetails.pickUpTime}')
             ],
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
-              Text(
-                  'Drop Off Address: '),
+              Text('Drop Off Address: '),
               Spacer(),
               Text(
                   '${widget.laundryAddressDetails.dropOffAddress['address']}, ${widget.laundryAddressDetails.dropOffAddress['areaName']}')
             ],
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
-              Text(
-                  'Drop Off Phone Number:'),
+              Text('Drop Off Phone Number:'),
               Spacer(),
-              Text(
-                  '${widget.laundryAddressDetails.pickUpNumber}')
+              Text('${widget.laundryAddressDetails.pickUpNumber}')
             ],
           ),
-          SizedBox(height: 16,),
+          SizedBox(
+            height: 16,
+          ),
           Divider()
         ],
       ),
