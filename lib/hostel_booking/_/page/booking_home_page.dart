@@ -48,7 +48,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   String sortBy = 'default';
 
   Connectivity connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult> subscription;
   bool performOnlineActivity;
   bool toDisplay = true;
 
@@ -529,21 +528,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       getUniName();
       initSearch();
     });
-    subscription =
-        connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.mobile ||
-          result == ConnectivityResult.wifi) {
-        performOnlineActivity = true;
-        toDisplay = true;
-//        moreHostelAvailable
-        if (!mounted) return;
-        setState(() {});
-      } else if (result == ConnectivityResult.none) {
-        performOnlineActivity = false;
-        toDisplay = false;
-//        setState(() {});
-      }
-    });
     scrollController.addListener(() {
       _scrollListener();
     });
@@ -552,7 +536,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   @override
   void dispose() {
-    subscription.cancel();
     super.dispose();
   }
 
@@ -890,7 +873,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
               ),
             ),
           ),
-          Expanded(flex: 2, child: dropdownButton()),
+          Expanded(flex: 2, child: myPopMenu()),
         ],
       ),
     );
@@ -981,10 +964,10 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     );
   }
 
-  DropdownButton dropdownButton() {
-    return DropdownButton<String>(
-      underline: Container(color: Colors.transparent),
-      onChanged: (value) async {
+
+  Widget myPopMenu() {
+    return PopupMenuButton(
+      onSelected: (value) async {
         print('value: $value');
         if (value == 'changeUni') {
           print('Change uin');
@@ -1004,26 +987,29 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             isStillLoadingData = false;
           });
         }
+        Fluttertoast.showToast(
+            msg: "You have selected " + value.toString(),
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0);
       },
-      hint: Icon(
+      icon: Icon(
         Icons.tune,
         color: Colors.black,
       ),
-      isExpanded: true,
-      items: [
-        DropdownMenuItem<String>(
-          value: "default",
+      itemBuilder: (context) => [
+        PopupMenuItem<String>(
+          value: "changeUni",
           child: Column(
             children: <Widget>[
-              Text(
-                "All",
-                textAlign: TextAlign.center,
-              ),
+              Text("Edit Uni", textAlign: TextAlign.center, maxLines: 1),
               Divider(),
             ],
           ),
         ),
-        DropdownMenuItem<String>(
+        PopupMenuItem<String>(
           value: "price",
           child: Column(
             children: <Widget>[
@@ -1035,7 +1021,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             ],
           ),
         ),
-        DropdownMenuItem<String>(
+        PopupMenuItem<String>(
           value: "distance",
           child: Column(
             children: <Widget>[
@@ -1047,7 +1033,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             ],
           ),
         ),
-        DropdownMenuItem<String>(
+        PopupMenuItem<String>(
           value: "roommateNeeded",
           child: Column(
             children: <Widget>[
@@ -1059,7 +1045,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             ],
           ),
         ),
-        DropdownMenuItem<String>(
+        PopupMenuItem<String>(
           value: "isSchoolHostel",
           child: Column(
             children: <Widget>[
@@ -1068,7 +1054,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             ],
           ),
         ),
-        DropdownMenuItem<String>(
+        PopupMenuItem<String>(
           value: "changeUni",
           child: Column(
             children: <Widget>[

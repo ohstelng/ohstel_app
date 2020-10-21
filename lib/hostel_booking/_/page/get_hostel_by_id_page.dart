@@ -242,28 +242,40 @@ class _GetHostelByIDPageState extends State<GetHostelByIDPage> {
         children: <Widget>[
           Expanded(
             flex: 5,
-            child: FlatButton(
-              color: Theme.of(context).primaryColor,
-              onPressed: () {
-                chargeCard();
-              },
-              child: Text('Make Payment'),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 10.0),
+              child: FlatButton(
+                color: Theme.of(context).primaryColor,
+                onPressed: () {
+                  chargeCard();
+                },
+                child: Text(
+                  'Make Payment',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ),
           ),
           Expanded(
             flex: 5,
-            child: FlatButton(
-              color: Theme.of(context).buttonColor,
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => HostelBookingInspectionRequestPage(
-                      hostelModel: hostelModel,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 10.0),
+              child: FlatButton(
+                color: Theme.of(context).buttonColor,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => HostelBookingInspectionRequestPage(
+                        hostelModel: hostelModel,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: Text('Request Inspection'),
+                  );
+                },
+                child: Text(
+                  'Request Inspection',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
             ),
           ),
         ],
@@ -274,81 +286,75 @@ class _GetHostelByIDPageState extends State<GetHostelByIDPage> {
   Widget hostelDetails() {
     TextStyle _titlestyle =
         TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
-    return DefaultTabController(
-      length: 2,
-      child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text(
-                  '${hostelModel.hostelName}',
-                  style: _titlestyle,
-                ),
-                Spacer(),
-                Text(
-                  'N${formatCurrency.format(hostelModel.price)}',
-                  style: _titlestyle,
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            Row(
-              children: <Widget>[
-                Text('${hostelModel.hostelLocation}'),
-                Spacer(),
-                Text(hostelModel.isSchoolHostel ? 'Roommate Needed' : '')
-              ],
-            ),
-            SizedBox(height: 8),
-            Row(children: <Widget>[
-              Icon(
-                Icons.location_on,
-                size: 16,
-              ),
-              Text('${hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
-              Spacer(),
-            ]),
-            Container(
-              child: TabBar(
-                tabs: <Widget>[
-                  Tab(
-                    child: Text(
-                      'Details',
-                      style: TextStyle(color: Colors.black),
-                    ),
+    return Expanded(
+      child: DefaultTabController(
+        length: 1,
+        child: Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    '${hostelModel.hostelName}',
+                    style: _titlestyle,
                   ),
-                  Tab(
-                      child: Text(
-                    'Reviews',
-                    style: TextStyle(color: Colors.black),
-                  ))
+                  Spacer(),
+                  Text(
+                    'N${formatCurrency.format(hostelModel.price)}',
+                    style: _titlestyle,
+                  ),
                 ],
               ),
-            ),
-            Container(
-                height: MediaQuery.of(context).size.height * 0.22,
-                child: TabBarView(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(
-                          child: Text('${hostelModel.description}')),
+              SizedBox(height: 8),
+              Row(
+                children: <Widget>[
+                  Text('${hostelModel.hostelLocation}'),
+                  Spacer(),
+                  Text(hostelModel.isSchoolHostel ? 'Roommate Needed' : '')
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(children: <Widget>[
+                Icon(
+                  Icons.location_on,
+                  size: 16,
+                ),
+                Text('${hostelModel.distanceFromSchoolInKm}KM from Unilorin'),
+                Spacer(),
+              ]),
+              Container(
+                child: TabBar(
+                  tabs: <Widget>[
+                    Tab(
+                      child: Text(
+                        'Details',
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(
-                          child: Text(
-                              'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat')),
-                    )
                   ],
-                ))
-          ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.22,
+                  child: TabBarView(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SingleChildScrollView(
+                            child: Text('${hostelModel.description}')),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

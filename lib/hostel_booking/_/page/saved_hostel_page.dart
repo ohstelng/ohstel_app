@@ -6,6 +6,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
+import 'get_hostel_by_id_page.dart';
+
 class SavedHostelPage extends StatefulWidget {
   @override
   _SavedHostelPageState createState() => _SavedHostelPageState();
@@ -78,12 +80,12 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
           child: InkWell(
             onTap: () {
               print(savedHostelModel.hostelID);
-//              Navigator.of(context).push(
-//                MaterialPageRoute(
-//                  builder: (context) =>
-//                      GetHostelByIDPage(id: savedHostelModel.hostelID),
-//                ),
-//              );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      GetHostelByIDPage(id: savedHostelModel.hostelID),
+                ),
+              );
             },
             child: Container(
               padding: EdgeInsets.all(10),
@@ -97,9 +99,11 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
                     width: 8,
                   ),
                   Container(
+                    height: 120,
                     width: MediaQuery.of(context).size.width * 0.45,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(
                           height: 8,
@@ -114,31 +118,13 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
                         SizedBox(
                           height: 8,
                         ),
-                        Text(
-                          'Location',
-                          style: TextStyle(
-                            color: Color(0xff868686),
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          "N Price",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
                         Row(
                           children: [
-                            Icon(Icons.location_on,
-                                size: 15, color: Color(0xff868686)),
+                            Icon(
+                              Icons.location_on,
+                              size: 15,
+                              color: Color(0xff868686),
+                            ),
                             Expanded(
                               child: Text(
                                 '${savedHostelModel.hostelLocation}',
@@ -148,13 +134,18 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
                                 ),
                               ),
                             ),
-                            Spacer(),
-                            Expanded(
-                                child: Text(
-                              "date",
-                              style: TextStyle(color: Color(0xff868686)),
-                            ))
                           ],
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          '${savedHostelModel.hostelLocation}',
+                          style: TextStyle(
+                            color: Color(0xff868686),
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ],
                     ),

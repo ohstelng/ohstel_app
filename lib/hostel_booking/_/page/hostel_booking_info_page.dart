@@ -57,51 +57,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
               child: PaymentPopUp(
             hostelModel: widget.hostelModel,
             userData: userData,
-          )
-//              child: Column(
-//                mainAxisSize: MainAxisSize.min,
-//                children: [
-//                  Text(
-//                    'The Sum Of NGN ${widget.hostelModel.price} '
-//                    'Will Be Deducted From Your Wallet Balance!',
-//                    textAlign: TextAlign.center,
-//                  ),
-//                  SizedBox(height: 20),
-//                  TextField(
-//                    decoration: InputDecoration(
-//                      labelText: 'Password',
-//                      hintText: 'Enter Your Password',
-//                    ),
-//                    obscureText: true,
-//                    keyboardType: TextInputType.text,
-//                    textInputAction: TextInputAction.done,
-//                    onChanged: (val) {
-//                      password = val;
-//                    },
-//                  ),
-//                  SizedBox(height: 20),
-//                  Row(
-//                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                    children: [
-//                      FlatButton(
-//                        onPressed: () async {
-//                          await validateUser(password: password);
-//                        },
-//                        child: Text('Proceed'),
-//                        color: Colors.green,
-//                      ),
-//                      FlatButton(
-//                        onPressed: () {
-//                          Navigator.pop(context);
-//                        },
-//                        child: Text('Cancel'),
-//                        color: Colors.grey,
-//                      ),
-//                    ],
-//                  ),
-//                ],
-//              ),
-              ),
+          )),
         );
       },
     );
@@ -138,7 +94,6 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                   top: 0.0,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-//                    height: MediaQuery.of(context).size.height * 0.2,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -175,10 +130,15 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                       ),
                     ),
                     Expanded(
-                        flex: 6,
-                        child: Text('Hostel Details',
-                            style:
-                                TextStyle(fontSize: 20, color: Colors.white))),
+                      flex: 6,
+                      child: Text(
+                        'Hostel Details',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                     Expanded(
                       flex: 1,
                       child: InkWell(
@@ -254,13 +214,15 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
   }
 
   Widget hostelDetails() {
-    TextStyle _titlestyle =
-        TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
+    TextStyle _titlestyle = TextStyle(
+      fontSize: 22,
+      fontWeight: FontWeight.bold,
+    );
+
     return DefaultTabController(
-      length: 2,
+      length: 1,
       child: Expanded(
         child: Container(
-//        height: MediaQuery.of(context).size.height * 0.36,
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
           decoration: BoxDecoration(
             color: Colors.transparent,
@@ -312,33 +274,23 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                         style: TextStyle(color: Colors.black),
                       ),
                     ),
-                    Tab(
-                        child: Text(
-                      'Reviews',
-                      style: TextStyle(color: Colors.black),
-                    ))
                   ],
                 ),
               ),
               Container(
 //                  height: MediaQuery.of(context).size.height * 0.13,
-                  child: Expanded(
-                child: TabBarView(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(
-                          child: Text('${widget.hostelModel.description}')),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(
-                          child: Text(
-                              'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat')),
-                    )
-                  ],
+                child: Expanded(
+                  child: TabBarView(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SingleChildScrollView(
+                            child: Text('${widget.hostelModel.description}')),
+                      ),
+                    ],
+                  ),
                 ),
-              ))
+              )
             ],
           ),
         ),
@@ -479,6 +431,8 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
     print(';;;;;;;;;;;;;;;;;;;;;;;;;;');
     if (result == 0) {
       savePaidDataToServer();
+      Navigator.pop(context);
+      showPaidPopUp();
     }
   }
 
@@ -512,20 +466,21 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FlatButton(
-                  onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    await validateUser(password: password);
-                    setState(() {
-                      loading = false;
-                    });
-                  },
-                  child:
-                      loading ? CircularProgressIndicator() : Text('Proceed'),
-                  color: Colors.green,
-                ),
+                loading
+                    ? CircularProgressIndicator()
+                    : FlatButton(
+                        onPressed: () async {
+                          setState(() {
+                            loading = true;
+                          });
+                          await validateUser(password: password);
+                          setState(() {
+                            loading = false;
+                          });
+                        },
+                        child: Text('Proceed'),
+                        color: Colors.green,
+                      ),
                 FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
@@ -538,6 +493,34 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
           ],
         ),
       ),
+    );
+  }
+
+  void showPaidPopUp() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text('Congratulations!'),
+          content: Text(
+            'You Payment Has Been Sucessfully Confirmed, You Would Recive A SmS Shortly. \n \n Thanks For Choosing Us.',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w300,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
