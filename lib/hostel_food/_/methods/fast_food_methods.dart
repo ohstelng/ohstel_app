@@ -11,6 +11,9 @@ class FastFoodMethods {
   final CollectionReference orderedFoodCollectionRef =
       FirebaseFirestore.instance.collection('orderedFood');
 
+  final CollectionReference foodInfoCollectionRef =
+      FirebaseFirestore.instance.collection('foodSalesInfo');
+
   Future<List<Map>> getFoodsFromDb({@required String uniName}) async {
     List<Map> fastFoodList = List<Map>();
 
@@ -33,12 +36,38 @@ class FastFoodMethods {
   }
 
   Future<void> saveOrderToDb({@required PaidFood paidFood}) async {
+    var dateParse = DateTime.parse(DateTime.now().toString());
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    var batch = db.batch();
+
     try {
       print('iiiiii');
-      await orderedFoodCollectionRef.doc(paidFood.id).set(paidFood.toMap());
+
+      paidFood.orders.forEach((currentOrder) {
+        debugPrint(currentOrder.toString());
+        String currentFastFood = currentOrder['fastFoodName'].toString();
+        debugPrint(currentFastFood);
+        batch.set(
+          foodInfoCollectionRef
+              .doc('$currentFastFood')
+              .collection(dateParse.year.toString())
+              .doc(dateParse.month.toString()),
+          {"count": FieldValue.increment(1)},
+          SetOptions(merge: true),
+        );
+      });
+
+      batch.set(
+        orderedFoodCollectionRef.doc(paidFood.id),
+        paidFood.toMap(),
+      );
+
+      await batch.commit();
+
       Fluttertoast.showToast(msg: 'Order Sucessfull!');
-    } catch (e) {
+    } catch (e, s) {
       print(e);
+      print(s);
       Fluttertoast.showToast(msg: '$e');
     }
   }
@@ -49,10 +78,6 @@ class FastFoodMethods {
     try {
       DocumentSnapshot documentSnapshot =
           await foodCollectionRef.doc('drinks').get();
-
-//      for (var i = 0; i < querySnapshot.docs.length; i++) {
-//        fastFoodList.add(querySnapshot.docs[i].data());
-//      }
       drinksData = FastFoodModel.fromMap(documentSnapshot.data());
     } catch (e) {
       print(e);

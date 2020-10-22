@@ -92,7 +92,7 @@ class EachOrder {
     data['mainItem'] = this.mainItem;
     data['extraItems'] = this.extraItems;
     data['numberOfPlates'] = this.numberOfPlates;
-    data['status'] = 'Delivery In Process';
+    data['status'] = 'Awaiting Delivery';
 
     return data;
   }

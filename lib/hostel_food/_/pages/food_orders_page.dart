@@ -29,6 +29,20 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
     }
   }
 
+  Future<void> refresh() async {
+    if (!mounted) return;
+    setState(() {
+      isLoading = true;
+    });
+
+    await Future.delayed(Duration(milliseconds: 200));
+
+    if (!mounted) return;
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   void initState() {
     getUserData();
@@ -40,8 +54,16 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Orders'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: refresh,
+          ),
+        ],
       ),
-      body: isLoading ? Container(child: CircularProgressIndicator()) : body(),
+      body: isLoading
+          ? Container(child: Center(child: CircularProgressIndicator()))
+          : body(),
     );
   }
 
@@ -93,7 +115,9 @@ class _FoodOrderPageState extends State<FoodOrderPage> {
                           EachOrder.fromMap(paidOrder.orders[index]);
                       return Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
+                          border: Border.all(
+                            color: Colors.black,
+                          ),
                         ),
                         margin: EdgeInsets.all(10.0),
                         child: details(currentOrder: currentOrder),

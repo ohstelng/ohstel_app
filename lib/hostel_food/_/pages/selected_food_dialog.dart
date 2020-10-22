@@ -13,7 +13,6 @@ import 'package:intl/intl.dart';
 
 import 'food_cart_page.dart';
 
-
 class FoodDialog extends StatefulWidget {
   final List<ExtraItemDetails> currentExtraItemDetails;
   final ItemDetails itemDetails;
@@ -69,6 +68,23 @@ class _FoodDialogState extends State<FoodDialog> {
     }
   }
 
+  void saveToCart() {
+    Map map = FoodCartModel(
+      itemDetails: widget.itemDetails,
+      totalPrice: getTotal(),
+      numberOfPlates: numberOfPlates,
+      extraItems: extraList,
+      itemFastFoodLocation: widget.foodModel.locationName,
+    ).toMap();
+
+    HiveMethods().saveFoodCartToDb(map: map);
+    numberOfPlates = 1;
+    extraList = [];
+
+    if (!mounted) return;
+    setState(() {});
+  }
+
   @override
   void dispose() {
     extraListController.close();
@@ -87,21 +103,26 @@ class _FoodDialogState extends State<FoodDialog> {
 //    var size = MediaQuery.of(context).size;
 
     return isLoading
-        ? Container(color: Colors.white,child: Center(child: CircularProgressIndicator()))
+        ? Container(
+            color: Colors.white,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
         : Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-            color: Colors.black,
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop()),
-        actions: [
-          cartWidget(),
-        ],
-      ),
-      body: SafeArea(
-        child: Container(
+            appBar: AppBar(
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: IconButton(
+                  color: Colors.black,
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.of(context).pop()),
+              actions: [
+                cartWidget(),
+              ],
+            ),
+            body: SafeArea(
+              child: Container(
                 child: ListView(
                   children: <Widget>[
                     Container(
@@ -222,13 +243,12 @@ class _FoodDialogState extends State<FoodDialog> {
                                   size: 16,
                                 ),
                                 Text(
-                                  "delivery time will be here",
+                                  "  5 - 10 Mins Delivery Time Range",
                                   style: TextStyle(color: Color(0xFFF27507)),
                                 )
                               ],
                             ),
                           ),
-                          Text("Ratings will be here")
                         ],
                       ),
                     ),
@@ -322,14 +342,7 @@ class _FoodDialogState extends State<FoodDialog> {
                         ),
                         padding: const EdgeInsets.all(20),
                         onPressed: () {
-                          Map map = FoodCartModel(
-                            itemDetails: widget.itemDetails,
-                            totalPrice: getTotal(),
-                            numberOfPlates: numberOfPlates,
-                            extraItems: extraList,
-                            itemFastFoodLocation: widget.foodModel.locationName,
-                          ).toMap();
-                          HiveMethods().saveFoodCartToDb(map: map);
+                          saveToCart();
                         },
                         color: Color(0xFFF27507),
                         label: Text(
@@ -345,8 +358,8 @@ class _FoodDialogState extends State<FoodDialog> {
                   ],
                 ),
               ),
-      ),
-    );
+            ),
+          );
   }
 
   Widget extraItemWidget() {

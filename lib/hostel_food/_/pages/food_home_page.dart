@@ -50,7 +50,6 @@ class _FoodHomePageState extends State<FoodHomePage> {
         child: Container(
           child: ListView(
             children: <Widget>[
-//              searchBar(),
               imageList(),
               foodList(),
             ],

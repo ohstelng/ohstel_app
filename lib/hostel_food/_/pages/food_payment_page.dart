@@ -67,15 +67,16 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       return null;
     }
     cartBox.toMap().forEach((key, value) {
-      print(value);
-      print(value.runtimeType);
       var currentValueData = HashMap.from(value);
-      print(currentValueData.runtimeType);
-      print('opopo');
-      FoodCartModel foodCart =
-          FoodCartModel.fromMap(Map<String, dynamic>.from(currentValueData));
+
+      FoodCartModel foodCart = FoodCartModel.fromMap(
+        Map<String, dynamic>.from(currentValueData),
+      );
+
       if (foodCart.itemFastFoodLocation.toLowerCase() == 'onCampus' &&
           addressDetails['areaName'].toString().toLowerCase() == 'onCampus') {
+        print(foodCart.itemFastFoodLocation.toLowerCase() == 'onCampus' &&
+            addressDetails['areaName'].toString().toLowerCase() == 'onCampus');
         onCampus++;
       } else {
         if (foodCart.itemFastFoodLocation.toLowerCase() ==
@@ -120,7 +121,6 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     Map data = await HiveMethods().getUserData();
     print(data);
     userData = data;
-//    _phoneNumber = data['phoneNumber'];
     numberSteam.add(data['phoneNumber']);
 
     await getDeliveryFeeFromApi();
@@ -633,13 +633,15 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       email: currentUserData['email'],
       fastFoodNames: fastFoodList,
       orders: ordersList,
-      uniName: widget.userData['uniName'],
+      uniName: widget.userData['uniDetails']['abbr'].toString().toLowerCase(),
       addressDetails: addressDetails,
       buyerID: currentUserData['uid'],
     );
 
     try {
-      await FastFoodMethods().saveOrderToDb(paidFood: orderedFood);
+      await FastFoodMethods().saveOrderToDb(
+        paidFood: orderedFood,
+      );
       clearCart();
       await showMessage();
       Navigator.maybePop(context);
@@ -705,20 +707,21 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FlatButton(
-                  onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    await validateUser(password: password);
-                    setState(() {
-                      loading = false;
-                    });
-                  },
-                  child:
-                      loading ? CircularProgressIndicator() : Text('Proceed'),
-                  color: Colors.green,
-                ),
+                loading
+                    ? CircularProgressIndicator()
+                    : FlatButton(
+                        onPressed: () async {
+                          setState(() {
+                            loading = true;
+                          });
+                          await validateUser(password: password);
+                          setState(() {
+                            loading = false;
+                          });
+                        },
+                        child: Text('Proceed'),
+                        color: Colors.green,
+                      ),
                 FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
