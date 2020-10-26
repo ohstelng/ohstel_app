@@ -72,30 +72,26 @@ class _HireSearchPageState extends State<HireSearchPage> {
       children: <Widget>[
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(5.0, 5.0, 2.0, 5.0),
+            padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
             child: TextField(
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.search,
               controller: searchController,
               onChanged: (val) {
                 setState(() {
                   query = val.trim();
                 });
               },
+              onSubmitted: (_) {
+                startSearch();
+              },
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(left: 25.0),
-                  hintText: 'Search by Product Name',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4.0))),
+                contentPadding: EdgeInsets.only(left: 25.0),
+                hintText: 'Search by Product Name',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+              ),
             ),
-          ),
-        ),
-        Container(
-          child: InkWell(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-              startSearch();
-            },
-            child: Center(child: Icon(Icons.search)),
           ),
         ),
       ],
@@ -112,12 +108,12 @@ class _HireSearchPageState extends State<HireSearchPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.local_hotel,
+                  Icons.error,
                   color: Colors.grey,
                   size: 85.0,
                 ),
                 Text(
-                  'Sorry No Product Was Found With The keyWord $query :(',
+                  'Sorry No Workr Was Founded :(',
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 18.0,
@@ -139,12 +135,12 @@ class _HireSearchPageState extends State<HireSearchPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Icon(
-              Icons.hotel,
+              Icons.settings,
               color: Colors.grey,
               size: 85.0,
             ),
             Text(
-              'Search For Product By Name',
+              'Search For Worker By Name',
               style: TextStyle(
                 fontWeight: FontWeight.w300,
                 fontSize: 18.0,
@@ -223,40 +219,73 @@ class _HireSearchPageState extends State<HireSearchPage> {
                             child: Icon(Icons.person),
                           ),
                   ),
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Text(
-                          '${currentWorkerModel.userName}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5.0, top: 10.0),
+                      height: 140,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Text(
+                              '${currentWorkerModel.userName}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Text(
+                              '${currentWorkerModel.workerPhoneNumber}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Text(
+                              '${currentWorkerModel.workType}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 16,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Text(
+                              '${currentWorkerModel.workerEmail}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 16,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Text(
-                          '${currentWorkerModel.workerPhoneNumber}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Text(
-                          '${currentWorkerModel.workerEmail}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                    ),
                   )
                 ],
               ),
             ),
           ),
         );
-      }, itemBuilderType: dynamic,
+      },
+      itemBuilderType: PaginateBuilderType.listView,
     );
   }
 }

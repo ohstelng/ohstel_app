@@ -98,12 +98,6 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
         );
       },
     );
-
-//      Navigator.pop(context);
-//    } catch (e) {
-//      print(e);
-//      Fluttertoast.showToast(msg: '$e');
-//    }
   }
 
   @override
@@ -290,48 +284,23 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
     );
   }
 
-  // Widget payButton() {
-  //   return Container(
-  //     decoration: BoxDecoration(
-  //       color: Color(0xffF27509),
-  //       borderRadius: BorderRadius.circular(15.0),
-  //     ),
-  //     width: double.infinity,
-  //     margin: EdgeInsets.all(15.0),
-  //     child: FlatButton(
-  //       onPressed: () async {
-  //         Map addressDetails = await HiveMethods().getFoodLocationDetails();
-
-  //         if (userData != null && addressDetails != null) {
-  //           paymentPopUp();
-  //         } else {
-  //           Fluttertoast.showToast(
-  //             msg: 'Plase Provide a delivery Location!',
-  //             gravity: ToastGravity.CENTER,
-  //             toastLength: Toast.LENGTH_LONG,
-  //           );
-  //         }
-  //       },
-  //       child: Text(
-  //         'Make Payment',
-  //         style: TextStyle(color: Colors.white),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget address() {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text('Pick Up Address:'),
-              Spacer(),
-              Text(
-                  '${widget.laundryAddressDetails.pickUpAddress['address']}, ${widget.laundryAddressDetails.pickUpAddress['areaName']}')
-            ],
+          Container(
+            width: MediaQuery.of(context).size.width * 0.80,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Pick Up Address'),
+                SizedBox(height: 10),
+                Text(
+                    '${widget.laundryAddressDetails.pickUpAddress['address']}, ${widget.laundryAddressDetails.pickUpAddress['areaName']}')
+              ],
+            ),
           ),
           SizedBox(
             height: 16,
@@ -363,16 +332,21 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
               Text('${widget.laundryAddressDetails.pickUpTime}')
             ],
           ),
+          Divider(),
           SizedBox(
             height: 16,
           ),
-          Row(
-            children: [
-              Text('Drop Off Address: '),
-              Spacer(),
-              Text(
-                  '${widget.laundryAddressDetails.dropOffAddress['address']}, ${widget.laundryAddressDetails.dropOffAddress['areaName']}')
-            ],
+          Container(
+            width: MediaQuery.of(context).size.width * 0.80,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Drop Off Address'),
+                SizedBox(height: 10.0),
+                Text(
+                    '${widget.laundryAddressDetails.dropOffAddress['address']}, ${widget.laundryAddressDetails.dropOffAddress['areaName']}')
+              ],
+            ),
           ),
           SizedBox(
             height: 16,
@@ -526,6 +500,8 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
   }
 
   Future<void> pay() async {
+    int count = 0;
+
     int result = await WalletMethods().deductWallet(
       amount: getGrandTotal().toDouble(),
       payingFor: 'Laundry',
@@ -533,7 +509,11 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
     );
     if (result == 0) {
       saveFoodInfoToDb();
+      clearCart();
       Navigator.pop(context);
+      Navigator.popUntil(context, (route) {
+        return count++ == 2;
+      });
     }
   }
 

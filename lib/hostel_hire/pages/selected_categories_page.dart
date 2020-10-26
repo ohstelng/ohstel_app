@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../../utilities/app_style.dart';
 import '../../utilities/shared_widgets.dart';
@@ -51,7 +48,7 @@ class SelectedHireCategoryPage extends StatelessWidget {
         ],
       ),
       body: DefaultTabController(
-        length: 2,
+        length: 1,
         child: Column(
           children: [
             //Search Bar
@@ -82,10 +79,10 @@ class SelectedHireCategoryPage extends StatelessWidget {
                       child: Text(
                     "Explore",
                   )),
-                  Tab(
-                      child: Text(
-                    "Saved",
-                  )),
+//                  Tab(
+//                      child: Text(
+//                    "Saved",
+//                  )),
                 ],
               ),
             ),
@@ -129,7 +126,7 @@ class SelectedHireCategoryPage extends StatelessWidget {
                   ),
 
                   //Saved Tab
-                  Placeholder(),
+//                  Placeholder(),
                 ],
               ),
             ),
@@ -212,20 +209,20 @@ class HireWorkerListTile extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 8),
-                      IconButton(
-                        constraints: BoxConstraints.tightFor(
-                          height: 20,
-                        ),
-                        padding: EdgeInsets.zero,
-                        iconSize: 18,
-                        icon: Icon(
-                          Random().nextBool() //TODO: BE Change to whether saved or not boolean
-                              ? Icons.bookmark_border
-                              : Icons.bookmark,
-                          color: midnightExpress,
-                        ),
-                        onPressed: () {},
-                      )
+//                      IconButton(
+//                        constraints: BoxConstraints.tightFor(
+//                          height: 20,
+//                        ),
+//                        padding: EdgeInsets.zero,
+//                        iconSize: 18,
+//                        icon: Icon(
+//                          Random().nextBool() //TODO: BE Change to whether saved or not boolean
+//                              ? Icons.bookmark_border
+//                              : Icons.bookmark,
+//                          color: midnightExpress,
+//                        ),
+//                        onPressed: () {},
+//                      )
                     ],
                   ),
                   SizedBox(height: 4),
@@ -234,20 +231,20 @@ class HireWorkerListTile extends StatelessWidget {
                     style: body1.copyWith(fontSize: 14),
                     softWrap: true,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: SmoothStarRating(
-                      isReadOnly: true,
-                      starCount: 5,
-                      rating:
-                          3.5, //TODO: BE add RATING to worker model and use here
-                      color: midnightExpress,
-                      borderColor: midnightExpress,
-                      size: 14,
-                    ),
-                  ),
+//                  Padding(
+//                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+//                    child: SmoothStarRating(
+//                      isReadOnly: true,
+//                      starCount: 5,
+//                      rating:
+//                          3.5, //TODO: BE add RATING to worker model and use here
+//                      color: midnightExpress,
+//                      borderColor: midnightExpress,
+//                      size: 14,
+//                    ),
+//                  ),
                   Text(
-                    'NA', //TODO: BE add OPEN PERIOD to worker model and use here
+                    '${worker.openTime}', //TODO: BE add OPEN PERIOD to worker model and use here
                     style: body1.copyWith(fontSize: 16),
                   ),
                   SizedBox(height: 8),

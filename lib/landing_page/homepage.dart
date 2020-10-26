@@ -79,17 +79,16 @@ class _HomepageState extends State<Homepage> {
                               ),
                             );
                           },
-                          child: CircleAvatar(
-                            backgroundColor: Colors.blueGrey[400],
-                            radius: 50,
+                          child: Container(
+                            height: 100,
+                            width: 100,
                             child: userData['profilePicUrl'] == null
                                 ? Icon(Icons.person, color: Color(0xffebf1ef))
                                 : ExtendedImage.network(
                                     userData['profilePicUrl'],
                                     fit: BoxFit.fill,
                                     handleLoadingProgress: true,
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(160),
+                                    shape: BoxShape.circle,
                                     cache: false,
                                     enableMemoryCache: true,
                                   ),

@@ -65,7 +65,7 @@ class HireMethods {
       {@required Map data, @required String id}) async {
     try {
       await laundryOrderCollection.doc(id).set(data);
-      Fluttertoast.showToast(msg: 'Saved To DataBase');
+      Fluttertoast.showToast(msg: 'Order Added To DataBase.');
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '$e');

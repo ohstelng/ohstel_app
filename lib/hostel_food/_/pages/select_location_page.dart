@@ -19,46 +19,48 @@ class SelectDeliveryLocationPage extends StatefulWidget {
 
 class _SelectDeliveryLocationPageState
     extends State<SelectDeliveryLocationPage> {
-  bool onCampus = true;
 
+  bool onCampus = true;
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color(0xFFF27507),
+    return Container(
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Color(0xFFF27507),
 //          backgroundColor: Colors.teal,
-          elevation: 0.0,
-          leading: Container(),
-          centerTitle: true,
-          title: Text('Select Location'),
-          bottom: TabBar(
-            indicatorColor: Colors.white,
-            indicatorWeight: 5,
-            onTap: (index) {
-              print(index);
-              if (index == 0) {
-                onCampus = true;
-              } else if (index == 1) {
-                onCampus = false;
-              }
-            },
-            tabs: [
-              Tab(text: "On Campus"),
-              Tab(text: "Off Campus"),
+            elevation: 0.0,
+            leading: Container(),
+            centerTitle: true,
+            title: Text('Select Location'),
+            bottom: TabBar(
+              indicatorColor: Colors.white,
+              indicatorWeight: 5,
+              onTap: (index) {
+                print(index);
+                if (index == 0) {
+                  onCampus = true;
+                } else if (index == 1) {
+                  onCampus = false;
+                }
+              },
+              tabs: [
+                Tab(text: "On Campus"),
+                Tab(text: "Off Campus"),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              Container(
+                child: OnCampusLocation(type: widget.type),
+              ),
+              Container(
+                child: OffCampusLocation(type: widget.type),
+              ),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: [
-            Container(
-              child: OnCampusLocation(type: widget.type),
-            ),
-            Container(
-              child: OffCampusLocation(type: widget.type),
-            ),
-          ],
         ),
       ),
     );
@@ -90,118 +92,115 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.all(15.0),
-        child: ListView(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(bottom: 40),
-              decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-              child: ExpansionTile(
-                key: GlobalKey(),
-                title: Text('$_areaName'),
-                leading: Icon(Icons.location_on),
-                children: <Widget>[
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .30,
-                    child: FutureBuilder(
-                      future: getAreaNamesFromApi(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          List areaNameList = snapshot.data['areaNames'];
-                          return ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            itemCount: areaNameList.length,
-                            itemBuilder: (context, index) {
-                              String currentAreaName = areaNameList[index];
-                              return InkWell(
-                                onTap: () {
-                                  if (mounted) {
-                                    setState(() {
-                                      _areaName = currentAreaName;
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.all(5.0),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.add_location,
-                                        color: Colors.grey,
-                                      ),
-                                      Text(
-                                        '$currentAreaName',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w400),
-                                      )
-                                    ],
-                                  ),
+    return Container(
+      margin: EdgeInsets.all(15.0),
+      child: ListView(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(bottom: 40),
+            decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+            child: ExpansionTile(
+              key: GlobalKey(),
+              title: Text('$_areaName'),
+              leading: Icon(Icons.location_on),
+              children: <Widget>[
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .30,
+                  child: FutureBuilder(
+                    future: getAreaNamesFromApi(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        List areaNameList = snapshot.data['areaNames'];
+                        return ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          itemCount: areaNameList.length,
+                          itemBuilder: (context, index) {
+                            String currentAreaName = areaNameList[index];
+                            return InkWell(
+                              onTap: () {
+                                if (mounted) {
+                                  setState(() {
+                                    _areaName = currentAreaName;
+                                  });
+                                }
+                              },
+                              child: Container(
+                                margin: EdgeInsets.all(5.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.add_location,
+                                      color: Colors.grey,
+                                    ),
+                                    Text(
+                                      '$currentAreaName',
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w400),
+                                    )
+                                  ],
                                 ),
-                              );
-                            },
-                          );
-                        }
-                      },
-                    ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            TextField(
-              decoration: InputDecoration(hintText: 'Enter Your Location'),
-              controller: controller,
-              textInputAction: TextInputAction.done,
-              autocorrect: true,
-              maxLength: 250,
-              maxLines: null,
-              onChanged: (val) {
-                address = val;
-              },
-              onSubmitted: (val) {
-                print(val);
-              },
-            ),
-            FlatButton(
-              color: Color(0xFFF27507),
-              onPressed: () {
-                if (address != null && address.length > 3) {
-                  Map addressDetails = {
-                    'address': address,
-                    'areaName': _areaName,
-                    'onCampus': false,
-                  };
-                  print(addressDetails);
+          ),
+          TextField(
+            decoration: InputDecoration(hintText: 'Enter Your Location'),
+            controller: controller,
+            textInputAction: TextInputAction.done,
+            autocorrect: true,
+            maxLength: 250,
+            maxLines: null,
+            onChanged: (val) {
+              address = val;
+            },
+            onSubmitted: (val) {
+              print(val);
+            },
+          ),
+          FlatButton(
+            color: Color(0xFFF27507),
+            onPressed: () {
+              if (address != null && address.length > 3) {
+                Map addressDetails = {
+                  'address': address,
+                  'areaName': _areaName,
+                  'onCampus': false,
+                };
+                print(addressDetails);
 
-                  if (widget.type == null) {
-                    HiveMethods()
-                        .saveFoodLocationDetailsToDb(map: addressDetails);
-                  } else {
-                    if (widget.type == AddressType.pickUp) {
-                      HiveMethods()
-                          .saveToLaundryPickUpBox(data: addressDetails);
-                    } else if (widget.type == AddressType.dropOff) {
-                      HiveMethods().saveToLaundryDropBox(data: addressDetails);
-                    }
-                  }
-                  Navigator.pop(context);
+                if (widget.type == null) {
+                  HiveMethods()
+                      .saveFoodLocationDetailsToDb(map: addressDetails);
                 } else {
-                  Fluttertoast.showToast(msg: 'Please Fill All Input!');
+                  if (widget.type == AddressType.pickUp) {
+                    HiveMethods().saveToLaundryPickUpBox(data: addressDetails);
+                  } else if (widget.type == AddressType.dropOff) {
+                    HiveMethods().saveToLaundryDropBox(data: addressDetails);
+                  }
                 }
-              },
-              child: Text(
-                'Submit',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-          ],
-        ),
+                Navigator.pop(context);
+              } else {
+                Fluttertoast.showToast(msg: 'Please Fill All Input!');
+              }
+            },
+            child: Text(
+              'Submit',
+              style: TextStyle(color: Colors.white),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -222,60 +221,58 @@ class _OnCampusLocationState extends State<OnCampusLocation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.all(15.0),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              decoration: InputDecoration(hintText: 'Enter Your Location'),
-              controller: controller,
-              textInputAction: TextInputAction.done,
-              autocorrect: true,
-              maxLength: 250,
-              maxLines: null,
-              onChanged: (val) {
-                address = val;
-              },
-              onSubmitted: (val) {
-                print(val);
-              },
-            ),
-            Container(
-              width: double.infinity,
-              child: FlatButton(
-                color: Color(0xFFF27507),
-                onPressed: () {
-                  if (address != null && address.length > 3) {
-                    Map addressDetails = {
-                      'address': address,
-                      'areaName': 'onCampus',
-                      'onCampus': true,
-                    };
-                    print(addressDetails);
-                    if (widget.type == null) {
+    return Container(
+      margin: EdgeInsets.all(15.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(hintText: 'Enter Your Location'),
+            controller: controller,
+            textInputAction: TextInputAction.done,
+            autocorrect: true,
+            maxLength: 250,
+            maxLines: null,
+            onChanged: (val) {
+              address = val;
+            },
+            onSubmitted: (val) {
+              print(val);
+            },
+          ),
+          Container(
+            width: double.infinity,
+            child: FlatButton(
+              color: Color(0xFFF27507),
+              onPressed: () {
+                if (address != null && address.length > 3) {
+                  Map addressDetails = {
+                    'address': address,
+                    'areaName': 'onCampus',
+                    'onCampus': true,
+                  };
+                  print(addressDetails);
+                  if (widget.type == null) {
+                    HiveMethods()
+                        .saveFoodLocationDetailsToDb(map: addressDetails);
+                  } else {
+                    if (widget.type == AddressType.pickUp) {
                       HiveMethods()
-                          .saveFoodLocationDetailsToDb(map: addressDetails);
-                    } else {
-                      if (widget.type == AddressType.pickUp) {
-                        HiveMethods()
-                            .saveToLaundryPickUpBox(data: addressDetails);
-                      } else if (widget.type == AddressType.dropOff) {
-                        HiveMethods()
-                            .saveToLaundryDropBox(data: addressDetails);
-                      }
+                          .saveToLaundryPickUpBox(data: addressDetails);
+                    } else if (widget.type == AddressType.dropOff) {
+                      HiveMethods().saveToLaundryDropBox(data: addressDetails);
                     }
-                    Navigator.pop(context);
                   }
-                },
-                child: Text(
-                  'Submit',
-                  style: TextStyle(color: Colors.white),
-                ),
+                  Navigator.pop(context);
+                }
+              },
+              child: Text(
+                'Submit',
+                style: TextStyle(color: Colors.white),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

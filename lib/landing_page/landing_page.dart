@@ -39,10 +39,6 @@ class _MainHomePageState extends State<MainHomePage> {
   @override
   void initState() {
     pageController = PageController(initialPage: getPageIndex, keepPage: true);
-    //TODO: implement connectivity checker
-    //TODO: implement connectivity checker
-    //TODO: implement connectivity checker
-    //TODO: implement connectivity checker
     HiveMethods().intiLocationData();
     super.initState();
   }
