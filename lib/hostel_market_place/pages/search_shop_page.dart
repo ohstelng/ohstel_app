@@ -16,8 +16,8 @@ class _SearchShopsPageState extends State<SearchShopsPage> {
   List<ShopModel> searchList = [];
   String query = '';
   bool isStillLoadingData = false;
-  bool moreProductAvailable = true;
-  bool gettingMoreProduct = false;
+  bool moreShopAvailable = true;
+  bool gettingMoreShop = false;
   bool searchStarted = false;
   ShopModel lastShop;
   String lastQuery;
@@ -33,9 +33,9 @@ class _SearchShopsPageState extends State<SearchShopsPage> {
         setState(() {
           if (list.isNotEmpty) {
             if (list.length < 5) {
-              moreProductAvailable = false;
+              moreShopAvailable = false;
             } else {
-              moreProductAvailable = true;
+              moreShopAvailable = true;
             }
 
             searchList = list;
@@ -57,28 +57,28 @@ class _SearchShopsPageState extends State<SearchShopsPage> {
   }
 
   void getMore() {
-    if (moreProductAvailable == false) {
+    if (moreShopAvailable == false) {
       return;
     }
 
-    if (gettingMoreProduct == true) {
+    if (gettingMoreShop == true) {
       return;
     }
 
     try {
-      gettingMoreProduct = true;
+      gettingMoreShop = true;
       MarketMethods()
           .searchMorePartnerShop(query: query, lastShop: lastShop)
           .then((List<ShopModel> list) {
         setState(() {
           if (list.length < 3) {
-            moreProductAvailable = false;
+            moreShopAvailable = false;
           }
 
           searchList.addAll(list);
           lastShop = searchList[searchList.length - 1];
 
-          gettingMoreProduct = false;
+          gettingMoreShop = false;
         });
       });
     } catch (e) {
@@ -196,7 +196,7 @@ class _SearchShopsPageState extends State<SearchShopsPage> {
               },
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.only(left: 25.0),
-                hintText: 'Search by Product Name',
+                hintText: 'Search by Shop Name',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -248,7 +248,7 @@ class _SearchShopsPageState extends State<SearchShopsPage> {
               size: 85.0,
             ),
             Text(
-              'Search For Product By Name',
+              'Search For Shop By Name',
               style: TextStyle(
                 fontWeight: FontWeight.w300,
                 fontSize: 18.0,

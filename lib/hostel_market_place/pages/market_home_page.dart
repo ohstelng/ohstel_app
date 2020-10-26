@@ -215,7 +215,9 @@ class _MarketHomePageState extends State<MarketHomePage> {
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AllPartnerShopsPage())),
+                        builder: (context) => AllPartnerShopsPage(),
+                    ),
+                ),
                 child: Text(
                   "See all",
                   style: TextStyle(fontSize: 16),

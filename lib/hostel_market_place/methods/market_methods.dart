@@ -12,6 +12,9 @@ class MarketMethods {
   final CollectionReference marketOrderCollection =
       FirebaseFirestore.instance.collection('marketOrders');
 
+  final CollectionReference shopCollection =
+      FirebaseFirestore.instance.collection('shopOwnersData');
+
   Future<List<Map>> getAllCategories() async {
     List<Map> dataList = List<Map>();
 
@@ -127,9 +130,6 @@ class MarketMethods {
   Future<List<ShopModel>> getPartnerShops() async {
     List<ShopModel> shopList = List<ShopModel>();
 
-    final CollectionReference shopCollection =
-        FirebaseFirestore.instance.collection('shopOwnersData');
-
     QuerySnapshot querySnapshot = await shopCollection
         .where('isPartner', isEqualTo: true)
         .orderBy('shopName')
@@ -152,7 +152,7 @@ class MarketMethods {
     QuerySnapshot querySnapshot = await shopCollection
         .where('isPartner', isEqualTo: true)
         .orderBy('numberOfProducts', descending: true)
-        .limit(2)
+        .limit(4)
         .get();
 
     querySnapshot.docs.forEach((doc) {
@@ -169,7 +169,6 @@ class MarketMethods {
         FirebaseFirestore.instance.collection('shopOwnersData');
 
     QuerySnapshot querySnapshot = await shopCollection
-        .where('isPartner', isEqualTo: true)
         .where('shopName', isGreaterThanOrEqualTo: query)
         .where('shopName', isLessThan: query + 'z')
         .orderBy('shopName')

@@ -288,33 +288,40 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
         maxHeight: 150,
         maxWidth: MediaQuery.of(context).size.width * .35,
       ),
-      child: Carousel(
-        images: imageList.map(
-          (images) {
-            return Container(
-              child: ExtendedImage.network(
-                images,
-                fit: BoxFit.fill,
-                handleLoadingProgress: true,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(10),
-                cache: false,
-                enableMemoryCache: true,
+      child: imageList != null
+          ? Carousel(
+              images: imageList.map(
+                (images) {
+                  return Container(
+                    child: ExtendedImage.network(
+                      images,
+                      fit: BoxFit.fill,
+                      handleLoadingProgress: true,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(10),
+                      cache: false,
+                      enableMemoryCache: true,
+                    ),
+                  );
+                },
+              ).toList(),
+              autoplay: true,
+              indicatorBgPadding: 0.0,
+              dotPosition: DotPosition.bottomCenter,
+              dotSpacing: 15.0,
+              dotSize: 4,
+              dotIncreaseSize: 2.5,
+              dotIncreasedColor: Theme.of(context).primaryColor,
+              dotBgColor: Colors.transparent,
+              animationCurve: Curves.fastOutSlowIn,
+              animationDuration: Duration(milliseconds: 2000),
+            )
+          : Container(
+              color: Colors.grey[200],
+              child: Center(
+                child: Icon(Icons.image),
               ),
-            );
-          },
-        ).toList(),
-        autoplay: true,
-        indicatorBgPadding: 0.0,
-        dotPosition: DotPosition.bottomCenter,
-        dotSpacing: 15.0,
-        dotSize: 4,
-        dotIncreaseSize: 2.5,
-        dotIncreasedColor: Theme.of(context).primaryColor,
-        dotBgColor: Colors.transparent,
-        animationCurve: Curves.fastOutSlowIn,
-        animationDuration: Duration(milliseconds: 2000),
-      ),
+            ),
     );
   }
 
