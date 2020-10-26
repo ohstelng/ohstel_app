@@ -156,7 +156,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
           return Column(
             children: <Widget>[
               Card(
-                elevation: 0,
+                elevation: 1.5,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
@@ -325,36 +325,24 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: TextField(
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.search,
               controller: searchController,
               onChanged: (val) {
                 setState(() {
                   query = val.trim();
                 });
               },
+              onSubmitted: (_) {
+                startSearch();
+              },
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(left: 25.0),
-                  hintText: 'Search by Product Name',
-                  border: OutlineInputBorder()),
+                contentPadding: EdgeInsets.only(left: 25.0),
+                hintText: 'Search by Product Name',
+                border: OutlineInputBorder(),
+              ),
             ),
           ),
         ),
-        Container(
-          child: InkWell(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-              startSearch();
-            },
-            child: Center(
-                child: Icon(
-              Icons.search,
-              size: 35,
-            )),
-          ),
-        ),
-        SizedBox(
-          width: 8,
-        )
       ],
     );
   }
@@ -396,7 +384,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Icon(
-              Icons.hotel,
+              Icons.local_grocery_store,
               color: Colors.grey,
               size: 85.0,
             ),

@@ -42,7 +42,7 @@ class _AllCategoriesState extends State<AllCategories> {
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
                 child: Card(
-                  elevation: 0,
+                  elevation: 1.5,
                   child: InkWell(
                     onTap: () {
                       Navigator.of(context).push(
@@ -59,11 +59,14 @@ class _AllCategoriesState extends State<AllCategories> {
                         Container(
                           height: 150,
                           width: 200,
+                          padding: EdgeInsets.all(10.0),
                           margin: EdgeInsets.symmetric(
-                              horizontal: 5.0, vertical: 2.0),
+                            horizontal: 10.0,
+                            vertical: 10.0,
+                          ),
                           decoration: BoxDecoration(
-                            color: Colors.grey,
-                            border: Border.all(color: Colors.grey),
+                            color: Colors.grey[200],
+//                            border: Border.all(color: Colors.grey),
                           ),
                           child: ExtendedImage.network(
                             data['imageUrl'],

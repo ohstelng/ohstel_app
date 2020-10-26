@@ -44,6 +44,7 @@ class _WalletHomeState extends State<WalletHome> {
 
   getUserDetails() {
     AuthService().getUserDetails(uid: userData['uid']).then((data) {
+      if(!mounted) return;
       setState(() {
         userModel = data;
       });

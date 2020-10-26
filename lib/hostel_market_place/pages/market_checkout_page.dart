@@ -187,6 +187,8 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
   }
 
   int deliveryFee() {
+    String userLocation =
+        userData['uniDetails']['name'].toString().toLowerCase();
     int numbers = cartBox.length;
     int shippingFee = 0;
 
@@ -199,10 +201,12 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
 
       if (deliveryDetailsFromApi != null) {
         deliveryDetailsFromApi.forEach((key, value) {
-          if (key.toString().toLowerCase() ==
-              userData['uniDetails']['name'].toString().toLowerCase()) {
-            num =
-                num + value[currentItemDetails.productOriginLocation]['price'];
+          String currentKey = key.toString().toLowerCase();
+          String itemOriginLocation = currentItemDetails.productOriginLocation;
+          Map currentLocation = value[itemOriginLocation] ?? {'price': 0};
+
+          if (currentKey == userLocation) {
+            num = num + currentLocation['price'];
           }
         });
       }
@@ -216,6 +220,8 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
   int getGrandTotal() {
     int numbers = cartBox.length;
     int _total = 0;
+    String userLocation =
+        userData['uniDetails']['name'].toString().toLowerCase();
 
     for (var i = 0; i < numbers; i++) {
       int unitNumber = 1;
@@ -230,12 +236,12 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
 
       if (deliveryDetailsFromApi != null) {
         deliveryDetailsFromApi.forEach((key, value) {
-          if (key.toString().toLowerCase() ==
-              userData['uniDetails']['name'].toString().toLowerCase()) {
-            print(key);
-            print(value[currentItemDetails.productOriginLocation]['price']);
-            shippingFee = shippingFee +
-                value[currentItemDetails.productOriginLocation]['price'];
+          String currentKey = key.toString().toLowerCase();
+          String itemOriginLocation = currentItemDetails.productOriginLocation;
+          Map currentLocation = value[itemOriginLocation] ?? {'price': 0};
+
+          if (currentKey == userLocation) {
+            shippingFee = shippingFee + currentLocation['price'];
           }
         });
       }
@@ -506,27 +512,34 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
     );
   }
 
-  Widget deliveryInfo(
-      {@required MarketCartModel currentCartItem, @required Map apiData}) {
-    String schoolName = userData['uniDetails']['name'].toString();
+  Widget deliveryInfo({
+    @required MarketCartModel currentCartItem,
+    @required Map apiData,
+  }) {
+    String schoolName = userData['uniDetails']['name'].toString().toLowerCase();
     String schoolNameAbbr = userData['uniDetails']['abbr'].toString();
-//    print(userData);
-//    print(schoolName);
-//    print(schoolNameAbbr);
+    String productLocation =
+        currentCartItem.productOriginLocation.toLowerCase();
 
-    if (currentCartItem.productOriginLocation.toLowerCase() !=
-        userData['uniDetails']['abbr'].toString().toLowerCase()) {
+    if (productLocation != schoolNameAbbr.toLowerCase()) {
       Map _uniMap;
 
       apiData.forEach((key, value) {
-//        print(schoolName);
-//        print(key);
-        if (key.toString().toLowerCase() == schoolName.toLowerCase()) {
+        String currentKey = key.toString().toLowerCase();
+
+        if (currentKey == schoolName) {
+          print('vale: $value');
           _uniMap = value;
         }
       });
 
-      print(_uniMap);
+      Map shippingPrice =
+          _uniMap[currentCartItem.productOriginLocation.toLowerCase()] ??
+              {'price': 0};
+
+      Map deliveryTtime =
+          _uniMap[currentCartItem.productOriginLocation.toLowerCase()] ??
+              {'delivery_time': 'Not Found'};
 
       return Column(
         children: [
@@ -536,8 +549,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text('Shipped From ${currentCartItem.productOriginLocation}'),
-                Text(
-                    'N${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['price']}'),
+                Text('N${shippingPrice['price']}'),
               ],
             ),
           ),
@@ -547,8 +559,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text('Delivery Time'),
-                Text(
-                    'N${_uniMap[currentCartItem.productOriginLocation.toLowerCase()]['delivery_time']} Day'),
+                Text('N ${deliveryTtime['delivery_time']} Day'),
               ],
             ),
           ),
@@ -613,7 +624,6 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               Map apiData = snapshot.data;
-//            List locationList = apiData.values.toList();
               return ValueListenableBuilder(
                 valueListenable: cartBox.listenable(),
                 builder: (context, box, widget) {

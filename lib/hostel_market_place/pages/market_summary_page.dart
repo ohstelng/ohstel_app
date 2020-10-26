@@ -99,6 +99,8 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
   }
 
   int deliveryFee() {
+    String userLocation =
+        userData['uniDetails']['name'].toString().toLowerCase();
     int numbers = cartBox.length;
     int shippingFee = 0;
 
@@ -111,10 +113,12 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
 
       if (deliveryDetailsFromApi != null) {
         deliveryDetailsFromApi.forEach((key, value) {
-          if (key.toString().toLowerCase() ==
-              userData['uniDetails']['name'].toString().toLowerCase()) {
-            num =
-                num + value[currentItemDetails.productOriginLocation]['price'];
+          String currentKey = key.toString().toLowerCase();
+          String itemOriginLocation = currentItemDetails.productOriginLocation;
+          Map currentLocation = value[itemOriginLocation] ?? {'price': 0};
+
+          if (currentKey == userLocation) {
+            num = num + currentLocation['price'];
           }
         });
       }
@@ -591,6 +595,8 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
   }
 
   int deliveryFee() {
+    String userLocation =
+        widget.userData['uniDetails']['name'].toString().toLowerCase();
     int numbers = widget.cartBox.length;
     int shippingFee = 0;
 
@@ -603,10 +609,12 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
 
       if (widget.deliveryDetailsFromApi != null) {
         widget.deliveryDetailsFromApi.forEach((key, value) {
-          if (key.toString().toLowerCase() ==
-              widget.userData['uniDetails']['name'].toString().toLowerCase()) {
-            num =
-                num + value[currentItemDetails.productOriginLocation]['price'];
+          String currentKey = key.toString().toLowerCase();
+          String itemOriginLocation = currentItemDetails.productOriginLocation;
+          Map currentLocation = value[itemOriginLocation] ?? {'price': 0};
+
+          if (currentKey == userLocation) {
+            num = num + currentLocation['price'];
           }
         });
       }
@@ -736,20 +744,21 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FlatButton(
-                  onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    await validateUser(password: password);
-                    setState(() {
-                      loading = false;
-                    });
-                  },
-                  child:
-                      loading ? CircularProgressIndicator() : Text('Proceed'),
-                  color: Colors.green,
-                ),
+                loading
+                    ? CircularProgressIndicator()
+                    : FlatButton(
+                        onPressed: () async {
+                          setState(() {
+                            loading = true;
+                          });
+                          await validateUser(password: password);
+                          setState(() {
+                            loading = false;
+                          });
+                        },
+                        child: Text('Proceed'),
+                        color: Colors.green,
+                      ),
                 FlatButton(
                   onPressed: () {
                     Navigator.pop(context);

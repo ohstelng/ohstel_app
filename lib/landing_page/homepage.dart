@@ -32,20 +32,15 @@ class _HomepageState extends State<Homepage> {
   bool isLoading = true;
   Map userData;
 
-  Connectivity connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult> subscription;
-  bool performOnlineActivity;
-  bool toDisplay = true;
 
   Future<void> getUserData() async {
-    await Future.delayed(Duration(seconds: 1));
-
     if (!mounted) return;
-
     setState(() {
       isLoading = true;
     });
+
     userData = await HiveMethods().getUserData();
+
     setState(() {
       isLoading = false;
     });
@@ -54,25 +49,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     getUserData();
-    subscription =
-        connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.mobile ||
-          result == ConnectivityResult.wifi) {
-        performOnlineActivity = true;
-        toDisplay = true;
-        setState(() {});
-      } else if (result == ConnectivityResult.none) {
-        performOnlineActivity = false;
-        toDisplay = false;
-      }
-    });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   @override

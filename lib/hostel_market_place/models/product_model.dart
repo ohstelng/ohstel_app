@@ -15,7 +15,7 @@ class ProductModel {
   int productShopOwnerPhoneNumber;
   Timestamp dateAdded;
   List searchKeys;
-  List sizeInfo;
+  List hasSize;
   String id = Uuid().v1().toString();
   String partnerProductCategory;
 
@@ -30,7 +30,7 @@ class ProductModel {
     @required this.productShopName,
     @required this.productShopOwnerEmail,
     @required this.productShopOwnerPhoneNumber,
-    this.sizeInfo,
+    this.hasSize,
     this.partnerProductCategory,
   });
 
@@ -51,7 +51,7 @@ class ProductModel {
         int.parse(mapData['productShopOwnerPhoneNumber']);
     this.dateAdded = mapData['dateAdded'];
     this.id = mapData['id'];
-    this.sizeInfo = mapData['sizeInfo'];
+    this.hasSize = mapData['hasSize'];
     this.searchKeys = mapData['searchKeys'].cast<String>();
     this.partnerProductCategory = mapData['partnerProductCategory'];
   }
@@ -86,244 +86,9 @@ class ProductModel {
     data['dateAdded'] = Timestamp.now();
     data['id'] = this.id;
     data['searchKeys'] = _searchKeys;
-    data['hasSize'] = this.sizeInfo;
+    data['hasSize'] = this.hasSize;
     data['partnerProductCategory'] = this.partnerProductCategory;
 
     return data;
   }
 }
-
-//List<ProductModel> list = [
-//  ProductModel(
-//    productName: 'Dangote Sugars',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Foodstuff',
-//    productSubCategory: 'Sugars',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'ola',
-//    productShopOwnerEmail: 'olashop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08099776655,
-//    productOriginLocation: 'unilorin',
-//  ),
-//  ProductModel(
-//    productName: 'Kings oil',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Foodstuff',
-//    productSubCategory: 'Oil',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'ola',
-//    productShopOwnerEmail: 'olashop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08099776655,
-//    productOriginLocation: 'unilorin',
-//  ),
-//  ProductModel(
-//    productName: 'Holladia Yoghurt',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Foodstuff',
-//    productSubCategory: 'Drinks',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'ola',
-//    productShopOwnerEmail: 'olashop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08099776655,
-//    productOriginLocation: 'unilorin',
-//  ),
-//  ProductModel(
-//    productName: 'Red Blanket',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Bed and Beddings',
-//    productSubCategory: 'Blanket',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'ola',
-//    productShopOwnerEmail: 'olashop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08099776655,
-//    productOriginLocation: 'unilorin',
-//  ),
-//  ProductModel(
-//    productName: 'Vita Foam',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Bed and Beddings',
-//    productSubCategory: 'Mattress',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'ola',
-//    productShopOwnerEmail: 'olashop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08099776655,
-//    productOriginLocation: 'unilorin',
-//  ),
-//  ProductModel(
-//    productName: 'Fila Polo',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Men Fashion',
-//    productSubCategory: 'Clothing',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'ola',
-//    productShopOwnerEmail: 'olashop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08099776655,
-//    productOriginLocation: 'unilorin',
-//  ),
-//  ProductModel(
-//    productName: 'Nike Shoes',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Men Fashion',
-//    productSubCategory: 'Men Shoes',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'ola',
-//    productShopOwnerEmail: 'olashop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08099776655,
-//    productOriginLocation: 'unilorin',
-//  ),
-//  ProductModel(
-//    productName: 'Apple watch',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Men Fashion',
-//    productSubCategory: 'Men Watches',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'ola shop',
-//    productShopOwnerEmail: 'olashop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08099776655,
-//    productOriginLocation: 'unilorin',
-//  ),
-//  ProductModel(
-//    productName: 'NoteBooks',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Educational Needs',
-//    productSubCategory: 'Stationery',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'teni',
-//    productShopOwnerEmail: 'teniShop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08011223344,
-//    productOriginLocation: 'unilag',
-//  ),
-//  ProductModel(
-//    productName: 'School Bag',
-//    imageUrls: [
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSVUlqCtI1EqLkv0Tt2MyIo3qdZgJl9aPsn1Q&usqp=CAU',
-//    ],
-//    productCategory: 'Educational Needs',
-//    productSubCategory: 'School Bags',
-//    productDescription: 'this wiil contain product description',
-//    productPrice: 500,
-//    productShopName: 'teni',
-//    productShopOwnerEmail: 'teniShop123@gmail.com',
-//    productShopOwnerPhoneNumber: 08011223344,
-//    productOriginLocation: 'unilag',
-//  ),
-//];
-//
-/////
-//
-//List<Map> catList = [
-//  {
-//    'searchKey': 'Bed and Beddings',
-//    'imageUrl':
-//        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS5pnms0lVT0jKIN7MlIGMXW15dZRAvjFeTvQ&usqp=CAU'
-//  },
-//  {
-//    'searchKey': 'Educational Needs',
-//    'imageUrl':
-//        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSoQI17QtBhJqhWNiPSyTVj6U3v2Bm7je2mEg&usqp=CAU'
-//  },
-//  {
-//    'searchKey': 'Foodstuff',
-//    'imageUrl':
-//        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTJQC1IZE_j8hQTXDNgAZCL9zePHuok4n51xg&usqp=CAU'
-//  },
-//  {
-//    'searchKey': 'Health and Beauty',
-//    'imageUrl':
-//        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR6cYb8w8LcRt11k2wijpkVjPfLA3qeBgn0aw&usqp=CAU'
-//  },
-//  {
-//    'searchKey': 'Hostel Cleaning',
-//    'imageUrl':
-//        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRB0_N9ii4KMjIpe56pYCWd9TdQ6wHClfVx2A&usqp=CAU'
-//  },
-//  {
-//    'searchKey': 'Men Fashion',
-//    'imageUrl':
-//        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcReh2rKhXB4vWgcmIjFQ82Z9dO8xcqeF0dWlA&usqp=CAU'
-//  },
-//  {
-//    'searchKey': 'Phone and Tablets',
-//    'imageUrl':
-//        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTAVFkjYl6n4fgpSfJkKF_OWn0cjFdqTUfDiA&usqp=CAU'
-//  },
-//  {
-//    'searchKey': 'Women Fashion',
-//    'imageUrl':
-//        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTCmF8OLf8CW3ffRr0a743R5biIdkSW3x2ZVg&usqp=CAU'
-//  },
-//];
-//
-////void savecat() async {
-////  final CollectionReference marketRef = Firestore.instance.collection('market');
-////
-////  for (Map i in catList) {
-////    await marketRef
-////        .document('categories')
-////        .collection('productsList')
-////        .document(i['searchKey'])
-////        .setData(i.cast<String, dynamic>());
-////  }
-////}
-//
-//Future<void> saveProduct() async {
-//  final CollectionReference collectionReference =
-//      Firestore.instance.collection('market');
-//
-//  for (ProductModel productModel in list) {
-//    print(productModel.productOriginLocation);
-////    print(list.length);
-//    await collectionReference
-//        .document('products')
-//        .collection('allProducts')
-//        .document(productModel.id)
-//        .setData(productModel.toMap());
-//  }
-//}

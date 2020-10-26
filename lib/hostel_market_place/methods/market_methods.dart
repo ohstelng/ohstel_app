@@ -133,6 +133,7 @@ class MarketMethods {
     QuerySnapshot querySnapshot = await shopCollection
         .where('isPartner', isEqualTo: true)
         .orderBy('shopName')
+        .limit(10)
         .get();
 
     querySnapshot.docs.forEach((doc) {
@@ -172,6 +173,33 @@ class MarketMethods {
         .where('shopName', isGreaterThanOrEqualTo: query)
         .where('shopName', isLessThan: query + 'z')
         .orderBy('shopName')
+        .limit(10)
+        .get();
+
+    querySnapshot.docs.forEach((doc) {
+      print(doc.data());
+      shopList.add(ShopModel.fromMap(doc.data()));
+    });
+
+    return shopList;
+  }
+
+  Future<List<ShopModel>> searchMorePartnerShop({
+    String query,
+    ShopModel lastShop,
+  }) async {
+    List<ShopModel> shopList = List<ShopModel>();
+
+    final CollectionReference shopCollection =
+        FirebaseFirestore.instance.collection('shopOwnersData');
+
+    QuerySnapshot querySnapshot = await shopCollection
+        .where('isPartner', isEqualTo: true)
+        .where('shopName', isGreaterThanOrEqualTo: query)
+        .where('shopName', isLessThan: query + 'z')
+        .orderBy('shopName')
+        .startAfter([lastShop.shopName])
+        .limit(10)
         .get();
 
     querySnapshot.docs.forEach((doc) {

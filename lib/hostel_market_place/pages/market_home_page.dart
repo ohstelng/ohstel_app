@@ -90,7 +90,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
                       SizedBox(height: 8),
                       tabBarView(),
                       SizedBox(height: 8),
-                      // TODO: COMMENT OUT TOP BRANDS AFTER
+//                       TODO: COMMENT OUT TOP BRANDS AFTER
                       topBrands(),
                       SizedBox(height: 16),
 //                      recommended4U(),
@@ -154,64 +154,42 @@ class _MarketHomePageState extends State<MarketHomePage> {
             ]);
   }
 
-  Widget recommended4U() {
+  Widget appBar() {
     return Container(
-      height: 300,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Recommended for you",
-            style: TextStyle(fontSize: 16),
+      padding: EdgeInsets.symmetric(horizontal: 4),
+      child: Row(
+        children: <Widget>[
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfilePage(),
+                ),
+              );
+            },
+            child: Container(
+              height: 55,
+              width: 55,
+              child: userData['profilePicUrl'] == null
+                  ? Icon(Icons.person, color: Color(0xffebf1ef))
+                  : ExtendedImage.network(
+                      userData['profilePicUrl'],
+                      fit: BoxFit.fill,
+                      handleLoadingProgress: true,
+                      shape: BoxShape.circle,
+//                      borderRadius: BorderRadius.circular(160),
+                      cache: false,
+                      enableMemoryCache: true,
+                    ),
+            ),
           ),
-          SizedBox(
-            height: 8,
-          ),
-          Expanded(child: latestProduct()),
-          SizedBox(height: 8),
-          Expanded(child: latestProduct()),
+          Spacer(),
+          cartWidget(),
+          popMenu()
         ],
       ),
     );
-  }
-
-  Widget appBar() {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 4),
-        child: Row(
-          children: <Widget>[
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
-                  ),
-                );
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.blueGrey[400],
-                radius: 25,
-                child: userData['profilePicUrl'] == null
-                    ? Icon(Icons.person, color: Color(0xffebf1ef))
-                    : ExtendedImage.network(
-                        userData['profilePicUrl'],
-                        fit: BoxFit.fill,
-                        handleLoadingProgress: true,
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(160),
-                        cache: false,
-                        enableMemoryCache: true,
-                      ),
-              ),
-            ),
-            Spacer(),
-            cartWidget(),
-            popMenu()
-
-//                header(),
-          ],
-        ));
   }
 
   Widget topBrands() {
@@ -313,21 +291,9 @@ class _MarketHomePageState extends State<MarketHomePage> {
                   style: _tabBarStyle,
                 ),
               ),
-//              Tab(
-//                  child: Text(
-//                'Best Sell',
-//                style: _tabBarStyle,
-//              ))
             ],
           ),
-          Spacer(),
-//          Padding(
-//            padding: const EdgeInsets.symmetric(vertical: 16.0),
-//            child: Text(
-//              "See All",
-//              style: _tabBarStyle,
-//            ),
-//          )
+//          Spacer(),
         ],
       ),
     );
@@ -336,11 +302,10 @@ class _MarketHomePageState extends State<MarketHomePage> {
   Widget tabBarView() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8),
-      height: 260, //
+      height: 300, //
       child: TabBarView(
         children: <Widget>[
           latestProduct(),
-//          latestProduct(),
         ],
       ),
     );
@@ -349,7 +314,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
   Widget latestProduct() {
     return PaginateFirestore(
       scrollDirection: Axis.horizontal,
-      itemsPerPage: 3,
+      itemsPerPage: 6,
       initialLoader: Container(
         height: 50,
         child: Center(
@@ -367,7 +332,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
         ProductModel currentProductModel =
             ProductModel.fromMap(documentSnapshot.data());
         return Card(
-          elevation: 0,
+          elevation: 1.0,
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(
@@ -379,60 +344,45 @@ class _MarketHomePageState extends State<MarketHomePage> {
               );
             },
             child: Container(
-              height: 153,
+              height: 165,
               child: Column(
                 children: <Widget>[
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      width: 153,
-                      height: 104,
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(color: Colors.black12),
-                            child: currentProductModel.imageUrls != null
-                                ? Center(
-                                    child: ExtendedImage.network(
-                                      currentProductModel.imageUrls[0],
-                                      fit: BoxFit.fill,
-                                      handleLoadingProgress: true,
-                                      shape: BoxShape.rectangle,
-                                      cache: false,
-                                      enableMemoryCache: true,
-                                    ),
-                                  )
-                                : Center(child: Icon(Icons.image)),
-                          ),
-//                          Positioned(
-//                              bottom: 7,
-//                              right: 7,
-//                              child: SvgPicture.asset("asset/Shape.svg"))
-                        ],
-                      ),
-                    ),
+                  Container(
+                    margin: EdgeInsets.all(2.0),
+                    padding: EdgeInsets.all(5.0),
+                    height: 80,
+                    width: 153,
+                    decoration: BoxDecoration(color: Colors.grey[200]),
+                    child: currentProductModel.imageUrls != null
+                        ? ExtendedImage.network(
+                            currentProductModel.imageUrls[0],
+                            fit: BoxFit.fill,
+                            handleLoadingProgress: true,
+                            shape: BoxShape.rectangle,
+                            cache: false,
+                            enableMemoryCache: true,
+                          )
+                        : Center(child: Icon(Icons.image)),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                      width: 153,
-                      height: 46,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                              child:
-                                  Text('${currentProductModel.productName}')),
-                          Expanded(
-                            child: Text(
-                              '\N${currentProductModel.productPrice}',
-                              style: TextStyle(fontSize: 16),
-                            ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    width: 153,
+                    height: 50,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            '${currentProductModel.productName}',
                           ),
-                        ],
-                      ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            '\N${currentProductModel.productPrice}',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 ],
@@ -515,8 +465,12 @@ class _MarketHomePageState extends State<MarketHomePage> {
                                 );
                               },
                               child: Container(
+                                margin: EdgeInsets.all(5.0),
+                                color: Colors.grey[200],
                                 padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 10),
+                                  vertical: 5.0,
+                                  horizontal: 5.0,
+                                ),
                                 child: ExtendedImage.network(
                                   currentData['imageUrl'],
                                   fit: BoxFit.fill,

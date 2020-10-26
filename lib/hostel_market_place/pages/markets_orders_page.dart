@@ -80,8 +80,9 @@ class _MarketOrdersPageState extends State<MarketOrdersPage> {
           return InkWell(
             onTap: () {},
             child: Card(
-              child: ExpansionTile(
-                title: Column(
+              child: Container(
+                margin: EdgeInsets.all(15.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -99,36 +100,41 @@ class _MarketOrdersPageState extends State<MarketOrdersPage> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    ExpansionTile(
+                      title: Text('View Items'),
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: currentProductModel.orders.length,
+                          itemBuilder: (context, index) {
+                            EachPaidOrderModel currentOrder =
+                                EachPaidOrderModel.fromMap(
+                              currentProductModel.orders[index],
+                            );
+                            return Container(
+                              margin: EdgeInsets.symmetric(
+                                horizontal: 2.0,
+                                vertical: 10.0,
+                              ),
+                              child: Material(
+                                elevation: 2.5,
+                                child: Row(
+                                  children: [
+                                    displayMultiPic(
+                                      imageList: currentOrder.imageUrls,
+                                    ),
+                                    details(currentOrder: currentOrder),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    )
                   ],
                 ),
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: currentProductModel.orders.length,
-                    itemBuilder: (context, index) {
-                      EachPaidOrderModel currentOrder =
-                          EachPaidOrderModel.fromMap(
-                        currentProductModel.orders[index],
-                      );
-                      return Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                        ),
-//                        margin: EdgeInsets.all(10.0),
-                        child: Row(
-//                              mainAxisSize: MainAxisSize.min,
-                          children: [
-                            displayMultiPic(
-                              imageList: currentOrder.imageUrls,
-                            ),
-                            details(currentOrder: currentOrder),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ],
               ),
             ),
           );
@@ -139,21 +145,23 @@ class _MarketOrdersPageState extends State<MarketOrdersPage> {
   }
 
   Widget details({@required EachPaidOrderModel currentOrder}) {
-    return Container(
-      margin: EdgeInsets.all(10.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('productName: ${currentOrder.productName}'),
-          Text('product Size: ${currentOrder.size ?? 'None'}'),
-          Text('ShopName: ${currentOrder.productShopName}'),
-          Text('Shop Email: ${currentOrder.productShopOwnerEmail}'),
-          Text('Shop Number: ${currentOrder.productShopOwnerPhoneNumber}'),
-          Text('Price: ${currentOrder.productPrice}'),
-          Text('Category: ${currentOrder.productCategory}'),
-          Text('deliveryStatus: ${currentOrder.deliveryStatus}'),
-        ],
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('productName: ${currentOrder.productName}'),
+            Text('product Size: ${currentOrder.size ?? 'None'}'),
+            Text('ShopName: ${currentOrder.productShopName}'),
+            Text('Shop Email: ${currentOrder.productShopOwnerEmail}'),
+            Text('Shop Number: ${currentOrder.productShopOwnerPhoneNumber}'),
+            Text('Price: ${currentOrder.productPrice}'),
+            Text('Category: ${currentOrder.productCategory}'),
+            Text('deliveryStatus: ${currentOrder.deliveryStatus}'),
+          ],
+        ),
       ),
     );
   }

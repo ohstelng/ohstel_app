@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_market_place/models/market_cart_model.dart';
 import 'package:Ohstel_app/hostel_market_place/models/product_model.dart';
@@ -24,6 +25,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
   int units = 1;
   bool isLoading = true;
   Map userData;
+
   // Box marketBox;
   String selectedSize;
 
@@ -127,10 +129,11 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
             ),
             children: [
               Text(
-                'The delivery would be handled by OHstel or any Ologee partnered delivery service.',
+                'The delivery Esp. 1 - 4 Day Depending On Your Loaction. \n A More Accurate Delivery Will Be Shown On The Check Out Summary Page',
                 style: TextStyle(
                   fontSize: 16,
                 ),
+                textAlign: TextAlign.center,
               )
             ],
           ),
@@ -169,35 +172,38 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
   }
 
   Widget hasSizedWidget() {
-    if (widget.productModel.sizeInfo == null ||
-        widget.productModel.sizeInfo.isEmpty) {
+    if (widget.productModel.hasSize == null ||
+        widget.productModel.hasSize.isEmpty) {
       return Container();
     } else {
       return Container(
-//        width: MediaQuery.of(context).size.width * .75,
-        height: 60,
+        height: 50,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
-          itemCount: widget.productModel.sizeInfo.length,
+          itemCount: widget.productModel.hasSize.length,
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
                 setState(() {
-                  selectedSize = widget.productModel.sizeInfo[index];
+                  selectedSize = widget.productModel.hasSize[index];
                 });
               },
               child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  color: selectedSize == widget.productModel.sizeInfo[index]
-                      ? Colors.orange
-                      : Colors.transparent,
-                ),
-                padding: EdgeInsets.all(10.0),
-                margin: EdgeInsets.all(10.0),
-                child: Center(
-                  child: Text('${widget.productModel.sizeInfo[index]}'),
+                height: 50,
+                child: Card(
+                  elevation: 1.5,
+                  child: Container(
+                    width: 80,
+                    decoration: BoxDecoration(
+                      color: selectedSize == widget.productModel.hasSize[index]
+                          ? Colors.orange
+                          : Colors.transparent,
+                    ),
+                    child: Center(
+                      child: Text('${widget.productModel.hasSize[index]}'),
+                    ),
+                  ),
                 ),
               ),
             );
@@ -212,8 +218,8 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
       padding: EdgeInsets.symmetric(vertical: 16),
       child: InkWell(
         onTap: () {
-          if (widget.productModel.sizeInfo == null ||
-              widget.productModel.sizeInfo.isEmpty) {
+          if (widget.productModel.hasSize == null ||
+              widget.productModel.hasSize.isEmpty) {
             saveInfoToCart();
           } else {
             if (selectedSize == null) {
@@ -357,33 +363,40 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
         maxHeight: MediaQuery.of(context).size.height * 0.3,
         maxWidth: MediaQuery.of(context).size.width * .75,
       ),
-      child: Carousel(
-        images: imageList.map(
-          (images) {
-            return Container(
-              child: ExtendedImage.network(
-                images,
-                fit: BoxFit.cover,
-                handleLoadingProgress: true,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(10),
-                cache: false,
-                enableMemoryCache: true,
+      child: imageList != null
+          ? Carousel(
+              images: imageList.map(
+                (images) {
+                  return Container(
+                    child: ExtendedImage.network(
+                      images,
+                      fit: BoxFit.cover,
+                      handleLoadingProgress: true,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(10),
+                      cache: false,
+                      enableMemoryCache: true,
+                    ),
+                  );
+                },
+              ).toList(),
+              autoplay: true,
+              indicatorBgPadding: 8,
+              dotPosition: DotPosition.bottomCenter,
+              dotSpacing: 15.0,
+              dotSize: 4,
+              dotIncreaseSize: 2.5,
+              dotIncreasedColor: Theme.of(context).primaryColor,
+              dotBgColor: Colors.transparent,
+              animationCurve: Curves.fastOutSlowIn,
+              animationDuration: Duration(milliseconds: 2000),
+            )
+          : Container(
+              color: Colors.grey[200],
+              child: Center(
+                child: Icon(Icons.image),
               ),
-            );
-          },
-        ).toList(),
-        autoplay: true,
-        indicatorBgPadding: 8,
-        dotPosition: DotPosition.bottomCenter,
-        dotSpacing: 15.0,
-        dotSize: 4,
-        dotIncreaseSize: 2.5,
-        dotIncreasedColor: Theme.of(context).primaryColor,
-        dotBgColor: Colors.transparent,
-        animationCurve: Curves.fastOutSlowIn,
-        animationDuration: Duration(milliseconds: 2000),
-      ),
+            ),
     );
   }
 

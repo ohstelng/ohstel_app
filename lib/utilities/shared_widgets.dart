@@ -199,9 +199,7 @@ class CustomLongButton extends StatelessWidget {
             )),
         color: type == ButtonType.borderBlue || type == ButtonType.borderOrange
             ? Colors.transparent
-            : type == ButtonType.filledOrange
-                ? childeanFire
-                : midnightExpress,
+            : type == ButtonType.filledOrange ? childeanFire : midnightExpress,
         height: 48,
         minWidth: double.infinity,
         child: Text(
@@ -253,9 +251,7 @@ class CustomShortButton extends StatelessWidget {
             )),
         color: type == ButtonType.borderBlue || type == ButtonType.borderOrange
             ? Colors.transparent
-            : type == ButtonType.filledOrange
-                ? childeanFire
-                : midnightExpress,
+            : type == ButtonType.filledOrange ? childeanFire : midnightExpress,
         height: 40,
         minWidth: double.infinity,
         child: Text(
@@ -362,8 +358,10 @@ Widget cartWidget() {
 
 Widget cachedNetworkImage(String mediaUrl) {
   return CachedNetworkImage(
+    height: 120,
+    width: double.infinity,
     imageUrl: mediaUrl,
-    fit: BoxFit.cover,
+    fit: BoxFit.fill,
     placeholder: (context, url) => Padding(
       padding: EdgeInsets.all(20.0),
       child: Center(child: CircularProgressIndicator()),

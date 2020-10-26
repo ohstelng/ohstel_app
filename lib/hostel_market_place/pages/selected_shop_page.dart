@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 
 class SelectedShopPage extends StatefulWidget {
   final ShopModel shop;
+
   SelectedShopPage(this.shop);
+
   @override
   _SelectedShopPageState createState() => _SelectedShopPageState();
 }
@@ -25,29 +27,36 @@ class _SelectedShopPageState extends State<SelectedShopPage>
 
   buildAllItems() {
     return FutureBuilder(
-        future: MarketMethods().getShopItems(widget.shop.shopName),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+      future: MarketMethods().getShopItems(widget.shop.shopName),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-          return snapshot.data.length > 0
-              ? GridView.builder(
-                  padding: EdgeInsets.only(top: 24.0),
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 0.65,
-                    mainAxisSpacing: 21.0,
-                  ),
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    return Center(child: ShopItemWidget(snapshot.data[index]));
-                  },
-                )
-              : buildNoItem(context, text: 'Shop has no item.');
-        });
+        return snapshot.data.length > 0
+            ? GridView.builder(
+                padding: EdgeInsets.only(top: 20.0),
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  mainAxisSpacing: 15.0,
+                  crossAxisSpacing: 10.0,
+                ),
+                physics: BouncingScrollPhysics(),
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    color: Colors.red,
+                    child: ShopItemWidget(
+                      snapshot.data[index],
+                    ),
+                  );
+                },
+              )
+            : buildNoItem(context, text: 'Shop has no item.');
+      },
+    );
   }
 
   buildGroceries() {
@@ -122,12 +131,16 @@ class _SelectedShopPageState extends State<SelectedShopPage>
                   padding: EdgeInsets.only(top: 24.0),
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 200,
-                    childAspectRatio: 0.65,
-                    mainAxisSpacing: 21.0,
+                    childAspectRatio: 0.55,
+                    mainAxisSpacing: 15.0,
                   ),
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
-                    return Center(child: ShopItemWidget(snapshot.data[index]));
+                    return Center(
+                      child: ShopItemWidget(
+                        snapshot.data[index],
+                      ),
+                    );
                   },
                 )
               : buildNoItem(context, text: 'Shop has no toiletry item.');
@@ -214,6 +227,7 @@ class _SelectedShopPageState extends State<SelectedShopPage>
 
 class ShopItemWidget extends StatelessWidget {
   final ProductModel item;
+
   ShopItemWidget(this.item);
 
   @override
@@ -228,38 +242,34 @@ class ShopItemWidget extends StatelessWidget {
         ),
       ),
       child: Container(
-        width: 147.0,
         color: Color(0xaffF4F5F6),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 153.0,
-              width: 147.0,
+              color: Colors.grey[200],
+              padding: EdgeInsets.all(3.0),
               child: cachedNetworkImage(
                 item.imageUrls[0],
-                // 'https://www.jessicagavin.com/wp-content/uploads/2019/05/types-of-peppers-1.jpg',
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 50.0,
-                    child: Text(
-                      item.productName,
-                      style: TextStyle(
-                        color: Color(0xFF3A3A3A),
-                        fontSize: 14.0,
-                        fontFamily: 'Lato',
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
+                  Text(
+                    '${item.productName}',
+                    style: TextStyle(
+                      color: Color(0xFF3A3A3A),
+                      fontSize: 14.0,
+                      fontFamily: 'Lato',
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 5.0),
                   Text(
                     'N${item.productPrice}',
                     style: TextStyle(

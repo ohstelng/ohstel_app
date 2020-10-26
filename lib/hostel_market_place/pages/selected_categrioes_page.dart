@@ -93,13 +93,14 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
             return Container(
               margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
               child: Card(
-                elevation: 0,
+                elevation: 1.5,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => SelectedProductPage(
-                            productModel: currentProductModel),
+                          productModel: currentProductModel,
+                        ),
                       ),
                     );
                   },
@@ -107,12 +108,15 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                     children: <Widget>[
                       Container(
                         height: 150,
-                        width: 200,
+                        width: 180,
+                        padding: EdgeInsets.all(10.0),
                         margin: EdgeInsets.symmetric(
-                            horizontal: 5.0, vertical: 5.0),
+                          horizontal: 5.0,
+                          vertical: 5.0,
+                        ),
                         decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: Border.all(color: Colors.grey),
+                          color: Colors.grey[200],
+//                          border: Border.all(color: Colors.grey),
                         ),
                         child: Carousel(
                           images: currentProductModel.imageUrls.map(
@@ -147,6 +151,10 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
+                              isShippedFromDifferentState(
+                                origin:
+                                    currentProductModel.productOriginLocation,
+                              ),
                               Text('${currentProductModel.productName}',
                                   maxLines: 1,
                                   style: TextStyle(
@@ -182,6 +190,29 @@ class _SelectedCategoriesPageState extends State<SelectedCategoriesPage> {
         ),
       ),
     );
+  }
+
+  Widget isShippedFromDifferentState({@required String origin}) {
+    if (uniName != null) {
+      if (uniName != origin) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.deepOrangeAccent,
+          ),
+          child: Text(
+            'Shipped From Other State',
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      } else {
+        return Container();
+      }
+    } else {
+      return Container(
+        child: Text('Error!'),
+      );
+    }
   }
 
   Widget appBar() {
