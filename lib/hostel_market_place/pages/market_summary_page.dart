@@ -670,7 +670,6 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       buyerPhoneNumber: widget.phoneNumber,
       buyerAddress: widget.userData['address'],
       buyerID: widget.userData['uid'],
-//      deliveryStatus: 'Delivery In progress.....',
       listOfShopsPurchasedFrom: shopsList,
       orders: orderList,
       amountPaid: getGrandTotal() + deliveryFee(),

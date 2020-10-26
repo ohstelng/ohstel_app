@@ -15,6 +15,9 @@ class MarketMethods {
   final CollectionReference shopCollection =
       FirebaseFirestore.instance.collection('shopOwnersData');
 
+  final CollectionReference marketData =
+      FirebaseFirestore.instance.collection('marketData');
+
   Future<List<Map>> getAllCategories() async {
     List<Map> dataList = List<Map>();
 
@@ -42,8 +45,38 @@ class MarketMethods {
   }
 
   Future<void> saveOrderToDataBase({@required PaidOrderModel data}) async {
+    var dateParse = DateTime.parse(DateTime.now().toString());
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    var batch = db.batch();
+
     try {
-      await marketOrderCollection.doc(data.id).set(data.toMap());
+      data.orders.forEach((currentOrder) async {
+        EachPaidOrderModel order = EachPaidOrderModel.fromMap(currentOrder);
+
+        /// this Increses the Shop Owner Sales Count by one
+        batch.set(
+          marketData.doc('${order.productShopName}'),
+          {"count": FieldValue.increment(1)},
+          SetOptions(merge: true),
+        );
+
+        /// this Increses the Total Company Sales Count by one
+        batch.set(
+          marketData
+              .doc('salesInfo')
+              .collection(dateParse.year.toString())
+              .doc(dateParse.month.toString()),
+          {"count": FieldValue.increment(1)},
+          SetOptions(merge: true),
+        );
+      });
+
+      batch.set(
+        marketOrderCollection.doc(data.id),
+        data.toMap(),
+      );
+
+      await batch.commit();
       Fluttertoast.showToast(msg: 'Order Complete!');
     } catch (e) {
       Fluttertoast.showToast(msg: '$e');
