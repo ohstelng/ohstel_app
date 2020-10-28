@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:Ohstel_app/constant/constant.dart';
 import 'package:Ohstel_app/constant/no_connection.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_booking/_/methods/hostel_booking_methods.dart';
@@ -515,7 +516,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   }
 
   Future getUniList() async {
-    String url = "https://quiz-demo-de79d.appspot.com/hostel_api/searchKeys";
+    String url = baseApiUrl+"/hostel_api/searchKeys";
     var response = await http.get(url);
     var result = json.decode(response.body);
     print(result);

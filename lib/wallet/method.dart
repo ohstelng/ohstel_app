@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+import '../constant/constant.dart';
+
 class WalletMethods {
 //  final String uid;
 //
@@ -314,7 +316,7 @@ class WalletMethods {
   Future<void> getCoin({@required BuildContext context}) async {
     int fee;
 
-    String url = "https://quiz-demo-de79d.appspot.com/coinFee";
+    String url = baseApiUrl+"/coinFee";
     var response = await http.get(url);
     var result = json.decode(response.body);
     print(result);

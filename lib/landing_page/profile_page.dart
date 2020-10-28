@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:Ohstel_app/auth/methods/auth_database_methods.dart';
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/auth/models/userModel.dart';
+import 'package:Ohstel_app/constant/constant.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -216,7 +217,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future getUniList() async {
-    String url = "https://quiz-demo-de79d.appspot.com/hostel_api/searchKeys";
+    String url = baseApiUrl+"/hostel_api/searchKeys";
     var response = await http.get(url);
     var result = json.decode(response.body);
     print(result);

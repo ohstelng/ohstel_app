@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:Ohstel_app/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
@@ -164,8 +165,7 @@ class HiveMethods {
 
   Future<void> getLocationDateFromApi() async {
     try {
-      String url =
-          "https://quiz-demo-de79d.appspot.com/hostel_api/all_sub_locations";
+      String url = baseApiUrl+"/hostel_api/all_sub_locations";
       var response = await http.get(url);
       Map data = json.decode(response.body);
       data['lastUpdate'] = DateTime.now().millisecondsSinceEpoch;

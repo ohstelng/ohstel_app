@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:Ohstel_app/constant/constant.dart';
 import 'package:Ohstel_app/hostel_booking/_/page/booking_home_page.dart';
 import 'package:Ohstel_app/hostel_hire/methods/hire_methods.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _LaundryPaymentPageState extends State<LaundryPaymentPage> {
   Future<void> getDeliveryFeeFromApi() async {
     String uniName = await HiveMethods().getUniName();
     Box<Map> laundry = await HiveMethods().getOpenBox('laundryBox');
-    String url = 'https://quiz-demo-de79d.appspot.com/hire_api/$uniName';
+    String url = baseApiUrl+'/hire_api/$uniName';
     var response = await http.get(url);
     Map data = json.decode(response.body);
     deliveryFee = (data['$uniName'] * laundry.length);

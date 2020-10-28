@@ -8,6 +8,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+import '../../constant/constant.dart';
+
 class SignUpPage extends StatefulWidget {
   final Function toggleView;
 
@@ -74,7 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<Map> getAllUniNamesFromApi() async {
-    String url = "https://quiz-demo-de79d.appspot.com/hostel_api/searchKeys";
+    String url = baseApiUrl+"/hostel_api/searchKeys";
     var response = await http.get(url);
     Map data = json.decode(response.body);
 

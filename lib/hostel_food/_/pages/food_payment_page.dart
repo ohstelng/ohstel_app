@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
+import 'package:Ohstel_app/constant/constant.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_food/_/methods/fast_food_methods.dart';
 import 'package:Ohstel_app/hostel_food/_/models/extras_food_details.dart';
@@ -50,8 +51,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   Future<void> getDeliveryFeeFromApi() async {
     String uniName = await HiveMethods().getUniName();
 
-    String url =
-        'https://quiz-demo-de79d.appspot.com/food_api/food_delivery_info';
+    String url = baseApiUrl+'/food_api/food_delivery_info';
     var response = await http.get(url);
     Map data = await json.decode(response.body)['$uniName'];
     deliveryInfo = data;

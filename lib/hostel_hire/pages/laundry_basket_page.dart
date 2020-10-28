@@ -32,7 +32,7 @@ import 'laundry_address_details_page.dart';
 //  Future<void> getDeliveryFeeFromApi() async {
 //    String uniName = await HiveMethods().getUniName();
 //    Box<Map> laundry = await HiveMethods().getOpenBox('laundryBox');
-//    String url = 'https://quiz-demo-de79d.appspot.com/hire_api/$uniName';
+//    String url = '$baseApiUrl/hire_api/$uniName';
 //    var response = await http.get(url);
 //    Map data = json.decode(response.body);
 //    deliveryFee = (data['$uniName'] * laundry.length);

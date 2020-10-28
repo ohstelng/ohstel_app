@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:Ohstel_app/constant/constant.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -83,7 +84,7 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
 
   Future<Map> getAreaNamesFromApi() async {
     String uniName = await HiveMethods().getUniName();
-    String url = 'https://quiz-demo-de79d.appspot.com/food_api/$uniName';
+    String url = baseApiUrl+'/food_api/$uniName';
     var response = await http.get(url);
     Map data = json.decode(response.body);
 
