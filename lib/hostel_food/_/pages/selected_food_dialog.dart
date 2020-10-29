@@ -32,7 +32,6 @@ class _FoodDialogState extends State<FoodDialog> {
   final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
   Box cartBox;
   bool isLoading = true;
-
   Runes input = Runes('\u20a6');
   var symbol;
   StreamController<List<ExtraItemDetails>> extraListController =
@@ -100,8 +99,6 @@ class _FoodDialogState extends State<FoodDialog> {
 
   @override
   Widget build(BuildContext context) {
-//    var size = MediaQuery.of(context).size;
-
     return isLoading
         ? Container(
             color: Colors.white,
@@ -305,9 +302,7 @@ class _FoodDialogState extends State<FoodDialog> {
                             ),
                           )
                         : Container(),
-                    SizedBox(
-                      height: 30,
-                    ),
+                    batchTimeDetails(),
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                       child: Column(
@@ -329,9 +324,7 @@ class _FoodDialogState extends State<FoodDialog> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    SizedBox(height: 10),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -360,6 +353,140 @@ class _FoodDialogState extends State<FoodDialog> {
               ),
             ),
           );
+  }
+
+  Widget batchTimeDetails() {
+    if (widget.foodModel.hasBatchTime != null) {
+      ///
+      if (widget.foodModel.hasBatchTime) {
+        return Container(
+          margin: EdgeInsets.all(10.0),
+          child: Card(
+            elevation: 2.5,
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 2.0),
+                  child: Text(
+                    'Note: This Fast Food Is Not At Your Current Location \n So The Foods Ordered Will '
+                    'Be Deliverd In Batches. \n They Are 5 Batches In Total Which Are Shown Below.',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.orange[600],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                batchTimes(),
+                Container(
+                  margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+                  child: Text(
+                    'If You Order Now You Food Will Be Deliverd By ${getBatchDeliveryTime()}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.grey[500],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      } else {
+        return Container();
+      }
+
+      ///
+    } else {
+      return Container();
+    }
+  }
+
+  Widget batchTimes() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: EdgeInsets.all(5.0),
+            child: Text(
+              'Morning Batch: 10:00Am',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(5.0),
+            child: Text(
+              'Mid Day Batch: 12:00Am',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(5.0),
+            child: Text(
+              'Afternoon Batch: 2:00Pm',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ),
+          Container(
+              margin: EdgeInsets.all(5.0),
+              child: Text(
+                'Evening Batch: 04:00Pm',
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                ),
+              )),
+          Container(
+            margin: EdgeInsets.all(5.0),
+            child: Text(
+              'Night Batch: 07:00Pm',
+              style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String getBatchDeliveryTime() {
+    TimeOfDay time = TimeOfDay.now();
+
+    if (time.hour < 10) {
+      return 'Morning Batch By 10:00Am';
+    } else if (time.hour < 12) {
+      return 'Mid Day Batch By 12:00Am';
+    } else if (time.hour < 14) {
+      return 'Afternoon Batch By 02:00Pm';
+    } else if (time.hour < 16) {
+      return 'Evening Batch By 04:00Pm';
+    } else if (time.hour < 19) {
+      return 'Night Batch By 07:00Pm';
+    } else {
+      return '';
+    }
   }
 
   Widget extraItemWidget() {
