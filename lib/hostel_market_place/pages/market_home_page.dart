@@ -26,13 +26,14 @@ class MarketHomePage extends StatefulWidget {
   _MarketHomePageState createState() => _MarketHomePageState();
 }
 
+
 class _MarketHomePageState extends State<MarketHomePage> {
   String uniName;
   bool isLoading = true;
   Map userData;
   Box marketBox;
   int _current = 0;
-  List _imgList = [1, 2, 3, 4];
+  List _imgList = ["asset/ban1.jpg","asset/ban50.jpg","asset/ban3.jpg","asset/ban6.jpg"];
   TextStyle _tabBarStyle = TextStyle(color: Colors.black);
 
   Future<void> getUserData() async {
@@ -531,7 +532,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
               autoPlay: true,
               autoPlayInterval: Duration(seconds: 3),
               pauseAutoPlayOnTouch: true,
-              enableInfiniteScroll: false,
+              enableInfiniteScroll: true,
               autoPlayAnimationDuration: Duration(milliseconds: 800),
               autoPlayCurve: Curves.fastOutSlowIn,
               enlargeCenterPage: true,
@@ -543,13 +544,8 @@ class _MarketHomePageState extends State<MarketHomePage> {
                   return Container(
                     width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    decoration: BoxDecoration(color: Colors.grey),
-                    child: Center(
-                      child: Text(
-                        'image $i',
-                        style: TextStyle(fontSize: 16.0),
-                      ),
-                    ),
+                    decoration: BoxDecoration(color: Colors.transparent),
+                    child: Image.asset("$i",fit: BoxFit.fill,)
                   );
                 },
               );

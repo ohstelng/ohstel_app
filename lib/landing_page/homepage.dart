@@ -135,7 +135,7 @@ class _HomepageState extends State<Homepage> {
                                 enlargeCenterPage: true,
                                 scrollDirection: Axis.horizontal,
                               ),
-                              items: [1, 2, 3, 4].map((i) {
+                              items: ["asset/ban1.jpg","asset/ban2.jpg","asset/ban3.jpg","asset/ban4.jpg"].map((i) {
                                 return Builder(
                                   builder: (BuildContext context) {
                                     return Container(
@@ -143,12 +143,9 @@ class _HomepageState extends State<Homepage> {
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 5.0),
                                       decoration:
-                                          BoxDecoration(color: Colors.grey),
-                                      child: Center(
-                                        child: Text(
-                                          'image $i',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
+                                          BoxDecoration(color: Colors.transparent),
+                                      child: Image.asset("$i",fit: BoxFit.fill,
+
                                       ),
                                     );
                                   },
