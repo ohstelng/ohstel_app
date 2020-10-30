@@ -246,8 +246,8 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
                       Fluttertoast.showToast(msg: 'Input Invaild Number!');
                     }
                   },
-                  color: Colors.green,
-                  child: Text('Submit'),
+                  color: Theme.of(context).primaryColor,
+                  child: Text('Submit',style: TextStyle(color: Colors.white),),
                 )
               ],
             ),
@@ -273,6 +273,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -287,21 +288,23 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   }
 
   Widget body() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(left: 10.0),
-            child: Text(
-              'Review Your Payment',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+    return SingleChildScrollView(
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left: 10.0),
+              child: Text(
+                'Review Your Payment',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+              ),
             ),
-          ),
-          ordersContainer(),
-          address(),
-          payButton(),
-        ],
+            ordersContainer(),
+            address(),
+            payButton(),
+          ],
+        ),
       ),
     );
   }
@@ -310,7 +313,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     return Container(
       decoration: BoxDecoration(
         color: Color(0xffF27509),
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
       width: double.infinity,
       margin: EdgeInsets.all(15.0),
@@ -328,7 +331,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
         },
         child: Text(
           'Make Payment',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(fontSize: 20,color: Colors.white),
         ),
       ),
     );
@@ -526,17 +529,24 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       // false = user must tap button, true = tap outside dialog
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: Text('Payment SucessFull'),
-          content: Text(
-            'Your Food Will Be Delivered To You In the next 10 - 15 Mins. '
-            '\n\n Please Ensure To Be With Your Phone, Our Dispatch Rider'
-            ' Will Call You With The Phone Number You Provided. \n\n\n\n Thank'
-            ' For Purchasing With Us',
-            textAlign: TextAlign.center,
+          title: Text('Payment Successful'),
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.7,
+            child: Column(
+              children: [
+                Image.asset("asset/success.jpg"),
+                SizedBox(height: 16,),
+                Text(
+                  'Your Food Will Be Delivered To You In the next 10 - 15 Mins. '
+                  '\n\n Our Dispatch Rider will contact you via Phone Number provided. \n\n\n\n Thanks for your patronage',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('OK'),
+              child: Text('OK',style: TextStyle(fontSize: 20),),
               onPressed: () {
                 Navigator.of(dialogContext).pop(); // Dismiss alert dialog
               },
@@ -719,15 +729,15 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
                             loading = false;
                           });
                         },
-                        child: Text('Proceed'),
-                        color: Colors.green,
+                        child: Text('Proceed',style: TextStyle(color: Colors.white),),
+                        color: Theme.of(context).primaryColor,
                       ),
                 FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('Cancel'),
-                  color: Colors.grey,
+                  child: Text('Cancel',style: TextStyle(color: Colors.red),),
+                  color: Colors.white38,
                 ),
               ],
             ),
