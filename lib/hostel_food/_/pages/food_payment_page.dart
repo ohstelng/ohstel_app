@@ -539,18 +539,21 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       barrierDismissible: false,
       // false = user must tap button, true = tap outside dialog
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text('Payment Successful'),
+        return AlertDialog(insetPadding: EdgeInsets.symmetric(vertical: 110,horizontal: 30),
+          contentPadding: EdgeInsets.symmetric(vertical: 16,horizontal: 16),
           content: Container(
-            height: MediaQuery.of(context).size.height*0.7,
             child: Column(
               children: [
                 Image.asset("asset/success.jpg"),
-                SizedBox(height: 16,),
-                Text(
-                  'Your Food Will Be Delivered To You In the next 10 - 15 Mins. '
-                  '\n\n Our Dispatch Rider will contact you via Phone Number provided. \n\n\n\n Thanks for your patronage',
-                  textAlign: TextAlign.center,
+                Text('Payment Successful',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)
+                  ,),
+                SizedBox(height: 8,),
+                Expanded(
+                  child: Text(
+                    'Your Food Will Be Delivered To You In the next 10 - 15 Mins. '
+                    '\n\n Our Dispatch Rider will contact you via Phone Number provided. \n\n Thanks for your patronage',
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
             ),
