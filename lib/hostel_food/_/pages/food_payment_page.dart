@@ -710,7 +710,7 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'The Sum Of NGN ${getGrandTotal()} '
+              'The Sum Of ₦${getGrandTotal()} '
               'Will Be Deducted From Your Wallet Balance!',
               textAlign: TextAlign.center,
             ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
+import 'package:Ohstel_app/constant/constant.dart';
 import 'package:Ohstel_app/hive_methods/hive_class.dart';
 import 'package:Ohstel_app/hostel_market_place/methods/market_methods.dart';
 import 'package:Ohstel_app/hostel_market_place/models/market_cart_model.dart';
@@ -56,7 +57,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
   }
 
   Future getDeliveryInfoFromApi() async {
-    String url = "http://quiz-demo-de79d.appspot.com/market_api/deliveryInfo";
+    String url = baseApiUrl + "/market_api/deliveryInfo";
     var response = await http.get(url);
     var data = json.decode(response.body);
 
@@ -297,7 +298,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
                             style: _normText,
                           ),
                           Text(
-                            'N${currentCartItem.productPrice}',
+                            '₦${currentCartItem.productPrice}',
                             style: _normText,
                           ),
                         ],
@@ -453,7 +454,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
                   style: _normText,
                 ),
                 Text(
-                  'N${formatCurrency.format(getGrandTotal())}',
+                  '₦${formatCurrency.format(getGrandTotal())}',
                   style: _normText,
                 )
               ]),
@@ -465,7 +466,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
                   style: _normText,
                 ),
                 Text(
-                  'N${formatCurrency.format(deliveryFee())}',
+                  '₦${formatCurrency.format(deliveryFee())}',
                   style: _normText,
                 )
               ]),
@@ -481,7 +482,7 @@ class _MarketSummaryPageState extends State<MarketSummaryPage> {
                   style: _normText,
                 ),
                 Text(
-                  'N ${formatCurrency.format(getGrandTotal() + deliveryFee())}',
+                  '₦${formatCurrency.format(getGrandTotal() + deliveryFee())}',
                   style: _normText,
                 )
               ]),
@@ -722,7 +723,7 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'The Sum Of NGN ${getGrandTotal()} '
+              'The Sum Of ₦${getGrandTotal()} '
               'Will Be Deducted From Your Wallet Balance!',
               textAlign: TextAlign.center,
             ),
@@ -755,15 +756,16 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
                             loading = false;
                           });
                         },
-                        child: Text('Proceed'),
-                        color: Colors.green,
+                        child: Text('Proceed',style: TextStyle(color: Colors.white),),
+                        color: Theme.of(context).primaryColor,
                       ),
                 FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
-                  },
-                  child: Text('Cancel'),
-                  color: Colors.grey,
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MarketCartPage()));
+                   },
+                  child: Text('Cancel',style: TextStyle(color: Colors.red),),
+                  color: Colors.white,
                 ),
               ],
             ),

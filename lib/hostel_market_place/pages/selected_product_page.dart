@@ -197,11 +197,18 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
                     width: 80,
                     decoration: BoxDecoration(
                       color: selectedSize == widget.productModel.hasSize[index]
-                          ? Colors.orange
+                          ? Theme.of(context).primaryColor
                           : Colors.transparent,
                     ),
                     child: Center(
-                      child: Text('${widget.productModel.hasSize[index]}'),
+                      child: Text(
+                        '${widget.productModel.hasSize[index]}',
+                        style: TextStyle(
+                            color: selectedSize ==
+                                    widget.productModel.hasSize[index]
+                                ? Colors.white
+                                : Colors.black),
+                      ),
                     ),
                   ),
                 ),

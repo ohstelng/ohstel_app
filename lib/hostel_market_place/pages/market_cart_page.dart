@@ -161,7 +161,7 @@ class _MarketCartPageState extends State<MarketCartPage> {
                                           ),
                                           SizedBox(height: 8),
                                           Text(
-                                            'N${currentCartItem.productPrice}',
+                                            '₦${currentCartItem.productPrice}',
                                             style: TextStyle(fontSize: 17),
                                           ),
                                         ],
@@ -221,7 +221,7 @@ class _MarketCartPageState extends State<MarketCartPage> {
                                   style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
-                                  'N${getGrandTotal()}',
+                                  '₦${getGrandTotal()}',
                                   style: TextStyle(
                                       fontSize: 20, color: Color(0xffC4C4C4)),
                                 ),

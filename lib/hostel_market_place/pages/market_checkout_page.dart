@@ -62,7 +62,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
   }
 
   Future getDeliveryInfoFromApi() async {
-    String url = "http://quiz-demo-de79d.appspot.com/market_api/deliveryInfo";
+    String url = baseApiUrl + "/market_api/deliveryInfo";
     var response = await http.get(url);
     var data = json.decode(response.body);
 
@@ -331,8 +331,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                           getAddress(),
                           Container(
                             padding: EdgeInsets.all(16),
-                            height: 45,
-                            child: Text(
+                           child: Text(
                               "Details",
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
@@ -473,7 +472,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                 style: _mainText,
               ),
               Text(
-                'N${getSubTotal()}',
+                '₦${getSubTotal()}',
                 style: _mainText,
               ),
             ],
@@ -486,7 +485,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                 style: _mainText,
               ),
               Text(
-                'N${deliveryFee()}',
+                '₦${deliveryFee()}',
                 style: _mainText,
               ),
             ],
@@ -503,7 +502,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                 style: _mainText,
               ),
               Text(
-                'N${getGrandTotal()}',
+                '₦${getGrandTotal()}',
                 style: _mainText,
               ),
             ],
@@ -604,7 +603,7 @@ class _MarketCheckOutPageState extends State<MarketCheckOutPage> {
                   style: _mainText,
                 ),
                 Text(
-                  '${_uniMap[schoolNameAbbr.toLowerCase()]['delivery_time']} Day',
+                  '${_uniMap[schoolNameAbbr.toLowerCase()]['delivery_time']} ',
                   style: _subText,
                 ),
               ],
