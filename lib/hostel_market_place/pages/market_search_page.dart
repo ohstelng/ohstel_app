@@ -239,7 +239,7 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
             height: 8,
           ),
           Text(
-            'N${product.productPrice}',
+            '₦ ${product.productPrice}',
             style: TextStyle(
               color: Color(0xffc4c4c4),
               fontSize: 18,

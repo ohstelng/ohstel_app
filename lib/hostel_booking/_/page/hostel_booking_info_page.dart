@@ -238,7 +238,7 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                   ),
                   Spacer(),
                   Text(
-                    'N${formatCurrency.format(widget.hostelModel.price)}',
+                    '₦${formatCurrency.format(widget.hostelModel.price)}',
                     style: _titlestyle,
                   ),
                 ],
@@ -478,15 +478,15 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
                             loading = false;
                           });
                         },
-                        child: Text('Proceed'),
-                        color: Colors.green,
+                        child: Text('Proceed',style: TextStyle(color: Colors.white),),
+                        color: Theme.of(context).primaryColor,
                       ),
                 FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('Cancel'),
-                  color: Colors.grey,
+                  child: Text('Cancel',style: TextStyle(color: Colors.red),),
+                  color: Colors.white54,
                 ),
               ],
             ),
