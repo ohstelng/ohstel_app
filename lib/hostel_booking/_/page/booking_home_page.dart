@@ -517,7 +517,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Future getUniList() async {
     String url = baseApiUrl+"/hostel_api/searchKeys";
+    debugPrint(url);
     var response = await http.get(url);
+    debugPrint(response.statusCode.toString());
     var result = json.decode(response.body);
     print(result);
     return result;
