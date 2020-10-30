@@ -146,11 +146,22 @@ class _SearchShopsPageState extends State<SearchShopsPage> {
           return ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
-              child: Container(
-                height: 50.0,
-                width: 50.0,
-                child: cachedNetworkImage(searchList[index].imageUrl),
-              ),
+              child: searchList[index].imageUrl != null
+                  ? Container(
+                      height: 50.0,
+                      width: 50.0,
+                      child: cachedNetworkImage(searchList[index].imageUrl))
+                  : Container(
+                      height: 50.0,
+                      width: 50.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: Colors.grey[300],
+                      ),
+                      child: Center(
+                        child: Icon(Icons.image),
+                      ),
+                    ),
             ),
             title: Text(
               searchList[index].shopName,

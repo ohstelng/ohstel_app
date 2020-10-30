@@ -56,11 +56,22 @@ class _AllPartnerShopsPageState extends State<AllPartnerShopsPage> {
           return ListTile(
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
-              child: Container(
-                height: 50.0,
-                width: 50.0,
-                child: cachedNetworkImage(shop.imageUrl),
-              ),
+              child: shop.imageUrl != null
+                  ? Container(
+                      height: 50.0,
+                      width: 50.0,
+                      child: cachedNetworkImage(shop.imageUrl))
+                  : Container(
+                      height: 50.0,
+                      width: 50.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: Colors.grey[300],
+                      ),
+                      child: Center(
+                        child: Icon(Icons.image),
+                      ),
+                    ),
             ),
             title: Text(
               shop.shopName,

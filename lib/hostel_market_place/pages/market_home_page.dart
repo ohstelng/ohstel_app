@@ -213,10 +213,10 @@ class _MarketHomePageState extends State<MarketHomePage> {
               ),
               GestureDetector(
                 onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AllPartnerShopsPage(),
-                    ),
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AllPartnerShopsPage(),
+                  ),
                 ),
                 child: Text(
                   "See all",
@@ -243,32 +243,46 @@ class _MarketHomePageState extends State<MarketHomePage> {
                         builder: (context) => SelectedShopPage(shop),
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(70.0),
-                          child: Container(
-                            height: 140.0,
-                            width: 140.0,
-                            child: cachedNetworkImage(shop.imageUrl),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(70.0),
+                            child: Container(
+                              height: 140.0,
+                              width: 140.0,
+                              child: shop.imageUrl != null
+                                  ? cachedNetworkImage(shop.imageUrl)
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.grey[300],
+                                      ),
+                                      child: Center(
+                                        child: Icon(Icons.image),
+                                      ),
+                                    ),
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 16.0),
-                        Text(
-                          shop.shopName,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontStyle: FontStyle.italic,
+                          SizedBox(height: 16.0),
+                          Text(
+                            shop.shopName,
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
               });
               return Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: ListView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
                   children: _children,
                 ),
               );

@@ -39,6 +39,16 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
   var symbol;
 
+  Future<void> refreshPage() async {
+    setState(() {
+      isLoading = false;
+    });
+    await Future.delayed(Duration(milliseconds: 100));
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   List<ExtraItemDetails> getExtraFromMap({@required List data}) {
     List<ExtraItemDetails> _extraList = [];
 
@@ -51,7 +61,8 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   Future<void> getDeliveryFeeFromApi() async {
     String uniName = await HiveMethods().getUniName();
 
-    String url = baseApiUrl+'/food_api/food_delivery_info';
+    String url = baseApiUrl + '/food_api/food_delivery_info';
+    debugPrint(url);
     var response = await http.get(url);
     Map data = await json.decode(response.body)['$uniName'];
     deliveryInfo = data;
@@ -352,7 +363,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
                 onPressed: () async {
                   addressDetails = await HiveMethods().getFoodLocationDetails();
                   await selectDeliveryLocation();
-                  setState(() {});
+                  refreshPage();
                 },
                 child: Text('Edit'),
               ),

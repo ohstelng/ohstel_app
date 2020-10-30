@@ -356,8 +356,8 @@ class _FoodDialogState extends State<FoodDialog> {
   }
 
   Widget batchTimeDetails() {
+    /// null check
     if (widget.foodModel.hasBatchTime != null) {
-      ///
       if (widget.foodModel.hasBatchTime) {
         return Container(
           margin: EdgeInsets.all(10.0),
