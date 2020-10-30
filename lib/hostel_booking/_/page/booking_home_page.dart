@@ -732,65 +732,74 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           SizedBox(
             height: 8,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '${hostel.hostelName}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17.0,
-                  color: Colors.black,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-          SizedBox(height: 2),
-          Row(
-            children: <Widget>[
-              Icon(Icons.location_on, size: 16, color: Colors.grey),
-              SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  '${hostel.hostelLocation}',
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '${hostel.hostelName}',
                   style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14.0,
-                    color: Colors.grey,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 17.0,
+                    color: Colors.black,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              SizedBox(
-                width: 8,
-              ),
+              ],
+            ),
+          ),
+          SizedBox(height: 8),
+          Expanded(
+            child: Row(children: <Widget>[
               Text(
-                '${hostel.distanceFromSchoolInKm.toLowerCase().contains('km') ? hostel.distanceFromSchoolInKm : hostel.distanceFromSchoolInKm + 'KM'}',
+                '₦ ${formatCurrency.format(hostel.price)}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,
-                  color: Colors.grey,
+                  color: Colors.black,
                 ),
                 overflow: TextOverflow.ellipsis,
-              ),
-            ],
+              )
+            ]),
           ),
-          SizedBox(height: 2),
-          Row(children: <Widget>[
-            Text(
-              'N  ${formatCurrency.format(hostel.price)}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
-                color: Colors.black,
-              ),
-              overflow: TextOverflow.ellipsis,
-            )
-          ]),
-          SizedBox(
-            height: 8,
-          )
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.location_on, size: 16, color: Colors.grey),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '${hostel.hostelLocation}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14.0,
+                      color: Colors.grey,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Container( padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.orange[200]
+                  ),
+                  child: Text(
+                    '${hostel.distanceFromSchoolInKm.toLowerCase().contains('km') ? hostel.distanceFromSchoolInKm : hostel.distanceFromSchoolInKm + 'km'}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0,
+                      color: Colors.black,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 8),
         ],
       ),
     );

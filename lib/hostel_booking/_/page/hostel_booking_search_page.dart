@@ -9,6 +9,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'booking_home_page.dart';
+
 class HostelBookingSearchPage extends StatefulWidget {
   @override
   _HostelBookingSearchPageState createState() =>
@@ -187,6 +189,7 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
 
   Widget autoSuggest() {
     return Container(
+      height: 50,
       margin: EdgeInsets.all(10.0),
       child: Center(
         child: searchTextField = AutoCompleteTextField<SubLocation>(
@@ -197,7 +200,6 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
             style: new TextStyle(color: Colors.black, fontSize: 16.0),
             decoration: new InputDecoration(
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25.0),
                 borderSide: BorderSide(),
               ),
               suffixIcon: Container(
@@ -286,34 +288,42 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
         controller: scrollController,
         itemBuilder: ((context, index) {
           HostelModel currentHostelModel = searchList[index];
-          return Card(
-            elevation: 2.5,
-            child: InkWell(
-              onTap: () {
-                print(currentHostelModel.id);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        HostelBookingInFoPage(hostelModel: currentHostelModel),
-                  ),
-                );
-              },
-              child: Container(
-                margin: EdgeInsets.all(10),
+          return Container(
+            child: Card(
+              elevation: 1,
+              child: InkWell(
+                onTap: () {
+                  print(currentHostelModel.id);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          HostelBookingInFoPage(hostelModel: currentHostelModel),
+                    ),
+                  );
+                },
                 child: Column(
-                  children: <Widget>[
-                    displayMultiPic(imageList: currentHostelModel.imageUrl),
-                    hostelDetails(hostel: currentHostelModel),
+                  children: [
+                    Container(
+                      height: 120,
+                      margin: EdgeInsets.all(10),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(flex: 3,child: displayMultiPic(imageList: currentHostelModel.imageUrl)),
+                          Expanded(flex: 4, child: hostelDetails(hostel: currentHostelModel)),
+
+                        ],
+                      ),
+                    ),
                     index == (searchList.length - 1)
                         ? Container(
-                            height: 100,
-                            child: Center(
-                              child: moreHostelAvailable == false
-                                  ? Text('No More Hostel Available!!')
-                                  : CircularProgressIndicator(),
-                            ),
-                          )
-                        : Container(),
+                      height: 80,
+                      child: Center(
+                        child: moreHostelAvailable == false
+                            ? Text('No More Hostel Available!!')
+                            : CircularProgressIndicator(),
+                      ),
+                    )
+                        : Container()
                   ],
                 ),
               ),
@@ -326,60 +336,72 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
 
   Widget hostelDetails({@required HostelModel hostel}) {
     return Container(
+      width: MediaQuery.of(context).size.width*0.7 ,
       padding: EdgeInsets.all(10),
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width * 0.60,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${hostel.hostelName}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                    color: Colors.black,
+          Expanded(
+            flex: 4,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '${hostel.hostelName}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  '${hostel.hostelLocation}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15.0,
-                    color: Colors.grey,
+                  SizedBox(height: 8,),
+                  Text(
+                    '₦${formatCurrency.format(hostel.price)}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                  SizedBox(height: 8,),
+                  Row(
+                    children: [
+                      Text(
+                        '${hostel.hostelLocation}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15.0,
+                          color: Colors.grey,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Spacer(),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.orange[200]
+                        ),
+                        child: Text(
+                          '${hostel.distanceFromSchoolInKm} km',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.0,
+                            color: Colors.black,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-          Container(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  '#${hostel.price}K',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0,
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  '${hostel.distanceFromSchoolInKm}KM',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 10.0,
-                    color: Colors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );
@@ -389,7 +411,7 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
     return Container(
       constraints: BoxConstraints(
         maxHeight: 250,
-        maxWidth: MediaQuery.of(context).size.width * .95,
+        maxWidth: MediaQuery.of(context).size.width * .60,
       ),
       child: Carousel(
         images: imageList.map(
@@ -397,7 +419,7 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
             return Container(
               child: ExtendedImage.network(
                 images,
-                fit: BoxFit.fill,
+                fit: BoxFit.fitHeight,
                 handleLoadingProgress: true,
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(10),
@@ -413,7 +435,7 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
         dotSpacing: 15.0,
         dotSize: 4,
         dotIncreaseSize: 2.5,
-        dotIncreasedColor: Colors.teal,
+        dotIncreasedColor: Theme.of(context).primaryColor,
         dotBgColor: Colors.transparent,
         animationCurve: Curves.fastOutSlowIn,
         animationDuration: Duration(milliseconds: 2000),
