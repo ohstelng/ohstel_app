@@ -18,7 +18,7 @@ class FoodHomePage extends StatefulWidget {
 
 class _FoodHomePageState extends State<FoodHomePage> {
 
-  List _imgList = ["asset/ban4.jpg","asset/ban7.jpg","asset/ban8.png"];
+  List _imgList = ["asset/ban4.jpg","asset/ban7.jpg",];
 
   String uniName;
   bool loading = true;
@@ -81,8 +81,8 @@ class _FoodHomePageState extends State<FoodHomePage> {
 
   Widget imageList() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-      height: 147,
+      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 16.0),
+      height: 150,
       width: 395,
       child: CarouselSlider(
         options: CarouselOptions(

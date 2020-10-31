@@ -557,13 +557,14 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             length: 2,
             child: Scaffold(
               appBar: PreferredSize(
-                preferredSize: Size.fromHeight(96),
+                preferredSize: Size.fromHeight(110),
                 child: AppBar(
                   backgroundColor: Colors.white,
                   flexibleSpace: SafeArea(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
+                        SizedBox(height: 8,),
                         searchInputControl(),
                         TabBar(
                           tabs: [
@@ -848,6 +849,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   Widget searchInputControl() {
     return Container(
       padding: EdgeInsets.only(
+
         left: 8,
         right: 8,
       ),

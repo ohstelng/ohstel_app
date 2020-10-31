@@ -117,10 +117,10 @@ class _HomepageState extends State<Homepage> {
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 30.0),
+                              vertical: 8, horizontal: 2.0),
                           child: Container(
                             height: 147,
-                            width: MediaQuery.of(context).size.width * 0.78,
+                            width: MediaQuery.of(context).size.width ,
                             child: CarouselSlider(
                               options: CarouselOptions(
                                 height: 400.0,
@@ -147,7 +147,7 @@ class _HomepageState extends State<Homepage> {
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 5.0),
                                       decoration: BoxDecoration(
-                                          color: Colors.transparent),
+                                          color: Colors.transparent,border: Border.all(color: Theme.of(context).primaryColor)),
                                       child: Image.asset(
                                         "$i",
                                         fit: BoxFit.fill,
