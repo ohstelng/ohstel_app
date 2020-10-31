@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/wrapper.dart';
-import 'welcome_page.dart';
 
 void main() => runApp(new MyApp());
 
@@ -309,7 +308,7 @@ class IntroScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => WelcomePage()));
+                              builder: (context) => Wrapper()));
                     },
                     child: Container(
                       child: Center(
