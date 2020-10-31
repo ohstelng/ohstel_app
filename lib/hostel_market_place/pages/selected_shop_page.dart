@@ -254,28 +254,32 @@ class ShopItemWidget extends StatelessWidget {
                 item.imageUrls[0],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${item.productName}',
-                    style: TextStyle(
-                      color: Color(0xFF3A3A3A),
-                      fontSize: 14.0,
-                      fontFamily: 'Lato',
+                  Expanded(
+                    child: Text(
+                      '${item.productName}',
+                      style: TextStyle(
+                        color: Color(0xFF3A3A3A),
+                        fontSize: 14.0,
+                        fontFamily: 'Lato',
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
                   ),
                   SizedBox(height: 5.0),
-                  Text(
-                    'N${item.productPrice}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.0,
-                      fontFamily: 'Lato',
+                  Expanded(
+                    child: Text( 
+                      '₦${item.productPrice}',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0,
+                                              ),
                     ),
                   ),
                 ],

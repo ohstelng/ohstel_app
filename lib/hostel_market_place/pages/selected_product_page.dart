@@ -352,7 +352,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
             height: 15,
           ),
           Text(
-            'N${widget.productModel.productPrice}',
+            '₦${widget.productModel.productPrice}',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20,

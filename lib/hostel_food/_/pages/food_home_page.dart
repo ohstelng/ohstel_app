@@ -17,6 +17,9 @@ class FoodHomePage extends StatefulWidget {
 }
 
 class _FoodHomePageState extends State<FoodHomePage> {
+
+  List _imgList = ["asset/ban4.jpg","asset/ban7.jpg","asset/ban8.png"];
+
   String uniName;
   bool loading = true;
 
@@ -92,19 +95,14 @@ class _FoodHomePageState extends State<FoodHomePage> {
           enlargeCenterPage: true,
           scrollDirection: Axis.horizontal,
         ),
-        items: [1, 2, 3, 4].map((i) {
+        items: _imgList.map((i) {
           return Builder(
             builder: (BuildContext context) {
               return Container(
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.symmetric(horizontal: 5.0),
-                decoration: BoxDecoration(color: Colors.grey),
-                child: Center(
-                  child: Text(
-                    'image $i',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ),
+                decoration: BoxDecoration(color: Colors.transparent,border: Border.all(color: Theme.of(context).primaryColor)),
+                child: Image.asset("$i",fit: BoxFit.fill,),
               );
             },
           );

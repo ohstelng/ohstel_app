@@ -23,6 +23,7 @@ class WalletHome extends StatefulWidget {
 
 class _WalletHomeState extends State<WalletHome> {
   AdmobReward reward;
+
   // Screen Functionality
   UserModel userModel;
   Map userData;
@@ -44,7 +45,7 @@ class _WalletHomeState extends State<WalletHome> {
 
   getUserDetails() {
     AuthService().getUserDetails(uid: userData['uid']).then((data) {
-      if(!mounted) return;
+      if (!mounted) return;
       setState(() {
         userModel = data;
       });
@@ -463,7 +464,22 @@ class _WalletHomeState extends State<WalletHome> {
                               color: childeanFire,
                             ),
                             ActionButton(
-                              onTap: () {},
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Row(
+                                          children: [
+                                            Icon(Icons.info, color: Theme.of(context).primaryColor,),SizedBox(width: 8,),
+                                            Text("COVID-19 Student Relief Fund",style:TextStyle(fontSize: 16) ,),
+                                          ],
+                                        ),
+                                        content: Text(
+                                            " The OHstel COVID-19 Non - Interest Student Relief Loan \n\nApply to receive ₦3,000 to ₦100,000 in assistance to help cover expenses during this global crisis.\n\n Message: 08167077381 for more enquiries",textAlign: TextAlign.center,),
+                                      );
+                                    });
+                              },
                               label: 'Get a student Loan',
                             ),
                             ActionButton(
@@ -519,6 +535,7 @@ class ActionButton extends StatelessWidget {
   final String label;
   final Color color;
   final bool filled;
+
   @override
   Widget build(BuildContext context) {
     return MaterialButton(

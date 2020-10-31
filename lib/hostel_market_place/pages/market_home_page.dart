@@ -33,7 +33,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
   Map userData;
   Box marketBox;
   int _current = 0;
-  List _imgList = ["asset/ban1.jpg","asset/ban50.jpg","asset/ban3.jpg","asset/ban6.jpg"];
+  List _imgList = ["asset/ban1.jpg","asset/ban5.jpg","asset/ban3.jpg","asset/ban6.jpg"];
   TextStyle _tabBarStyle = TextStyle(color: Colors.black);
 
   Future<void> getUserData() async {
@@ -544,7 +544,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
                   return Container(
                     width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    decoration: BoxDecoration(color: Colors.transparent),
+                    decoration: BoxDecoration(color: Colors.transparent,border: Border.all(color: Theme.of(context).primaryColor)),
                     child: Image.asset("$i",fit: BoxFit.fill,)
                   );
                 },
