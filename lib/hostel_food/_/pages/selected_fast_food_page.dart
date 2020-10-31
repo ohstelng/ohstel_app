@@ -192,7 +192,15 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
       return Expanded(
         child: Container(
           child: Center(
-            child: Text('No $selectedFoodBar Found!'),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Image.asset("asset/empty.png",scale: 22/7,),
+                Text('No $selectedFoodBar Found!',style: TextStyle(fontSize: 18),),
+                SizedBox(height: 32,)
+              ],
+            ),
           ),
         ),
       );
@@ -256,19 +264,18 @@ class _SelectedFastFoodPageState extends State<SelectedFastFoodPage> {
                                     )
                                   : Container(
                                       alignment: Alignment.topCenter,
-                                      height: 120,
+                                      height: 100,
                                       width: double.infinity,
                                       decoration: BoxDecoration(
                                         color: Colors.grey,
                                         shape: BoxShape.rectangle,
                                       ),
                                     ),
-                              Flexible(
+                              Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[

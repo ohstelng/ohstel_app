@@ -5,6 +5,7 @@ import 'package:Ohstel_app/hostel_market_place/pages/selected_product_page.dart'
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class MarketSearchPage extends StatefulWidget {
@@ -121,6 +122,8 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -363,15 +366,11 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Icon(
-                  Icons.local_hotel,
-                  color: Colors.grey,
-                  size: 85.0,
-                ),
+                Image.asset("asset/empty.png",scale: 22/7,),
                 Text(
-                  'Sorry No Product Was Found With The keyWord $query :(',
+                  'Sorry No Product Was Found',
                   style: TextStyle(
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.bold,
                     fontSize: 18.0,
                   ),
                 )
@@ -390,15 +389,12 @@ class _MarketSearchPageState extends State<MarketSearchPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              Icons.local_grocery_store,
-              color: Colors.grey,
-              size: 85.0,
-            ),
+            SvgPicture.asset("asset/shop.svg"),
+            SizedBox(height: 16,),
             Text(
               'Search For Product By Name',
               style: TextStyle(
-                fontWeight: FontWeight.w300,
+                fontWeight: FontWeight.bold,
                 fontSize: 18.0,
               ),
             )

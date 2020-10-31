@@ -3,6 +3,7 @@ import 'package:Ohstel_app/hostel_market_place/models/shop_model.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_shop_page.dart';
 import 'package:Ohstel_app/utilities/shared_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SearchShopsPage extends StatefulWidget {
@@ -111,6 +112,7 @@ class _SearchShopsPageState extends State<SearchShopsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: Column(
           children: [
@@ -226,15 +228,11 @@ class _SearchShopsPageState extends State<SearchShopsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Icon(
-                  Icons.shop_two,
-                  color: Colors.grey,
-                  size: 85.0,
-                ),
+                Image.asset("asset/empty.png",scale: 22/7,),
                 Text(
-                  'Sorry No Shop Was Found With The keyWord $query :(',
+                  'Sorry, $query was not found',
                   style: TextStyle(
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.bold,
                     fontSize: 18.0,
                   ),
                 )
@@ -253,15 +251,11 @@ class _SearchShopsPageState extends State<SearchShopsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              Icons.local_grocery_store,
-              color: Colors.grey,
-              size: 85.0,
-            ),
+            SvgPicture.asset("asset/shop.svg"),
             Text(
               'Search For Shop By Name',
               style: TextStyle(
-                fontWeight: FontWeight.w300,
+                fontWeight: FontWeight.bold,
                 fontSize: 18.0,
               ),
             )

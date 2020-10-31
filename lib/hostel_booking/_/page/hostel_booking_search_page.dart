@@ -7,6 +7,7 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'booking_home_page.dart';
@@ -71,8 +72,8 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
     } catch (e) {
       Fluttertoast.showToast(msg: e.message, toastLength: Toast.LENGTH_LONG);
       setState(() {
-          isStillLoadingData = false;
-        });
+        isStillLoadingData = false;
+      });
     }
   }
 
@@ -167,15 +168,11 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Icon(
-                  Icons.local_hotel,
-                  color: Colors.grey,
-                  size: 85.0,
-                ),
+                Image.asset("asset/empty.png",scale: 22/7,),
                 Text(
-                  'Sorry No Hostel Was Found With This Location :(',
+                  'Sorry, No Hostel Was Found',
                   style: TextStyle(
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.bold,
                     fontSize: 18.0,
                   ),
                 )
@@ -296,8 +293,8 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
                   print(currentHostelModel.id);
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) =>
-                          HostelBookingInFoPage(hostelModel: currentHostelModel),
+                      builder: (context) => HostelBookingInFoPage(
+                          hostelModel: currentHostelModel),
                     ),
                   );
                 },
@@ -308,21 +305,25 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
                       margin: EdgeInsets.all(10),
                       child: Row(
                         children: <Widget>[
-                          Expanded(flex: 3,child: displayMultiPic(imageList: currentHostelModel.imageUrl)),
-                          Expanded(flex: 4, child: hostelDetails(hostel: currentHostelModel)),
-
+                          Expanded(
+                              flex: 3,
+                              child: displayMultiPic(
+                                  imageList: currentHostelModel.imageUrl)),
+                          Expanded(
+                              flex: 4,
+                              child: hostelDetails(hostel: currentHostelModel)),
                         ],
                       ),
                     ),
                     index == (searchList.length - 1)
                         ? Container(
-                      height: 80,
-                      child: Center(
-                        child: moreHostelAvailable == false
-                            ? Text('No More Hostel Available!!')
-                            : CircularProgressIndicator(),
-                      ),
-                    )
+                            height: 80,
+                            child: Center(
+                              child: moreHostelAvailable == false
+                                  ? Text('No More Hostel Available!!')
+                                  : CircularProgressIndicator(),
+                            ),
+                          )
                         : Container()
                   ],
                 ),
@@ -336,7 +337,7 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
 
   Widget hostelDetails({@required HostelModel hostel}) {
     return Container(
-      width: MediaQuery.of(context).size.width*0.7 ,
+      width: MediaQuery.of(context).size.width * 0.7,
       padding: EdgeInsets.all(10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -357,7 +358,9 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 8,),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Text(
                     '₦${formatCurrency.format(hostel.price)}',
                     style: TextStyle(
@@ -367,7 +370,9 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 8,),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Row(
                     children: [
                       Text(
@@ -383,9 +388,8 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.orange[200]
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.orange[200]),
                         child: Text(
                           '${hostel.distanceFromSchoolInKm} km',
                           style: TextStyle(
@@ -450,16 +454,18 @@ class _HostelBookingSearchPageState extends State<HostelBookingSearchPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              Icons.hotel,
-              color: Colors.grey,
-              size: 85.0,
+            SvgPicture.asset(
+              "asset/explore.svg",
+              height: 200,
+            ),
+            SizedBox(
+              height: 16,
             ),
             Text(
-              'Search For Hostel By Name',
+              'Search For Hostel By location',
               style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
               ),
             )
           ],
