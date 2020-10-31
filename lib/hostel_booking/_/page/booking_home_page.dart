@@ -35,7 +35,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   bool isStillLoadingData = true;
   var queryResultSet = [];
   var tempSearchStore = [];
-  List<HostelModel> searchList;
+  List<HostelModel> searchList = [];
   var query = '';
   int perPage = 3;
   bool gettingMoreHostels = false;
@@ -52,7 +52,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   bool performOnlineActivity;
   bool toDisplay = true;
 
-  void initSearch() {
+  void initSearch() async {
+    await getUniName();
+
     try {
       isStillLoadingData = true;
       moreHostelAvailable = true;
@@ -67,7 +69,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             setState(() {
               searchList = list;
               isStillLoadingData = false;
-              lastHostel = searchList[searchList.length - 1];
+              if (searchList.isNotEmpty) {
+                lastHostel = searchList[searchList.length - 1];
+              }
             });
           }
         },
@@ -512,11 +516,12 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     print(name);
     print(data);
     uniName = name;
+    print('UniName: $uniName');
     userDetails = data;
   }
 
   Future getUniList() async {
-    String url = baseApiUrl+"/hostel_api/searchKeys";
+    String url = baseApiUrl + "/hostel_api/searchKeys";
     debugPrint(url);
     var response = await http.get(url);
     debugPrint(response.statusCode.toString());
@@ -528,7 +533,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getUniName();
       initSearch();
     });
     scrollController.addListener(() {
@@ -781,11 +785,11 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 SizedBox(
                   width: 8,
                 ),
-                Container( padding: EdgeInsets.all(5),
+                Container(
+                  padding: EdgeInsets.all(5),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.orange[200]
-                  ),
+                      color: Colors.orange[200]),
                   child: Text(
                     '${hostel.distanceFromSchoolInKm.toLowerCase().contains('km') ? hostel.distanceFromSchoolInKm : hostel.distanceFromSchoolInKm + 'km'}',
                     style: TextStyle(
@@ -976,7 +980,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
     );
   }
 
-
   Widget myPopMenu() {
     return PopupMenuButton(
       onSelected: (value) async {
@@ -1012,15 +1015,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         color: Colors.black,
       ),
       itemBuilder: (context) => [
-        PopupMenuItem<String>(
-          value: "changeUni",
-          child: Column(
-            children: <Widget>[
-              Text("Edit Uni", textAlign: TextAlign.center, maxLines: 1),
-              Divider(),
-            ],
-          ),
-        ),
         PopupMenuItem<String>(
           value: "price",
           child: Column(

@@ -162,16 +162,10 @@ class AuthService {
     final value = userData;
     print(userData);
 
-    userData['dateJoined'] = userData["dateJoined"]?.toDate().toString();
+    userData['dateJoined'] = userData["dateJoined"].toString();
     print(userData);
 
     await userDataBox.put(key, value);
-    print('saved');
-    print('saved');
-    print('saved');
-    print('saved');
-    print('saved');
-    print('saved');
     print('saved');
   }
 

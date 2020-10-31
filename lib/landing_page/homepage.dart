@@ -7,7 +7,6 @@ import 'package:Ohstel_app/hostel_hire/pages/hire_home_page.dart';
 import 'package:Ohstel_app/landing_page/profile_page.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,6 @@ class _HomepageState extends State<Homepage> {
   bool isLoading = true;
   Map userData;
 
-
   Future<void> getUserData() async {
     if (!mounted) return;
     setState(() {
@@ -41,6 +39,7 @@ class _HomepageState extends State<Homepage> {
 
     userData = await HiveMethods().getUserData();
 
+    if (!mounted) return;
     setState(() {
       isLoading = false;
     });
@@ -135,17 +134,23 @@ class _HomepageState extends State<Homepage> {
                                 enlargeCenterPage: true,
                                 scrollDirection: Axis.horizontal,
                               ),
-                              items: ["asset/ban1.jpg","asset/ban2.jpg","asset/ban3.jpg","asset/ban4.jpg"].map((i) {
+                              items: [
+                                "asset/ban1.jpg",
+                                "asset/ban2.jpg",
+                                "asset/ban3.jpg",
+                                "asset/ban4.jpg"
+                              ].map((i) {
                                 return Builder(
                                   builder: (BuildContext context) {
                                     return Container(
                                       width: MediaQuery.of(context).size.width,
                                       margin:
                                           EdgeInsets.symmetric(horizontal: 5.0),
-                                      decoration:
-                                          BoxDecoration(color: Colors.transparent),
-                                      child: Image.asset("$i",fit: BoxFit.fill,
-
+                                      decoration: BoxDecoration(
+                                          color: Colors.transparent),
+                                      child: Image.asset(
+                                        "$i",
+                                        fit: BoxFit.fill,
                                       ),
                                     );
                                   },
