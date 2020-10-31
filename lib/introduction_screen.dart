@@ -88,26 +88,22 @@ class IntroScreen extends StatelessWidget {
                   ),
                   Text(
                     "Book",
-                    style: TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
+                 Container(
+                   height: 120,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                     child: Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus vel id neque egestas. adipiscing elit. Cursus vel id neque egestas."),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.2,
+                        "We help you bypass all the stress "
+                            "involved in Hostel booking and processes.",style: TextStyle(fontSize: 16),textAlign: TextAlign.center,),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 4,
-                        width: 21,
+                        height: 6,
+                        width: 40,
                         decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(20)),
@@ -116,8 +112,8 @@ class IntroScreen extends StatelessWidget {
                         width: 12,
                       ),
                       Container(
-                        height: 4,
-                        width: 11,
+                        height: 6,
+                        width: 16,
                         decoration: BoxDecoration(
                             color: Color(0xffF9BA83),
                             borderRadius: BorderRadius.circular(20)),
@@ -126,8 +122,8 @@ class IntroScreen extends StatelessWidget {
                         width: 12,
                       ),
                       Container(
-                        height: 4,
-                        width: 11,
+                        height: 6,
+                        width: 16,
                         decoration: BoxDecoration(
                             color: Color(0xffF9BA83),
                             borderRadius: BorderRadius.circular(20)),
@@ -135,13 +131,13 @@ class IntroScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 8,
+                    height: MediaQuery.of(context).size.height * 0.1,
                   ),
                   InkWell(
                     onTap: () {
                       if (_controller.hasClients) {
                         _controller.animateToPage(
-                          3,
+                          1,
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeInOut,
                         );
@@ -150,8 +146,8 @@ class IntroScreen extends StatelessWidget {
                     child: Container(
                       child: Center(
                           child: Text(
-                        "Skip",
-                        style: TextStyle(fontSize: 17, color: Colors.white),
+                        "Next",
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17, color: Colors.white),
                       )),
                       height: 37,
                       width: 132,
@@ -178,26 +174,21 @@ class IntroScreen extends StatelessWidget {
                   ),
                   Text(
                     "Shop",
-                    style: TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
-                    padding:
+                Container(
+                  height: 120,
+                  padding:
                         const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                     child: Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus vel id neque egestas. adipiscing elit. Cursus vel id neque egestas."),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.2,
+                        "Are you new to hostel? And not quite sure about all you'll need and where to get them? \n\n Worry less, shopping just got easier",textAlign: TextAlign.center,style: TextStyle(fontSize: 16),),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 4,
-                        width: 11,
+                        height: 6,
+                        width: 16,
                         decoration: BoxDecoration(
                             color: Color(0xffF9BA83),
                             borderRadius: BorderRadius.circular(20)),
@@ -206,8 +197,8 @@ class IntroScreen extends StatelessWidget {
                         width: 12,
                       ),
                       Container(
-                        height: 4,
-                        width: 21,
+                        height: 6,
+                        width: 40,
                         decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(20)),
@@ -216,8 +207,8 @@ class IntroScreen extends StatelessWidget {
                         width: 12,
                       ),
                       Container(
-                        height: 4,
-                        width: 11,
+                        height: 6,
+                        width: 16,
                         decoration: BoxDecoration(
                             color: Color(0xffF9BA83),
                             borderRadius: BorderRadius.circular(20)),
@@ -225,7 +216,7 @@ class IntroScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 8,
+                    height: MediaQuery.of(context).size.height * 0.1,
                   ),
                   InkWell(
                     onTap: () {
@@ -241,7 +232,7 @@ class IntroScreen extends StatelessWidget {
                       child: Center(
                           child: Text(
                         "Skip",
-                        style: TextStyle(fontSize: 17, color: Colors.white),
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17, color: Colors.white),
                       )),
                       height: 37,
                       width: 132,
@@ -262,31 +253,28 @@ class IntroScreen extends StatelessWidget {
                   Container(
                       height: MediaQuery.of(context).size.height * 0.30,
                       width: MediaQuery.of(context).size.width,
-                      child: SvgPicture.asset("asset/shop.svg")),
+                      child: SvgPicture.asset("asset/address.svg")),
                   SizedBox(
                     height: 60,
                   ),
                   Text(
                     "Hire",
-                    style: TextStyle(fontSize: 24),
+                    style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Padding(
+
+                  Container(
+                    height: 120,
                     padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                     child: Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus vel id neque egestas. adipiscing elit. Cursus vel id neque egestas."),
+                        "OHstel connects you with all your needs, with few steps. \nGet a painter, laundry service, gas filling agent, carpenter etc.",style: TextStyle(fontSize: 16),textAlign: TextAlign.center),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                  ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 4,
-                        width: 11,
+                        height: 6,
+                        width: 16,
                         decoration: BoxDecoration(
                             color: Color(0xffF9BA83),
                             borderRadius: BorderRadius.circular(20)),
@@ -295,8 +283,8 @@ class IntroScreen extends StatelessWidget {
                         width: 12,
                       ),
                       Container(
-                        height: 4,
-                        width: 11,
+                        height: 6,
+                        width: 16,
                         decoration: BoxDecoration(
                             color: Color(0xffF9BA83),
                             borderRadius: BorderRadius.circular(20)),
@@ -305,8 +293,8 @@ class IntroScreen extends StatelessWidget {
                         width: 12,
                       ),
                       Container(
-                        height: 4,
-                        width: 21,
+                        height: 6,
+                        width: 40,
                         decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(20)),
@@ -314,7 +302,7 @@ class IntroScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 8,
+                    height: MediaQuery.of(context).size.height * 0.1,
                   ),
                   InkWell(
                     onTap: () {
@@ -327,7 +315,7 @@ class IntroScreen extends StatelessWidget {
                       child: Center(
                           child: Text(
                         "Get Started",
-                        style: TextStyle(fontSize: 17, color: Colors.white),
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17, color: Colors.white),
                       )),
                       height: 37,
                       width: 132,

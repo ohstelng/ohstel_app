@@ -33,7 +33,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
   Map userData;
   Box marketBox;
   int _current = 0;
-  List _imgList = ["asset/ban1.jpg","asset/ban5.jpg","asset/ban3.jpg","asset/ban6.jpg"];
+  List _imgList = ["asset/ban5.jpg","asset/ban6.jpg","asset/ban3.jpg"];
   TextStyle _tabBarStyle = TextStyle(color: Colors.black);
 
   Future<void> getUserData() async {
