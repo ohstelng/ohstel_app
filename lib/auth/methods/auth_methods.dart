@@ -35,7 +35,7 @@ class AuthService {
       );
       User user = result.user;
 
-      await getUserDetails(uid: user.uid);
+      await getUserDetails();
 
       return userFromFirebase(user);
     } catch (e) {
@@ -120,7 +120,8 @@ class AuthService {
 
 //  Future getUserDetails({@required String uid}) async {
 
-  Future<UserModel> getUserDetails({@required String uid}) async {
+  Future<UserModel> getUserDetails() async {
+    String uid = auth.currentUser.uid;
     UserModel userDetails;
     final CollectionReference userDataCollectionRef =
         FirebaseFirestore.instance.collection('userData');

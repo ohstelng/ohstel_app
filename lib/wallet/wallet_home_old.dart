@@ -182,7 +182,7 @@ class _WalletHomeOldState extends State<WalletHomeOld> {
   }
 
   getUserDetails() {
-    AuthService().getUserDetails(uid: userData['uid']).then((data) {
+    AuthService().getUserDetails().then((data) {
       setState(() {
         userModel = data;
       });

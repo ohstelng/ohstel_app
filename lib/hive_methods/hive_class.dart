@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:Ohstel_app/auth/methods/auth_methods.dart';
 import 'package:Ohstel_app/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -88,7 +89,8 @@ class HiveMethods {
 
     if (userDataBox.isEmpty) {
       await Future.delayed(Duration(seconds: 1));
-//      AuthService().signOut();
+      await AuthService().getUserDetails();
+      getUserData();
     }
     print(userDataBox.toMap());
     print('ooooooooooooooooooooooooooooooooooooo');
@@ -165,7 +167,7 @@ class HiveMethods {
 
   Future<void> getLocationDateFromApi() async {
     try {
-      String url = baseApiUrl+"/hostel_api/all_sub_locations";
+      String url = baseApiUrl + "/hostel_api/all_sub_locations";
       var response = await http.get(url);
       Map data = json.decode(response.body);
       data['lastUpdate'] = DateTime.now().millisecondsSinceEpoch;
