@@ -189,6 +189,9 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
         );
       },
     );
+
+    addressDetailsBox = await HiveMethods().getOpenBox('addressBox');
+    setState(() {});
   }
 
   int getGrandTotal() {
@@ -258,7 +261,10 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
                     }
                   },
                   color: Theme.of(context).primaryColor,
-                  child: Text('Submit',style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 )
               ],
             ),
@@ -342,7 +348,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
         },
         child: Text(
           'Make Payment',
-          style: TextStyle(fontSize: 20,color: Colors.white),
+          style: TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
     );
@@ -539,15 +545,20 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       barrierDismissible: false,
       // false = user must tap button, true = tap outside dialog
       builder: (BuildContext dialogContext) {
-        return AlertDialog(insetPadding: EdgeInsets.symmetric(vertical: 110,horizontal: 30),
-          contentPadding: EdgeInsets.symmetric(vertical: 16,horizontal: 16),
+        return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(vertical: 110, horizontal: 30),
+          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           content: Container(
             child: Column(
               children: [
                 Image.asset("asset/success.jpg"),
-                Text('Payment Successful',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)
-                  ,),
-                SizedBox(height: 8,),
+                Text(
+                  'Payment Successful',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
                 Expanded(
                   child: Text(
                     'Your Food Will Be Delivered To You In the next 10 - 15 Mins. '
@@ -560,7 +571,10 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('OK',style: TextStyle(fontSize: 20),),
+              child: Text(
+                'OK',
+                style: TextStyle(fontSize: 20),
+              ),
               onPressed: () {
                 Navigator.of(dialogContext).pop(); // Dismiss alert dialog
               },
@@ -743,14 +757,20 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
                             loading = false;
                           });
                         },
-                        child: Text('Proceed',style: TextStyle(color: Colors.white),),
+                        child: Text(
+                          'Proceed',
+                          style: TextStyle(color: Colors.white),
+                        ),
                         color: Theme.of(context).primaryColor,
                       ),
                 FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('Cancel',style: TextStyle(color: Colors.red),),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.red),
+                  ),
                   color: Colors.white38,
                 ),
               ],

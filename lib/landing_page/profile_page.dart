@@ -217,7 +217,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future getUniList() async {
-    String url = baseApiUrl+"/hostel_api/searchKeys";
+    String url = baseApiUrl + "/hostel_api/searchKeys";
     var response = await http.get(url);
     var result = json.decode(response.body);
     print(result);
@@ -262,248 +262,246 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget body() {
     UserModel userModel = UserModel.fromMap(userData.cast<String, dynamic>());
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16),
-        height: MediaQuery.of(context).size.height,
-        color: Colors.white,
-        child: ListView(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8),
-                      child: Stack(
-                        children: [
-                          userModel.profilePicUrl == null
-                              ? CircleAvatar(
-                                  backgroundColor: Colors.blueGrey[400],
-                                  radius: 80,
-                                  child: Icon(
-                                    Icons.person,
-                                    color: Colors.grey[400],
-                                  ))
-                              : Container(
-                                  height: 120,
-                                  width: 120,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(160),
-                                    child: ExtendedImage.network(
-                                      userData['profilePicUrl'],
-                                      fit: BoxFit.cover,
-                                      handleLoadingProgress: true,
-                                      shape: BoxShape.rectangle,
-                                      cache: false,
-                                      enableMemoryCache: true,
-                                    ),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 16),
+      height: MediaQuery.of(context).size.height,
+      color: Colors.white,
+      child: ListView(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8),
+                    child: Stack(
+                      children: [
+                        userModel.profilePicUrl == null
+                            ? CircleAvatar(
+                                backgroundColor: Colors.blueGrey[400],
+                                radius: 80,
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.grey[400],
+                                ))
+                            : Container(
+                                height: 120,
+                                width: 120,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(160),
+                                  child: ExtendedImage.network(
+                                    userData['profilePicUrl'],
+                                    fit: BoxFit.cover,
+                                    handleLoadingProgress: true,
+                                    shape: BoxShape.rectangle,
+                                    cache: false,
+                                    enableMemoryCache: true,
                                   ),
                                 ),
-                          Positioned(
-                            bottom: 3.0,
-                            right: 3.0,
-                            child: CircleAvatar(
-                              backgroundColor: Color(0xffebf1ef),
-                              child: isUpdatingPic
-                                  ? CircularProgressIndicator()
-                                  : IconButton(
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color: Colors.deepOrange,
-                                      ),
-                                      onPressed: () {
+                              ),
+                        Positioned(
+                          bottom: 3.0,
+                          right: 3.0,
+                          child: CircleAvatar(
+                            backgroundColor: Color(0xffebf1ef),
+                            child: isUpdatingPic
+                                ? CircularProgressIndicator()
+                                : IconButton(
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Colors.deepOrange,
+                                    ),
+                                    onPressed: () {
 //                              print(userData);
-                                        pickImage();
-                                      },
-                                    ),
-                            ),
+                                      pickImage();
+                                    },
+                                  ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${userModel.fullName}",
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Colors.deepOrange,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.0),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                    radius: 16,
-                                    backgroundColor: Color(0xffebf1ef),
-                                    child: Icon(
-                                      Icons.phone,
-                                      size: 16,
-                                    )),
-                                SizedBox(
-                                  width: 16,
-                                ),
-                                Text(
-                                  "${userModel.phoneNumber}",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.0),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                    radius: 16,
-                                    backgroundColor: Color(0xffebf1ef),
-                                    child: Icon(
-                                      Icons.email,
-                                      size: 16,
-                                    )),
-                                SizedBox(
-                                  width: 16,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    "${userModel.email}",
-                                    style: TextStyle(fontSize: 15),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                    backgroundColor: Color(0xffebf1ef),
-                                    child: Icon(
-                                      Icons.location_on,
-                                      size: 16,
-                                    ),
-                                    radius: 16),
-                                SizedBox(
-                                  width: 16,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    "${userModel.uniDetails['name']}",
-                                    style: TextStyle(fontSize: 15),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Divider(),
-            ExpansionTile(
-              childrenPadding: EdgeInsets.symmetric(horizontal: 16),
-              trailing: Icon(Icons.arrow_forward_ios),
-              key: GlobalKey(),
-              title: Text('Edit Profile Details'),
-              leading: CircleAvatar(
-                  backgroundColor: Color(0xffebf1ef),
-                  radius: 37,
-                  child: Icon(Icons.edit)),
-              children: <Widget>[
-                SizedBox(
-//                  height: MediaQuery.of(context).size.height * .30,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: 2,
-                    itemBuilder: (context, index) {
-                      List optionList = [
-                        'Change Phone Number',
-                        'Change University',
-                      ];
-                      return ListTile(
-                        title: Text('${optionList[index]}'),
-                        subtitle: Text('Tap To Edit'),
-                        onTap: () {
-                          editingController(index: index);
-                        },
-                      );
-                    },
                   ),
-                ),
-              ],
-            ),
-            Divider(),
-            ExpansionTile(
-              childrenPadding: EdgeInsets.symmetric(horizontal: 16),
-              trailing: Icon(Icons.arrow_forward_ios),
-              key: GlobalKey(),
-              title: Text('User ID'),
-              leading: CircleAvatar(
-                  backgroundColor: Color(0xffebf1ef),
-                  radius: 37,
-                  child: Icon(Icons.description)),
-              children: <Widget>[
-                ListTile(
-                  title: Text('${userModel.uid}'),
-                  leading: Icon(Icons.content_copy),
-                  subtitle: Text('Click To Copy To ClipBoard'),
-                  onTap: () {
-                    copyUidToClipBoard();
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${userModel.fullName}",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.deepOrange,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                  radius: 16,
+                                  backgroundColor: Color(0xffebf1ef),
+                                  child: Icon(
+                                    Icons.phone,
+                                    size: 16,
+                                  )),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Text(
+                                "${userModel.phoneNumber}",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                  radius: 16,
+                                  backgroundColor: Color(0xffebf1ef),
+                                  child: Icon(
+                                    Icons.email,
+                                    size: 16,
+                                  )),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "${userModel.email}",
+                                  style: TextStyle(fontSize: 15),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                  backgroundColor: Color(0xffebf1ef),
+                                  child: Icon(
+                                    Icons.location_on,
+                                    size: 16,
+                                  ),
+                                  radius: 16),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "${userModel.uniDetails['name']}",
+                                  style: TextStyle(fontSize: 15),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Divider(),
+          ExpansionTile(
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16),
+            trailing: Icon(Icons.arrow_forward_ios),
+            key: GlobalKey(),
+            title: Text('Edit Profile Details'),
+            leading: CircleAvatar(
+                backgroundColor: Color(0xffebf1ef),
+                radius: 37,
+                child: Icon(Icons.edit)),
+            children: <Widget>[
+              SizedBox(
+//                  height: MediaQuery.of(context).size.height * .30,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 2,
+                  itemBuilder: (context, index) {
+                    List optionList = [
+                      'Change Phone Number',
+                      'Change University',
+                    ];
+                    return ListTile(
+                      title: Text('${optionList[index]}'),
+                      subtitle: Text('Tap To Edit'),
+                      onTap: () {
+                        editingController(index: index);
+                      },
+                    );
                   },
                 ),
-              ],
-            ),
-            Items(Icons.lock_outline, "Privacy & Services"),
-            Items(
-              Icons.info_outline,
-              "Legal",
-            ),
-            Divider(),
-            ListTile(
-              leading: CircleAvatar(
-                  radius: 37,
-                  backgroundColor: Color(0xffebf1ef),
-                  child: Icon(
-                    Icons.exit_to_app,
-                    size: 30,
-                  )),
-              title: Text('Log Out'),
-              trailing: Icon(Icons.arrow_forward_ios),
-              onTap: () async {
-                await AuthService().signOut();
-                Navigator.pop(context);
-              },
-            ),
-            Divider()
-          ],
-        ),
+              ),
+            ],
+          ),
+          Divider(),
+          ExpansionTile(
+            childrenPadding: EdgeInsets.symmetric(horizontal: 16),
+            trailing: Icon(Icons.arrow_forward_ios),
+            key: GlobalKey(),
+            title: Text('User ID'),
+            leading: CircleAvatar(
+                backgroundColor: Color(0xffebf1ef),
+                radius: 37,
+                child: Icon(Icons.description)),
+            children: <Widget>[
+              ListTile(
+                title: Text('${userModel.uid}'),
+                leading: Icon(Icons.content_copy),
+                subtitle: Text('Click To Copy To ClipBoard'),
+                onTap: () {
+                  copyUidToClipBoard();
+                },
+              ),
+            ],
+          ),
+          Items(Icons.lock_outline, "Privacy & Services"),
+          Items(
+            Icons.info_outline,
+            "Legal",
+          ),
+          Divider(),
+          ListTile(
+            leading: CircleAvatar(
+                radius: 37,
+                backgroundColor: Color(0xffebf1ef),
+                child: Icon(
+                  Icons.exit_to_app,
+                  size: 30,
+                )),
+            title: Text('Log Out'),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () async {
+              await AuthService().signOut();
+              Navigator.pop(context);
+            },
+          ),
+          Divider()
+        ],
       ),
     );
   }

@@ -682,6 +682,7 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       await MarketMethods().saveOrderToDataBase(data: paidOrderModel);
       clearCart();
       Navigator.pop(context);
+      Navigator.pop(context);
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '$e');

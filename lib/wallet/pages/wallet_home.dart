@@ -21,7 +21,7 @@ class WalletHome extends StatefulWidget {
   _WalletHomeState createState() => _WalletHomeState();
 }
 
-class _WalletHomeState extends State<WalletHome> {
+class _WalletHomeState extends State<WalletHome> with AutomaticKeepAliveClientMixin {
   AdmobReward reward;
 
   // Screen Functionality
@@ -330,7 +330,23 @@ class _WalletHomeState extends State<WalletHome> {
                                         builder:
                                             (context, AsyncSnapshot snapshot) {
                                           if (!snapshot.hasData) {
-                                            return Text('Loading...');
+                                            return Text(
+                                              'Loading...',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            );
+                                          } else if (snapshot.data.data() == null) {
+                                            return Text(
+                                              'NGN 00.0',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            );
                                           } else {
                                             if (snapshot.data == null) {
                                               return Text('......');
@@ -399,7 +415,23 @@ class _WalletHomeState extends State<WalletHome> {
                                         .snapshots(),
                                     builder: (context, AsyncSnapshot snapshot) {
                                       if (!snapshot.hasData) {
-                                        return Text('Loading...');
+                                        return Text(
+                                          'Loading.....',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        );
+                                      } else if (snapshot.data.data() == null) {
+                                        return Text(
+                                          'NGN 00.0',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        );
                                       } else {
                                         if (snapshot.data == null) {
                                           return Text('......');
@@ -416,15 +448,9 @@ class _WalletHomeState extends State<WalletHome> {
                                             fontWeight: FontWeight.w600,
                                           ),
                                         );
-                                        /* Text(
-                        "NGN $balance.0",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold),
-                      ); */
+
                                       }
-                                    }),
+                                    },),
                               ],
                             ),
                           ],
@@ -471,12 +497,24 @@ class _WalletHomeState extends State<WalletHome> {
                                       return AlertDialog(
                                         title: Row(
                                           children: [
-                                            Icon(Icons.info, color: Theme.of(context).primaryColor,),SizedBox(width: 8,),
-                                            Text("COVID-19 Student Relief Fund",style:TextStyle(fontSize: 16) ,),
+                                            Icon(
+                                              Icons.info,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Text(
+                                              "COVID-19 Student Relief Fund",
+                                              style: TextStyle(fontSize: 16),
+                                            ),
                                           ],
                                         ),
                                         content: Text(
-                                            " The OHstel COVID-19 Non - Interest Student Relief Loan \n\nApply to receive ₦3,000 to ₦100,000 in assistance to help cover expenses during this global crisis.\n\n Message: 08167077381 for more enquiries",textAlign: TextAlign.center,),
+                                          " The OHstel COVID-19 Non - Interest Student Relief Loan \n\nApply to receive ₦3,000 to ₦100,000 in assistance to help cover expenses during this global crisis.\n\n Message: 08167077381 for more enquiries",
+                                          textAlign: TextAlign.center,
+                                        ),
                                       );
                                     });
                               },
@@ -520,6 +558,9 @@ class _WalletHomeState extends State<WalletHome> {
             ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 // Reused action Button widget
@@ -569,7 +610,7 @@ class _TransferFundPopUpState extends State<TransferFundPopUp> {
   bool _loading = false;
   int stage = 0;
 
-  int amount;
+  String amount;
   UserModel receiver;
   String uid;
   String message = 'Loading....';
@@ -593,8 +634,11 @@ class _TransferFundPopUpState extends State<TransferFundPopUp> {
       stage = 2;
     });
 
+    print('ffffff');
+    print('amount: $amount');
+    print('amount: ${amount.runtimeType}');
     int result = await WalletMethods().transferFund(
-      amount: amount.toDouble(),
+      amount: double.parse(amount),
       receiver: receiver,
     );
 
@@ -687,7 +731,7 @@ class _TransferFundPopUpState extends State<TransferFundPopUp> {
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
             onChanged: (val) {
-              amount = int.parse(val.trim());
+              amount = val.trim();
             },
             validator: (value) {
               if (value.trim().isEmpty) {
@@ -703,8 +747,11 @@ class _TransferFundPopUpState extends State<TransferFundPopUp> {
             children: [
               ActionButton(
                 onTap: () {
+                  print(amount);
                   if (formKey.currentState.validate()) {
+                    print('got here');
                     nextStep();
+//                    makeTransfer();
                   }
                 },
                 label: 'Proceed',
@@ -736,6 +783,8 @@ class _TransferFundPopUpState extends State<TransferFundPopUp> {
             ),
           );
         } else {
+          print(snapshot.data);
+          print(snapshot.data.runtimeType);
           receiver = snapshot.data;
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -759,8 +808,8 @@ class _TransferFundPopUpState extends State<TransferFundPopUp> {
                 children: [
                   FlatButton(
                     onPressed: () {
+                      print(';;;;;');
                       makeTransfer();
-//                        nextStep();
                     },
                     child: Text('Proceed'),
                     color: Colors.green,

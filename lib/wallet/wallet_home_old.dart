@@ -457,6 +457,7 @@ class _TransferFundPopUpState extends State<TransferFundPopUp> {
       stage = 2;
     });
 
+    print('fffffffff');
     int result = await WalletMethods().transferFund(
       amount: amount.toDouble(),
       receiver: receiver,

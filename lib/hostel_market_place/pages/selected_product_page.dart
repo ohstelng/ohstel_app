@@ -129,7 +129,7 @@ class _SelectedProductPageState extends State<SelectedProductPage> {
             ),
             children: [
               Text(
-                'The delivery Esp. 1 - 4 Day Depending On Your Loaction. \n A More Accurate Delivery Will Be Shown On The Check Out Summary Page',
+                'The delivery Esp. 1 - 4 Day Depending On Your Location. \n A More Accurate Delivery Will Be Shown On The Check Out Summary Page',
                 style: TextStyle(
                   fontSize: 16,
                 ),

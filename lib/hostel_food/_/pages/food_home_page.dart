@@ -16,7 +16,7 @@ class FoodHomePage extends StatefulWidget {
   _FoodHomePageState createState() => _FoodHomePageState();
 }
 
-class _FoodHomePageState extends State<FoodHomePage> {
+class _FoodHomePageState extends State<FoodHomePage> with AutomaticKeepAliveClientMixin{
 
   List _imgList = ["asset/ban4.jpg","asset/ban7.jpg",];
 
@@ -172,7 +172,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
                       handleLoadingProgress: true,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(10),
-                      cache: false,
+                      cache: true,
                       enableMemoryCache: true,
                     ),
                   ),
@@ -428,4 +428,7 @@ class _FoodHomePageState extends State<FoodHomePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

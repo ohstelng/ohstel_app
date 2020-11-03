@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
@@ -57,7 +55,7 @@ class HostelModel {
     this.dateAdded = mapData['dateAdded'];
     this.ratings = mapData['ratings'];
     this.searchKey = mapData['searchKey'];
-    this.dormType = mapData['hostelType'];
+    this.dormType = mapData['dormType'];
     this.landMark = mapData['landMark'];
     this.uniName = mapData['uniName'];
     this.hostelAccommodationType = mapData['hostelAccommodationType'];
@@ -80,13 +78,9 @@ class HostelModel {
     data['uniName'] = this.uniName;
     data['dateAdded'] = Timestamp.now().microsecondsSinceEpoch;
     data['ratings'] = this.ratings;
-
-    data['dormType'] =
-        ['boys only', 'girls only', 'mixed'][Random().nextInt(3)];
-    data['landMark'] = 'this will be a name of any land mark near the hostel';
-    data['hostelAccommodationType'] =
-        'accoomdation type one room, self contain, 2 bedroom(for off campus) while two, three or 4 to a room(for school hoste)';
-
+    data['dormType'] = this.dormType;
+    data['landMark'] = this.landMark;
+    data['hostelAccommodationType'] = this.hostelAccommodationType;
     data['searchKey'] = this.hostelName[0].toLowerCase();
     data['id'] = this.id;
 

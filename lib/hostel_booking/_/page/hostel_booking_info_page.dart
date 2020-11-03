@@ -263,8 +263,17 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                 Text(
                     '${widget.hostelModel.distanceFromSchoolInKm.toLowerCase().contains('km') ? widget.hostelModel.distanceFromSchoolInKm + ' from Unilorin' : widget.hostelModel.distanceFromSchoolInKm + 'KM from Unilorin'}'),
                 Spacer(),
-                Text("12/12/2020")
+                Text(
+                    "${DateTime.fromMicrosecondsSinceEpoch(widget.hostelModel.dateAdded).toString().split(' ')[0]}")
               ]),
+//              Row(children: <Widget>[
+//                Icon(
+//                  Icons.person,
+//                  size: 16,
+//                ),
+//                Text('Dorm Type: ${widget.hostelModel.dormType}'),
+//                Spacer(),
+//              ]),
               SizedBox(height: 16),
               Container(
                 child: TabBar(
@@ -286,7 +295,11 @@ class _HostelBookingInFoPageState extends State<HostelBookingInFoPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SingleChildScrollView(
-                            child: Text('${widget.hostelModel.description}')),
+                          child: Text(
+                            '${widget.hostelModel.description} \n\n ${widget.hostelModel.extraFeatures}',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -479,14 +492,20 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
                             loading = false;
                           });
                         },
-                        child: Text('Proceed',style: TextStyle(color: Colors.white),),
+                        child: Text(
+                          'Proceed',
+                          style: TextStyle(color: Colors.white),
+                        ),
                         color: Theme.of(context).primaryColor,
                       ),
                 FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('Cancel',style: TextStyle(color: Colors.red),),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.red),
+                  ),
                   color: Colors.white54,
                 ),
               ],

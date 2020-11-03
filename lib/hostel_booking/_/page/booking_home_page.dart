@@ -29,7 +29,8 @@ class HostelBookingHomePage extends StatefulWidget {
   _HostelBookingHomePageState createState() => _HostelBookingHomePageState();
 }
 
-class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
+class _HostelBookingHomePageState extends State<HostelBookingHomePage>
+    with AutomaticKeepAliveClientMixin {
   Box<Map> userDataBox;
   ScrollController scrollController = ScrollController();
   bool isStillLoadingData = true;
@@ -564,7 +565,9 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        SizedBox(height: 8,),
+                        SizedBox(
+                          height: 8,
+                        ),
                         searchInputControl(),
                         TabBar(
                           tabs: [
@@ -616,7 +619,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
 
   Widget sortByDistance() {
     return PaginateFirestore(
-      itemsPerPage: 3,
+      shrinkWrap: true,
+      itemsPerPage: 6,
       initialLoader: Container(
         height: 50,
         child: Center(
@@ -640,22 +644,28 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           elevation: 2.5,
           child: InkWell(
             onTap: () {
-//              print(currentHostelModel.id);
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      HostelBookingInFoPage(hostelModel: currentHostelModel)));
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => HostelBookingInFoPage(
+                    hostelModel: currentHostelModel,
+                  ),
+                ),
+              );
             },
             child: Container(
               margin: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  displayMultiPic(imageList: currentHostelModel.imageUrl),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  hostelDetails(hostel: currentHostelModel),
-                ],
+              child: SizedBox(
+                height: 130,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    displayMultiPic(imageList: currentHostelModel.imageUrl),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    hostelDetails(hostel: currentHostelModel),
+                  ],
+                ),
               ),
             ),
           ),
@@ -666,16 +676,29 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   }
 
   Widget resultList() {
+    if (searchList.isEmpty) {
+      return Center(
+        child: Text(
+          'No Hostel Found!',
+          style: TextStyle(
+            fontWeight: FontWeight.w300,
+            fontSize: 30,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 1.0,
-        mainAxisSpacing: 8,
-        childAspectRatio: 0.87,
+        mainAxisSpacing: 0.5,
+        childAspectRatio: 0.85,
       ),
       physics: BouncingScrollPhysics(),
       controller: scrollController,
-      shrinkWrap: false,
+      shrinkWrap: true,
       primary: false,
       itemCount: searchList.length,
       itemBuilder: (context, index) {
@@ -683,23 +706,31 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
         HostelModel currentHostelModel = searchList[index];
 
         return Container(
+//          color: Colors.red,
+          constraints: BoxConstraints(
+            maxHeight: 232,
+          ),
           child: Column(
             children: <Widget>[
-              Expanded(
-                child: Card(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => HostelBookingInFoPage(
-                            hostelModel: currentHostelModel,
-                          ),
+              Card(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => HostelBookingInFoPage(
+                          hostelModel: currentHostelModel,
                         ),
-                      );
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: 200,
+                      ),
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Expanded(
@@ -708,9 +739,11 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                                 imageList: currentHostelModel.imageUrl),
                           ),
                           Expanded(
-                              flex: 3,
-                              child: hostelDetails(hostel: currentHostelModel)),
-//                          SizedBox(height: 5),
+                            flex: 3,
+                            child: hostelDetails(
+                              hostel: currentHostelModel,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -718,7 +751,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 ),
               ),
               (index == (searchList.length - 1)) && moreHostelAvailable == true
-                  ? CircularProgressIndicator()
+                  ? Container(height: 20, child: CircularProgressIndicator())
                   : Container(),
             ],
           ),
@@ -737,11 +770,11 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
           SizedBox(
             height: 8,
           ),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: Text(
                   '${hostel.hostelName}',
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
@@ -750,8 +783,8 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           SizedBox(height: 8),
           Expanded(
@@ -826,7 +859,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
                 handleLoadingProgress: true,
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(10),
-                cache: false,
+                cache: true,
                 enableMemoryCache: true,
               ),
             );
@@ -849,7 +882,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
   Widget searchInputControl() {
     return Container(
       padding: EdgeInsets.only(
-
         left: 8,
         right: 8,
       ),
@@ -1004,13 +1036,6 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
             isStillLoadingData = false;
           });
         }
-        Fluttertoast.showToast(
-            msg: "You have selected " + value.toString(),
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: Colors.black,
-            textColor: Colors.white,
-            fontSize: 16.0);
       },
       icon: Icon(
         Icons.tune,
@@ -1074,4 +1099,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

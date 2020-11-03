@@ -21,7 +21,7 @@ class Homepage extends StatefulWidget {
   _HomepageState createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomepageState extends State<Homepage> with AutomaticKeepAliveClientMixin{
   BoxDecoration _boxDec = BoxDecoration(
     color: Color(0xfff4f5f6),
     borderRadius: BorderRadius.circular(10),
@@ -81,6 +81,10 @@ class _HomepageState extends State<Homepage> {
                           child: Container(
                             height: 100,
                             width: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              shape: BoxShape.circle,
+                            ),
                             child: userData['profilePicUrl'] == null
                                 ? Icon(Icons.person, color: Color(0xffebf1ef))
                                 : ExtendedImage.network(
@@ -88,7 +92,7 @@ class _HomepageState extends State<Homepage> {
                                     fit: BoxFit.fill,
                                     handleLoadingProgress: true,
                                     shape: BoxShape.circle,
-                                    cache: false,
+                                    cache: true,
                                     enableMemoryCache: true,
                                   ),
                           ),
@@ -332,4 +336,7 @@ class _HomepageState extends State<Homepage> {
       );
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -245,7 +245,7 @@ class _OnCampusLocationState extends State<OnCampusLocation> {
             width: double.infinity,
             child: FlatButton(
               color: Color(0xFFF27507),
-              onPressed: () {
+              onPressed: () async {
                 if (address != null && address.length > 3) {
                   Map addressDetails = {
                     'address': address,
@@ -254,14 +254,13 @@ class _OnCampusLocationState extends State<OnCampusLocation> {
                   };
                   print(addressDetails);
                   if (widget.type == null) {
-                    HiveMethods()
-                        .saveFoodLocationDetailsToDb(map: addressDetails);
+                    await HiveMethods().saveFoodLocationDetailsToDb(map: addressDetails);
                   } else {
                     if (widget.type == AddressType.pickUp) {
-                      HiveMethods()
+                      await HiveMethods()
                           .saveToLaundryPickUpBox(data: addressDetails);
                     } else if (widget.type == AddressType.dropOff) {
-                      HiveMethods().saveToLaundryDropBox(data: addressDetails);
+                      await HiveMethods().saveToLaundryDropBox(data: addressDetails);
                     }
                   }
                   Navigator.pop(context);

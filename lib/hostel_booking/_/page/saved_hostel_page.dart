@@ -13,7 +13,8 @@ class SavedHostelPage extends StatefulWidget {
   _SavedHostelPageState createState() => _SavedHostelPageState();
 }
 
-class _SavedHostelPageState extends State<SavedHostelPage> {
+class _SavedHostelPageState extends State<SavedHostelPage>
+    with AutomaticKeepAliveClientMixin {
   Map userDetails;
   bool isLoading = true;
 
@@ -176,7 +177,7 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
                 handleLoadingProgress: true,
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(10),
-                cache: false,
+                cache: true,
                 enableMemoryCache: true,
               ),
             );
@@ -195,4 +196,7 @@ class _SavedHostelPageState extends State<SavedHostelPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

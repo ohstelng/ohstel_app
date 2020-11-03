@@ -147,7 +147,7 @@ class AuthService {
     try {
       DocumentSnapshot document = await userDataCollectionRef.doc(uid).get();
       print(document.data());
-      userDetails = UserModel.fromMap(document.data().cast<String, dynamic>());
+      userDetails = UserModel.fromMap(document.data());
     } catch (e) {
       print(e);
       Fluttertoast.showToast(msg: '${e.message}');

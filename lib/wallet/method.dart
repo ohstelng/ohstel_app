@@ -38,19 +38,18 @@ class WalletMethods {
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot docSnapshot = await transaction.get(userDoc);
-        int previousAmount = (docSnapshot.data()['walletBalance'] ?? 0);
-        print('ppppppppppppppppppppppppppppppppppppppp');
-        print(previousAmount);
+        Map snapshotData = docSnapshot.data() ?? {'walletBalance': 0};
+
+        int previousBalance = snapshotData['walletBalance'] ?? 0;
+        print(previousBalance);
         int updatedWalletBalance;
-        int balance = docSnapshot.data()['walletBalance'];
-        print(balance);
 
         if (!docSnapshot.exists) {
           print('Document does not exist!');
           throw Exception("Document does not exist!");
         }
 
-        updatedWalletBalance = (balance == null ? 0 : balance) + amount.toInt();
+        updatedWalletBalance = previousBalance + amount.toInt();
 
         print("balance = $updatedWalletBalance");
 
@@ -62,7 +61,7 @@ class WalletMethods {
         WalletHistoryModel walletHistory = WalletHistoryModel(
           amount: amount.toInt().toString(),
           balance: updatedWalletBalance,
-          previousAmount: previousAmount,
+          previousAmount: previousBalance,
           desc: desc,
           type: type,
           ref: ref,
@@ -76,8 +75,9 @@ class WalletMethods {
 
         return updatedWalletBalance;
       });
-    } catch (e) {
+    } catch (e, s) {
       print(e);
+      print(s);
       Fluttertoast.showToast(msg: '$e');
     }
   }
@@ -98,25 +98,22 @@ class WalletMethods {
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot docSnapshot = await transaction.get(userDoc);
-        double previousAmount =
-            (double.parse(docSnapshot.data()['walletBalance'].toString()) ?? 0);
-        print('ppppppppppppppppppppppppppppppppppppppp');
-        print(previousAmount);
+        Map snapshotData = docSnapshot.data() ?? {'walletBalance': 0};
+        int previousBalance = snapshotData['walletBalance'] ?? 0;
+        print(previousBalance);
         int updatedWalletBalance;
-        int balance = docSnapshot.data()['walletBalance'] ?? 0;
-        print(balance);
 
         if (!docSnapshot.exists) {
           print('Document does not exist!');
           throw Exception("Document does not exist!");
         }
 
-        if (balance < amount) {
+        if (previousBalance < amount) {
           print('Insufficient Balance!');
           throw Exception("Insufficient Balance!!");
         }
 
-        updatedWalletBalance = balance - amount.toInt();
+        updatedWalletBalance = previousBalance - amount.toInt();
 
         print("balance = $updatedWalletBalance");
 
@@ -131,7 +128,7 @@ class WalletMethods {
             .add({
           'amount': amount.toInt().toString(),
           'balance': updatedWalletBalance,
-          'previousAmount': previousAmount,
+          'previousAmount': previousBalance,
           'desc': desc,
           'date': Timestamp.now(),
           'type': type,
@@ -168,21 +165,17 @@ class WalletMethods {
           userWalletCollectionRef.doc(receiver.uid);
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
+        String userUid = await HiveMethods().getUid();
         DocumentSnapshot userDocSnapshot = await transaction.get(userDoc);
         DocumentSnapshot receiverDocSnapshot =
             await transaction.get(receiverDoc);
-
-        double userPreviousAmount =
-            (double.parse(userDocSnapshot.data()['walletBalance'].toString()) ??
-                0);
-        double receiverPreviousAmount = (double.parse(
-                receiverDocSnapshot.data()['walletBalance'].toString()) ??
-            0);
+        Map userData = userDocSnapshot.data() ?? {'walletBalance': 0};
+        Map receiverData = receiverDocSnapshot.data() ?? {'walletBalance': 0};
+        int userPreviousBalance = userData['walletBalance'] ?? 0;
+        int receiverPreviousBalance = receiverData['walletBalance'] ?? 0;
 
         int userUpdateWalletBalance;
         int receiverUpdateWalletBalance;
-        int userBalance = userDocSnapshot.data()['walletBalance'] ?? 0;
-        int receiverBalance = receiverDocSnapshot.data()['walletBalance'] ?? 0;
 
         if (!userDocSnapshot.exists && !receiverDocSnapshot.exists) {
           print('Document does not exist!');
@@ -191,14 +184,14 @@ class WalletMethods {
         }
         print(1);
 
-        if (userBalance < amount) {
+        if (userPreviousBalance < amount) {
           print('Insufficient Balance!');
           throw Exception("Insufficient Balance!!");
         }
 
         print(2);
-        userUpdateWalletBalance = userBalance - amount.toInt();
-        receiverUpdateWalletBalance = receiverBalance + amount.toInt();
+        userUpdateWalletBalance = userPreviousBalance - amount.toInt();
+        receiverUpdateWalletBalance = receiverPreviousBalance + amount.toInt();
 
         transaction.update(
           userDoc,
@@ -215,17 +208,17 @@ class WalletMethods {
         WalletHistoryModel userWalletHistory = WalletHistoryModel(
           amount: amount.toInt().toString(),
           balance: userUpdateWalletBalance,
-          previousAmount: userPreviousAmount,
+          previousAmount: userPreviousBalance,
           desc: desc,
           type: type,
           ref: ref,
-          uid: userData['uid'],
+          uid: userUid,
         );
 
         WalletHistoryModel receiverWalletHistory = WalletHistoryModel(
           amount: amount.toInt().toString(),
-          balance: receiverPreviousAmount,
-          previousAmount: receiverBalance,
+          balance: receiverUpdateWalletBalance,
+          previousAmount: receiverPreviousBalance,
           type: type,
           desc: desc,
           ref: ref,
@@ -233,21 +226,23 @@ class WalletMethods {
         );
 
         print(5);
-        fundHistoryCollectionRef
-            .doc(userData['uid'])
+        print(userData);
+        await fundHistoryCollectionRef
+            .doc(userUid)
             .collection('walletHistory')
             .add(userWalletHistory.toMap());
 
         print(6);
-        fundHistoryCollectionRef
+        await fundHistoryCollectionRef
             .doc(receiver.uid)
             .collection('walletHistory')
             .add(receiverWalletHistory.toMap());
 
         status = 0;
       });
-    } catch (e) {
+    } catch (e, s) {
       print(e);
+      print(s);
       status = 1;
       Fluttertoast.showToast(msg: '$e');
     }
@@ -268,7 +263,8 @@ class WalletMethods {
 
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot docSnapshot = await transaction.get(userDoc);
-        int previousAmount = (docSnapshot.data()['coinBalance'] ?? 0);
+        Map userData = docSnapshot.data() ?? {'walletBalance': 0};
+        int previousAmount = userData['coinBalance'];
         print('ppppppppppppppppppppppppppppppppppppppp');
         print(previousAmount);
         int updatedCoinBalance;
@@ -305,7 +301,6 @@ class WalletMethods {
             .add(walletHistory.toMap());
 
         showSuccessMessage(context: context, price: amount);
-//        return updatedCoinBalance;
       });
     } catch (e) {
       print(e);
@@ -316,7 +311,7 @@ class WalletMethods {
   Future<void> getCoin({@required BuildContext context}) async {
     int fee;
 
-    String url = baseApiUrl+"/coinFee";
+    String url = baseApiUrl + "/coinFee";
     var response = await http.get(url);
     var result = json.decode(response.body);
     print(result);

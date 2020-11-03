@@ -26,14 +26,13 @@ class MarketHomePage extends StatefulWidget {
   _MarketHomePageState createState() => _MarketHomePageState();
 }
 
-
-class _MarketHomePageState extends State<MarketHomePage> {
+class _MarketHomePageState extends State<MarketHomePage> with AutomaticKeepAliveClientMixin {
   String uniName;
   bool isLoading = true;
   Map userData;
   Box marketBox;
   int _current = 0;
-  List _imgList = ["asset/ban5.jpg","asset/ban6.jpg","asset/ban3.jpg"];
+  List _imgList = ["asset/ban5.jpg", "asset/ban6.jpg", "asset/ban3.jpg"];
   TextStyle _tabBarStyle = TextStyle(color: Colors.black);
 
   Future<void> getUserData() async {
@@ -319,7 +318,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
   Widget tabBarView() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8),
-      height: 300, //
+      height: 600, //
       child: TabBarView(
         children: <Widget>[
           latestProduct(),
@@ -330,8 +329,11 @@ class _MarketHomePageState extends State<MarketHomePage> {
 
   Widget latestProduct() {
     return PaginateFirestore(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+      ),
       scrollDirection: Axis.horizontal,
-      itemsPerPage: 6,
+      itemsPerPage: 10,
       initialLoader: Container(
         height: 50,
         child: Center(
@@ -376,7 +378,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
                             fit: BoxFit.fill,
                             handleLoadingProgress: true,
                             shape: BoxShape.rectangle,
-                            cache: false,
+                            cache: true,
                             enableMemoryCache: true,
                           )
                         : Center(child: Icon(Icons.image)),
@@ -542,11 +544,16 @@ class _MarketHomePageState extends State<MarketHomePage> {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.symmetric(horizontal: 5.0),
-                    decoration: BoxDecoration(color: Colors.transparent,border: Border.all(color: Theme.of(context).primaryColor)),
-                    child: Image.asset("$i",fit: BoxFit.fill,)
-                  );
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(
+                              color: Theme.of(context).primaryColor)),
+                      child: Image.asset(
+                        "$i",
+                        fit: BoxFit.fill,
+                      ));
                 },
               );
             }).toList(),
@@ -683,4 +690,7 @@ class _MarketHomePageState extends State<MarketHomePage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
