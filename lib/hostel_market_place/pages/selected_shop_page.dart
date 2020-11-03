@@ -16,18 +16,18 @@ class SelectedShopPage extends StatefulWidget {
 }
 
 class _SelectedShopPageState extends State<SelectedShopPage>
-    with SingleTickerProviderStateMixin {
-  TabController _tabController;
+    with AutomaticKeepAliveClientMixin {
+//  TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+//    _tabController = TabController(length: 4, vsync: this);
   }
 
-  buildAllItems() {
+  Widget buildAllItems() {
     return FutureBuilder(
-      future: MarketMethods().getShopItems(widget.shop.shopName),
+      future: MarketMethods().getShopItems(widget.shop.shopName.toLowerCase()),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -44,6 +44,7 @@ class _SelectedShopPageState extends State<SelectedShopPage>
                   crossAxisSpacing: 10.0,
                 ),
                 physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   return Container(
@@ -163,8 +164,8 @@ class _SelectedShopPageState extends State<SelectedShopPage>
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+//          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               widget.shop.shopName,
@@ -178,51 +179,20 @@ class _SelectedShopPageState extends State<SelectedShopPage>
                 color: Color(0xFFC4C4C4),
               ),
             ),
-            SizedBox(height: 40.0),
-            TabBar(
-              controller: _tabController,
-              indicatorColor: Colors.transparent,
-              unselectedLabelStyle: TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Lato',
-              ),
-              unselectedLabelColor: Colors.black,
-              labelColor: Theme.of(context).primaryColor,
-              labelStyle: TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Lato',
-              ),
-              labelPadding: EdgeInsets.symmetric(horizontal: 24.0),
-              isScrollable: true,
-              tabs: [
-                Text('All'),
-                Text('Groceries'),
-                Text('Drinks'),
-                Text('Toiletries'),
-              ],
-            ),
+            SizedBox(height: 20.0),
             Divider(
               color: Colors.black.withOpacity(0.12),
               thickness: 1.0,
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  buildAllItems(),
-                  buildGroceries(),
-                  buildDrinks(),
-                  buildToiletries(),
-                ],
-              ),
-            ),
+            buildAllItems(),
           ],
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class ShopItemWidget extends StatelessWidget {
@@ -274,12 +244,12 @@ class ShopItemWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 5.0),
                   Expanded(
-                    child: Text( 
+                    child: Text(
                       '₦${item.productPrice}',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 20.0,
-                                              ),
+                      ),
                     ),
                   ),
                 ],
