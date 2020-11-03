@@ -4,7 +4,9 @@ import 'package:Ohstel_app/hostel_market_place/models/shop_model.dart';
 import 'package:Ohstel_app/hostel_market_place/pages/selected_product_page.dart';
 import 'package:Ohstel_app/utilities/app_style.dart';
 import 'package:Ohstel_app/utilities/shared_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:paginate_firestore/paginate_firestore.dart';
 
 class SelectedShopPage extends StatefulWidget {
   final ShopModel shop;
@@ -23,6 +25,46 @@ class _SelectedShopPageState extends State<SelectedShopPage>
   void initState() {
     super.initState();
 //    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  Widget productList() {
+    return PaginateFirestore(
+      initialLoader: Center(
+        child: CircularProgressIndicator(),
+      ),
+      bottomLoader: Container(
+        height: 50,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+      itemsPerPage: 10,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        mainAxisSpacing: 15.0,
+        crossAxisSpacing: 10.0,
+      ),
+      physics: BouncingScrollPhysics(),
+      shrinkWrap: true,
+      emptyDisplay: buildNoItem(context, text: 'Shop has no item.'),
+      itemBuilder: (int index, BuildContext cntxt, DocumentSnapshot snapshot) {
+        ProductModel product = ProductModel.fromMap(snapshot.data());
+        return Container(
+          color: Colors.red,
+          child: ShopItemWidget(
+            product,
+          ),
+        );
+      },
+      query: MarketMethods()
+          .marketCollection
+          .doc('products')
+          .collection('allProducts')
+          .orderBy('dateAdded', descending: true)
+          .where('productShopName',
+              isEqualTo: widget.shop.shopName.toLowerCase()),
+      itemBuilderType: PaginateBuilderType.gridView,
+    );
   }
 
   Widget buildAllItems() {
@@ -184,7 +226,7 @@ class _SelectedShopPageState extends State<SelectedShopPage>
               color: Colors.black.withOpacity(0.12),
               thickness: 1.0,
             ),
-            buildAllItems(),
+            productList(),
           ],
         ),
       ),

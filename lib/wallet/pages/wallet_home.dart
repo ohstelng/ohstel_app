@@ -8,6 +8,7 @@ import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
+import '../../ad_manager.dart';
 import '../../auth/methods/auth_methods.dart';
 import '../../auth/models/userModel.dart';
 import '../../hive_methods/hive_class.dart';
@@ -21,7 +22,8 @@ class WalletHome extends StatefulWidget {
   _WalletHomeState createState() => _WalletHomeState();
 }
 
-class _WalletHomeState extends State<WalletHome> with AutomaticKeepAliveClientMixin {
+class _WalletHomeState extends State<WalletHome>
+    with AutomaticKeepAliveClientMixin {
   AdmobReward reward;
 
   // Screen Functionality
@@ -91,7 +93,7 @@ class _WalletHomeState extends State<WalletHome> with AutomaticKeepAliveClientMi
   }
 
   Future<void> _verifyOnServer(String reference) async {
-    String skTest = 'sk_test_5df98ac979ca2f2d10789cb1a158715096cde107';
+    String skTest = 'sk_live_73656eea07892e936a4e06f044b163d83ee3273d';
 
     try {
       Map<String, String> headers = {
@@ -212,22 +214,22 @@ class _WalletHomeState extends State<WalletHome> with AutomaticKeepAliveClientMi
   void initState() {
     getUserData();
     PaystackPlugin.initialize(
-      publicKey: 'pk_test_d0490fa7b5ae91bf5317ebdbd761760c8f14fd8f',
+      publicKey: 'pk_live_8cba4348b014eeed03430439945b624f669a7039',
     );
     super.initState();
-//    reward = AdmobReward(
-//        adUnitId: AdManager.RewardId,
-//        listener: (event, args) {
-//          if (event == AdmobAdEvent.rewarded) {
-//            //TODO: implement get coin
-//            //TODO: implement get coin
-//            //TODO: implement get coin
-//            // The backend for the reward goes here, Mr Ola.
-//            WalletMethods().getCoin(context: context);
-//            print('User Rewarded');
-//          }
-//        });
-//    reward.load();
+    reward = AdmobReward(
+        adUnitId: AdManager.RewardId,
+        listener: (event, args) {
+          if (event == AdmobAdEvent.rewarded) {
+            //TODO: implement get coin
+            //TODO: implement get coin
+            //TODO: implement get coin
+            // The backend for the reward goes here, Mr Ola.
+            WalletMethods().getCoin(context: context);
+            print('User Rewarded');
+          }
+        });
+    reward.load();
   }
 
 //-- Screen Functionality
@@ -338,7 +340,8 @@ class _WalletHomeState extends State<WalletHome> with AutomaticKeepAliveClientMi
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             );
-                                          } else if (snapshot.data.data() == null) {
+                                          } else if (snapshot.data.data() ==
+                                              null) {
                                             return Text(
                                               'NGN 00.0',
                                               style: TextStyle(
@@ -409,48 +412,48 @@ class _WalletHomeState extends State<WalletHome> with AutomaticKeepAliveClientMi
                                 ),
                                 SizedBox(height: 8),
                                 StreamBuilder(
-                                    stream: WalletMethods()
-                                        .userWalletCollectionRef
-                                        .doc(userData['uid'])
-                                        .snapshots(),
-                                    builder: (context, AsyncSnapshot snapshot) {
-                                      if (!snapshot.hasData) {
-                                        return Text(
-                                          'Loading.....',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        );
-                                      } else if (snapshot.data.data() == null) {
-                                        return Text(
-                                          'NGN 00.0',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        );
-                                      } else {
-                                        if (snapshot.data == null) {
-                                          return Text('......');
-                                        }
-                                        DocumentSnapshot doc = snapshot.data;
-                                        String balance =
-                                            (doc.data()['coinBalance'] ?? 0)
-                                                .toString();
-                                        return Text(
-                                          'OHC $balance.0',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        );
-
+                                  stream: WalletMethods()
+                                      .userWalletCollectionRef
+                                      .doc(userData['uid'])
+                                      .snapshots(),
+                                  builder: (context, AsyncSnapshot snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Text(
+                                        'Loading.....',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      );
+                                    } else if (snapshot.data.data() == null) {
+                                      return Text(
+                                        'NGN 00.0',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      );
+                                    } else {
+                                      if (snapshot.data == null) {
+                                        return Text('......');
                                       }
-                                    },),
+                                      DocumentSnapshot doc = snapshot.data;
+                                      String balance =
+                                          (doc.data()['coinBalance'] ?? 0)
+                                              .toString();
+                                      return Text(
+                                        'OHC $balance.0',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           ],
@@ -481,7 +484,7 @@ class _WalletHomeState extends State<WalletHome> with AutomaticKeepAliveClientMi
                                   print('Error');
                                 }
                               },
-                              label: 'Get  Coin',
+                              label: 'Data To Cash',
                               color: childeanFire,
                             ),
                             ActionButton(
