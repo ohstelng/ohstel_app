@@ -730,7 +730,7 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
             ),
             SizedBox(height: 20),
             TextField(
-              decoration: InputDecoration(
+              decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)) ,
                 labelText: 'Password',
                 hintText: 'Enter Your Password',
               ),
@@ -747,31 +747,39 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
               children: [
                 loading
                     ? CircularProgressIndicator()
-                    : FlatButton(
-                        onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          await validateUser(password: password);
-                          setState(() {
-                            loading = false;
-                          });
-                        },
-                        child: Text(
-                          'Proceed',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Theme.of(context).primaryColor,
-                      ),
-                FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(color: Colors.red),
+                    :Container(
+                  decoration: BoxDecoration(color:Theme.of(context).primaryColor,borderRadius: BorderRadius.circular(10),border: Border.all(color: Theme.of(context).primaryColor)),
+                  padding: EdgeInsets.symmetric(horizontal: 15,vertical: 6),
+                  child: InkWell(
+                    onTap: () async {
+                      setState(() {
+                        loading = true;
+                      });
+                      await validateUser(password: password);
+                      setState(() {
+                        loading = false;
+                      });
+                    },
+                    child: Text(
+                      'Proceed',
+                      style: TextStyle(color: Colors.white),
+                    ),
+
                   ),
-                  color: Colors.white38,
+                ),
+                Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),border: Border.all(color: Theme.of(context).primaryColor)),
+                  padding: EdgeInsets.symmetric(horizontal: 15,vertical: 6),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.red),
+                    ),
+
+                  ),
                 ),
               ],
             ),
