@@ -828,7 +828,7 @@ class _HostelBookingHomePageState extends State<HostelBookingHomePage>
                     '${hostel.distanceFromSchoolInKm.toLowerCase().contains('km') ? hostel.distanceFromSchoolInKm : hostel.distanceFromSchoolInKm + 'km'}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 14.0,
+                      fontSize: 12.0,
                       color: Colors.black,
                     ),
                     overflow: TextOverflow.ellipsis,
