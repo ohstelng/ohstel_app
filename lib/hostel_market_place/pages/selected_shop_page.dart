@@ -38,7 +38,7 @@ class _SelectedShopPageState extends State<SelectedShopPage>
           child: CircularProgressIndicator(),
         ),
       ),
-      itemsPerPage: 10,
+      itemsPerPage: 6,
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 200,
         mainAxisSpacing: 15.0,
@@ -127,7 +127,8 @@ class _SelectedShopPageState extends State<SelectedShopPage>
                   },
                 )
               : buildNoItem(context, text: 'Shop has no grocery item.');
-        });
+        },
+    );
   }
 
   buildDrinks() {

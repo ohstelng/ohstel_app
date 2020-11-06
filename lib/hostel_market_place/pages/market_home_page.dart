@@ -333,7 +333,7 @@ class _MarketHomePageState extends State<MarketHomePage> with AutomaticKeepAlive
         crossAxisCount: 4,
       ),
       scrollDirection: Axis.horizontal,
-      itemsPerPage: 10,
+      itemsPerPage: 6,
       initialLoader: Container(
         height: 50,
         child: Center(
