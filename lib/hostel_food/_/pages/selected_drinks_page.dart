@@ -152,9 +152,11 @@ class _DrinksDialogState extends State<DrinksDialog> {
                             ),
                             onTap: () {
                               if (mounted) {
-                                setState(() {
-                                  number++;
-                                });
+                                if (number < 10) {
+                                  setState(() {
+                                    number++;
+                                  });
+                                }
                               }
                             },
                           ),
@@ -268,7 +270,10 @@ class _DrinksDialogState extends State<DrinksDialog> {
                             numberOfPlates: number,
                             extraItems: [],
                             itemFastFoodLocation:
-                                widget.fastFoodDetails.locationName,
+                                widget.fastFoodDetails.foodFastLocation,
+                            fastFoodStateLocation:
+                                widget.fastFoodDetails.stateLocation,
+                            fastFoodMainArea: widget.fastFoodDetails.mainArea,
                           ).toMap();
                           HiveMethods().saveFoodCartToDb(map: map);
 //              Navigator.maybePop(context);

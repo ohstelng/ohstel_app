@@ -154,8 +154,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               margin: EdgeInsets.only(left: 10.0, right: 10.0),
                               child: ListTile(
                                 onTap: () {
+                                  Map data = currentUniDetails;
                                   print(currentUniDetails);
-                                  updateUni(uniDetails: currentUniDetails);
+                                  updateUni(uniDetails: data);
                                 },
                                 title: Row(
                                   children: <Widget>[

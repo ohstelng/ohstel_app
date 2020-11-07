@@ -217,19 +217,19 @@ class _WalletHomeState extends State<WalletHome>
       publicKey: 'pk_live_8cba4348b014eeed03430439945b624f669a7039',
     );
     super.initState();
-    reward = AdmobReward(
-        adUnitId: AdManager.RewardId,
-        listener: (event, args) {
-          if (event == AdmobAdEvent.rewarded) {
-            //TODO: implement get coin
-            //TODO: implement get coin
-            //TODO: implement get coin
-            // The backend for the reward goes here, Mr Ola.
-            WalletMethods().getCoin(context: context);
-            print('User Rewarded');
-          }
-        });
-    reward.load();
+//    reward = AdmobReward(
+//        adUnitId: AdManager.RewardId,
+//        listener: (event, args) {
+//          if (event == AdmobAdEvent.rewarded) {
+//            //TODO: implement get coin
+//            //TODO: implement get coin
+//            //TODO: implement get coin
+//            // The backend for the reward goes here, Mr Ola.
+//            WalletMethods().getCoin(context: context);
+//            print('User Rewarded');
+//          }
+//        });
+//    reward.load();
   }
 
 //-- Screen Functionality

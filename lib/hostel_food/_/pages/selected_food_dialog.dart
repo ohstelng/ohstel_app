@@ -68,15 +68,19 @@ class _FoodDialogState extends State<FoodDialog> {
   }
 
   void saveToCart() {
-    Map map = FoodCartModel(
+    Map foodData = FoodCartModel(
       itemDetails: widget.itemDetails,
       totalPrice: getTotal(),
       numberOfPlates: numberOfPlates,
       extraItems: extraList,
-      itemFastFoodLocation: widget.foodModel.locationName,
+      itemFastFoodLocation: widget.foodModel.foodFastLocation,
+      fastFoodStateLocation: widget.foodModel.stateLocation,
+      fastFoodMainArea: widget.foodModel.mainArea,
     ).toMap();
 
-    HiveMethods().saveFoodCartToDb(map: map);
+    print(foodData);
+
+    HiveMethods().saveFoodCartToDb(map: foodData);
     numberOfPlates = 1;
     extraList = [];
 
@@ -198,9 +202,11 @@ class _FoodDialogState extends State<FoodDialog> {
                               ),
                               onTap: () {
                                 if (mounted) {
-                                  setState(() {
-                                    numberOfPlates++;
-                                  });
+                                  if (numberOfPlates < 10) {
+                                    setState(() {
+                                      numberOfPlates++;
+                                    });
+                                  }
                                 }
                               },
                             ),

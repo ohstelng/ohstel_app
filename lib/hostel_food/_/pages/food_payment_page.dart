@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:Ohstel_app/auth/methods/auth_methods.dart';
@@ -32,8 +31,10 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   Map addressDetails;
   Map userData;
   bool isLoading = true;
-  Map deliveryInfo;
+//  Map deliveryInfo;
   String uniName;
+  int userNumber;
+  int deliveryPrice;
 
   Runes input = Runes('\u20a6');
   final formatCurrency = new NumberFormat.currency(locale: "en_US", symbol: "");
@@ -58,64 +59,54 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     return _extraList;
   }
 
-  Future<void> getDeliveryFeeFromApi() async {
-    String uniName = await HiveMethods().getUniName();
+  Future<Map> getDeliveryFeeDataFromApi() async {
+    String userState = await HiveMethods().getUserState();
 
-    String url = baseApiUrl + '/food_api/food_delivery_info';
+    String url = baseApiUrl + '/food_api/price?location=$userState&area=all';
     debugPrint(url);
     var response = await http.get(url);
-    Map data = await json.decode(response.body)['$uniName'];
-    deliveryInfo = data;
+    Map data = await json.decode(response.body.toLowerCase());
+
+    return data;
   }
 
-  int getDeliveryFee() {
-    int sameLocationCount = 0;
-    int differentLocationCount = 0;
-    int onCampus = 0;
-    int totalDeliveryFee;
+  Future<Map> getPriceMultiplierFromApi() async {
+    String url = baseApiUrl + '/food_api/price_multiplier';
+    debugPrint(url);
+    var response = await http.get(url);
+    Map data = await json.decode(response.body.toLowerCase());
 
-    if (addressDetails == null) {
-      return null;
-    }
-    cartBox.toMap().forEach((key, value) {
-      var currentValueData = HashMap.from(value);
+    return data;
+  }
 
-      FoodCartModel foodCart = FoodCartModel.fromMap(
-        Map<String, dynamic>.from(currentValueData),
-      );
+  Future<int> getDeliveryFee() async {
+    Map deliveryPricing = await getDeliveryFeeDataFromApi();
+    Map priceMultiplier = await getPriceMultiplierFromApi();
+    String userDeliveryArea =
+        addressDetails['areaName'].toString().toLowerCase();
+    int totalPrice = 0;
 
-      if (foodCart.itemFastFoodLocation.toLowerCase() == 'onCampus' &&
-          addressDetails['areaName'].toString().toLowerCase() == 'onCampus') {
-        print(foodCart.itemFastFoodLocation.toLowerCase() == 'onCampus' &&
-            addressDetails['areaName'].toString().toLowerCase() == 'onCampus');
-        onCampus++;
-      } else {
-        if (foodCart.itemFastFoodLocation.toLowerCase() ==
-            addressDetails['areaName'].toString().toLowerCase()) {
-          sameLocationCount++;
-        } else {
-          differentLocationCount++;
-        }
-        print('${foodCart.itemFastFoodLocation}');
-      }
+    print(deliveryPricing);
+    print(priceMultiplier);
+    print(userDeliveryArea);
+
+    cartBox.values.forEach((mapData) {
+      FoodCartModel item = FoodCartModel.fromMap(mapData);
+      String currentItemFastFoodMainArea = item.fastFoodMainArea;
+      String numberOfPlates = item.numberOfPlates.toString();
+      Map priceMap = deliveryPricing[currentItemFastFoodMainArea];
+      int _currentTotal = 0;
+
+      int _currentItemPrice = priceMap[userDeliveryArea];
+      int _currentMultiplierForNumberOfPlate = priceMultiplier[numberOfPlates];
+      _currentTotal = (_currentItemPrice * _currentMultiplierForNumberOfPlate);
+      totalPrice += _currentTotal;
     });
-    print(addressDetails);
-    print(sameLocationCount);
-    print(differentLocationCount);
 
-    Map onCampusData = deliveryInfo['onCampus'];
-    Map sameLocationData = deliveryInfo['sameLocation'];
-    Map differentLocationData = deliveryInfo['differentLocation'];
+    print(totalPrice);
+    deliveryPrice = totalPrice;
 
-    int onCampusPrice = onCampusData['$onCampus'] ?? 0;
-    int sameLocationPrice = sameLocationData['$sameLocationCount'] ?? 0;
-    int differentLocationPrice =
-        differentLocationData['$differentLocationCount'] ?? 0;
-
-    totalDeliveryFee =
-        (onCampusPrice + sameLocationPrice + differentLocationPrice);
-
-    return totalDeliveryFee;
+    return totalPrice;
   }
 
   Future<void> getUserData() async {
@@ -124,7 +115,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
         isLoading = true;
       });
     }
-    addressDetails = await HiveMethods().getFoodLocationDetails();
+    addressDetails = await HiveMethods().getFoodDeliveryLocationDetails();
     uniName = await HiveMethods().getUniName();
     cartBox = await HiveMethods().getOpenBox('cart');
     userDataBox = await HiveMethods().getOpenBox('userDataBox');
@@ -133,8 +124,6 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
     print(data);
     userData = data;
     numberSteam.add(data['phoneNumber']);
-
-    await getDeliveryFeeFromApi();
 
     if (mounted) {
       setState(() {
@@ -153,7 +142,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
             title: Text('Payment Alert'),
             content: Container(
               child: PaymentPopUp(
-                deliveryFee: getDeliveryFee(),
+                deliveryFee: deliveryPrice,
                 cartBox: cartBox,
                 userData: userData,
               ),
@@ -190,7 +179,9 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       },
     );
 
-    addressDetailsBox = await HiveMethods().getOpenBox('addressBox');
+    addressDetails = await HiveMethods().getFoodDeliveryLocationDetails();
+    print(addressDetails);
+    print('ffffpfpfpfpff');
     setState(() {});
   }
 
@@ -251,10 +242,11 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
                   },
                 ),
                 FlatButton(
-                  onPressed: () {
+                  onPressed: () async {
                     print(number.length);
                     if (number.length > 10) {
                       numberSteam.add(number);
+
                       Navigator.pop(context);
                     } else {
                       Fluttertoast.showToast(msg: 'Input Invaild Number!');
@@ -336,13 +328,21 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       margin: EdgeInsets.all(15.0),
       child: FlatButton(
         onPressed: () async {
-          if (userData != null && addressDetails != null) {
+          if (userData != null &&
+              addressDetails != null &&
+              userNumber != null &&
+              deliveryPrice != null) {
+            print('pass');
             paymentPopUp();
           } else {
             Fluttertoast.showToast(
-              msg: 'Plase Provide a delivery Location!',
-              gravity: ToastGravity.CENTER,
+              msg: 'Plase Provide a delivery Location! '
+                  'OR Wait For Your Delivery Fee To Be Calculated.',
+              gravity: ToastGravity.TOP,
               toastLength: Toast.LENGTH_LONG,
+              fontSize: 18,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
             );
           }
         },
@@ -367,7 +367,8 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
               FlatButton(
                 color: Colors.grey[300],
                 onPressed: () async {
-                  addressDetails = await HiveMethods().getFoodLocationDetails();
+                  addressDetails =
+                      await HiveMethods().getFoodDeliveryLocationDetails();
                   await selectDeliveryLocation();
                   refreshPage();
                 },
@@ -386,7 +387,18 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
       valueListenable: addressDetailsBox.listenable(),
       builder: (context, Box box, widget) {
         if (box.values.isEmpty) {
-          return Text('No Adress Found!!');
+          return Card(
+            child: Container(
+              margin: EdgeInsets.all(10.0),
+              child: Text(
+                'No Adress Found!!',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          );
         } else {
           Map data = box.getAt(0);
           return Card(
@@ -425,6 +437,7 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
                               if (snapshot.data == null) {
                                 return Text('No Number Found');
                               }
+                              userNumber = int.parse(snapshot.data);
                               return Text(
                                 '${snapshot.data}',
                                 maxLines: 1,
@@ -457,6 +470,12 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
   }
 
   Widget ordersContainer() {
+    int _numberOfItems = 0;
+    cartBox.values.forEach((map) {
+      FoodCartModel item = FoodCartModel.fromMap(map);
+      _numberOfItems += item.numberOfPlates;
+    });
+
     return Container(
       height: 210,
       decoration: BoxDecoration(
@@ -484,26 +503,52 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text('Delivery Fee'),
-                Text('$symbol ${formatCurrency.format(getDeliveryFee() ?? 0)}')
+                deliveryFeeInfo(),
+              ]),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Total Number Of Items'),
+                Text('$_numberOfItems')
               ]),
           Divider(
             thickness: .5,
             color: Colors.black45,
           ),
           Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Total',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                ),
-                Text(
-                  '$symbol ${formatCurrency.format(getGrandTotal() + (getDeliveryFee() ?? 0))}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-                )
-              ]),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Total',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+              ),
+              deliveryFeeInfo(getGrandTotal()),
+            ],
+          ),
         ],
       ),
+    );
+  }
+
+  Widget deliveryFeeInfo([int otherTotal = 0]) {
+    return FutureBuilder(
+      future: getDeliveryFee(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Text(
+            'Calculation.....',
+            style: TextStyle(
+              fontWeight: FontWeight.w300,
+              fontSize: 16,
+            ),
+          );
+        } else {
+          int price = snapshot.data;
+          return Text(
+            '$symbol ${formatCurrency.format(price + otherTotal)}',
+          );
+        }
+      },
     );
   }
 
@@ -632,7 +677,7 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
   Future<void> saveFoodInfoToDb() async {
     int numbers = widget.cartBox.length;
     Map currentUserData = await HiveMethods().getUserData();
-    Map addressDetails = await HiveMethods().getFoodLocationDetails();
+    Map addressDetails = await HiveMethods().getFoodDeliveryLocationDetails();
     List<String> fastFoodList = [];
     List<Map> ordersList = [];
 
@@ -674,6 +719,7 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       uniName: widget.userData['uniDetails']['abbr'].toString().toLowerCase(),
       addressDetails: addressDetails,
       buyerID: currentUserData['uid'],
+      amountPaid: getGrandTotal(),
     );
 
     try {
@@ -730,7 +776,9 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
             ),
             SizedBox(height: 20),
             TextField(
-              decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)) ,
+              decoration: InputDecoration(
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 labelText: 'Password',
                 hintText: 'Enter Your Password',
               ),
@@ -747,29 +795,36 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
               children: [
                 loading
                     ? CircularProgressIndicator()
-                    :Container(
-                  decoration: BoxDecoration(color:Theme.of(context).primaryColor,borderRadius: BorderRadius.circular(10),border: Border.all(color: Theme.of(context).primaryColor)),
-                  padding: EdgeInsets.symmetric(horizontal: 15,vertical: 6),
-                  child: InkWell(
-                    onTap: () async {
-                      setState(() {
-                        loading = true;
-                      });
-                      await validateUser(password: password);
-                      setState(() {
-                        loading = false;
-                      });
-                    },
-                    child: Text(
-                      'Proceed',
-                      style: TextStyle(color: Colors.white),
-                    ),
-
-                  ),
-                ),
+                    : Container(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor)),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+                        child: InkWell(
+                          onTap: () async {
+                            setState(() {
+                              loading = true;
+                            });
+                            await validateUser(password: password);
+                            setState(() {
+                              loading = false;
+                            });
+                          },
+                          child: Text(
+                            'Proceed',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
                 Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),border: Border.all(color: Theme.of(context).primaryColor)),
-                  padding: EdgeInsets.symmetric(horizontal: 15,vertical: 6),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border:
+                          Border.all(color: Theme.of(context).primaryColor)),
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                   child: InkWell(
                     onTap: () {
                       Navigator.pop(context);
@@ -778,7 +833,6 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
                       'Cancel',
                       style: TextStyle(color: Colors.red),
                     ),
-
                   ),
                 ),
               ],

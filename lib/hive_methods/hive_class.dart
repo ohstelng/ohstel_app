@@ -70,6 +70,15 @@ class HiveMethods {
     return uniName;
   }
 
+  Future<String> getUserState() async {
+    Box<Map> userDataBox = await getOpenBox('userDataBox');
+
+    Map uniDetails = userDataBox.get(0)['uniDetails'];
+//    print(uniDetails);
+    String state = uniDetails['state'].toString().toLowerCase();
+    return state;
+  }
+
   Future<String> getAddress() async {
     Box<Map> userDataBox = await getOpenBox('userDataBox');
 
@@ -110,7 +119,6 @@ class HiveMethods {
     Box<Map> cartDataBox = await getOpenBox('cart');
 
     cartDataBox.add(map);
-//    cartDataBox.put('laste', value)
     Fluttertoast.showToast(msg: 'Added To Cart');
     print('saved');
   }
@@ -194,7 +202,7 @@ class HiveMethods {
     print('saved');
   }
 
-  Future<Map> getFoodLocationDetails() async {
+  Future<Map> getFoodDeliveryLocationDetails() async {
     Box<Map> addressDetailsDataBox = await getOpenBox('addressBox');
 
     Map addressDetails = addressDetailsDataBox.get(0);

@@ -20,17 +20,15 @@ class SelectDeliveryLocationPage extends StatefulWidget {
 
 class _SelectDeliveryLocationPageState
     extends State<SelectDeliveryLocationPage> {
-
   bool onCampus = true;
   @override
   Widget build(BuildContext context) {
     return Container(
       child: DefaultTabController(
-        length: 2,
+        length: 1,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Color(0xFFF27507),
-//          backgroundColor: Colors.teal,
             elevation: 0.0,
             leading: Container(),
             centerTitle: true,
@@ -47,16 +45,12 @@ class _SelectDeliveryLocationPageState
                 }
               },
               tabs: [
-                Tab(text: "On Campus"),
-                Tab(text: "Off Campus"),
+                Tab(text: "Location Avalible"),
               ],
             ),
           ),
           body: TabBarView(
             children: [
-              Container(
-                child: OnCampusLocation(type: widget.type),
-              ),
               Container(
                 child: OffCampusLocation(type: widget.type),
               ),
@@ -82,11 +76,12 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
   String address;
   String _areaName = 'Selected Area Name';
 
-  Future<Map> getAreaNamesFromApi() async {
-    String uniName = await HiveMethods().getUniName();
-    String url = baseApiUrl+'/food_api/$uniName';
+  Future<List> getAreaNamesFromApi() async {
+    String userState = await HiveMethods().getUserState();
+    String url = baseApiUrl + '/location_api/places?location=$userState';
     var response = await http.get(url);
-    Map data = json.decode(response.body);
+    List data = json.decode(response.body);
+    data.sort();
 
     return data;
   }
@@ -115,7 +110,7 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
                           child: CircularProgressIndicator(),
                         );
                       } else {
-                        List areaNameList = snapshot.data['areaNames'];
+                        List areaNameList = snapshot.data;
                         return ListView.builder(
                           physics: BouncingScrollPhysics(),
                           itemCount: areaNameList.length,
@@ -157,7 +152,9 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
             ),
           ),
           TextField(
-            decoration: InputDecoration(hintText: 'Enter Your Location'),
+            decoration: InputDecoration(
+              hintText: 'Enter A detail Description Of Your Place....',
+            ),
             controller: controller,
             textInputAction: TextInputAction.done,
             autocorrect: true,
@@ -199,77 +196,6 @@ class _OffCampusLocationState extends State<OffCampusLocation> {
             child: Text(
               'Submit',
               style: TextStyle(color: Colors.white),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class OnCampusLocation extends StatefulWidget {
-  final AddressType type;
-
-  OnCampusLocation({this.type});
-
-  @override
-  _OnCampusLocationState createState() => _OnCampusLocationState();
-}
-
-class _OnCampusLocationState extends State<OnCampusLocation> {
-  TextEditingController controller = TextEditingController();
-  String address;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(15.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          TextField(
-            decoration: InputDecoration(hintText: 'Enter Your Location'),
-            controller: controller,
-            textInputAction: TextInputAction.done,
-            autocorrect: true,
-            maxLength: 250,
-            maxLines: null,
-            onChanged: (val) {
-              address = val;
-            },
-            onSubmitted: (val) {
-              print(val);
-            },
-          ),
-          Container(
-            width: double.infinity,
-            child: FlatButton(
-              color: Color(0xFFF27507),
-              onPressed: () async {
-                if (address != null && address.length > 3) {
-                  Map addressDetails = {
-                    'address': address,
-                    'areaName': 'onCampus',
-                    'onCampus': true,
-                  };
-                  print(addressDetails);
-                  if (widget.type == null) {
-                    await HiveMethods().saveFoodLocationDetailsToDb(map: addressDetails);
-                  } else {
-                    if (widget.type == AddressType.pickUp) {
-                      await HiveMethods()
-                          .saveToLaundryPickUpBox(data: addressDetails);
-                    } else if (widget.type == AddressType.dropOff) {
-                      await HiveMethods().saveToLaundryDropBox(data: addressDetails);
-                    }
-                  }
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(
-                'Submit',
-                style: TextStyle(color: Colors.white),
-              ),
             ),
           )
         ],

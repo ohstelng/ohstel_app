@@ -15,6 +15,7 @@ class PaidFood {
   String id = Uuid().v1().toString();
   String buyerID;
   bool doneWith;
+  int amountPaid;
 
   // this will be a map of area name and address
   Map addressDetails;
@@ -29,6 +30,7 @@ class PaidFood {
     @required this.orders,
     @required this.uniName,
     @required this.addressDetails,
+    @required this.amountPaid,
   });
 
   PaidFood.fromMap(mapData) {
@@ -43,6 +45,7 @@ class PaidFood {
     this.addressDetails = mapData['addressDetails'];
     this.id = mapData['id'];
     this.buyerID = mapData['buyerID'];
+    this.amountPaid = mapData['amountPaid'];
   }
 
   Map toMap() {
@@ -59,6 +62,7 @@ class PaidFood {
     data['id'] = this.id;
     data['doneWith'] = false;
     data['buyerID'] = this.buyerID;
+    data['amountPaid'] = this.amountPaid;
 
     return data;
   }

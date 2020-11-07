@@ -139,9 +139,11 @@ class _SnackDialogState extends State<SnackDialog> {
                       ),
                       onTap: () {
                         if (mounted) {
-                          setState(() {
-                            number++;
-                          });
+                          if (number < 10) {
+                            setState(() {
+                              number++;
+                            });
+                          }
                         }
                       },
                     ),
@@ -251,10 +253,12 @@ class _SnackDialogState extends State<SnackDialog> {
                       totalPrice: getTotal(),
                       numberOfPlates: number,
                       extraItems: [],
-                      itemFastFoodLocation: widget.fastFoodDetails.locationName,
+                      itemFastFoodLocation:
+                          widget.fastFoodDetails.foodFastLocation,
+                      fastFoodStateLocation: widget.fastFoodDetails.stateLocation,
+                      fastFoodMainArea: widget.fastFoodDetails.mainArea,
                     ).toMap();
                     HiveMethods().saveFoodCartToDb(map: map);
-//              Navigator.maybePop(context);
                   },
                   color: Color(0xFFF27507),
                   label: Text(
