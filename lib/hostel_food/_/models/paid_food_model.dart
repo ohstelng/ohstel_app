@@ -9,6 +9,7 @@ class PaidFood {
   String email;
   String buyerFullName;
   String address;
+  String orderState;
   List fastFoodNames;
   List orders;
   String uniName;
@@ -31,6 +32,7 @@ class PaidFood {
     @required this.uniName,
     @required this.addressDetails,
     @required this.amountPaid,
+    @required this.orderState,
   });
 
   PaidFood.fromMap(mapData) {
@@ -46,6 +48,7 @@ class PaidFood {
     this.id = mapData['id'];
     this.buyerID = mapData['buyerID'];
     this.amountPaid = mapData['amountPaid'];
+    this.orderState = mapData['orderState'];
   }
 
   Map toMap() {
@@ -63,6 +66,7 @@ class PaidFood {
     data['doneWith'] = false;
     data['buyerID'] = this.buyerID;
     data['amountPaid'] = this.amountPaid;
+    data['orderState'] = this.orderState;
 
     return data;
   }

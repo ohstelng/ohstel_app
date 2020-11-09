@@ -86,10 +86,6 @@ class _FoodPaymentPageState extends State<FoodPaymentPage> {
         addressDetails['areaName'].toString().toLowerCase();
     int totalPrice = 0;
 
-    print(deliveryPricing);
-    print(priceMultiplier);
-    print(userDeliveryArea);
-
     cartBox.values.forEach((mapData) {
       FoodCartModel item = FoodCartModel.fromMap(mapData);
       String currentItemFastFoodMainArea = item.fastFoodMainArea;
@@ -720,6 +716,8 @@ class _PaymentPopUpState extends State<PaymentPopUp> {
       addressDetails: addressDetails,
       buyerID: currentUserData['uid'],
       amountPaid: getGrandTotal(),
+      orderState:
+          currentUserData['uniDetails']['state'].toString().toLowerCase(),
     );
 
     try {

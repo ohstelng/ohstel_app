@@ -79,7 +79,7 @@ class _CartPageState extends State<CartPage> {
       });
     }
 //    cartBox = await HiveMethods().getOpenBox('cart');
-    cartBox = await HiveMethods().getCartData();
+    cartBox = await HiveMethods().getFoodCartData();
     userDataBox = await HiveMethods().getOpenBox('userDataBox');
     addressDetailsBox = await HiveMethods().getOpenBox('addressBox');
     Map data = await HiveMethods().getUserData();

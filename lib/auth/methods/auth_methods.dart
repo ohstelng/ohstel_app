@@ -161,10 +161,8 @@ class AuthService {
     Box<Map> userDataBox = await HiveMethods().getOpenBox('userDataBox');
     final key = 0;
     final value = userData;
-    print(userData);
 
     userData['dateJoined'] = userData["dateJoined"].toString();
-    print(userData);
 
     await userDataBox.put(key, value);
     print('saved');

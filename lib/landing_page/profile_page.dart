@@ -210,7 +210,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
     Map _userData = await HiveMethods().getUserData();
     _userData['uniDetails'] = uniDetails;
+
     AuthService().saveUserDataToDb(userData: _userData);
+
+    //clear food cart
+    await HiveMethods().getFoodCartData().then((foodCart) async {
+      await foodCart.clear();
+    });
+
     userData = _userData;
     setState(() {});
 

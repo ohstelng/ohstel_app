@@ -108,7 +108,7 @@ class HiveMethods {
     return userData;
   }
 
-  Future<Box> getCartData() async {
+  Future<Box> getFoodCartData() async {
     Box<Map> cartDataBox = await getOpenBox('cart');
 
     print(cartDataBox.isEmpty);
