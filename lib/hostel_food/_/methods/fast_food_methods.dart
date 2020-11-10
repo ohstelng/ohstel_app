@@ -47,6 +47,7 @@ class FastFoodMethods {
         debugPrint(currentOrder.toString());
         String currentFastFood = currentOrder['fastFoodName'].toString();
         debugPrint(currentFastFood);
+
         batch.set(
           foodInfoCollectionRef
               .doc('$currentFastFood')
@@ -55,6 +56,35 @@ class FastFoodMethods {
           {"count": FieldValue.increment(1)},
           SetOptions(merge: true),
         );
+
+        batch.set(
+          foodInfoCollectionRef
+              .doc('$currentFastFood')
+              .collection(dateParse.year.toString())
+              .doc(dateParse.month.toString()),
+          {"day ${dateParse.day}": FieldValue.increment(1)},
+          SetOptions(merge: true),
+        );
+
+        batch.set(
+          foodInfoCollectionRef
+              .doc('total')
+              .collection(dateParse.year.toString())
+              .doc(dateParse.month.toString()),
+          {"count": FieldValue.increment(1)},
+          SetOptions(merge: true),
+        );
+
+        batch.set(
+          foodInfoCollectionRef
+              .doc('total')
+              .collection(dateParse.year.toString())
+              .doc(dateParse.month.toString()),
+          {"day ${dateParse.day}": FieldValue.increment(1)},
+          SetOptions(merge: true),
+        );
+
+        ///
       });
 
       batch.set(
